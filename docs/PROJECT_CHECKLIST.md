@@ -1,0 +1,3 @@
+- [ ] NQBA Execution Layer
+- [ ] SigmaEQ Engine
+- [ ] Dynex API Integration

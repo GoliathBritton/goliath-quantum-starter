@@ -1,0 +1,1 @@
+print('Initializing Goliath Quantum Starter with NQBA layer...')
