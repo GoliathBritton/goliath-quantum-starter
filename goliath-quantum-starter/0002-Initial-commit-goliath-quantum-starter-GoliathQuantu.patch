@@ -1,0 +1,37 @@
+From 87c37cf7dbc2123f615d683488a69f41917acfb8 Mon Sep 17 00:00:00 2001
+From: GoliathBritton <john.britton@goliathomniedge.com>
+Date: Thu, 21 Aug 2025 03:59:38 -0500
+Subject: [PATCH 2/2] Initial commit - goliath quantum starter + GoliathQuantum
+ module
+
+---
+ README.md | Bin 0 -> 56 bytes
+ test.md   | Bin 18 -> 0 bytes
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 README.md
+ delete mode 100644 test.md
+
+diff --git a/README.md b/README.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..9ee754efa5872bc6ca80eea482dd4b67060f0e75
+GIT binary patch
+literal 56
+zcmezWPnki1!JQ$WA%`K8A(5ekAp^({WGDr)^MJfkhFl;&7|2RwC<2nHK$4e%iva*|
+CWeYF>
+
+literal 0
+HcmV?d00001
+
+diff --git a/test.md b/test.md
+deleted file mode 100644
+index 24ca74cb8dc4d967c5d69716a78f9af180208545..0000000000000000000000000000000000000000
+GIT binary patch
+literal 0
+HcmV?d00001
+
+literal 18
+ZcmezWPnki1A%r27p_rkBftP`c0RS~f1NZ;{
+
+-- 
+2.48.1.windows.1
+
