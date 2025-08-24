@@ -1,109 +1,140 @@
 """
-NQBA Settings Module
-Configuration management using pydantic.BaseSettings
-Centralizes all environment variables and configuration
+NQBA Stack Settings
+Centralized configuration management with secure credential handling
 """
 import os
-from typing import Optional
-from pydantic import BaseSettings, Field, validator
 from pathlib import Path
+from typing import Optional, Dict, Any
+from pydantic import BaseSettings, Field, validator
+import logging
+
+logger = logging.getLogger(__name__)
 
 class NQBASettings(BaseSettings):
-    """NQBA configuration settings"""
+    """NQBA Stack Configuration Settings"""
     
     # Environment
-    environment: str = Field(default="development", env="NQBA_ENV")
+    environment: str = Field(default="development", env="NQBA_ENVIRONMENT")
     debug: bool = Field(default=False, env="NQBA_DEBUG")
     
-    # Dynex Configuration
-    dynex_api_key: Optional[str] = Field(default=None, env="DYNEX_API_KEY")
-    dynex_mainnet: bool = Field(default=True, env="DYNEX_MAINNET")
-    dynex_default_reads: int = Field(default=1000, env="DYNEX_DEFAULT_READS")
-    dynex_default_annealing_time: int = Field(default=100, env="DYNEX_ANNEALING_TIME")
-    dynex_timeout_seconds: int = Field(default=300, env="DYNEX_TIMEOUT")
+    # Company Information
+    company_name: str = Field(default="FLYFOX AI", env="NQBA_COMPANY_NAME")
+    business_unit: str = Field(default="NQBA Core", env="NQBA_BUSINESS_UNIT")
     
-    # IPFS Configuration
-    ipfs_project_id: Optional[str] = Field(default=None, env="IPFS_PROJECT_ID")
-    ipfs_project_secret: Optional[str] = Field(default=None, env="IPFS_PROJECT_SECRET")
-    ipfs_gateway_url: str = Field(default="https://ipfs.infura.io:5001", env="IPFS_GATEWAY_URL")
+    # API Credentials (SECURE - Never log or expose these)
+    dynex_api_key: Optional[str] = Field(default=None, env="DYNEX_API_KEY", description="DynexSolve API key")
+    ipfs_project_id: Optional[str] = Field(default=None, env="IPFS_PROJECT_ID", description="IPFS project identifier")
+    ipfs_project_secret: Optional[str] = Field(default=None, env="IPFS_PROJECT_SECRET", description="IPFS project secret")
+    llm_api_key: Optional[str] = Field(default=None, env="LLM_API_KEY", description="LLM service API key")
+    openai_api_key: Optional[str] = Field(default=None, env="OPENAI_API_KEY", description="OpenAI API key")
     
     # Web3 Configuration
-    web3_provider_url: Optional[str] = Field(default=None, env="WEB3_PROVIDER_URL")
-    web3_private_key: Optional[str] = Field(default=None, env="WEB3_PRIVATE_KEY")
+    web3_provider_url: Optional[str] = Field(default=None, env="WEB3_PROVIDER_URL", description="Web3 provider URL")
     
-    # LLM Configuration
-    llm_api_key: Optional[str] = Field(default=None, env="LLM_API_KEY")
-    openai_api_key: Optional[str] = Field(default=None, env="OPENAI_API_KEY")
-    
-    # Database Configuration
-    database_url: str = Field(default="sqlite:///nqba.db", env="DATABASE_URL")
-    redis_url: str = Field(default="redis://localhost:6379", env="REDIS_URL")
-    
-    # Logging Configuration
-    log_level: str = Field(default="INFO", env="LOG_LEVEL")
-    log_file: Optional[str] = Field(default=None, env="LOG_FILE")
-    ltc_enabled: bool = Field(default=True, env="LTC_ENABLED")
+    # Data and Storage
+    data_dir: Path = Field(default=Path("./data"), env="NQBA_DATA_DIR")
+    log_dir: Path = Field(default=Path("./logs"), env="NQBA_LOG_DIR")
+    cache_dir: Path = Field(default=Path("./cache"), env="NQBA_CACHE_DIR")
     
     # API Configuration
-    api_host: str = Field(default="0.0.0.0", env="API_HOST")
-    api_port: int = Field(default=8000, env="API_PORT")
-    api_workers: int = Field(default=1, env="API_WORKERS")
+    api_host: str = Field(default="0.0.0.0", env="NQBA_API_HOST")
+    api_port: int = Field(default=8000, env="NQBA_API_PORT")
+    api_workers: int = Field(default=1, env="NQBA_API_WORKERS")
+    
+    # Quantum Configuration
+    quantum_timeout: int = Field(default=300, env="NQBA_QUANTUM_TIMEOUT")
+    quantum_max_qubits: int = Field(default=64, env="NQBA_QUANTUM_MAX_QUBITS")
+    quantum_backend: str = Field(default="dynex", env="NQBA_QUANTUM_BACKEND")
+    
+    # LTC Configuration
+    ltc_backup_interval: int = Field(default=3600, env="NQBA_LTC_BACKUP_INTERVAL")
+    ltc_max_entries: int = Field(default=10000, env="NQBA_LTC_MAX_ENTRIES")
+    ltc_enable_ipfs: bool = Field(default=True, env="NQBA_LTC_ENABLE_IPFS")
     
     # Security Configuration
-    secret_key: str = Field(default="nqba-secret-key-change-in-production", env="SECRET_KEY")
-    jwt_secret: str = Field(default="nqba-jwt-secret-change-in-production", env="JWT_SECRET")
-    cors_origins: list = Field(default=["*"], env="CORS_ORIGINS")
+    enable_cors: bool = Field(default=True, env="NQBA_ENABLE_CORS")
+    cors_origins: list = Field(default=["*"], env="NQBA_CORS_ORIGINS")
+    enable_rate_limiting: bool = Field(default=True, env="NQBA_ENABLE_RATE_LIMITING")
+    rate_limit_requests: int = Field(default=100, env="NQBA_RATE_LIMIT_REQUESTS")
+    rate_limit_window: int = Field(default=60, env="NQBA_RATE_LIMIT_WINDOW")
     
-    # Business Configuration
-    company_name: str = Field(default="FLYFOX AI", env="COMPANY_NAME")
-    business_unit: str = Field(default="NQBA Core", env="BUSINESS_UNIT")
-    sigma_select_enabled: bool = Field(default=True, env="SIGMA_SELECT_ENABLED")
-    flyfox_energy_enabled: bool = Field(default=True, env="FLYFOX_ENERGY_ENABLED")
-    
-    # File Paths
-    base_dir: Path = Field(default=Path(__file__).parent.parent.parent)
-    config_dir: Path = Field(default=Path(__file__).parent.parent.parent / "config")
-    data_dir: Path = Field(default=Path(__file__).parent.parent.parent / "data")
-    logs_dir: Path = Field(default=Path(__file__).parent.parent.parent / "logs")
-    
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
-        case_sensitive = False
-    
-    @validator('environment')
-    def validate_environment(cls, v):
-        allowed = ['development', 'staging', 'production', 'testing']
-        if v not in allowed:
-            raise ValueError(f'Environment must be one of: {allowed}')
+    # Validation and Security
+    @validator('dynex_api_key')
+    def validate_dynex_api_key(cls, v):
+        """Validate Dynex API key format"""
+        if v is not None:
+            if not v.startswith('dnx_'):
+                logger.warning("Dynex API key should start with 'dnx_'")
+            if len(v) < 20:
+                logger.warning("Dynex API key seems too short")
         return v
     
-    @validator('log_level')
-    def validate_log_level(cls, v):
-        allowed = ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']
-        if v.upper() not in allowed:
-            raise ValueError(f'Log level must be one of: {allowed}')
-        return v.upper()
+    @validator('ipfs_project_id')
+    def validate_ipfs_project_id(cls, v):
+        """Validate IPFS project ID format"""
+        if v is not None:
+            if not v.startswith('Qm') and not v.startswith('bafy'):
+                logger.warning("IPFS project ID should start with 'Qm' or 'bafy'")
+        return v
     
-    @property
-    def is_production(self) -> bool:
-        """Check if running in production"""
-        return self.environment == "production"
+    @validator('openai_api_key')
+    def validate_openai_api_key(cls, v):
+        """Validate OpenAI API key format"""
+        if v is not None:
+            if not v.startswith('sk-'):
+                logger.warning("OpenAI API key should start with 'sk-'")
+        return v
     
-    @property
-    def is_development(self) -> bool:
-        """Check if running in development"""
-        return self.environment == "development"
+    @validator('llm_api_key')
+    def validate_llm_api_key(cls, v):
+        """Validate LLM API key format"""
+        if v is not None:
+            if len(v) < 10:
+                logger.warning("LLM API key seems too short")
+        return v
     
-    @property
-    def is_testing(self) -> bool:
-        """Check if running in testing"""
-        return self.environment == "testing"
+    # Security methods
+    def get_credential_status(self) -> Dict[str, bool]:
+        """Get credential configuration status (safe to log)"""
+        return {
+            "dynex_configured": self.dynex_configured,
+            "ipfs_configured": self.ipfs_configured,
+            "web3_configured": self.web3_configured,
+            "llm_configured": self.llm_configured,
+            "all_credentials_configured": self.all_credentials_configured
+        }
     
+    def validate_credentials(self) -> Dict[str, str]:
+        """Validate all credentials and return status messages"""
+        status = {}
+        
+        if not self.dynex_configured:
+            status["dynex"] = "DYNEX_API_KEY not configured"
+        else:
+            status["dynex"] = "✅ Dynex configured"
+            
+        if not self.ipfs_configured:
+            status["ipfs"] = "IPFS_PROJECT_ID or IPFS_PROJECT_SECRET not configured"
+        else:
+            status["ipfs"] = "✅ IPFS configured"
+            
+        if not self.web3_configured:
+            status["web3"] = "WEB3_PROVIDER_URL not configured"
+        else:
+            status["web3"] = "✅ Web3 configured"
+            
+        if not self.llm_configured:
+            status["llm"] = "LLM_API_KEY or OPENAI_API_KEY not configured"
+        else:
+            status["llm"] = "✅ LLM configured"
+            
+        return status
+    
+    # Computed properties
     @property
     def dynex_configured(self) -> bool:
         """Check if Dynex is properly configured"""
-        return bool(self.dynex_api_key)
+        return bool(self.dynex_api_key and len(self.dynex_api_key) > 20)
     
     @property
     def ipfs_configured(self) -> bool:
@@ -120,54 +151,95 @@ class NQBASettings(BaseSettings):
         """Check if LLM is properly configured"""
         return bool(self.llm_api_key or self.openai_api_key)
     
-    def create_directories(self):
+    @property
+    def all_credentials_configured(self) -> bool:
+        """Check if all critical credentials are configured"""
+        return all([
+            self.dynex_configured,
+            self.ipfs_configured,
+            self.web3_configured,
+            self.llm_configured
+        ])
+    
+    @property
+    def is_production(self) -> bool:
+        """Check if running in production"""
+        return self.environment.lower() == "production"
+    
+    @property
+    def is_development(self) -> bool:
+        """Check if running in development"""
+        return self.environment.lower() == "development"
+    
+    @property
+    def is_testing(self) -> bool:
+        """Check if running in testing"""
+        return self.environment.lower() == "testing"
+    
+    # Directory setup
+    def setup_directories(self):
         """Create necessary directories"""
-        for directory in [self.config_dir, self.data_dir, self.logs_dir]:
+        for directory in [self.data_dir, self.log_dir, self.cache_dir]:
             directory.mkdir(parents=True, exist_ok=True)
+            logger.info(f"Directory ready: {directory}")
     
-    def get_database_config(self):
-        """Get database configuration"""
+    # Security audit
+    def security_audit(self) -> Dict[str, Any]:
+        """Perform security audit (safe to log)"""
         return {
-            "url": self.database_url,
-            "echo": self.debug,
-            "pool_pre_ping": True,
-            "pool_recycle": 300
+            "environment": self.environment,
+            "debug_mode": self.debug,
+            "cors_enabled": self.enable_cors,
+            "rate_limiting_enabled": self.enable_rate_limiting,
+            "credential_status": self.get_credential_status(),
+            "directory_permissions": {
+                "data_dir": str(self.data_dir),
+                "log_dir": str(self.log_dir),
+                "cache_dir": str(self.cache_dir)
+            }
         }
     
-    def get_redis_config(self):
-        """Get Redis configuration"""
-        return {
-            "url": self.redis_url,
-            "decode_responses": True,
-            "socket_connect_timeout": 5,
-            "socket_timeout": 5
-        }
-    
-    def get_api_config(self):
-        """Get API configuration"""
-        return {
-            "host": self.api_host,
-            "port": self.api_port,
-            "workers": self.api_workers,
-            "debug": self.debug
-        }
+    class Config:
+        env_file = ".env"
+        env_file_encoding = "utf-8"
+        case_sensitive = False
 
 # Global settings instance
-settings = NQBASettings()
+_settings: Optional[NQBASettings] = None
 
-# Convenience functions
 def get_settings() -> NQBASettings:
     """Get global settings instance"""
-    return settings
+    global _settings
+    if _settings is None:
+        _settings = NQBASettings()
+        _settings.setup_directories()
+        
+        # Log configuration status (without exposing credentials)
+        logger.info("NQBA Settings initialized")
+        logger.info(f"Environment: {_settings.environment}")
+        logger.info(f"Company: {_settings.company_name}")
+        logger.info(f"Business Unit: {_settings.business_unit}")
+        
+        # Log credential status safely
+        cred_status = _settings.get_credential_status()
+        for service, status in cred_status.items():
+            logger.info(f"{service}: {status}")
+        
+        # Security audit
+        audit = _settings.security_audit()
+        logger.info("Security audit completed")
+        
+    return _settings
 
+# Convenience functions
 def is_production() -> bool:
     """Check if running in production"""
-    return settings.is_production
+    return get_settings().is_production
 
 def is_development() -> bool:
     """Check if running in development"""
-    return settings.is_development
+    return get_settings().is_development
 
 def is_testing() -> bool:
     """Check if running in testing"""
-    return settings.is_testing
+    return get_settings().is_testing
