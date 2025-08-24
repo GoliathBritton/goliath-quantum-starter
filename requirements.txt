@@ -1,58 +1,66 @@
-# Core dependencies
-asyncio>=3.4.3
-aiohttp>=3.8.0
+# NQBA-Core Platform Dependencies
+# Core Python packages
+python-dotenv>=1.0.0
 pydantic>=2.0.0
-dataclasses-json>=0.6.0
+fastapi>=0.100.0
+uvicorn[standard]>=0.20.0
 
-# Quantum computing
+# Quantum Computing
+numpy>=1.24.0
 qiskit>=0.44.0
 cirq>=1.2.0
 pennylane>=0.30.0
 
-# AI and machine learning
+# AI/ML
+scikit-learn>=1.3.0
 torch>=2.0.0
 transformers>=4.30.0
-numpy>=1.24.0
-scipy>=1.10.0
 
-# Configuration and utilities
-python-dotenv>=1.0.0
+# Configuration & Utilities
 pyyaml>=6.0
 click>=8.1.0
 rich>=13.0.0
+tqdm>=4.65.0
 
-# Testing
-pytest>=7.0.0
-pytest-asyncio>=0.21.0
-pytest-cov>=4.0.0
-pytest-mock>=3.10.0
+# Async & Concurrency
+asyncio-mqtt>=0.11.0
+aiofiles>=23.0.0
 
-# Development tools
-black>=23.0.0
-flake8>=6.0.0
-mypy>=1.0.0
-pre-commit>=3.0.0
-
-# Logging and monitoring
-structlog>=23.0.0
-prometheus-client>=0.17.0
-
-# Security
+# Security & Cryptography
 cryptography>=41.0.0
-bcrypt>=4.0.0
+passlib>=1.7.4
+python-jose[cryptography]>=3.3.0
 
-# Optional: Voice processing
-speechrecognition>=3.10.0
-pyaudio>=0.2.11
-
-# Optional: Web framework (for API endpoints)
-fastapi>=0.100.0
-uvicorn>=0.22.0
-
-# Optional: Database
+# Database & Storage
 sqlalchemy>=2.0.0
 alembic>=1.11.0
-
-# Optional: Message queues
 redis>=4.5.0
-celery>=5.3.0
+
+# Testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+pytest-cov>=4.1.0
+pytest-mock>=3.11.0
+
+# Development Tools
+black>=23.0.0
+flake8>=6.0.0
+mypy>=1.5.0
+pre-commit>=3.3.0
+
+# Documentation
+mkdocs>=1.5.0
+mkdocs-material>=9.2.0
+
+# Monitoring & Logging
+structlog>=23.1.0
+prometheus-client>=0.17.0
+
+# Optional: Dynex Integration
+# dynex-sdk>=1.0.0  # Uncomment when available
+
+# Optional: IPFS Integration
+# ipfshttpclient>=0.8.0  # Uncomment when needed
+
+# Optional: Web3 Integration
+# web3>=6.0.0  # Uncomment when needed

@@ -1,0 +1,36 @@
+# FLYFOX AI Quantum Computing Platform Configuration
+# This file contains all available configuration options
+
+quantum:
+  max_qubits: 32
+  backend: "qiskit"
+  optimization_level: 2
+  enable_apollo_mode: true
+  enable_hybrid: true
+
+dynex:
+  api_key: ""
+  network: "mainnet"
+  enable_pouw: true
+  green_credits: true
+  submission_interval: 300
+
+nqba:
+  execution_mode: "simulator"
+  max_parallel_jobs: 4
+  timeout: 300
+  enable_optimization: true
+  cache_results: true
+
+agent:
+  enable_voice: false
+  enable_chatbot: true
+  enable_digital_human: false
+  language_model: "gpt-3.5-turbo"
+  max_tokens: 1000
+
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file_path: "logs/flyfox_quantum.log"
+  enable_console: true

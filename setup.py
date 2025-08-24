@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Setup script for Goliath Quantum
+Setup script for FLYFOX AI Quantum Computing Platform
 Neuromorphic Quantum Base Architecture for advanced AI systems
 """
 
@@ -13,7 +13,7 @@ def read_readme():
     if os.path.exists(readme_path):
         with open(readme_path, "r", encoding="utf-8") as f:
             return f.read()
-    return "Goliath Quantum - Neuromorphic Quantum Base Architecture"
+    return "FLYFOX AI Quantum Computing Platform - Neuromorphic Quantum Base Architecture"
 
 # Read requirements
 def read_requirements():
@@ -24,18 +24,19 @@ def read_requirements():
     return []
 
 setup(
-    name="goliath-quantum",
+    name="flyfox-quantum",
     version="0.1.0",
-    author="Goliath Britton",
-    author_email="goliath@goliathquantum.com",
-    description="Neuromorphic Quantum Base Architecture for advanced AI systems",
+    author="FLYFOX AI",
+    author_email="contact@flyfox.ai",
+    description="FLYFOX AI Quantum Computing Platform - Neuromorphic Quantum Base Architecture",
     long_description=read_readme(),
     long_description_content_type="text/markdown",
-    url="https://github.com/GoliathBritton/goliath-quantum-starter",
+    url="https://github.com/flyfox-ai/quantum-platform",
     project_urls={
-        "Bug Reports": "https://github.com/GoliathBritton/goliath-quantum-starter/issues",
-        "Source": "https://github.com/GoliathBritton/goliath-quantum-starter",
-        "Documentation": "https://github.com/GoliathBritton/goliath-quantum-starter/docs",
+        "Bug Reports": "https://github.com/flyfox-ai/quantum-platform/issues",
+        "Source": "https://github.com/flyfox-ai/quantum-platform",
+        "Documentation": "https://github.com/flyfox-ai/quantum-platform/docs",
+        "Website": "https://flyfox.ai",
     },
     packages=find_packages(where="src"),
     package_dir={"": "src"},
@@ -86,7 +87,7 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "goliath-quantum=goliath_quantum.cli:main",
+            "flyfox-quantum=goliath.quantum.cli:main",
         ],
     },
     include_package_data=True,
@@ -98,6 +99,7 @@ setup(
         ],
     },
     keywords=[
+        "flyfox",
         "quantum",
         "computing",
         "ai",
@@ -107,6 +109,8 @@ setup(
         "dynex",
         "blockchain",
         "cryptography",
+        "nqba",
+        "sigmaeq",
     ],
     zip_safe=False,
 )

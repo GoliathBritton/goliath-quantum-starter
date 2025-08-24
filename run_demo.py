@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """
-FLYFOX AI: Quantum Computing Platform Demo Script
+FLYFOX AI: Quantum Computing Platform Demo Runner
 
-This script demonstrates the FLYFOX AI Quantum Computing Platform with simulator mode.
-Run this to test the basic functionality before deploying to production.
+This script demonstrates the complete FLYFOX AI Quantum Computing Platform.
 """
 
 import sys
@@ -11,9 +10,10 @@ import os
 import asyncio
 import numpy as np
 
-# Add the src directory to the path so we can import our modules
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", ".."))
+# Add src to Python path
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
 
+# Now import our modules
 from goliath.quantum.goliath_quantum import GoliathQuantum
 
 async def main():
