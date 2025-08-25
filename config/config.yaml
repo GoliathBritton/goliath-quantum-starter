@@ -1,5 +1,5 @@
 # FLYFOX AI Quantum Computing Platform Configuration
-# This file contains all available configuration options
+# Default configuration file
 
 quantum:
   max_qubits: 32
@@ -32,5 +32,5 @@ agent:
 logging:
   level: "INFO"
   format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-  file_path: "logs/flyfox_quantum.log"
+  file_path: null
   enable_console: true

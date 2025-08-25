@@ -1,38 +1,15 @@
 """
-NQBA Core API Server
-Integrated FLYFOX AI Quantum Hub and business intelligence platform
+FLYFOX AI Quantum Hub API
+FastAPI endpoints for third-party quantum computing integrations
+Provides MCP-style access to quantum computing capabilities
 """
 from fastapi import FastAPI, HTTPException, Depends, Header
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import Dict, Any, List, Optional
 import logging
-import uvicorn
 
-# Import NQBA core components
-from .core.business_assessment import (
-    assess_business_comprehensive,
-    AuditType,
-    BEMFramework,
-    AssessmentResult
-)
-from .core.scheduled_audits import (
-    subscribe_company,
-    get_subscription_stats,
-    SubscriptionTier,
-    AuditFrequency
-)
-from .core.automated_data_collection import (
-    get_audit_readiness,
-    get_data_summary,
-    add_custom_data_point,
-    DataSource,
-    DataCategory
-)
-
-# Import FLYFOX AI Quantum Hub components
-from .core.flyfox_quantum_hub import (
+from ..core.flyfox_quantum_hub import (
     flyfox_quantum_hub,
     QuantumOperation,
     QuantumProvider,
@@ -45,45 +22,19 @@ from .core.flyfox_quantum_hub import (
 
 logger = logging.getLogger(__name__)
 
-# Create FastAPI app
-app = FastAPI(
-    title="NQBA Core - FLYFOX AI Quantum Hub",
-    description="Neuromorphic Quantum Business Architecture with integrated quantum computing capabilities",
+# Create FastAPI app for quantum hub
+quantum_hub_app = FastAPI(
+    title="FLYFOX AI Quantum Hub API",
+    description="MCP-style quantum computing orchestration and third-party integration platform",
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc"
 )
 
-# Add CORS middleware
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
 # Security
 security = HTTPBearer()
 
-# Pydantic models for business assessment
-class BusinessAssessmentRequest(BaseModel):
-    """Business assessment request"""
-    company_name: str = Field(..., description="Company name")
-    industry: str = Field(..., description="Industry sector")
-    company_size: str = Field(..., description="Company size (SME, Mid-market, Enterprise)")
-    audit_types: List[str] = Field(default=["financial", "operational"], description="Types of audits to perform")
-    framework: str = Field(default="baldrige", description="Business excellence framework to use")
-    include_quantum_optimization: bool = Field(default=True, description="Include quantum optimization")
-
-class SubscriptionRequest(BaseModel):
-    """Subscription request"""
-    company_name: str = Field(..., description="Company name")
-    tier: str = Field(..., description="Subscription tier")
-    audit_types: List[str] = Field(..., description="Types of audits to include")
-    contact_email: str = Field(..., description="Contact email")
-
-# Pydantic models for FLYFOX AI Quantum Hub
+# Pydantic models
 class QuantumOptimizationRequest(BaseModel):
     """Quantum optimization request"""
     variables: List[str] = Field(..., description="List of variables to optimize")
@@ -137,179 +88,9 @@ async def authenticate_client(credentials: HTTPAuthorizationCredentials = Depend
     
     raise HTTPException(status_code=401, detail="Invalid API key")
 
-# Root endpoint
-@app.get("/")
-async def root():
-    """Root endpoint with NQBA and FLYFOX AI Quantum Hub information"""
-    return {
-        "service": "NQBA Core - FLYFOX AI Quantum Hub",
-        "description": "Neuromorphic Quantum Business Architecture with integrated quantum computing capabilities",
-        "version": "1.0.0",
-        "documentation": "/docs",
-        "components": {
-            "business_assessment": "Comprehensive business assessment with quantum optimization",
-            "scheduled_audits": "Automated audit scheduling and execution",
-            "automated_data_collection": "Real-time data collection for audit readiness",
-            "flyfox_quantum_hub": "MCP-style quantum computing orchestration"
-        },
-        "endpoints": {
-            "business_assessment": {
-                "comprehensive": "POST /v1/assessment/comprehensive",
-                "frameworks": "GET /v1/assessment/frameworks"
-            },
-            "subscriptions": {
-                "subscribe": "POST /v1/subscriptions/subscribe",
-                "stats": "GET /v1/subscriptions/stats",
-                "tiers": "GET /v1/subscriptions/tiers"
-            },
-            "data_collection": {
-                "audit_readiness": "GET /v1/data/audit-readiness/{company_id}",
-                "data_summary": "GET /v1/data/summary/{company_id}",
-                "custom_data": "POST /v1/data/custom",
-                "data_sources": "GET /v1/data/sources"
-            },
-            "quantum_hub": {
-                "optimize": "POST /v1/quantum/optimize",
-                "llm": "POST /v1/quantum/llm",
-                "portfolio_optimize": "POST /v1/quantum/portfolio-optimize",
-                "status": "GET /v1/quantum/status/{request_id}",
-                "providers": "GET /v1/quantum/providers",
-                "register": "POST /v1/quantum/register",
-                "usage": "GET /v1/quantum/usage/{client_id}",
-                "health": "GET /v1/quantum/health"
-            }
-        }
-    }
+# API endpoints
 
-# Business Assessment Endpoints
-@app.post("/v1/assessment/comprehensive")
-async def comprehensive_business_assessment(request: BusinessAssessmentRequest):
-    """Perform comprehensive business assessment with quantum optimization"""
-    try:
-        # Convert string enums
-        audit_types = [AuditType(audit_type) for audit_type in request.audit_types]
-        framework = BEMFramework(request.framework)
-        
-        # Perform assessment
-        result = await assess_business_comprehensive(
-            company_name=request.company_name,
-            industry=request.industry,
-            company_size=request.company_size,
-            audit_types=audit_types,
-            framework=framework,
-            include_quantum_optimization=request.include_quantum_optimization
-        )
-        
-        return {
-            "status": "success",
-            "assessment": result
-        }
-        
-    except Exception as e:
-        logger.error(f"Business assessment failed: {e}")
-        raise HTTPException(status_code=500, detail=f"Business assessment failed: {str(e)}")
-
-@app.get("/v1/assessment/frameworks")
-async def get_assessment_frameworks():
-    """Get available assessment frameworks and audit types"""
-    return {
-        "audit_types": [audit_type.value for audit_type in AuditType],
-        "bem_frameworks": [framework.value for framework in BEMFramework],
-        "quantum_optimization": "Available for all assessment types"
-    }
-
-# Subscription Management Endpoints
-@app.post("/v1/subscriptions/subscribe")
-async def subscribe_to_nqba(request: SubscriptionRequest):
-    """Subscribe company to NQBA services"""
-    try:
-        # Convert string enums
-        tier = SubscriptionTier(request.tier)
-        audit_types = [AuditType(audit_type) for audit_type in request.audit_types]
-        
-        # Subscribe company
-        subscription_id = await subscribe_company(
-            company_name=request.company_name,
-            tier=tier,
-            audit_types=audit_types,
-            contact_email=request.contact_email
-        )
-        
-        return {
-            "status": "success",
-            "subscription_id": subscription_id,
-            "message": f"Successfully subscribed {request.company_name} to {tier.value} tier"
-        }
-        
-    except Exception as e:
-        logger.error(f"Subscription failed: {e}")
-        raise HTTPException(status_code=500, detail=f"Subscription failed: {str(e)}")
-
-@app.get("/v1/subscriptions/stats")
-async def get_nqba_stats():
-    """Get NQBA subscription statistics"""
-    try:
-        stats = await get_subscription_stats()
-        return stats
-        
-    except Exception as e:
-        logger.error(f"Failed to get subscription stats: {e}")
-        raise HTTPException(status_code=500, detail=f"Failed to get subscription stats: {str(e)}")
-
-@app.get("/v1/subscriptions/tiers")
-async def get_subscription_tiers():
-    """Get available subscription tiers"""
-    return {
-        "tiers": [tier.value for tier in SubscriptionTier],
-        "frequencies": [freq.value for freq in AuditFrequency],
-        "quantum_integration": "All tiers include quantum computing capabilities"
-    }
-
-# Data Collection Endpoints
-@app.get("/v1/data/audit-readiness/{company_id}")
-async def get_company_audit_readiness(company_id: str):
-    """Get company audit readiness status"""
-    try:
-        readiness = await get_audit_readiness(company_id)
-        return readiness
-        
-    except Exception as e:
-        logger.error(f"Failed to get audit readiness: {e}")
-        raise HTTPException(status_code=500, detail=f"Failed to get audit readiness: {str(e)}")
-
-@app.get("/v1/data/summary/{company_id}")
-async def get_company_data_summary(company_id: str):
-    """Get company data collection summary"""
-    try:
-        summary = await get_data_summary(company_id)
-        return summary
-        
-    except Exception as e:
-        logger.error(f"Failed to get data summary: {e}")
-        raise HTTPException(status_code=500, detail=f"Failed to get data summary: {str(e)}")
-
-@app.post("/v1/data/custom")
-async def add_custom_data(data: Dict[str, Any]):
-    """Add custom data point"""
-    try:
-        result = await add_custom_data_point(data)
-        return result
-        
-    except Exception as e:
-        logger.error(f"Failed to add custom data: {e}")
-        raise HTTPException(status_code=500, detail=f"Failed to add custom data: {str(e)}")
-
-@app.get("/v1/data/sources")
-async def get_data_sources():
-    """Get available data sources and categories"""
-    return {
-        "data_sources": [source.value for source in DataSource],
-        "data_categories": [category.value for category in DataCategory],
-        "quantum_enhanced_analysis": "Available for all data sources"
-    }
-
-# FLYFOX AI Quantum Hub Endpoints
-@app.post("/v1/quantum/optimize", response_model=QuantumResponse)
+@quantum_hub_app.post("/api/v1/quantum/optimize", response_model=QuantumResponse)
 async def quantum_optimization(
     request: QuantumOptimizationRequest,
     client_id: str = Depends(authenticate_client)
@@ -347,7 +128,7 @@ async def quantum_optimization(
         logger.error(f"Quantum optimization failed: {e}")
         raise HTTPException(status_code=500, detail=f"Quantum optimization failed: {str(e)}")
 
-@app.post("/v1/quantum/llm", response_model=QuantumResponse)
+@quantum_hub_app.post("/api/v1/quantum/llm", response_model=QuantumResponse)
 async def quantum_llm(
     request: QuantumLLMRequest,
     client_id: str = Depends(authenticate_client)
@@ -384,7 +165,7 @@ async def quantum_llm(
         logger.error(f"Quantum LLM request failed: {e}")
         raise HTTPException(status_code=500, detail=f"Quantum LLM request failed: {str(e)}")
 
-@app.post("/v1/quantum/portfolio-optimize", response_model=QuantumResponse)
+@quantum_hub_app.post("/api/v1/quantum/portfolio-optimize", response_model=QuantumResponse)
 async def portfolio_optimization(
     request: PortfolioOptimizationRequest,
     client_id: str = Depends(authenticate_client)
@@ -422,7 +203,7 @@ async def portfolio_optimization(
         logger.error(f"Portfolio optimization failed: {e}")
         raise HTTPException(status_code=500, detail=f"Portfolio optimization failed: {str(e)}")
 
-@app.get("/v1/quantum/status/{request_id}")
+@quantum_hub_app.get("/api/v1/quantum/status/{request_id}")
 async def get_quantum_status(
     request_id: str,
     client_id: str = Depends(authenticate_client)
@@ -443,22 +224,21 @@ async def get_quantum_status(
         logger.error(f"Failed to get quantum status: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to get quantum status: {str(e)}")
 
-@app.get("/v1/quantum/providers")
+@quantum_hub_app.get("/api/v1/quantum/providers")
 async def get_quantum_providers():
     """Get available quantum providers"""
     try:
         providers = await get_available_providers()
         return {
             "providers": providers,
-            "total_providers": len(providers),
-            "flyfox_ai_branded": "All providers integrated under FLYFOX AI"
+            "total_providers": len(providers)
         }
         
     except Exception as e:
         logger.error(f"Failed to get quantum providers: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to get quantum providers: {str(e)}")
 
-@app.post("/v1/quantum/register")
+@quantum_hub_app.post("/api/v1/quantum/register")
 async def register_third_party(
     request: ThirdPartyRegistrationRequest
 ):
@@ -493,7 +273,7 @@ async def register_third_party(
         logger.error(f"Third-party registration failed: {e}")
         raise HTTPException(status_code=500, detail=f"Third-party registration failed: {str(e)}")
 
-@app.get("/v1/quantum/usage/{client_id}")
+@quantum_hub_app.get("/api/v1/quantum/usage/{client_id}")
 async def get_quantum_usage(
     client_id: str,
     authenticated_client_id: str = Depends(authenticate_client)
@@ -511,12 +291,12 @@ async def get_quantum_usage(
         logger.error(f"Failed to get quantum usage: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to get quantum usage: {str(e)}")
 
-@app.get("/v1/quantum/health")
+@quantum_hub_app.get("/api/v1/quantum/health")
 async def quantum_hub_health():
     """Health check for quantum hub"""
     return {
         "status": "healthy",
-        "service": "FLYFOX AI Quantum Hub (Integrated with NQBA)",
+        "service": "FLYFOX AI Quantum Hub",
         "version": "1.0.0",
         "providers_configured": len(flyfox_quantum_hub.provider_configs),
         "active_integrations": len([
@@ -526,28 +306,42 @@ async def quantum_hub_health():
         "pending_requests": len([
             req for req in flyfox_quantum_hub.quantum_requests.values()
             if req.status.value == "pending"
-        ]),
-        "nqba_integration": "Fully integrated with business assessment and audit systems"
+        ])
     }
 
-# Health check endpoint
-@app.get("/health")
-async def health_check():
-    """Overall system health check"""
+@quantum_hub_app.get("/")
+async def quantum_hub_root():
+    """Root endpoint with API information"""
     return {
-        "status": "healthy",
-        "service": "NQBA Core - FLYFOX AI Quantum Hub",
+        "service": "FLYFOX AI Quantum Hub",
+        "description": "MCP-style quantum computing orchestration and third-party integration platform",
         "version": "1.0.0",
-        "components": {
-            "business_assessment": "operational",
-            "scheduled_audits": "operational", 
-            "automated_data_collection": "operational",
-            "flyfox_quantum_hub": "operational"
+        "documentation": "/docs",
+        "endpoints": {
+            "quantum_optimization": "POST /api/v1/quantum/optimize",
+            "quantum_llm": "POST /api/v1/quantum/llm",
+            "portfolio_optimization": "POST /api/v1/quantum/portfolio-optimize",
+            "get_status": "GET /api/v1/quantum/status/{request_id}",
+            "get_providers": "GET /api/v1/quantum/providers",
+            "register": "POST /api/v1/quantum/register",
+            "get_usage": "GET /api/v1/quantum/usage/{client_id}",
+            "health": "GET /api/v1/quantum/health"
         },
-        "quantum_providers": len(flyfox_quantum_hub.provider_configs),
-        "active_integrations": len(flyfox_quantum_hub.third_party_integrations)
+        "supported_operations": [
+            "optimization",
+            "simulation", 
+            "machine_learning",
+            "cryptography",
+            "quantum_llm",
+            "portfolio_optimization",
+            "risk_assessment",
+            "process_optimization"
+        ],
+        "supported_providers": [
+            "dynex",
+            "ibm_q",
+            "google_quantum",
+            "microsoft_azure",
+            "custom"
+        ]
     }
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)

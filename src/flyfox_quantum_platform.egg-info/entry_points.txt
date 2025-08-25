@@ -1,0 +1,3 @@
+[console_scripts]
+flyfox-demo = main:main
+flyfox-quantum = cli:cli

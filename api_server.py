@@ -25,6 +25,40 @@ from nqba_stack.core.orchestrator import (
 from nqba_stack.core.ltc_logger import get_ltc_logger
 from nqba_stack.business_pods import get_all_business_pods
 
+# Add import for business assessment
+from nqba_stack.core.business_assessment import (
+    assess_business_comprehensive,
+    AuditType,
+    BEMFramework,
+    AssessmentResult
+)
+
+# Add import for scheduled audits
+from nqba_stack.core.scheduled_audits import (
+    subscribe_company,
+    get_subscription_stats,
+    SubscriptionTier,
+    AuditFrequency
+)
+
+# Add import for automated data collection
+from nqba_stack.core.automated_data_collection import (
+    get_audit_readiness,
+    get_data_summary,
+    add_custom_data_point,
+    DataSource,
+    DataCategory
+)
+
+# Add import for FLYFOX AI Quantum Hub
+from nqba_stack.api.quantum_hub_api import quantum_hub_app
+from nqba_stack.core.flyfox_quantum_hub import (
+    QuantumOperation,
+    QuantumProvider,
+    submit_quantum_request,
+    get_request_status
+)
+
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -292,6 +326,68 @@ async def optimize_portfolio(request: PortfolioOptimizationRequest):
         logger.error(f"Portfolio optimization failed: {e}")
         raise HTTPException(status_code=500, detail=f"Portfolio optimization failed: {str(e)}")
 
+# Business Assessment endpoint
+@app.post("/v1/assessment/comprehensive", response_model=AssessmentResult)
+async def comprehensive_business_assessment(
+    company_data: Dict[str, Any],
+    audit_types: List[str] = None,
+    framework: str = "baldrige",
+    use_quantum: bool = True
+):
+    """Perform comprehensive business assessment using IBP, BEMs, and quantum optimization"""
+    try:
+        # Convert string inputs to enums
+        audit_type_enums = []
+        if audit_types:
+            for audit_type_str in audit_types:
+                try:
+                    audit_type_enums.append(AuditType(audit_type_str))
+                except ValueError:
+                    raise HTTPException(status_code=400, detail=f"Invalid audit type: {audit_type_str}")
+        else:
+            audit_type_enums = [AuditType.FINANCIAL, AuditType.OPERATIONAL, AuditType.COMPLIANCE]
+        
+        # Convert framework string to enum
+        try:
+            framework_enum = BEMFramework(framework)
+        except ValueError:
+            raise HTTPException(status_code=400, detail=f"Invalid framework: {framework}")
+        
+        # Perform assessment
+        assessment_result = await assess_business_comprehensive(
+            company_data=company_data,
+            audit_types=audit_type_enums,
+            framework=framework_enum,
+            use_quantum=use_quantum
+        )
+        
+        return assessment_result
+        
+    except Exception as e:
+        logger.error(f"Business assessment failed: {e}")
+        raise HTTPException(status_code=500, detail=f"Business assessment failed: {str(e)}")
+
+# Business Assessment frameworks endpoint
+@app.get("/v1/assessment/frameworks")
+async def get_assessment_frameworks():
+    """Get available assessment frameworks and audit types"""
+    return {
+        "audit_types": [
+            {"value": at.value, "name": at.name, "description": f"{at.name.title()} audit"}
+            for at in AuditType
+        ],
+        "bem_frameworks": [
+            {"value": bem.value, "name": bem.name, "description": f"{bem.name.title()} framework"}
+            for bem in BEMFramework
+        ],
+        "ibp_components": [
+            "strategic_alignment",
+            "cross_functional_collaboration", 
+            "long_term_focus",
+            "risk_resilience"
+        ]
+    }
+
 # LTC Query endpoint
 @app.get("/v1/ltc/query")
 async def query_ltc(
@@ -331,6 +427,301 @@ async def query_ltc(
     except Exception as e:
         logger.error(f"LTC query failed: {e}")
         raise HTTPException(status_code=500, detail=f"LTC query failed: {str(e)}")
+
+# Scheduled Audit Management endpoints
+@app.post("/v1/subscriptions/subscribe")
+async def subscribe_company_to_nqba(
+    company_id: str,
+    company_name: str,
+    subscription_tier: str,
+    custom_audit_types: List[str] = None,
+    custom_framework: str = None
+):
+    """Subscribe a company to NQBA scheduled audits"""
+    try:
+        # Convert string inputs to enums
+        try:
+            tier_enum = SubscriptionTier(subscription_tier)
+        except ValueError:
+            raise HTTPException(status_code=400, detail=f"Invalid subscription tier: {subscription_tier}")
+        
+        audit_type_enums = None
+        if custom_audit_types:
+            audit_type_enums = []
+            for audit_type_str in custom_audit_types:
+                try:
+                    audit_type_enums.append(AuditType(audit_type_str))
+                except ValueError:
+                    raise HTTPException(status_code=400, detail=f"Invalid audit type: {audit_type_str}")
+        
+        framework_enum = None
+        if custom_framework:
+            try:
+                framework_enum = BEMFramework(custom_framework)
+            except ValueError:
+                raise HTTPException(status_code=400, detail=f"Invalid framework: {custom_framework}")
+        
+        # Subscribe company
+        result = await subscribe_company(
+            company_id=company_id,
+            company_name=company_name,
+            subscription_tier=tier_enum,
+            custom_audit_types=audit_type_enums,
+            custom_framework=framework_enum
+        )
+        
+        return {
+            "status": "success",
+            "company_id": result,
+            "message": f"Company {company_name} successfully subscribed to {subscription_tier} tier"
+        }
+        
+    except Exception as e:
+        logger.error(f"Company subscription failed: {e}")
+        raise HTTPException(status_code=500, detail=f"Company subscription failed: {str(e)}")
+
+@app.get("/v1/subscriptions/stats")
+async def get_nqba_subscription_statistics():
+    """Get NQBA subscription statistics"""
+    try:
+        stats = await get_subscription_stats()
+        return stats
+        
+    except Exception as e:
+        logger.error(f"Failed to get subscription stats: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to get subscription stats: {str(e)}")
+
+@app.get("/v1/subscriptions/tiers")
+async def get_subscription_tiers():
+    """Get available subscription tiers and their configurations"""
+    return {
+        "tiers": [
+            {
+                "value": "basic",
+                "name": "Basic NQBA",
+                "monthly_price": 5000,
+                "audit_frequency": "monthly",
+                "audit_types": ["financial", "operational"],
+                "framework": "baldrige",
+                "use_quantum": False,
+                "audit_included": False
+            },
+            {
+                "value": "professional",
+                "name": "Professional NQBA",
+                "monthly_price": 15000,
+                "audit_frequency": "quarterly",
+                "audit_types": ["financial", "operational", "compliance"],
+                "framework": "baldrige",
+                "use_quantum": True,
+                "audit_included": True
+            },
+            {
+                "value": "enterprise",
+                "name": "Enterprise NQBA",
+                "monthly_price": 50000,
+                "audit_frequency": "monthly",
+                "audit_types": ["financial", "operational", "compliance", "it_security", "strategic"],
+                "framework": "efqm",
+                "use_quantum": True,
+                "audit_included": True
+            },
+            {
+                "value": "quantum_elite",
+                "name": "Quantum Elite NQBA",
+                "monthly_price": 100000,
+                "audit_frequency": "continuous",
+                "audit_types": ["financial", "operational", "compliance", "it_security", "strategic", "risk", "smeta", "sustainability"],
+                "framework": "efqm",
+                "use_quantum": True,
+                "audit_included": True
+            }
+        ]
+    }
+
+# Automated Data Collection endpoints
+@app.get("/v1/data/audit-readiness/{company_id}")
+async def get_company_audit_readiness(company_id: str):
+    """Get audit readiness status for a company"""
+    try:
+        readiness = await get_audit_readiness(company_id)
+        return readiness
+        
+    except Exception as e:
+        logger.error(f"Failed to get audit readiness: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to get audit readiness: {str(e)}")
+
+@app.get("/v1/data/summary/{company_id}")
+async def get_company_data_summary(company_id: str):
+    """Get data collection summary for a company"""
+    try:
+        summary = await get_data_summary(company_id)
+        return summary
+        
+    except Exception as e:
+        logger.error(f"Failed to get data summary: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to get data summary: {str(e)}")
+
+@app.post("/v1/data/custom")
+async def add_custom_data_point_endpoint(
+    company_id: str,
+    source: str,
+    category: str,
+    field_name: str,
+    field_value: Any,
+    confidence_score: float = 1.0
+):
+    """Add a custom data point"""
+    try:
+        # Convert string inputs to enums
+        try:
+            source_enum = DataSource(source)
+        except ValueError:
+            raise HTTPException(status_code=400, detail=f"Invalid data source: {source}")
+        
+        try:
+            category_enum = DataCategory(category)
+        except ValueError:
+            raise HTTPException(status_code=400, detail=f"Invalid data category: {category}")
+        
+        # Add custom data point
+        data_id = await add_custom_data_point(
+            company_id=company_id,
+            source=source_enum,
+            category=category_enum,
+            field_name=field_name,
+            field_value=field_value,
+            confidence_score=confidence_score
+        )
+        
+        return {
+            "status": "success",
+            "data_id": data_id,
+            "message": f"Custom data point added successfully"
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to add custom data point: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to add custom data point: {str(e)}")
+
+@app.get("/v1/data/sources")
+async def get_data_sources():
+    """Get available data sources and categories"""
+    return {
+        "data_sources": [
+            {"value": ds.value, "name": ds.name, "description": f"Data from {ds.value}"}
+            for ds in DataSource
+        ],
+        "data_categories": [
+            {"value": dc.value, "name": dc.name, "description": f"Data for {dc.value} audit"}
+            for dc in DataCategory
+        ]
+    }
+
+# Update quantum optimization endpoint to use FLYFOX AI Quantum Hub
+@app.post("/v1/quantum/optimize")
+async def quantum_optimization_enhanced(
+    variables: List[str],
+    constraints: List[Dict[str, Any]] = [],
+    objective_function: str = "minimize",
+    provider: str = "dynex",
+    priority: int = 1
+):
+    """Enhanced quantum optimization using FLYFOX AI Quantum Hub"""
+    try:
+        # Convert provider string to enum
+        provider_enum = QuantumProvider(provider)
+        
+        # Prepare parameters
+        parameters = {
+            "variables": variables,
+            "constraints": constraints,
+            "objective_function": objective_function
+        }
+        
+        # Submit quantum request using FLYFOX AI Quantum Hub
+        request_id = await submit_quantum_request(
+            client_id="NQBA_INTERNAL",  # Internal NQBA client
+            operation_type=QuantumOperation.OPTIMIZATION,
+            provider=provider_enum,
+            parameters=parameters,
+            priority=priority
+        )
+        
+        return {
+            "request_id": request_id,
+            "status": "submitted",
+            "message": "Quantum optimization request submitted to FLYFOX AI Quantum Hub",
+            "provider": provider,
+            "hub_endpoint": f"/quantum-hub/api/v1/quantum/status/{request_id}"
+        }
+        
+    except Exception as e:
+        logger.error(f"Quantum optimization failed: {e}")
+        raise HTTPException(status_code=500, detail=f"Quantum optimization failed: {str(e)}")
+
+# Add FLYFOX AI Quantum Hub status endpoint
+@app.get("/v1/quantum/status/{request_id}")
+async def get_quantum_status_enhanced(request_id: str):
+    """Get quantum operation status from FLYFOX AI Quantum Hub"""
+    try:
+        status = await get_request_status(request_id)
+        return {
+            **status,
+            "hub_service": "FLYFOX AI Quantum Hub",
+            "hub_documentation": "/quantum-hub/docs"
+        }
+        
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        logger.error(f"Failed to get quantum status: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to get quantum status: {str(e)}")
+
+# Add FLYFOX AI Quantum Hub providers endpoint
+@app.get("/v1/quantum/providers")
+async def get_quantum_providers_enhanced():
+    """Get available quantum providers from FLYFOX AI Quantum Hub"""
+    try:
+        from nqba_stack.core.flyfox_quantum_hub import get_available_providers
+        providers = await get_available_providers()
+        return {
+            "providers": providers,
+            "total_providers": len(providers),
+            "hub_service": "FLYFOX AI Quantum Hub",
+            "hub_endpoint": "/quantum-hub/api/v1/quantum/providers"
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to get quantum providers: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to get quantum providers: {str(e)}")
+
+# Add FLYFOX AI Quantum Hub health endpoint
+@app.get("/v1/quantum/health")
+async def quantum_health_enhanced():
+    """Get FLYFOX AI Quantum Hub health status"""
+    try:
+        from nqba_stack.core.flyfox_quantum_hub import flyfox_quantum_hub
+        
+        return {
+            "status": "healthy",
+            "service": "FLYFOX AI Quantum Hub",
+            "version": "1.0.0",
+            "providers_configured": len(flyfox_quantum_hub.provider_configs),
+            "active_integrations": len([
+                integration for integration in flyfox_quantum_hub.third_party_integrations.values()
+                if integration.is_active
+            ]),
+            "pending_requests": len([
+                req for req in flyfox_quantum_hub.quantum_requests.values()
+                if req.status.value == "pending"
+            ]),
+            "hub_endpoint": "/quantum-hub/api/v1/quantum/health"
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to get quantum health: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to get quantum health: {str(e)}")
 
 # Helper functions
 def _generate_next_actions(scored_leads: List[Dict[str, Any]]) -> List[str]:
