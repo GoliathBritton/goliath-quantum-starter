@@ -1,6 +1,7 @@
 """
 Prometheus Metrics and OpenTelemetry Tracing Scaffold
 """
+
 from fastapi import FastAPI
 from prometheus_client import Counter, generate_latest
 from starlette.responses import Response
@@ -10,7 +11,8 @@ from opentelemetry.sdk.trace.export import BatchSpanProcessor, ConsoleSpanExport
 
 app = FastAPI()
 
-REQUEST_COUNT = Counter('request_count', 'Total API Requests', ['endpoint'])
+REQUEST_COUNT = Counter("request_count", "Total API Requests", ["endpoint"])
+
 
 @app.middleware("http")
 async def prometheus_middleware(request, call_next):
@@ -19,9 +21,11 @@ async def prometheus_middleware(request, call_next):
     response = await call_next(request)
     return response
 
+
 @app.get("/metrics")
 def metrics():
     return Response(generate_latest(), media_type="text/plain")
+
 
 # OpenTelemetry setup
 trace.set_tracer_provider(TracerProvider())

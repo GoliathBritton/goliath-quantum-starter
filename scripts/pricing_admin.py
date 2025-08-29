@@ -1,6 +1,7 @@
 """
 Admin CLI for pricing: role-based access, changelog, and edit support.
 """
+
 import json
 from pathlib import Path
 import getpass
@@ -28,7 +29,9 @@ def show_changelog():
     with open(history, "r", encoding="utf-8") as f:
         for line in f:
             entry = json.loads(line)
-            print(f"{entry['timestamp']}: {entry['pricing'].get('hero', {}).get('title', '')}")
+            print(
+                f"{entry['timestamp']}: {entry['pricing'].get('hero', {}).get('title', '')}"
+            )
 
 
 def edit_pricing():
@@ -42,8 +45,11 @@ def edit_pricing():
 
 def main():
     import argparse
+
     parser = argparse.ArgumentParser(description="Pricing Admin CLI")
-    parser.add_argument("--changelog", action="store_true", help="Show pricing changelog")
+    parser.add_argument(
+        "--changelog", action="store_true", help="Show pricing changelog"
+    )
     parser.add_argument("--edit", action="store_true", help="Edit pricing (admin only)")
     args = parser.parse_args()
     if args.changelog:
@@ -52,6 +58,7 @@ def main():
         edit_pricing()
     else:
         parser.print_help()
+
 
 if __name__ == "__main__":
     main()

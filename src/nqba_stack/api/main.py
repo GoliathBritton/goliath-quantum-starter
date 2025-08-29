@@ -28,28 +28,30 @@ async def lifespan(app: FastAPI):
     # Startup
     logger.info("Starting NQBA API Server...")
     logger.info("Initializing business unit integration...")
-    
+
     # Import and initialize business unit manager
     try:
         from ..business_integration import business_unit_manager
         from ..business_integration import FLYFOXAIBusinessUnit
-        
+
         # Register FLYFOX AI business unit
         flyfox_ai = FLYFOXAIBusinessUnit()
         await business_unit_manager.register_business_unit(flyfox_ai)
-        
+
         # Start monitoring
         await business_unit_manager.start_monitoring()
-        
+
         logger.info("NQBA API Server started successfully")
-        logger.info(f"Registered business units: {len(await business_unit_manager.get_all_business_units())}")
-        
+        logger.info(
+            f"Registered business units: {len(await business_unit_manager.get_all_business_units())}"
+        )
+
     except Exception as e:
         logger.error(f"Failed to initialize business units: {e}")
         raise
-    
+
     yield
-    
+
     # Shutdown
     logger.info("Shutting down NQBA API Server...")
     try:
@@ -66,7 +68,7 @@ app = FastAPI(
     version="2.0.0",
     docs_url="/docs",
     redoc_url="/redoc",
-    lifespan=lifespan
+    lifespan=lifespan,
 )
 
 # Add CORS middleware
@@ -81,7 +83,7 @@ app.add_middleware(
 # Add trusted host middleware
 app.add_middleware(
     TrustedHostMiddleware,
-    allowed_hosts=["*"]  # In production, restrict to specific hosts
+    allowed_hosts=["*"],  # In production, restrict to specific hosts
 )
 
 
@@ -99,16 +101,16 @@ async def add_process_time_header(request: Request, call_next):
 async def log_requests(request: Request, call_next):
     """Log all API requests"""
     start_time = time.time()
-    
+
     # Log request
     logger.info(f"Request: {request.method} {request.url.path}")
-    
+
     response = await call_next(request)
-    
+
     # Log response
     process_time = time.time() - start_time
     logger.info(f"Response: {response.status_code} - {process_time:.3f}s")
-    
+
     return response
 
 
@@ -121,8 +123,8 @@ async def global_exception_handler(request: Request, exc: Exception):
         content={
             "error": "Internal server error",
             "message": "An unexpected error occurred",
-            "timestamp": time.time()
-        }
+            "timestamp": time.time(),
+        },
     )
 
 
@@ -136,8 +138,8 @@ async def http_exception_handler(request: Request, exc: HTTPException):
             "error": "HTTP error",
             "message": exc.detail,
             "status_code": exc.status_code,
-            "timestamp": time.time()
-        }
+            "timestamp": time.time(),
+        },
     )
 
 
@@ -150,11 +152,11 @@ async def root():
         "description": "API for the NQBA ecosystem",
         "business_units": [
             "FLYFOX AI - Energy Optimization",
-            "Goliath of All Trade - Financial Operations", 
-            "Sigma Select - Sales Intelligence"
+            "Goliath of All Trade - Financial Operations",
+            "Sigma Select - Sales Intelligence",
         ],
         "documentation": "/docs",
-        "status": "operational"
+        "status": "operational",
     }
 
 
@@ -163,24 +165,20 @@ async def health_check():
     """Health check endpoint"""
     try:
         from ..business_integration import business_unit_manager
-        
+
         # Get ecosystem status
         ecosystem_status = await business_unit_manager.get_ecosystem_status()
-        
+
         return {
             "status": "healthy",
             "timestamp": time.time(),
             "ecosystem": ecosystem_status,
-            "api_version": "2.0.0"
+            "api_version": "2.0.0",
         }
-        
+
     except Exception as e:
         logger.error(f"Health check failed: {e}")
-        return {
-            "status": "unhealthy",
-            "error": str(e),
-            "timestamp": time.time()
-        }
+        return {"status": "unhealthy", "error": str(e), "timestamp": time.time()}
 
 
 @app.get("/info")
@@ -195,60 +193,44 @@ async def api_info():
                 "name": "FLYFOX AI",
                 "description": "Energy optimization and consumption management",
                 "endpoints": "/api/v1/flyfox-ai",
-                "quantum_advantage": "3.2x energy optimization"
+                "quantum_advantage": "3.2x energy optimization",
             },
             "goliath_trade": {
-                "name": "Goliath of All Trade", 
+                "name": "Goliath of All Trade",
                 "description": "Financial trading and portfolio optimization",
                 "endpoints": "/api/v1/goliath-trade",
-                "quantum_advantage": "4.1x portfolio performance"
+                "quantum_advantage": "4.1x portfolio performance",
             },
             "sigma_select": {
                 "name": "Sigma Select",
                 "description": "Sales intelligence and lead scoring",
                 "endpoints": "/api/v1/sigma-select",
-                "quantum_advantage": "2.8x lead conversion"
-            }
+                "quantum_advantage": "2.8x lead conversion",
+            },
         },
         "features": [
             "Quantum-enhanced business operations",
             "Real-time monitoring and analytics",
             "Cross-business unit communication",
             "High Council administrative dashboard",
-            "Automated decision making"
+            "Automated decision making",
         ],
         "documentation": "/docs",
-        "redoc": "/redoc"
+        "redoc": "/redoc",
     }
 
 
 # Include routers
-app.include_router(
-    business_units_router,
-    prefix="/api/v1",
-    tags=["Business Units"]
-)
+app.include_router(business_units_router, prefix="/api/v1", tags=["Business Units"])
 
 app.include_router(
-    high_council_router,
-    prefix="/api/v1/high-council",
-    tags=["High Council"]
+    high_council_router, prefix="/api/v1/high-council", tags=["High Council"]
 )
 
-app.include_router(
-    monitoring_router,
-    prefix="/api/v1/monitoring",
-    tags=["Monitoring"]
-)
+app.include_router(monitoring_router, prefix="/api/v1/monitoring", tags=["Monitoring"])
 
 
 if __name__ == "__main__":
     import uvicorn
-    
-    uvicorn.run(
-        "main:app",
-        host="0.0.0.0",
-        port=8000,
-        reload=True,
-        log_level="info"
-    )
+
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True, log_level="info")

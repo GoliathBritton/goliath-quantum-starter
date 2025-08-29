@@ -15,17 +15,21 @@ from typing import Dict, Any, List
 from dataclasses import dataclass
 from enum import Enum
 
+
 class LandingPageType(Enum):
     """Types of landing pages"""
+
     AI_AGENT = "ai_agent"
     QAIAAS = "qaias"
     CUSTOM_DEVELOPMENT = "custom_development"
     INDUSTRY_SOLUTION = "industry_solution"
     QAAS = "qaas"
 
+
 @dataclass
 class LandingPageConfig:
     """Configuration for landing page generation"""
+
     page_type: LandingPageType
     service_name: str
     service_description: str
@@ -35,12 +39,13 @@ class LandingPageConfig:
     call_to_action: str
     branding: str = "FLYFOX AI"
 
+
 class LandingPageGenerator:
     """Generates dynamic landing pages for FLYFOX AI services"""
-    
+
     def __init__(self):
         self.templates = self._load_templates()
-    
+
     def _load_templates(self) -> Dict[str, str]:
         """Load HTML templates for different page types"""
         return {
@@ -48,37 +53,37 @@ class LandingPageGenerator:
             "ai_agent": self._get_ai_agent_template(),
             "qaias": self._get_qaias_template(),
             "custom_development": self._get_custom_development_template(),
-            "qaas": self._get_qaas_template()
+            "qaas": self._get_qaas_template(),
         }
-    
+
     def generate_landing_page(self, config: LandingPageConfig) -> str:
         """Generate a complete landing page based on configuration"""
         template = self.templates.get(config.page_type.value, self.templates["base"])
-        
+
         # Replace placeholders with actual content
         html = template.replace("{{SERVICE_NAME}}", config.service_name)
         html = html.replace("{{SERVICE_DESCRIPTION}}", config.service_description)
         html = html.replace("{{BRANDING}}", config.branding)
         html = html.replace("{{TARGET_AUDIENCE}}", config.target_audience)
         html = html.replace("{{CALL_TO_ACTION}}", config.call_to_action)
-        
+
         # Generate features HTML
         features_html = self._generate_features_html(config.features)
         html = html.replace("{{FEATURES}}", features_html)
-        
+
         # Generate pricing HTML
         pricing_html = self._generate_pricing_html(config.pricing)
         html = html.replace("{{PRICING}}", pricing_html)
-        
+
         return html
-    
+
     def _generate_features_html(self, features: List[str]) -> str:
         """Generate HTML for features list"""
         features_html = ""
         for feature in features:
             features_html += f'<li class="feature-item">✅ {feature}</li>\n'
         return features_html
-    
+
     def _generate_pricing_html(self, pricing: Dict[str, Any]) -> str:
         """Generate HTML for pricing section"""
         pricing_html = ""
@@ -89,11 +94,11 @@ class LandingPageGenerator:
                 <div class="price">{details.get('price', 'Contact Sales')}</div>
                 <ul class="tier-features">
             """
-            for feature in details.get('features', []):
-                pricing_html += f'<li>{feature}</li>\n'
+            for feature in details.get("features", []):
+                pricing_html += f"<li>{feature}</li>\n"
             pricing_html += "</ul></div>"
         return pricing_html
-    
+
     def _get_base_template(self) -> str:
         """Base HTML template"""
         return """
@@ -270,19 +275,19 @@ class LandingPageGenerator:
 </body>
 </html>
         """
-    
+
     def _get_ai_agent_template(self) -> str:
         """AI Agent landing page template"""
         return self._get_base_template()
-    
+
     def _get_qaias_template(self) -> str:
         """QAIaaS landing page template"""
         return self._get_base_template()
-    
+
     def _get_custom_development_template(self) -> str:
         """Custom Development landing page template"""
         return self._get_base_template()
-    
+
     def _get_qaas_template(self) -> str:
         """QAaaS landing page template"""
         return self._get_base_template()

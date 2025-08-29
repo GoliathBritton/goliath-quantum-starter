@@ -2,6 +2,7 @@
 Streamlit dashboard for Goliath of All Trade: Quantum+AI Automations
 - Division selector, demo workflows, and automation runner for each business unit
 """
+
 import streamlit as st
 from nqba import AUTOMATIONS, DIVISIONS
 
@@ -12,7 +13,9 @@ st.title("Goliath of All Trade: Quantum+AI Automation Platform")
 st.sidebar.header("Business Divisions")
 div_keys = list(DIVISIONS.keys())
 div_labels = [DIVISIONS[k]["label"] for k in div_keys]
-div_idx = st.sidebar.selectbox("Select Division", range(len(div_keys)), format_func=lambda i: div_labels[i])
+div_idx = st.sidebar.selectbox(
+    "Select Division", range(len(div_keys)), format_func=lambda i: div_labels[i]
+)
 div_key = div_keys[div_idx]
 division = DIVISIONS[div_key]
 
@@ -41,7 +44,7 @@ if selected == "lead_scoring":
         st.json(result)
 elif selected == "quantum_optimize":
     st.write("QUBO: x0^2 + x1^2 + 0.5*x0*x1")
-    Q = [(0,0,1.0),(1,1,-1.0),(0,1,0.5)]
+    Q = [(0, 0, 1.0), (1, 1, -1.0), (0, 1, 0.5)]
     if st.button("Run Quantum Optimization"):
         result = AUTOMATIONS[selected](2, Q)
         st.json(result)

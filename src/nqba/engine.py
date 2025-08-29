@@ -5,6 +5,7 @@ Handles agent registration, task routing, and API integration.
 
 from typing import Dict, Any, Callable
 
+
 class NQBAEngine:
     def __init__(self):
         self.agents = {}
@@ -16,6 +17,7 @@ class NQBAEngine:
         if agent_name not in self.agents:
             raise ValueError(f"Agent '{agent_name}' not registered.")
         return self.agents[agent_name](*args, **kwargs)
+
 
 # Example usage:
 # engine = NQBAEngine()

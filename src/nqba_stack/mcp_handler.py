@@ -30,10 +30,15 @@ TOOL_SCHEMAS = {tool["name"]: tool["inputSchema"] for tool in PROVIDER_SPEC["too
 
 # Audit/event log (simple file-based for demo)
 AUDIT_LOG = Path(__file__).parent.parent.parent / "logs" / "mcp_audit.log"
+
+
 def audit_log(event: str, payload: dict):
     AUDIT_LOG.parent.mkdir(parents=True, exist_ok=True)
     with open(AUDIT_LOG, "a", encoding="utf-8") as f:
-        f.write(json.dumps({"event": event, "payload": payload, "ts": time.time()}) + "\n")
+        f.write(
+            json.dumps({"event": event, "payload": payload, "ts": time.time()}) + "\n"
+        )
+
 
 # Security decorator (stub)
 def require_api_key(role: Optional[str] = None):
@@ -42,27 +47,35 @@ def require_api_key(role: Optional[str] = None):
         async def wrapper(*args, **kwargs):
             # TODO: Check API key, role, rate limit, etc.
             return await func(*args, **kwargs)
+
         return wrapper
+
     return decorator
+
 
 # Resource/cost control (stub)
 def check_resource_limits(tool: str, payload: dict):
     # TODO: Enforce max_concurrent_jobs, cost_limit, etc.
     return True
 
+
 # Health check (stub)
 def backend_health():
     # TODO: Check all backends, return status
     return {"dynex": "ok", "qiskit": "ok", "cirq": "ok", "pennylane": "ok"}
 
+
 # Tool registry and dispatcher
 TOOL_HANDLERS: Dict[str, Callable[[dict], Awaitable[Any]]] = {}
+
 
 def register_tool(name: str):
     def decorator(func):
         TOOL_HANDLERS[name] = func
         return func
+
     return decorator
+
 
 async def dispatch_tool(tool: str, payload: dict, user: str = "anonymous") -> dict:
     if tool not in TOOL_SCHEMAS:
@@ -85,16 +98,22 @@ async def dispatch_tool(tool: str, payload: dict, user: str = "anonymous") -> di
 
 # Handlers for all tools in provider.json (stub implementations)
 
+
 @register_tool("quantum.optimize.qubo")
 @require_api_key(role="user")
 async def handle_optimize_qubo(payload: dict) -> dict:
     """Optimize a QUBO problem using real quantum backend (NQBAEngine)"""
     nqba = NQBAEngine(mode=ExecutionMode.SIMULATOR)
     import numpy as np
+
     qubo_matrix = np.array(payload.get("qubo_matrix"))
     algorithm = payload.get("algorithm", "qaoa")
-    parameters = {k: v for k, v in payload.items() if k not in ["qubo_matrix", "algorithm"]}
-    result = await nqba.optimize_qubo(qubo_matrix, algorithm=algorithm, parameters=parameters)
+    parameters = {
+        k: v for k, v in payload.items() if k not in ["qubo_matrix", "algorithm"]
+    }
+    result = await nqba.optimize_qubo(
+        qubo_matrix, algorithm=algorithm, parameters=parameters
+    )
     return {"result": result.__dict__}
 
 
@@ -116,8 +135,8 @@ async def handle_optimize_schedule(payload: dict) -> dict:
     return {"result": "Schedule optimization (real logic TODO)", "input": payload}
 
 
-
 from .qdllm import qdllm
+
 
 @register_tool("quantum.llm.generate")
 @require_api_key(role="user")
@@ -133,7 +152,7 @@ async def handle_llm_generate(payload: dict) -> dict:
         context=context,
         temperature=temperature,
         max_tokens=max_tokens,
-        use_quantum_enhancement=use_quantum_enhancement
+        use_quantum_enhancement=use_quantum_enhancement,
     )
     return {"result": result}
 
@@ -155,11 +174,14 @@ async def handle_optimize_energy(payload: dict) -> dict:
     await asyncio.sleep(0.1)
     return {"result": "Energy optimization (real logic TODO)", "input": payload}
 
+
 def list_tools() -> list:
     return list(TOOL_SCHEMAS.keys())
 
+
 def get_tool_schema(tool: str) -> dict:
     return TOOL_SCHEMAS[tool]
+
 
 def get_backend_status() -> dict:
     return backend_health()

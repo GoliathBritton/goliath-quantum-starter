@@ -23,8 +23,10 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
+
 class CommunicationType(Enum):
     """Types of client communication"""
+
     CONTACT_FORM = "contact_form"
     SUPPORT_TICKET = "support_ticket"
     LIVE_CHAT = "live_chat"
@@ -34,15 +36,19 @@ class CommunicationType(Enum):
     PARTNERSHIP_INQUIRY = "partnership_inquiry"
     CALENDAR_BOOKING = "calendar_booking"
 
+
 class PriorityLevel(Enum):
     """Priority levels for communications"""
+
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
     URGENT = "urgent"
 
+
 class Status(Enum):
     """Status of communications"""
+
     NEW = "new"
     ASSIGNED = "assigned"
     IN_PROGRESS = "in_progress"
@@ -50,9 +56,11 @@ class Status(Enum):
     RESOLVED = "resolved"
     CLOSED = "closed"
 
+
 @dataclass
 class ContactForm:
     """Contact form submission"""
+
     name: str
     email: str
     company: Optional[str] = None
@@ -62,9 +70,11 @@ class ContactForm:
     phone: Optional[str] = None
     website: Optional[str] = None
 
+
 @dataclass
 class SupportTicket:
     """Support ticket"""
+
     ticket_id: str
     client_id: str
     subject: str
@@ -77,9 +87,11 @@ class SupportTicket:
     updated_at: datetime = field(default_factory=datetime.now)
     resolution: Optional[str] = None
 
+
 @dataclass
 class CommunicationRecord:
     """Record of all client communications"""
+
     id: str
     client_id: str
     communication_type: CommunicationType
@@ -92,9 +104,11 @@ class CommunicationRecord:
     response_time: Optional[timedelta] = None
     satisfaction_score: Optional[int] = None
 
+
 @dataclass
 class TeamMember:
     """FLYFOX AI team member"""
+
     id: str
     name: str
     email: str
@@ -104,9 +118,10 @@ class TeamMember:
     current_workload: int = 0
     max_workload: int = 10
 
+
 class ClientCommunicationSystem:
     """FLYFOX AI Client Communication System"""
-    
+
     def __init__(self):
         self.contact_forms = {}
         self.support_tickets = {}
@@ -119,9 +134,9 @@ class ClientCommunicationSystem:
             "average_response_time": 0.0,
             "client_satisfaction": 0.0,
             "communications_by_type": {},
-            "communications_by_priority": {}
+            "communications_by_priority": {},
         }
-    
+
     def _initialize_team(self) -> Dict[str, TeamMember]:
         """Initialize FLYFOX AI team members"""
         return {
@@ -130,8 +145,16 @@ class ClientCommunicationSystem:
                 name="John Britton",
                 email="john.britton@goliathomniedge.com",
                 role="CEO & Founder",
-                expertise=["Strategic Planning", "Business Development", "Quantum AI Strategy"],
-                availability={"available": True, "hours": "9AM-6PM EST", "timezone": "EST"}
+                expertise=[
+                    "Strategic Planning",
+                    "Business Development",
+                    "Quantum AI Strategy",
+                ],
+                availability={
+                    "available": True,
+                    "hours": "9AM-6PM EST",
+                    "timezone": "EST",
+                },
             ),
             "ai_specialist": TeamMember(
                 id="ai_specialist",
@@ -139,15 +162,27 @@ class ClientCommunicationSystem:
                 email="solutions@goliathomniedge.com",
                 role="AI Solutions Architect",
                 expertise=["qdLLM", "AI Agents", "Custom Development", "QAIaaS"],
-                availability={"available": True, "hours": "9AM-6PM EST", "timezone": "EST"}
+                availability={
+                    "available": True,
+                    "hours": "9AM-6PM EST",
+                    "timezone": "EST",
+                },
             ),
             "quantum_expert": TeamMember(
                 id="quantum_expert",
                 name="Quantum Technology Expert",
                 email="quantum@goliathomniedge.com",
                 role="Quantum Technology Lead",
-                expertise=["Quantum Computing", "Dynex Integration", "Quantum Algorithms"],
-                availability={"available": True, "hours": "9AM-6PM EST", "timezone": "EST"}
+                expertise=[
+                    "Quantum Computing",
+                    "Dynex Integration",
+                    "Quantum Algorithms",
+                ],
+                availability={
+                    "available": True,
+                    "hours": "9AM-6PM EST",
+                    "timezone": "EST",
+                },
             ),
             "business_dev": TeamMember(
                 id="business_dev",
@@ -155,7 +190,11 @@ class ClientCommunicationSystem:
                 email="partnerships@goliathomniedge.com",
                 role="Business Development Manager",
                 expertise=["Partnerships", "White Label", "Enterprise Sales"],
-                availability={"available": True, "hours": "9AM-6PM EST", "timezone": "EST"}
+                availability={
+                    "available": True,
+                    "hours": "9AM-6PM EST",
+                    "timezone": "EST",
+                },
             ),
             "support_team": TeamMember(
                 id="support_team",
@@ -163,10 +202,10 @@ class ClientCommunicationSystem:
                 email="support@goliathomniedge.com",
                 role="Customer Success Specialist",
                 expertise=["Technical Support", "Onboarding", "Account Management"],
-                availability={"available": True, "hours": "24/7", "timezone": "Global"}
-            )
+                availability={"available": True, "hours": "24/7", "timezone": "Global"},
+            ),
         }
-    
+
     def _initialize_channels(self) -> Dict[str, Dict[str, Any]]:
         """Initialize communication channels"""
         return {
@@ -175,47 +214,47 @@ class ClientCommunicationSystem:
                 "support": "support@goliathomniedge.com",
                 "sales": "sales@goliathomniedge.com",
                 "partnerships": "partnerships@goliathomniedge.com",
-                "response_time": "2 hours during business hours"
+                "response_time": "2 hours during business hours",
             },
             "phone": {
                 "main": "(517) 213-8392",
                 "support": "(517) 213-8392",
                 "sales": "(517) 213-8392",
-                "hours": "Mon-Fri 9AM-6PM EST"
+                "hours": "Mon-Fri 9AM-6PM EST",
             },
             "live_chat": {
                 "available": True,
                 "hours": "24/7",
                 "platform": "Integrated chat system",
-                "response_time": "Immediate"
+                "response_time": "Immediate",
             },
             "website": {
                 "main": "https://live.flyfoxai.com",
                 "contact": "https://live.flyfoxai.com/widget/booking/BJV7BainocNCHj2XDtt8",
-                "support": "https://live.flyfoxai.com/support"
+                "support": "https://live.flyfoxai.com/support",
             },
             "calendar": {
                 "booking_url": "https://live.flyfoxai.com/widget/booking/BJV7BainocNCHj2XDtt8",
                 "available": True,
-                "integration": "Direct calendar booking"
-            }
+                "integration": "Direct calendar booking",
+            },
         }
-    
+
     def submit_contact_form(self, form_data: ContactForm) -> Dict[str, Any]:
         """Process contact form submission"""
         try:
             # Generate unique ID
             form_id = f"contact_{int(time.time())}_{uuid.uuid4().hex[:8]}"
-            
+
             # Store contact form
             self.contact_forms[form_id] = {
                 "form_data": form_data,
                 "submitted_at": datetime.now().isoformat(),
                 "status": "new",
                 "assigned_to": self._assign_to_team_member(form_data),
-                "priority": self._determine_priority(form_data)
+                "priority": self._determine_priority(form_data),
             }
-            
+
             # Create communication record
             communication_id = self._create_communication_record(
                 client_id=form_id,
@@ -226,20 +265,20 @@ class ClientCommunicationSystem:
                     "company": form_data.company,
                     "service_interest": form_data.service_interest,
                     "message": form_data.message,
-                    "timeline": form_data.timeline
+                    "timeline": form_data.timeline,
                 },
-                priority=self._determine_priority(form_data)
+                priority=self._determine_priority(form_data),
             )
-            
+
             # Send confirmation email
             self._send_confirmation_email(form_data)
-            
+
             # Send notification to team
             self._notify_team(form_data, form_id)
-            
+
             # Update analytics
             self._update_analytics(CommunicationType.CONTACT_FORM)
-            
+
             return {
                 "success": True,
                 "form_id": form_id,
@@ -250,24 +289,29 @@ class ClientCommunicationSystem:
                     "Our team will review your inquiry",
                     "Expect a response within 2 hours during business hours",
                     "For urgent matters, call (517) 213-8392",
-                    "Book a meeting: https://live.flyfoxai.com/widget/booking/BJV7BainocNCHj2XDtt8"
-                ]
+                    "Book a meeting: https://live.flyfoxai.com/widget/booking/BJV7BainocNCHj2XDtt8",
+                ],
             }
-            
+
         except Exception as e:
             return {
                 "success": False,
                 "error": str(e),
-                "message": "We encountered an issue processing your request. Please try again or contact us directly at john.britton@goliathomniedge.com"
+                "message": "We encountered an issue processing your request. Please try again or contact us directly at john.britton@goliathomniedge.com",
             }
-    
-    def create_support_ticket(self, client_id: str, subject: str, description: str, 
-                             priority: PriorityLevel = PriorityLevel.MEDIUM, 
-                             category: str = "general") -> Dict[str, Any]:
+
+    def create_support_ticket(
+        self,
+        client_id: str,
+        subject: str,
+        description: str,
+        priority: PriorityLevel = PriorityLevel.MEDIUM,
+        category: str = "general",
+    ) -> Dict[str, Any]:
         """Create a support ticket"""
         try:
             ticket_id = f"ticket_{int(time.time())}_{uuid.uuid4().hex[:8]}"
-            
+
             ticket = SupportTicket(
                 ticket_id=ticket_id,
                 client_id=client_id,
@@ -275,11 +319,11 @@ class ClientCommunicationSystem:
                 description=description,
                 priority=priority,
                 category=category,
-                status=Status.NEW
+                status=Status.NEW,
             )
-            
+
             self.support_tickets[ticket_id] = ticket
-            
+
             # Create communication record
             communication_id = self._create_communication_record(
                 client_id=client_id,
@@ -288,32 +332,32 @@ class ClientCommunicationSystem:
                     "ticket_id": ticket_id,
                     "subject": subject,
                     "description": description,
-                    "category": category
+                    "category": category,
                 },
-                priority=priority
+                priority=priority,
             )
-            
+
             # Assign to appropriate team member
             assigned_member = self._assign_support_ticket(ticket)
             ticket.assigned_to = assigned_member
             ticket.status = Status.ASSIGNED
-            
+
             return {
                 "success": True,
                 "ticket_id": ticket_id,
                 "communication_id": communication_id,
                 "assigned_to": assigned_member,
                 "estimated_response": "4 hours",
-                "message": f"Support ticket created successfully. Assigned to {assigned_member}."
+                "message": f"Support ticket created successfully. Assigned to {assigned_member}.",
             }
-            
+
         except Exception as e:
             return {
                 "success": False,
                 "error": str(e),
-                "message": "Failed to create support ticket. Please contact support@goliathomniedge.com directly."
+                "message": "Failed to create support ticket. Please contact support@goliathomniedge.com directly.",
             }
-    
+
     def get_communication_channels(self) -> Dict[str, Any]:
         """Get available communication channels"""
         return {
@@ -325,7 +369,7 @@ class ClientCommunicationSystem:
                     "expertise": member.expertise,
                     "availability": member.availability,
                     "current_workload": member.current_workload,
-                    "max_workload": member.max_workload
+                    "max_workload": member.max_workload,
                 }
                 for member_id, member in self.team_members.items()
             },
@@ -334,31 +378,35 @@ class ClientCommunicationSystem:
                 "support_ticket": "4 hours",
                 "live_chat": "Immediate",
                 "email": "2 hours during business hours",
-                "phone": "Immediate during business hours"
-            }
+                "phone": "Immediate during business hours",
+            },
         }
-    
+
     def get_client_communications(self, client_id: str) -> List[Dict[str, Any]]:
         """Get all communications for a specific client"""
         client_communications = []
-        
+
         for comm_id, comm in self.communications.items():
             if comm.client_id == client_id:
-                client_communications.append({
-                    "id": comm_id,
-                    "type": comm.communication_type.value,
-                    "content": comm.content,
-                    "priority": comm.priority.value,
-                    "status": comm.status.value,
-                    "assigned_to": comm.assigned_to,
-                    "created_at": comm.created_at.isoformat(),
-                    "updated_at": comm.updated_at.isoformat(),
-                    "response_time": str(comm.response_time) if comm.response_time else None,
-                    "satisfaction_score": comm.satisfaction_score
-                })
-        
+                client_communications.append(
+                    {
+                        "id": comm_id,
+                        "type": comm.communication_type.value,
+                        "content": comm.content,
+                        "priority": comm.priority.value,
+                        "status": comm.status.value,
+                        "assigned_to": comm.assigned_to,
+                        "created_at": comm.created_at.isoformat(),
+                        "updated_at": comm.updated_at.isoformat(),
+                        "response_time": (
+                            str(comm.response_time) if comm.response_time else None
+                        ),
+                        "satisfaction_score": comm.satisfaction_score,
+                    }
+                )
+
         return client_communications
-    
+
     def _assign_to_team_member(self, form_data: ContactForm) -> str:
         """Assign contact form to appropriate team member"""
         if form_data.service_interest in ["qdllm", "ai_agents", "qaias"]:
@@ -369,7 +417,7 @@ class ClientCommunicationSystem:
             return "business_dev"
         else:
             return "ai_specialist"  # Default to AI specialist
-    
+
     def _determine_priority(self, form_data: ContactForm) -> PriorityLevel:
         """Determine priority based on form data"""
         if form_data.timeline == "immediate":
@@ -378,7 +426,7 @@ class ClientCommunicationSystem:
             return PriorityLevel.MEDIUM
         else:
             return PriorityLevel.LOW
-    
+
     def _assign_support_ticket(self, ticket: SupportTicket) -> str:
         """Assign support ticket to appropriate team member"""
         # Simple assignment logic - can be enhanced
@@ -388,24 +436,29 @@ class ClientCommunicationSystem:
             return "support_team"
         else:
             return "support_team"
-    
-    def _create_communication_record(self, client_id: str, communication_type: CommunicationType,
-                                   content: Dict[str, Any], priority: PriorityLevel) -> str:
+
+    def _create_communication_record(
+        self,
+        client_id: str,
+        communication_type: CommunicationType,
+        content: Dict[str, Any],
+        priority: PriorityLevel,
+    ) -> str:
         """Create a communication record"""
         comm_id = f"comm_{int(time.time())}_{uuid.uuid4().hex[:8]}"
-        
+
         communication = CommunicationRecord(
             id=comm_id,
             client_id=client_id,
             communication_type=communication_type,
             content=content,
             priority=priority,
-            status=Status.NEW
+            status=Status.NEW,
         )
-        
+
         self.communications[comm_id] = communication
         return comm_id
-    
+
     def _send_confirmation_email(self, form_data: ContactForm) -> bool:
         """Send confirmation email to client"""
         try:
@@ -416,28 +469,30 @@ class ClientCommunicationSystem:
         except Exception as e:
             print(f"❌ Failed to send confirmation email: {e}")
             return False
-    
+
     def _notify_team(self, form_data: ContactForm, form_id: str) -> bool:
         """Notify team about new contact form"""
         try:
             # This would integrate with team notification system
             # For now, just log the action
-            print(f"🔔 Team notified about new contact form from {form_data.name} ({form_data.email})")
+            print(
+                f"🔔 Team notified about new contact form from {form_data.name} ({form_data.email})"
+            )
             return True
         except Exception as e:
             print(f"❌ Failed to notify team: {e}")
             return False
-    
+
     def _update_analytics(self, communication_type: CommunicationType) -> None:
         """Update communication analytics"""
         self.analytics["total_communications"] += 1
-        
+
         # Update type-based analytics
         type_key = communication_type.value
         if type_key not in self.analytics["communications_by_type"]:
             self.analytics["communications_by_type"][type_key] = 0
         self.analytics["communications_by_type"][type_key] += 1
-    
+
     def get_communication_analytics(self) -> Dict[str, Any]:
         """Get communication system analytics"""
         return {
@@ -447,7 +502,7 @@ class ClientCommunicationSystem:
                     "name": member.name,
                     "role": member.role,
                     "workload": f"{member.current_workload}/{member.max_workload}",
-                    "availability": member.availability
+                    "availability": member.availability,
                 }
                 for member_id, member in self.team_members.items()
             },
@@ -455,6 +510,6 @@ class ClientCommunicationSystem:
                 "average_response_time": "2.5 hours",
                 "satisfaction_score": "4.8/5.0",
                 "resolution_rate": "98%",
-                "first_contact_resolution": "85%"
-            }
+                "first_contact_resolution": "85%",
+            },
         }

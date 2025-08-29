@@ -10,10 +10,4 @@ from .base_adapter import QuantumAdapter, AdapterConfig
 from .dynex_adapter import DynexAdapter
 from .simulator_adapter import SimulatorAdapter
 
-__all__ = [
-    "QuantumAdapter",
-    "AdapterConfig", 
-    "DynexAdapter",
-    "SimulatorAdapter"
-]
-
+__all__ = ["QuantumAdapter", "AdapterConfig", "DynexAdapter", "SimulatorAdapter"]

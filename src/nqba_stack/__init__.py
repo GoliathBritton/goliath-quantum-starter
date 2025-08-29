@@ -24,22 +24,17 @@ from .core.orchestrator import (
     submit_task,
     TaskRequest,
     TaskResult,
-    BusinessPod
+    BusinessPod,
 )
 
-from .core.ltc_logger import (
-    LTCLogger,
-    get_ltc_logger,
-    log_operation,
-    LTCOperation
-)
+from .core.ltc_logger import LTCLogger, get_ltc_logger, log_operation, LTCOperation
 
 from .core.dynex_adapter import (
     DynexAdapter,
     DynexConfig,
     OptimizationResult,
     solve_qubo,
-    score_leads
+    score_leads,
 )
 
 from .core.settings import (
@@ -47,7 +42,7 @@ from .core.settings import (
     get_settings,
     is_production,
     is_development,
-    is_testing
+    is_testing,
 )
 
 # Advanced Systems
@@ -58,7 +53,7 @@ from .qsai_engine import (
     ActionDecision,
     AuditEntry,
     DecisionState,
-    AgentType
+    AgentType,
 )
 
 from .qea_do import (
@@ -69,16 +64,10 @@ from .qea_do import (
     VerificationReport,
     AlgorithmType,
     GenerationPhase,
-    VerificationStatus
+    VerificationStatus,
 )
 
-from .qsai_agents import (
-    OfferAgent,
-    TimingAgent,
-    ChannelAgent,
-    RiskAgent,
-    AgentFactory
-)
+from .qsai_agents import OfferAgent, TimingAgent, ChannelAgent, RiskAgent, AgentFactory
 
 # Quantum-Enhanced Algorithms
 from .algorithms.quantum_enhanced_algorithms import (
@@ -88,7 +77,7 @@ from .algorithms.quantum_enhanced_algorithms import (
     QuantumEnergyManager,
     QuantumRiskAssessor,
     QuantumPersonalizationEngine,
-    AlgorithmResult
+    AlgorithmResult,
 )
 
 # Automation Orchestrator
@@ -97,7 +86,7 @@ from .automation.quantum_automation_orchestrator import (
     AutomationLevel,
     AutomationDomain,
     AutomationTask,
-    AutomationMetrics
+    AutomationMetrics,
 )
 
 # Advanced Algorithm Templates
@@ -111,7 +100,7 @@ from .algorithms.advanced_algorithm_templates import (
     BaseAlgorithm,
     QuantumPortfolioOptimizer as AdvancedQuantumPortfolioOptimizer,
     QuantumSupplyChainOptimizer,
-    QuantumFraudDetector
+    QuantumFraudDetector,
 )
 
 # Advanced Automation Workflows
@@ -128,7 +117,7 @@ from .automation.advanced_automation_workflows import (
     create_decision_automation_workflow,
     create_algorithm_optimization_workflow,
     create_deployment_automation_workflow,
-    create_workflow_orchestrator
+    create_workflow_orchestrator,
 )
 
 # Configuration Management
@@ -137,7 +126,7 @@ from .core.config_manager import (
     ServiceConfig,
     FallbackConfig,
     get_config_manager,
-    initialize_configuration
+    initialize_configuration,
 )
 
 # Version information
@@ -149,10 +138,9 @@ __description__ = "Neuromorphic Quantum Business Architecture Stack"
 __all__ = [
     # Core classes
     "NQBAStackOrchestrator",
-    "LTCLogger", 
+    "LTCLogger",
     "DynexAdapter",
     "NQBASettings",
-    
     # Advanced Systems
     "QSAIEngine",
     "QEA_DO",
@@ -161,7 +149,6 @@ __all__ = [
     "ChannelAgent",
     "RiskAgent",
     "AgentFactory",
-    
     # Core functions
     "get_orchestrator",
     "get_ltc_logger",
@@ -170,12 +157,10 @@ __all__ = [
     "log_operation",
     "solve_qubo",
     "score_leads",
-    
     # Utility functions
     "is_production",
-    "is_development", 
+    "is_development",
     "is_testing",
-    
     # Data classes
     "TaskRequest",
     "TaskResult",
@@ -196,7 +181,6 @@ __all__ = [
     "AlgorithmType",
     "GenerationPhase",
     "VerificationStatus",
-    
     # Quantum-Enhanced Algorithms
     "QuantumAlgorithmFactory",
     "QAlgorithmType",
@@ -205,14 +189,12 @@ __all__ = [
     "QuantumRiskAssessor",
     "QuantumPersonalizationEngine",
     "AlgorithmResult",
-    
     # Automation Orchestrator
     "QuantumAutomationOrchestrator",
     "AutomationLevel",
     "AutomationDomain",
     "AutomationTask",
     "AutomationMetrics",
-    
     # Advanced Algorithm Templates
     "AdvancedAlgorithmFactory",
     "get_algorithm_templates",
@@ -224,7 +206,6 @@ __all__ = [
     "AdvancedQuantumPortfolioOptimizer",
     "QuantumSupplyChainOptimizer",
     "QuantumFraudDetector",
-    
     # Advanced Automation Workflows
     "WorkflowType",
     "AutomationStage",
@@ -239,13 +220,12 @@ __all__ = [
     "create_algorithm_optimization_workflow",
     "create_deployment_automation_workflow",
     "create_workflow_orchestrator",
-    
     # Configuration Management
     "ConfigurationManager",
     "ServiceConfig",
     "FallbackConfig",
     "get_config_manager",
-    "initialize_configuration"
+    "initialize_configuration",
 ]
 
 # Initialize core components on import
@@ -254,18 +234,18 @@ try:
     orchestrator = get_orchestrator()
     ltc_logger = get_ltc_logger()
     settings = get_settings()
-    
+
     # Log successful initialization
     ltc_logger.log_operation(
         operation_type="nqba_stack_initialized",
         operation_data={
             "version": __version__,
             "components": ["orchestrator", "ltc_logger", "settings"],
-            "status": "ready"
+            "status": "ready",
         },
-        thread_ref="NQBA_STACK_INIT"
+        thread_ref="NQBA_STACK_INIT",
     )
-    
+
 except Exception as e:
     # Log initialization error
     print(f"Warning: NQBA Stack initialization failed: {e}")

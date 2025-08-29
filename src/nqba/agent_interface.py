@@ -1,9 +1,11 @@
 from typing import Any, Dict
 
+
 class AgentInterface:
     """
     Abstract interface for Neuromorphic Quantum Business Architecture (NQBA) agents (business pods, quantum solvers, etc.)
     """
+
     def __init__(self, name: str, config: Dict[str, Any] = None):
         self.name = name
         self.config = config or {}

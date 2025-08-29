@@ -1,8 +1,10 @@
 import os
 import aioftp
 
+
 class DynexFTPClient:
     """FTP client for Dynex solution files."""
+
     def __init__(self, host=None, user=None, password=None):
         self.host = host or os.getenv("DYNEX_FTP_HOST")
         self.user = user or os.getenv("DYNEX_FTP_USER")

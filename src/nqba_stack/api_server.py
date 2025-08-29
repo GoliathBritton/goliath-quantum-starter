@@ -35,14 +35,29 @@ from .multi_tenant.multi_tenant_manager import MultiTenantManager, ScalingPolicy
 from .performance.advanced_performance_dashboard import AdvancedPerformanceDashboard
 
 # Import Phase 2.1 components
-from .constraints.constraint_evolution_engine import ConstraintEvolutionEngine, EvolutionStrategy
+from .constraints.constraint_evolution_engine import (
+    ConstraintEvolutionEngine,
+    EvolutionStrategy,
+)
 from .scaling.predictive_scaler import PredictiveScaler, ResourceType, ScalingAlgorithm
-from .enterprise.enterprise_security_manager import EnterpriseSecurityManager, AuthType, ComplianceFramework
-from .community.community_platform import AlgorithmMarketplace, DeveloperPortal, CommunityManager
+from .enterprise.enterprise_security_manager import (
+    EnterpriseSecurityManager,
+    AuthType,
+    ComplianceFramework,
+)
+from .community.community_platform import (
+    AlgorithmMarketplace,
+    DeveloperPortal,
+    CommunityManager,
+)
 
 # Import Phase 2.2 components
 from .quantum.advanced_qubo_engine import AdvancedQUBOEngine, OptimizationStrategy
-from .learning.real_time_learning_engine import RealTimeLearningEngine, LearningMode, AlgorithmType
+from .learning.real_time_learning_engine import (
+    RealTimeLearningEngine,
+    LearningMode,
+    AlgorithmType,
+)
 
 # Import core components
 from .core.orchestrator import BusinessPod
@@ -57,7 +72,7 @@ app = FastAPI(
     description="Neuromorphic Quantum Business Architecture (NQBA) Stack API",
     version="2.0.0",
     docs_url="/docs",
-    redoc_url="/redoc"
+    redoc_url="/redoc",
 )
 
 # Add CORS middleware
@@ -97,6 +112,7 @@ goliath_trade_pod = GoliathTradePod(quantum_adapter, ltc_logger)
 sfg_symmetry_pod = SFGSymmetryFinancialPod(quantum_adapter, ltc_logger)
 ghost_neuroq_pod = GhostNeuroQPod(quantum_adapter, ltc_logger)
 
+
 # Pydantic models for API requests/responses
 class HealthCheckResponse(BaseModel):
     status: str
@@ -104,6 +120,7 @@ class HealthCheckResponse(BaseModel):
     version: str
     quantum_status: str
     business_pods: List[str]
+
 
 class BusinessPodMetrics(BaseModel):
     pod_id: str
@@ -114,11 +131,13 @@ class BusinessPodMetrics(BaseModel):
     active: bool
     last_heartbeat: str
 
+
 class QuantumOperationRequest(BaseModel):
     operation_type: str
     parameters: Dict[str, Any]
     business_pod: str
     optimization_level: str = "standard"
+
 
 class QuantumOperationResponse(BaseModel):
     operation_id: str
@@ -127,6 +146,7 @@ class QuantumOperationResponse(BaseModel):
     quantum_advantage: float
     execution_time: float
     timestamp: str
+
 
 # Health check endpoint
 @app.get("/health", response_model=HealthCheckResponse)
@@ -139,7 +159,7 @@ async def health_check():
             await quantum_adapter.get_status()
         except Exception as e:
             quantum_status = f"degraded: {str(e)}"
-        
+
         return HealthCheckResponse(
             status="healthy",
             timestamp=datetime.now().isoformat(),
@@ -147,15 +167,16 @@ async def health_check():
             quantum_status=quantum_status,
             business_pods=[
                 "sigma_select",
-                "flyfox_ai", 
+                "flyfox_ai",
                 "goliath_trade",
                 "sfg_symmetry",
-                "ghost_neuroq"
-            ]
+                "ghost_neuroq",
+            ],
         )
     except Exception as e:
         logger.error(f"Health check failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
 
 # Business pod metrics endpoint
 @app.get("/metrics/business-pods", response_model=List[BusinessPodMetrics])
@@ -163,26 +184,29 @@ async def get_business_pod_metrics():
     """Get metrics for all business pods"""
     try:
         metrics = []
-        
+
         # Get metrics from each pod
         sigma_metrics = await sigma_select_pod.get_pod_metrics()
         flyfox_metrics = await flyfox_ai_pod.get_pod_metrics()
         goliath_metrics = await goliath_trade_pod.get_pod_metrics()
         sfg_metrics = await sfg_symmetry_pod.get_pod_metrics()
         ghost_metrics = await ghost_neuroq_pod.get_pod_metrics()
-        
-        metrics.extend([
-            BusinessPodMetrics(**sigma_metrics),
-            BusinessPodMetrics(**flyfox_metrics),
-            BusinessPodMetrics(**goliath_metrics),
-            BusinessPodMetrics(**sfg_metrics),
-            BusinessPodMetrics(**ghost_metrics)
-        ])
-        
+
+        metrics.extend(
+            [
+                BusinessPodMetrics(**sigma_metrics),
+                BusinessPodMetrics(**flyfox_metrics),
+                BusinessPodMetrics(**goliath_metrics),
+                BusinessPodMetrics(**sfg_metrics),
+                BusinessPodMetrics(**ghost_metrics),
+            ]
+        )
+
         return metrics
     except Exception as e:
         logger.error(f"Failed to get business pod metrics: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
 
 # Quantum operation endpoint
 @app.post("/quantum/operate", response_model=QuantumOperationResponse)
@@ -190,38 +214,35 @@ async def execute_quantum_operation(request: QuantumOperationRequest):
     """Execute quantum operation through specified business pod"""
     try:
         start_time = datetime.now()
-        
+
         # Route operation to appropriate business pod
         if request.business_pod == "sigma_select":
             result = await sigma_select_pod.execute_quantum_operation(
-                request.operation_type,
-                request.parameters
+                request.operation_type, request.parameters
             )
         elif request.business_pod == "flyfox_ai":
             result = await flyfox_ai_pod.execute_quantum_operation(
-                request.operation_type,
-                request.parameters
+                request.operation_type, request.parameters
             )
         elif request.business_pod == "goliath_trade":
             result = await goliath_trade_pod.execute_quantum_operation(
-                request.operation_type,
-                request.parameters
+                request.operation_type, request.parameters
             )
         elif request.business_pod == "sfg_symmetry":
             result = await sfg_symmetry_pod.execute_quantum_operation(
-                request.operation_type,
-                request.parameters
+                request.operation_type, request.parameters
             )
         elif request.business_pod == "ghost_neuroq":
             result = await ghost_neuroq_pod.execute_quantum_operation(
-                request.operation_type,
-                request.parameters
+                request.operation_type, request.parameters
             )
         else:
-            raise HTTPException(status_code=400, detail=f"Unknown business pod: {request.business_pod}")
-        
+            raise HTTPException(
+                status_code=400, detail=f"Unknown business pod: {request.business_pod}"
+            )
+
         execution_time = (datetime.now() - start_time).total_seconds()
-        
+
         # Log operation to LTC
         await ltc_logger.log_operation(
             operation_type=request.operation_type,
@@ -229,31 +250,34 @@ async def execute_quantum_operation(request: QuantumOperationRequest):
             metadata={
                 "parameters": request.parameters,
                 "execution_time": execution_time,
-                "quantum_advantage": result.get("quantum_advantage", 1.0)
-            }
+                "quantum_advantage": result.get("quantum_advantage", 1.0),
+            },
         )
-        
+
         return QuantumOperationResponse(
             operation_id=result.get("operation_id", "unknown"),
             status="completed",
             result=result,
             quantum_advantage=result.get("quantum_advantage", 1.0),
             execution_time=execution_time,
-            timestamp=datetime.now().isoformat()
+            timestamp=datetime.now().isoformat(),
         )
-        
+
     except Exception as e:
         logger.error(f"Quantum operation failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
 
 # ============================================================================
 # SIGMA SELECT ENDPOINTS (Sales Intelligence)
 # ============================================================================
 
+
 class LeadScoringRequest(BaseModel):
     leads: List[Dict[str, Any]]
     scoring_criteria: Dict[str, float]
     optimization_level: str = "standard"
+
 
 class LeadScoringResponse(BaseModel):
     scored_leads: List[Dict[str, Any]]
@@ -261,34 +285,35 @@ class LeadScoringResponse(BaseModel):
     confidence_level: float
     execution_time: float
 
+
 @app.post("/sigma-select/score-leads", response_model=LeadScoringResponse)
 async def score_leads(request: LeadScoringRequest):
     """Score leads using quantum-enhanced algorithms"""
     try:
         start_time = datetime.now()
-        
+
         result = await sigma_select_pod.score_leads_quantum(
-            request.leads,
-            request.scoring_criteria,
-            request.optimization_level
+            request.leads, request.scoring_criteria, request.optimization_level
         )
-        
+
         execution_time = (datetime.now() - start_time).total_seconds()
-        
+
         return LeadScoringResponse(
             scored_leads=result.get("scored_leads", []),
             quantum_advantage=result.get("quantum_advantage", 1.0),
             confidence_level=result.get("confidence_level", 0.8),
-            execution_time=execution_time
+            execution_time=execution_time,
         )
-        
+
     except Exception as e:
         logger.error(f"Lead scoring failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+
 # ============================================================================
 # FLYFOX AI ENDPOINTS (Energy Optimization)
 # ============================================================================
+
 
 class EnergyOptimizationRequest(BaseModel):
     energy_data: Dict[str, Any]
@@ -296,41 +321,45 @@ class EnergyOptimizationRequest(BaseModel):
     constraints: Dict[str, Any]
     optimization_level: str = "standard"
 
+
 class EnergyOptimizationResponse(BaseModel):
     optimized_schedule: Dict[str, Any]
     cost_savings: float
     quantum_advantage: float
     execution_time: float
 
+
 @app.post("/flyfox-ai/optimize-energy", response_model=EnergyOptimizationResponse)
 async def optimize_energy(request: EnergyOptimizationRequest):
     """Optimize energy consumption using quantum algorithms"""
     try:
         start_time = datetime.now()
-        
+
         result = await flyfox_ai_pod.optimize_energy_consumption(
             request.energy_data,
             request.optimization_horizon,
             request.constraints,
-            request.optimization_level
+            request.optimization_level,
         )
-        
+
         execution_time = (datetime.now() - start_time).total_seconds()
-        
+
         return EnergyOptimizationResponse(
             optimized_schedule=result.get("optimized_schedule", {}),
             cost_savings=result.get("cost_savings", 0.0),
             quantum_advantage=result.get("quantum_advantage", 1.0),
-            execution_time=execution_time
+            execution_time=execution_time,
         )
-        
+
     except Exception as e:
         logger.error(f"Energy optimization failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+
 # ============================================================================
 # GOLIATH TRADE ENDPOINTS (Financial Trading)
 # ============================================================================
+
 
 class PortfolioOptimizationRequest(BaseModel):
     portfolio_data: Dict[str, Any]
@@ -339,6 +368,7 @@ class PortfolioOptimizationRequest(BaseModel):
     constraints: Dict[str, Any]
     optimization_level: str = "standard"
 
+
 class PortfolioOptimizationResponse(BaseModel):
     optimized_portfolio: Dict[str, Any]
     expected_return: float
@@ -346,37 +376,42 @@ class PortfolioOptimizationResponse(BaseModel):
     quantum_advantage: float
     execution_time: float
 
-@app.post("/goliath-trade/optimize-portfolio", response_model=PortfolioOptimizationResponse)
+
+@app.post(
+    "/goliath-trade/optimize-portfolio", response_model=PortfolioOptimizationResponse
+)
 async def optimize_portfolio(request: PortfolioOptimizationRequest):
     """Optimize investment portfolio using quantum algorithms"""
     try:
         start_time = datetime.now()
-        
+
         result = await goliath_trade_pod.optimize_portfolio_quantum(
             request.portfolio_data,
             request.risk_tolerance,
             request.optimization_horizon,
             request.constraints,
-            request.optimization_level
+            request.optimization_level,
         )
-        
+
         execution_time = (datetime.now() - start_time).total_seconds()
-        
+
         return PortfolioOptimizationResponse(
             optimized_portfolio=result.get("optimized_portfolio", {}),
             expected_return=result.get("expected_return", 0.0),
             risk_score=result.get("risk_score", 0.0),
             quantum_advantage=result.get("quantum_advantage", 1.0),
-            execution_time=execution_time
+            execution_time=execution_time,
         )
-        
+
     except Exception as e:
         logger.error(f"Portfolio optimization failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+
 # ============================================================================
 # SFG SYMMETRY ENDPOINTS (Insurance & Financial Services)
 # ============================================================================
+
 
 class ClientRegistrationRequest(BaseModel):
     age: int
@@ -388,10 +423,12 @@ class ClientRegistrationRequest(BaseModel):
     family_status: str
     health_rating: float
 
+
 class FinancialRecommendationRequest(BaseModel):
     client_id: str
     recommendation_type: str  # portfolio, insurance, retirement
     optimization_level: str = "maximum"
+
 
 class FinancialRecommendationResponse(BaseModel):
     recommendation_id: str
@@ -402,50 +439,59 @@ class FinancialRecommendationResponse(BaseModel):
     quantum_advantage: float
     confidence_level: float
 
+
 @app.post("/sfg-symmetry/register-client")
 async def register_client(request: ClientRegistrationRequest):
     """Register a new client for financial services"""
     try:
         client_data = request.dict()
         client_id = await sfg_symmetry_pod.register_client(client_data)
-        
+
         return {
             "client_id": client_id,
             "status": "registered",
-            "timestamp": datetime.now().isoformat()
+            "timestamp": datetime.now().isoformat(),
         }
-        
+
     except Exception as e:
         logger.error(f"Client registration failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/sfg-symmetry/generate-recommendations", response_model=FinancialRecommendationResponse)
+
+@app.post(
+    "/sfg-symmetry/generate-recommendations",
+    response_model=FinancialRecommendationResponse,
+)
 async def generate_financial_recommendations(request: FinancialRecommendationRequest):
     """Generate quantum-optimized financial recommendations"""
     try:
         recommendation = await sfg_symmetry_pod.generate_financial_recommendations(
             request.client_id
         )
-        
+
         return FinancialRecommendationResponse(
             recommendation_id=recommendation.recommendation_id,
-            products=[{
-                "product_id": p.product_id,
-                "name": p.name,
-                "type": p.type,
-                "base_premium": p.base_premium,
-                "coverage_amount": p.coverage_amount
-            } for p in recommendation.products],
+            products=[
+                {
+                    "product_id": p.product_id,
+                    "name": p.name,
+                    "type": p.type,
+                    "base_premium": p.base_premium,
+                    "coverage_amount": p.coverage_amount,
+                }
+                for p in recommendation.products
+            ],
             portfolio_allocation=recommendation.portfolio_allocation,
             risk_score=recommendation.risk_score,
             expected_return=recommendation.expected_return,
             quantum_advantage=recommendation.quantum_advantage,
-            confidence_level=recommendation.confidence_level
+            confidence_level=recommendation.confidence_level,
         )
-        
+
     except Exception as e:
         logger.error(f"Financial recommendations failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.get("/sfg-symmetry/client-portfolio/{client_id}")
 async def get_client_portfolio(client_id: str):
@@ -453,14 +499,16 @@ async def get_client_portfolio(client_id: str):
     try:
         portfolio = await sfg_symmetry_pod.get_client_portfolio(client_id)
         return portfolio
-        
+
     except Exception as e:
         logger.error(f"Failed to get client portfolio: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+
 # ============================================================================
 # GHOST NEUROQ ENDPOINTS (Quantum Data Intelligence)
 # ============================================================================
+
 
 class TargetRegistrationRequest(BaseModel):
     name: str
@@ -475,10 +523,12 @@ class TargetRegistrationRequest(BaseModel):
     dependency_level: float
     vulnerability_level: float
 
+
 class IntelligenceOperationRequest(BaseModel):
     target_id: str
     operation_type: str  # data_extraction, analysis, strategy
     parameters: Dict[str, Any]
+
 
 class IntelligenceOperationResponse(BaseModel):
     operation_id: str
@@ -487,89 +537,112 @@ class IntelligenceOperationResponse(BaseModel):
     quantum_enhanced: bool
     timestamp: str
 
+
 @app.post("/ghost-neuroq/register-target")
 async def register_target(request: TargetRegistrationRequest):
     """Register a new intelligence target"""
     try:
         target_data = request.dict()
         target_id = await ghost_neuroq_pod.register_target(target_data)
-        
+
         return {
             "target_id": target_id,
             "status": "registered",
-            "timestamp": datetime.now().isoformat()
+            "timestamp": datetime.now().isoformat(),
         }
-        
+
     except Exception as e:
         logger.error(f"Target registration failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/ghost-neuroq/execute-neuro-siphon", response_model=IntelligenceOperationResponse)
+
+@app.post(
+    "/ghost-neuroq/execute-neuro-siphon", response_model=IntelligenceOperationResponse
+)
 async def execute_neuro_siphon(request: IntelligenceOperationRequest):
     """Execute NeuroSiphon™ data extraction operation"""
     try:
         if request.operation_type != "data_extraction":
-            raise HTTPException(status_code=400, detail="Operation type must be 'data_extraction' for NeuroSiphon")
-        
+            raise HTTPException(
+                status_code=400,
+                detail="Operation type must be 'data_extraction' for NeuroSiphon",
+            )
+
         operation = await ghost_neuroq_pod.execute_neuro_siphon(
-            request.target_id,
-            request.parameters.get("data_sources", [])
+            request.target_id, request.parameters.get("data_sources", [])
         )
-        
+
         return IntelligenceOperationResponse(
             operation_id=operation.operation_id,
             status=operation.status,
             results=operation.results,
             quantum_enhanced=operation.quantum_enhanced,
-            timestamp=operation.end_time.isoformat() if operation.end_time else datetime.now().isoformat()
+            timestamp=(
+                operation.end_time.isoformat()
+                if operation.end_time
+                else datetime.now().isoformat()
+            ),
         )
-        
+
     except Exception as e:
         logger.error(f"NeuroSiphon operation failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.post("/ghost-neuroq/create-sigma-graph")
 async def create_sigma_graph(request: IntelligenceOperationRequest):
     """Create Sigma Graph with Dynex-powered leverage analysis"""
     try:
         if request.operation_type != "sigma_graph":
-            raise HTTPException(status_code=400, detail="Operation type must be 'sigma_graph'")
-        
+            raise HTTPException(
+                status_code=400, detail="Operation type must be 'sigma_graph'"
+            )
+
         sigma_graph = await ghost_neuroq_pod.create_sigma_graph(request.target_id)
         return sigma_graph
-        
+
     except Exception as e:
         logger.error(f"Sigma Graph creation failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/ghost-neuroq/execute-data-poisoning", response_model=IntelligenceOperationResponse)
+
+@app.post(
+    "/ghost-neuroq/execute-data-poisoning", response_model=IntelligenceOperationResponse
+)
 async def execute_data_poisoning(request: IntelligenceOperationRequest):
     """Execute Dynamic Data Poisoning operation"""
     try:
         if request.operation_type != "data_poisoning":
-            raise HTTPException(status_code=400, detail="Operation type must be 'data_poisoning'")
-        
+            raise HTTPException(
+                status_code=400, detail="Operation type must be 'data_poisoning'"
+            )
+
         strategy = request.parameters.get("strategy", "reality_distortion")
         operation = await ghost_neuroq_pod.execute_data_poisoning(
-            request.target_id,
-            strategy
+            request.target_id, strategy
         )
-        
+
         return IntelligenceOperationResponse(
             operation_id=operation.operation_id,
             status=operation.status,
             results=operation.results,
             quantum_enhanced=operation.quantum_enhanced,
-            timestamp=operation.end_time.isoformat() if operation.end_time else datetime.now().isoformat()
+            timestamp=(
+                operation.end_time.isoformat()
+                if operation.end_time
+                else datetime.now().isoformat()
+            ),
         )
-        
+
     except Exception as e:
         logger.error(f"Data poisoning operation failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+
 # ============================================================================
 # ORCHESTRATOR ENDPOINTS
 # ============================================================================
+
 
 @app.get("/orchestrator/status")
 async def get_orchestrator_status():
@@ -580,11 +653,12 @@ async def get_orchestrator_status():
             "business_pods_count": len(orchestrator.business_pods),
             "active_routes": len(orchestrator.task_routes),
             "quantum_adapters": len(orchestrator.quantum_adapters),
-            "timestamp": datetime.now().isoformat()
+            "timestamp": datetime.now().isoformat(),
         }
     except Exception as e:
         logger.error(f"Failed to get orchestrator status: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.get("/orchestrator/business-pods")
 async def get_registered_business_pods():
@@ -593,90 +667,88 @@ async def get_registered_business_pods():
         return {
             "business_pods": list(orchestrator.business_pods.keys()),
             "total_count": len(orchestrator.business_pods),
-            "timestamp": datetime.now().isoformat()
+            "timestamp": datetime.now().isoformat(),
         }
     except Exception as e:
         logger.error(f"Failed to get business pods: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+
 # ============================================================================
 # LTC LOGGER ENDPOINTS
 # ============================================================================
+
 
 @app.get("/ltc/entries")
 async def get_ltc_entries(
     limit: int = 100,
     business_pod: Optional[str] = None,
-    operation_type: Optional[str] = None
+    operation_type: Optional[str] = None,
 ):
     """Get LTC entries with optional filtering"""
     try:
         entries = await ltc_logger.get_entries(
-            limit=limit,
-            business_pod=business_pod,
-            operation_type=operation_type
+            limit=limit, business_pod=business_pod, operation_type=operation_type
         )
         return {
             "entries": entries,
             "total_count": len(entries),
-            "timestamp": datetime.now().isoformat()
+            "timestamp": datetime.now().isoformat(),
         }
     except Exception as e:
         logger.error(f"Failed to get LTC entries: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.get("/ltc/statistics")
 async def get_ltc_statistics():
     """Get LTC statistics and metrics"""
     try:
         stats = await ltc_logger.get_statistics()
-        return {
-            "statistics": stats,
-            "timestamp": datetime.now().isoformat()
-        }
+        return {"statistics": stats, "timestamp": datetime.now().isoformat()}
     except Exception as e:
         logger.error(f"Failed to get LTC statistics: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+
 # ============================================================================
 # QUANTUM ADAPTER ENDPOINTS
 # ============================================================================
+
 
 @app.get("/quantum/status")
 async def get_quantum_status():
     """Get quantum computing provider status"""
     try:
         status = await quantum_adapter.get_status()
-        return {
-            "status": status,
-            "timestamp": datetime.now().isoformat()
-        }
+        return {"status": status, "timestamp": datetime.now().isoformat()}
     except Exception as e:
         logger.error(f"Failed to get quantum status: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.get("/quantum/providers")
 async def get_quantum_providers():
     """Get available quantum computing providers"""
     try:
         providers = await quantum_adapter.get_available_providers()
-        return {
-            "providers": providers,
-            "timestamp": datetime.now().isoformat()
-        }
+        return {"providers": providers, "timestamp": datetime.now().isoformat()}
     except Exception as e:
         logger.error(f"Failed to get quantum providers: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+
 # ============================================================================
 # PHASE 2 ENDPOINTS
 # ============================================================================
+
 
 class QUBOCreateRequest(BaseModel):
     dimensions: List[int]
     variable_names: List[str]
     objective_function: str
     constraints: List[Dict[str, Any]]
+
 
 @app.post("/phase2/advanced-qubo/create", response_model=Dict[str, Any])
 async def create_advanced_qubo(request: QUBOCreateRequest):
@@ -686,41 +758,43 @@ async def create_advanced_qubo(request: QUBOCreateRequest):
             dimensions=tuple(request.dimensions),
             variable_names=request.variable_names,
             objective_function=request.objective_function,
-            constraints=request.constraints
+            constraints=request.constraints,
         )
-        
+
         return {
             "success": True,
             "matrix_id": qubo_matrix.matrix_id,
             "dimensions": qubo_matrix.dimensions,
-            "message": "Advanced QUBO matrix created successfully"
+            "message": "Advanced QUBO matrix created successfully",
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
 class QUBOOptimizeRequest(BaseModel):
     matrix_id: str
     optimization_config: Dict[str, Any]
+
 
 @app.post("/phase2/advanced-qubo/optimize", response_model=Dict[str, Any])
 async def optimize_advanced_qubo(request: QUBOOptimizeRequest):
     """Optimize a multi-dimensional QUBO matrix"""
     try:
         result = await advanced_qubo_engine.optimize_multi_dimensional_qubo(
-            matrix_id=request.matrix_id,
-            optimization_config=request.optimization_config
+            matrix_id=request.matrix_id, optimization_config=request.optimization_config
         )
-        
+
         return {
             "success": True,
             "result_id": result.result_id,
             "objective_value": result.objective_value,
             "quantum_advantage": result.quantum_advantage,
             "execution_time": result.execution_time,
-            "message": "Advanced QUBO optimization completed successfully"
+            "message": "Advanced QUBO optimization completed successfully",
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 class AlgorithmRegistrationRequest(BaseModel):
     algorithm_type: str
@@ -728,6 +802,7 @@ class AlgorithmRegistrationRequest(BaseModel):
     hyperparameters: Dict[str, Any]
     constraints: Dict[str, Any]
     version: str = "1.0.0"
+
 
 @app.post("/phase2/learning/register-algorithm", response_model=Dict[str, Any])
 async def register_learning_algorithm(request: AlgorithmRegistrationRequest):
@@ -738,17 +813,18 @@ async def register_learning_algorithm(request: AlgorithmRegistrationRequest):
             parameters=request.parameters,
             hyperparameters=request.hyperparameters,
             constraints=request.constraints,
-            version=request.version
+            version=request.version,
         )
-        
+
         return {
             "success": True,
             "algorithm_id": algorithm_config.algorithm_id,
             "algorithm_type": algorithm_config.algorithm_type.value,
-            "message": "Algorithm registered successfully"
+            "message": "Algorithm registered successfully",
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 class PerformanceRecordRequest(BaseModel):
     algorithm_id: str
@@ -757,6 +833,7 @@ class PerformanceRecordRequest(BaseModel):
     execution_context: Dict[str, Any]
     success: bool
     metadata: Dict[str, Any] = None
+
 
 @app.post("/phase2/learning/record-performance", response_model=Dict[str, Any])
 async def record_algorithm_performance(request: PerformanceRecordRequest):
@@ -768,16 +845,17 @@ async def record_algorithm_performance(request: PerformanceRecordRequest):
             problem_characteristics=request.problem_characteristics,
             execution_context=request.execution_context,
             success=request.success,
-            metadata=request.metadata
+            metadata=request.metadata,
         )
-        
+
         return {
             "success": True,
             "record_id": record_id,
-            "message": "Performance recorded successfully"
+            "message": "Performance recorded successfully",
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 class TenantCreateRequest(BaseModel):
     name: str
@@ -786,6 +864,7 @@ class TenantCreateRequest(BaseModel):
     isolation_level: str = "moderate"
     business_rules: Dict[str, Any] = None
     sla_requirements: Dict[str, Any] = None
+
 
 @app.post("/phase2/tenant/create", response_model=Dict[str, Any])
 async def create_tenant(request: TenantCreateRequest):
@@ -797,21 +876,23 @@ async def create_tenant(request: TenantCreateRequest):
             scaling_policy=ScalingPolicy(request.scaling_policy),
             isolation_level=request.isolation_level,
             business_rules=request.business_rules,
-            sla_requirements=request.sla_requirements
+            sla_requirements=request.sla_requirements,
         )
-        
+
         return {
             "success": True,
             "tenant_id": tenant_config.tenant_id,
             "tenant_name": tenant_config.name,
             "status": tenant_config.status.value,
-            "message": "Tenant created successfully"
+            "message": "Tenant created successfully",
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
 class TenantMetricsRequest(BaseModel):
     metrics_data: Dict[str, Any]
+
 
 # Phase 2.1 Request Models
 class ConstraintEvolutionRequest(BaseModel):
@@ -820,9 +901,11 @@ class ConstraintEvolutionRequest(BaseModel):
     performance_threshold: float = 0.85
     evolution_strategy: str = "moderate"
 
+
 class PerformancePredictionRequest(BaseModel):
     constraint_id: str
     scenario_data: Dict[str, Any]
+
 
 class ResourceDemandPredictionRequest(BaseModel):
     tenant_id: str
@@ -830,21 +913,25 @@ class ResourceDemandPredictionRequest(BaseModel):
     resource_types: List[str] = None
     include_business_cycles: bool = True
 
+
 class ScalingScheduleRequest(BaseModel):
     predictions: List[Dict[str, Any]]
     tenant_id: str
     optimization_algorithm: str = "genetic"
+
 
 class EnterpriseAuthenticationRequest(BaseModel):
     auth_type: str
     assertion: str
     issuer: str
 
+
 class ComplianceCheckRequest(BaseModel):
     operation: str
     data: Dict[str, Any]
     frameworks: List[str] = None
     timeout: int = 30
+
 
 class AlgorithmSubmissionRequest(BaseModel):
     name: str
@@ -858,6 +945,7 @@ class AlgorithmSubmissionRequest(BaseModel):
     requirements: List[str] = None
     example_usage: str = ""
 
+
 class TutorialCreationRequest(BaseModel):
     title: str
     content: str
@@ -867,25 +955,23 @@ class TutorialCreationRequest(BaseModel):
     estimated_time: int
     prerequisites: List[str] = None
 
+
 @app.post("/phase2/tenant/{tenant_id}/metrics", response_model=Dict[str, Any])
-async def record_tenant_metrics(
-    tenant_id: str,
-    request: TenantMetricsRequest
-):
+async def record_tenant_metrics(tenant_id: str, request: TenantMetricsRequest):
     """Record performance metrics for a tenant"""
     try:
         record_id = await multi_tenant_manager.record_tenant_metrics(
-            tenant_id=tenant_id,
-            metrics_data=request.metrics_data
+            tenant_id=tenant_id, metrics_data=request.metrics_data
         )
-        
+
         return {
             "success": True,
             "record_id": record_id,
-            "message": "Tenant metrics recorded successfully"
+            "message": "Tenant metrics recorded successfully",
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.get("/phase2/tenant/{tenant_id}/analytics", response_model=Dict[str, Any])
 async def get_tenant_analytics(tenant_id: str):
@@ -896,6 +982,7 @@ async def get_tenant_analytics(tenant_id: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
 @app.get("/phase2/dashboard/summary", response_model=Dict[str, Any])
 async def get_dashboard_summary():
     """Get comprehensive dashboard summary"""
@@ -905,14 +992,18 @@ async def get_dashboard_summary():
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
 @app.get("/phase2/dashboard/tenant/{tenant_id}", response_model=Dict[str, Any])
 async def get_tenant_dashboard(tenant_id: str):
     """Get performance dashboard for a specific tenant"""
     try:
-        tenant_data = await advanced_performance_dashboard.get_tenant_performance(tenant_id)
+        tenant_data = await advanced_performance_dashboard.get_tenant_performance(
+            tenant_id
+        )
         return tenant_data
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.post("/phase2/dashboard/start", response_model=Dict[str, Any])
 async def start_performance_dashboard():
@@ -921,10 +1012,11 @@ async def start_performance_dashboard():
         await advanced_performance_dashboard.start_dashboard()
         return {
             "success": True,
-            "message": "Performance dashboard started successfully"
+            "message": "Performance dashboard started successfully",
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.post("/phase2/dashboard/stop", response_model=Dict[str, Any])
 async def stop_performance_dashboard():
@@ -933,10 +1025,11 @@ async def stop_performance_dashboard():
         await advanced_performance_dashboard.stop_dashboard()
         return {
             "success": True,
-            "message": "Performance dashboard stopped successfully"
+            "message": "Performance dashboard stopped successfully",
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.get("/phase2/analytics/qubo", response_model=Dict[str, Any])
 async def get_qubo_analytics():
@@ -947,6 +1040,7 @@ async def get_qubo_analytics():
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
 @app.get("/phase2/analytics/learning", response_model=Dict[str, Any])
 async def get_learning_analytics():
     """Get analytics from the Real-Time Learning Engine"""
@@ -955,6 +1049,7 @@ async def get_learning_analytics():
         return analytics
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.get("/phase2/analytics/tenant", response_model=Dict[str, Any])
 async def get_tenant_system_analytics():
@@ -965,9 +1060,11 @@ async def get_tenant_system_analytics():
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
 # ============================================================================
 # DEMO ENDPOINTS
 # ============================================================================
+
 
 @app.post("/demo/run-comprehensive")
 async def run_comprehensive_demo():
@@ -981,19 +1078,21 @@ async def run_comprehensive_demo():
             "business_pods": [
                 "sigma_select",
                 "flyfox_ai",
-                "goliath_trade", 
+                "goliath_trade",
                 "sfg_symmetry",
-                "ghost_neuroq"
+                "ghost_neuroq",
             ],
-            "timestamp": datetime.now().isoformat()
+            "timestamp": datetime.now().isoformat(),
         }
     except Exception as e:
         logger.error(f"Demo scheduling failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+
 # ============================================================================
 # PHASE 2.1 API ENDPOINTS
 # ============================================================================
+
 
 # Constraint Evolution Endpoints
 @app.post("/phase2.1/constraints/evolve", response_model=Dict[str, Any])
@@ -1004,9 +1103,9 @@ async def evolve_constraints(request: ConstraintEvolutionRequest):
         constraint_updates = await constraint_evolution_engine.evolve_constraints(
             tenant_id=request.tenant_id,
             performance_data={"constraint_ids": request.constraint_ids},
-            strategy=strategy
+            strategy=strategy,
         )
-        
+
         return {
             "success": True,
             "updates_count": len(constraint_updates),
@@ -1018,23 +1117,23 @@ async def evolve_constraints(request: ConstraintEvolutionRequest):
                     "evolution_reason": update.evolution_reason,
                     "confidence_score": update.confidence_score,
                     "expected_improvement": update.expected_improvement,
-                    "risk_assessment": update.risk_assessment
+                    "risk_assessment": update.risk_assessment,
                 }
                 for update in constraint_updates
-            ]
+            ],
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.post("/phase2.1/constraints/predict-performance", response_model=Dict[str, Any])
 async def predict_constraint_performance(request: PerformancePredictionRequest):
     """Predict constraint performance under different scenarios"""
     try:
         prediction = await constraint_evolution_engine.predict_constraint_performance(
-            constraint_id=request.constraint_id,
-            scenario_data=request.scenario_data
+            constraint_id=request.constraint_id, scenario_data=request.scenario_data
         )
-        
+
         return {
             "success": True,
             "constraint_id": prediction.constraint_id,
@@ -1042,16 +1141,23 @@ async def predict_constraint_performance(request: PerformancePredictionRequest):
             "predicted_performance": prediction.predicted_performance,
             "confidence_interval": prediction.confidence_interval,
             "risk_factors": prediction.risk_factors,
-            "recommendations": prediction.recommendations
+            "recommendations": prediction.recommendations,
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/phase2.1/constraints/evolution-history/{tenant_id}", response_model=Dict[str, Any])
-async def get_constraint_evolution_history(tenant_id: str, time_range: Optional[int] = None):
+
+@app.get(
+    "/phase2.1/constraints/evolution-history/{tenant_id}", response_model=Dict[str, Any]
+)
+async def get_constraint_evolution_history(
+    tenant_id: str, time_range: Optional[int] = None
+):
     """Get evolution history for constraints"""
     try:
-        history = await constraint_evolution_engine.get_evolution_history(tenant_id, time_range)
+        history = await constraint_evolution_engine.get_evolution_history(
+            tenant_id, time_range
+        )
         return {
             "success": True,
             "tenant_id": tenant_id,
@@ -1062,27 +1168,31 @@ async def get_constraint_evolution_history(tenant_id: str, time_range: Optional[
                     "evolution_reason": entry.evolution_reason,
                     "confidence_score": entry.confidence_score,
                     "expected_improvement": entry.expected_improvement,
-                    "applied_at": entry.applied_at.isoformat()
+                    "applied_at": entry.applied_at.isoformat(),
                 }
                 for entry in history
-            ]
+            ],
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 # Predictive Scaling Endpoints
 @app.post("/phase2.1/scaling/predict-demand", response_model=Dict[str, Any])
 async def predict_resource_demand(request: ResourceDemandPredictionRequest):
     """Predict resource demand for scaling"""
     try:
-        resource_types = [ResourceType(rt) for rt in (request.resource_types or ["compute", "memory", "storage"])]
+        resource_types = [
+            ResourceType(rt)
+            for rt in (request.resource_types or ["compute", "memory", "storage"])
+        ]
         predictions = await predictive_scaler.predict_resource_demand(
             tenant_id=request.tenant_id,
             time_horizon=request.time_horizon,
             resource_types=resource_types,
-            include_business_cycles=request.include_business_cycles
+            include_business_cycles=request.include_business_cycles,
         )
-        
+
         return {
             "success": True,
             "predictions_count": len(predictions),
@@ -1094,22 +1204,24 @@ async def predict_resource_demand(request: ResourceDemandPredictionRequest):
                     "trend_direction": pred.trend_direction,
                     "business_cycle_factor": pred.business_cycle_factor,
                     "seasonal_factor": pred.seasonal_factor,
-                    "market_factor": pred.market_factor
+                    "market_factor": pred.market_factor,
                 }
                 for pred in predictions
-            ]
+            ],
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.post("/phase2.1/scaling/optimize-schedule", response_model=Dict[str, Any])
 async def optimize_scaling_schedule(request: ScalingScheduleRequest):
     """Optimize scaling schedule for cost efficiency"""
     try:
         algorithm = ScalingAlgorithm(request.optimization_algorithm)
-        
+
         # Convert JSON predictions to ResourceDemandPrediction objects
         from .scaling.predictive_scaler import ResourceDemandPrediction, ResourceType
+
         predictions = []
         for pred_data in request.predictions:
             prediction = ResourceDemandPrediction(
@@ -1120,16 +1232,16 @@ async def optimize_scaling_schedule(request: ScalingScheduleRequest):
                 timestamp=datetime.now(),
                 business_cycle_factor=0.5,
                 seasonal_factor=0.3,
-                market_factor=0.2
+                market_factor=0.2,
             )
             predictions.append(prediction)
-        
+
         schedule = await predictive_scaler.optimize_scaling_schedule(
             predictions=predictions,
             tenant_id=request.tenant_id,
-            optimization_algorithm=algorithm
+            optimization_algorithm=algorithm,
         )
-        
+
         return {
             "success": True,
             "schedule_id": schedule.schedule_id,
@@ -1145,13 +1257,14 @@ async def optimize_scaling_schedule(request: ScalingScheduleRequest):
                     "target_capacity": action.target_capacity,
                     "scaling_reason": action.scaling_reason,
                     "priority": action.priority,
-                    "estimated_cost": action.estimated_cost
+                    "estimated_cost": action.estimated_cost,
                 }
                 for action in schedule.actions
-            ]
+            ],
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.post("/phase2.1/scaling/apply-schedule", response_model=Dict[str, Any])
 async def apply_scaling_schedule(schedule_id: str, auto_approve: bool = False):
@@ -1165,10 +1278,11 @@ async def apply_scaling_schedule(schedule_id: str, auto_approve: bool = False):
             "message": "Scaling schedule applied successfully",
             "actions_applied": 3,
             "actions_failed": 0,
-            "total_cost": 45.50
+            "total_cost": 45.50,
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 # Enterprise Integration Endpoints
 @app.post("/phase2.1/enterprise/authenticate", response_model=Dict[str, Any])
@@ -1177,27 +1291,29 @@ async def authenticate_enterprise_user(request: EnterpriseAuthenticationRequest)
     try:
         if request.auth_type == "saml":
             from .enterprise.enterprise_security_manager import SAMLCredentials
+
             credentials = SAMLCredentials(
-                assertion=request.assertion,
-                issuer=request.issuer
+                assertion=request.assertion, issuer=request.issuer
             )
         elif request.auth_type == "oauth":
             from .enterprise.enterprise_security_manager import OAuthCredentials
+
             credentials = OAuthCredentials(
-                access_token=request.assertion,
-                token_type="Bearer"
+                access_token=request.assertion, token_type="Bearer"
             )
         elif request.auth_type == "ldap":
             from .enterprise.enterprise_security_manager import LDAPCredentials
+
             credentials = LDAPCredentials(
-                username=request.assertion,
-                password=request.issuer
+                username=request.assertion, password=request.issuer
             )
         else:
-            raise HTTPException(status_code=400, detail="Unsupported authentication type")
-        
+            raise HTTPException(
+                status_code=400, detail="Unsupported authentication type"
+            )
+
         auth_result = await enterprise_security_manager.authenticate_user(credentials)
-        
+
         if auth_result.is_authenticated:
             return {
                 "success": True,
@@ -1207,26 +1323,34 @@ async def authenticate_enterprise_user(request: EnterpriseAuthenticationRequest)
                 "groups": auth_result.groups,
                 "permissions": auth_result.permissions,
                 "session_token": auth_result.session_token,
-                "expires_at": auth_result.expires_at.isoformat() if auth_result.expires_at else None
+                "expires_at": (
+                    auth_result.expires_at.isoformat()
+                    if auth_result.expires_at
+                    else None
+                ),
             }
         else:
             raise HTTPException(status_code=401, detail=auth_result.error_message)
-            
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.post("/phase2.1/enterprise/compliance-check", response_model=Dict[str, Any])
 async def check_compliance(request: ComplianceCheckRequest):
     """Check compliance for operations"""
     try:
-        frameworks = [ComplianceFramework(f) for f in (request.frameworks or ["soc2", "iso27001", "gdpr"])]
+        frameworks = [
+            ComplianceFramework(f)
+            for f in (request.frameworks or ["soc2", "iso27001", "gdpr"])
+        ]
         compliance_result = await enterprise_security_manager.enforce_compliance(
             operation=request.operation,
             data=request.data,
             frameworks=frameworks,
-            timeout=request.timeout
+            timeout=request.timeout,
         )
-        
+
         return {
             "success": True,
             "is_compliant": compliance_result.is_compliant,
@@ -1237,10 +1361,11 @@ async def check_compliance(request: ComplianceCheckRequest):
             "violations": compliance_result.violations,
             "warnings": compliance_result.warnings,
             "recommendations": compliance_result.recommendations,
-            "audit_trail": compliance_result.audit_trail
+            "audit_trail": compliance_result.audit_trail,
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 class AuditLogRequest(BaseModel):
     user_id: str
@@ -1248,6 +1373,7 @@ class AuditLogRequest(BaseModel):
     details: Dict[str, Any]
     ip_address: Optional[str] = None
     user_agent: Optional[str] = None
+
 
 @app.post("/phase2.1/enterprise/audit-log", response_model=Dict[str, Any])
 async def create_audit_log(request: AuditLogRequest):
@@ -1258,33 +1384,39 @@ async def create_audit_log(request: AuditLogRequest):
             action=request.action,
             details=request.details,
             ip_address=request.ip_address,
-            user_agent=request.user_agent
+            user_agent=request.user_agent,
         )
-        
+
         return {
             "success": True,
             "entry_id": audit_entry.entry_id,
             "timestamp": audit_entry.timestamp.isoformat(),
-            "message": "Audit log entry created successfully"
+            "message": "Audit log entry created successfully",
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 # Community Platform Endpoints
 @app.post("/phase2.1/community/submit-algorithm", response_model=Dict[str, Any])
 async def submit_algorithm(request: AlgorithmSubmissionRequest):
     """Submit algorithm to marketplace"""
     try:
-        from .community.community_platform import QuantumAlgorithm, DeveloperProfile, AlgorithmCategory, AlgorithmComplexity
-        
+        from .community.community_platform import (
+            QuantumAlgorithm,
+            DeveloperProfile,
+            AlgorithmCategory,
+            AlgorithmComplexity,
+        )
+
         # Create developer profile (in production, this would come from authentication)
         developer = DeveloperProfile(
             developer_id="dev_temp_001",
             username="temp_developer",
             email="temp@example.com",
-            full_name="Temporary Developer"
+            full_name="Temporary Developer",
         )
-        
+
         # Create algorithm object
         algorithm = QuantumAlgorithm(
             algorithm_id="",  # Will be generated
@@ -1298,20 +1430,23 @@ async def submit_algorithm(request: AlgorithmSubmissionRequest):
             author=developer,
             tags=request.tags or [],
             requirements=request.requirements or [],
-            example_usage=request.example_usage
+            example_usage=request.example_usage,
         )
-        
-        submission_result = await algorithm_marketplace.submit_algorithm(algorithm, developer)
-        
+
+        submission_result = await algorithm_marketplace.submit_algorithm(
+            algorithm, developer
+        )
+
         return {
             "success": submission_result.is_successful,
             "algorithm_id": submission_result.algorithm_id,
             "message": submission_result.message,
             "validation_errors": submission_result.validation_errors,
-            "estimated_review_time": submission_result.estimated_review_time
+            "estimated_review_time": submission_result.estimated_review_time,
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.get("/phase2.1/community/discover-algorithms", response_model=Dict[str, Any])
 async def discover_algorithms(
@@ -1321,23 +1456,29 @@ async def discover_algorithms(
     min_rating: Optional[float] = None,
     tags: Optional[str] = None,
     limit: int = 20,
-    offset: int = 0
+    offset: int = 0,
 ):
     """Discover algorithms in marketplace"""
     try:
-        from .community.community_platform import SearchCriteria, AlgorithmCategory, AlgorithmComplexity
-        
+        from .community.community_platform import (
+            SearchCriteria,
+            AlgorithmCategory,
+            AlgorithmComplexity,
+        )
+
         search_criteria = SearchCriteria(
             category=AlgorithmCategory(category) if category else None,
             complexity=AlgorithmComplexity(complexity) if complexity else None,
             max_price=max_price,
             min_rating=min_rating,
             tags=tags.split(",") if tags else [],
-            sort_by="relevance"
+            sort_by="relevance",
         )
-        
-        algorithms = await algorithm_marketplace.discover_algorithms(search_criteria, limit, offset)
-        
+
+        algorithms = await algorithm_marketplace.discover_algorithms(
+            search_criteria, limit, offset
+        )
+
         return {
             "success": True,
             "algorithms_count": len(algorithms),
@@ -1352,56 +1493,60 @@ async def discover_algorithms(
                     "author": {
                         "username": algo.author.username,
                         "full_name": algo.author.full_name,
-                        "reputation_score": algo.author.reputation_score
+                        "reputation_score": algo.author.reputation_score,
                     },
                     "rating": algo.rating,
                     "review_count": algo.review_count,
                     "download_count": algo.download_count,
                     "tags": algo.tags,
                     "created_at": algo.created_at.isoformat(),
-                    "preview_available": algo.preview_available
+                    "preview_available": algo.preview_available,
                 }
                 for algo in algorithms
-            ]
+            ],
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.post("/phase2.1/community/purchase-algorithm", response_model=Dict[str, Any])
 async def purchase_algorithm(algorithm_id: str, license_type: str, buyer_id: str):
     """Purchase algorithm license"""
     try:
         purchase_result = await algorithm_marketplace.purchase_algorithm(
-            algorithm_id=algorithm_id,
-            license_type=license_type,
-            buyer_id=buyer_id
+            algorithm_id=algorithm_id, license_type=license_type, buyer_id=buyer_id
         )
-        
+
         return {
             "success": purchase_result.is_successful,
             "purchase_id": purchase_result.purchase_id,
             "download_url": purchase_result.download_url,
             "license_key": purchase_result.license_key,
             "message": purchase_result.message,
-            "error_details": purchase_result.error_details
+            "error_details": purchase_result.error_details,
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.post("/phase2.1/community/create-tutorial", response_model=Dict[str, Any])
 async def create_tutorial(request: TutorialCreationRequest):
     """Create tutorial in developer portal"""
     try:
-        from .community.community_platform import Tutorial, DeveloperProfile, AlgorithmComplexity
-        
+        from .community.community_platform import (
+            Tutorial,
+            DeveloperProfile,
+            AlgorithmComplexity,
+        )
+
         # Create developer profile (in production, this would come from authentication)
         developer = DeveloperProfile(
             developer_id="dev_temp_001",
             username="temp_developer",
             email="temp@example.com",
-            full_name="Temporary Developer"
+            full_name="Temporary Developer",
         )
-        
+
         # Create tutorial object
         tutorial = Tutorial(
             tutorial_id="",  # Will be generated
@@ -1412,26 +1557,27 @@ async def create_tutorial(request: TutorialCreationRequest):
             difficulty=AlgorithmComplexity(request.difficulty),
             tags=request.tags or [],
             estimated_time=request.estimated_time,
-            prerequisites=request.prerequisites or []
+            prerequisites=request.prerequisites or [],
         )
-        
+
         tutorial_result = await developer_portal.create_tutorial(tutorial, developer)
-        
+
         return {
             "success": tutorial_result.is_successful,
             "tutorial_id": tutorial_result.tutorial_id,
             "message": tutorial_result.message,
-            "validation_errors": tutorial_result.validation_errors
+            "validation_errors": tutorial_result.validation_errors,
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.get("/phase2.1/community/forums", response_model=Dict[str, Any])
 async def get_active_forums():
     """Get list of active community forums"""
     try:
         forums = await community_manager.get_active_forums()
-        
+
         return {
             "success": True,
             "forums_count": len(forums),
@@ -1445,20 +1591,21 @@ async def get_active_forums():
                     "moderation_level": forum.moderation_level,
                     "member_count": forum.member_count,
                     "topic_count": forum.topic_count,
-                    "is_active": forum.is_active
+                    "is_active": forum.is_active,
                 }
                 for forum in forums
-            ]
+            ],
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.get("/phase2.1/community/events", response_model=Dict[str, Any])
 async def get_upcoming_events():
     """Get list of upcoming community events"""
     try:
         events = await community_manager.get_upcoming_events()
-        
+
         return {
             "success": True,
             "events_count": len(events),
@@ -1472,46 +1619,48 @@ async def get_upcoming_events():
                     "end_date": event.end_date.isoformat(),
                     "organizer": {
                         "username": event.organizer.username,
-                        "full_name": event.organizer.full_name
+                        "full_name": event.organizer.full_name,
                     },
                     "is_online": event.is_online,
                     "location": event.location,
-                    "status": event.status
+                    "status": event.status,
                 }
                 for event in events
-            ]
+            ],
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 # ============================================================================
 # STARTUP AND SHUTDOWN EVENTS
 # ============================================================================
 
+
 @app.on_event("startup")
 async def startup_event():
     """Initialize all components on startup"""
     logger.info("Starting Goliath Quantum Starter API Server v2.2.0")
-    
+
     # Initialize Phase 1 components
     try:
         # Initialize quantum adapter
         await quantum_adapter.initialize()
-        
+
         # Initialize business pods
         await sigma_select_pod.initialize()
         await flyfox_ai_pod.initialize()
         await goliath_trade_pod.initialize()
         await sfg_symmetry_pod.initialize()
         await ghost_neuroq_pod.initialize()
-        
+
         # Register business pods with orchestrator
         await orchestrator.register_business_pod(sigma_select_pod)
         await orchestrator.register_business_pod(flyfox_ai_pod)
         await orchestrator.register_business_pod(goliath_trade_pod)
         await orchestrator.register_business_pod(sfg_symmetry_pod)
         await orchestrator.register_business_pod(ghost_neuroq_pod)
-        
+
         logger.info("Phase 1 components initialized successfully")
     except Exception as e:
         logger.error(f"Error initializing Phase 1 components: {e}")
@@ -1520,16 +1669,16 @@ async def startup_event():
     try:
         # Initialize multi-tenant management
         await multi_tenant_manager.initialize()
-        
+
         # Initialize real-time learning engine
         await real_time_learning_engine.initialize()
-        
+
         # Initialize advanced QUBO engine
         await advanced_qubo_engine.initialize()
-        
+
         # Initialize performance dashboard
         await advanced_performance_dashboard.initialize()
-        
+
         logger.info("Phase 2 components initialized successfully")
     except Exception as e:
         logger.error(f"Error initializing Phase 2 components: {e}")
@@ -1558,10 +1707,12 @@ async def startup_event():
 
     logger.info("All components initialized successfully")
 
+
 @app.on_event("shutdown")
 async def shutdown_event():
     """Cleanup on shutdown"""
     logger.info("Shutting down Goliath Quantum Starter API Server")
+
 
 # ============================================================================
 # MAIN ENTRY POINT
@@ -1569,12 +1720,9 @@ async def shutdown_event():
 
 if __name__ == "__main__":
     uvicorn.run(
-        "api_server:app",
-        host="0.0.0.0",
-        port=8000,
-        reload=True,
-        log_level="info"
+        "api_server:app", host="0.0.0.0", port=8000, reload=True, log_level="info"
     )
+
 
 # Phase 2.2 Request Models
 class QUBOCreateProblemRequest(BaseModel):
@@ -1586,11 +1734,13 @@ class QUBOCreateProblemRequest(BaseModel):
     strategy: str
     tenant_id: str
 
+
 class LearningModelCreateRequest(BaseModel):
     algorithm_type: str
     learning_mode: str
     initial_parameters: Dict[str, Any]
     tenant_id: str
+
 
 class LearningExampleRequest(BaseModel):
     model_id: str
@@ -1598,6 +1748,7 @@ class LearningExampleRequest(BaseModel):
     expected_output: Dict[str, Any]
     actual_output: Dict[str, Any]
     tenant_id: str
+
 
 # Phase 2.2 API Endpoints - Advanced QUBO Engine
 @app.post("/phase2.2/qubo/create-problem", response_model=Dict[str, Any])
@@ -1611,30 +1762,32 @@ async def create_optimization_problem(request: QUBOCreateProblemRequest):
             variables=request.variables,
             constraints=request.constraints,
             strategy=request.strategy,
-            tenant_id=request.tenant_id
+            tenant_id=request.tenant_id,
         )
         return {"status": "success", "data": result}
     except Exception as e:
         logger.error(f"Failed to create optimization problem: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+
 @app.post("/phase2.2/qubo/optimize/{problem_id}", response_model=Dict[str, Any])
 async def optimize_problem(
     problem_id: str,
     initial_values: Optional[Dict[str, float]] = None,
-    max_iterations: Optional[int] = None
+    max_iterations: Optional[int] = None,
 ):
     """Optimize a problem using advanced QUBO techniques"""
     try:
         result = await advanced_qubo_engine.optimize_problem(
             problem_id=problem_id,
             initial_values=initial_values,
-            max_iterations=max_iterations
+            max_iterations=max_iterations,
         )
         return {"status": "success", "data": result}
     except Exception as e:
         logger.error(f"Failed to optimize problem: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.get("/phase2.2/qubo/problem/{problem_id}/status", response_model=Dict[str, Any])
 async def get_problem_status(problem_id: str):
@@ -1646,6 +1799,7 @@ async def get_problem_status(problem_id: str):
         logger.error(f"Failed to get problem status: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+
 @app.get("/phase2.2/qubo/tenant/{tenant_id}/problems", response_model=Dict[str, Any])
 async def get_tenant_problems(tenant_id: str):
     """Get all optimization problems for a tenant"""
@@ -1655,6 +1809,7 @@ async def get_tenant_problems(tenant_id: str):
     except Exception as e:
         logger.error(f"Failed to get tenant problems: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.get("/phase2.2/qubo/tenant/{tenant_id}/analytics", response_model=Dict[str, Any])
 async def get_qubo_analytics(tenant_id: str):
@@ -1666,6 +1821,7 @@ async def get_qubo_analytics(tenant_id: str):
         logger.error(f"Failed to get QUBO analytics: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+
 # Phase 2.2 API Endpoints - Real-Time Learning Engine
 @app.post("/phase2.2/learning/create-model", response_model=Dict[str, Any])
 async def create_learning_model(request: LearningModelCreateRequest):
@@ -1675,12 +1831,13 @@ async def create_learning_model(request: LearningModelCreateRequest):
             algorithm_type=request.algorithm_type,
             learning_mode=request.learning_mode,
             initial_parameters=request.initial_parameters,
-            tenant_id=request.tenant_id
+            tenant_id=request.tenant_id,
         )
         return {"status": "success", "data": result}
     except Exception as e:
         logger.error(f"Failed to create learning model: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.post("/phase2.2/learning/add-example", response_model=Dict[str, Any])
 async def add_learning_example(request: LearningExampleRequest):
@@ -1691,14 +1848,17 @@ async def add_learning_example(request: LearningExampleRequest):
             input_data=request.input_data,
             expected_output=request.expected_output,
             actual_output=request.actual_output,
-            tenant_id=request.tenant_id
+            tenant_id=request.tenant_id,
         )
         return {"status": "success", "data": result}
     except Exception as e:
         logger.error(f"Failed to add learning example: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/phase2.2/learning/model/{model_id}/performance", response_model=Dict[str, Any])
+
+@app.get(
+    "/phase2.2/learning/model/{model_id}/performance", response_model=Dict[str, Any]
+)
 async def get_model_performance(model_id: str):
     """Get performance metrics for a learning model"""
     try:
@@ -1707,6 +1867,7 @@ async def get_model_performance(model_id: str):
     except Exception as e:
         logger.error(f"Failed to get model performance: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.get("/phase2.2/learning/tenant/{tenant_id}/summary", response_model=Dict[str, Any])
 async def get_learning_summary(tenant_id: str):
@@ -1717,6 +1878,7 @@ async def get_learning_summary(tenant_id: str):
     except Exception as e:
         logger.error(f"Failed to get learning summary: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.post("/phase2.2/learning/export/{tenant_id}", response_model=Dict[str, Any])
 async def export_learning_data(tenant_id: str, format: str = "json"):

@@ -17,7 +17,12 @@ from .qaas_platform import QAaaSPlatform
 from .client_portal import ClientPortal, ClientConfig, ClientTier, PortalFeature
 from .service_dashboard import ServiceDashboard, ServiceMetrics, DashboardMetric
 from .agent_suite import AgentSuite, AgentSuiteConfig, WhiteLabelType
-from .flyfox_platform import FLYFOXPlatform, PlatformConfig, PlatformTier, ServiceCategory
+from .flyfox_platform import (
+    FLYFOXPlatform,
+    PlatformConfig,
+    PlatformTier,
+    ServiceCategory,
+)
 from .flyfox_platform_like_gohighlevel import (
     FLYFOXPlatform as FLYFOXPlatformGoHighLevel,
     PlatformConfig as GoHighLevelPlatformConfig,
@@ -28,50 +33,44 @@ from .flyfox_platform_like_gohighlevel import (
     CalendarConfig,
     CRMModule,
     MarketingModule,
-    FunnelModule
+    FunnelModule,
 )
 from .client_communication import (
-    ClientCommunicationSystem, 
-    ContactForm, 
-    SupportTicket, 
+    ClientCommunicationSystem,
+    ContactForm,
+    SupportTicket,
     CommunicationRecord,
     CommunicationType,
     PriorityLevel,
     Status,
-    TeamMember
+    TeamMember,
 )
 
 __all__ = [
     # Landing Pages
     "LandingPageGenerator",
-    "LandingPageConfig", 
+    "LandingPageConfig",
     "LandingPageType",
-    
     # QAaaS Platform
     "QAaaSPlatform",
-    
     # Client Portal
     "ClientPortal",
     "ClientConfig",
     "ClientTier",
     "PortalFeature",
-    
     # Service Dashboard
     "ServiceDashboard",
     "ServiceMetrics",
     "DashboardMetric",
-    
     # Agent Suite
     "AgentSuite",
     "AgentSuiteConfig",
     "WhiteLabelType",
-    
     # FLYFOX Platform (Original)
     "FLYFOXPlatform",
     "PlatformConfig",
     "PlatformTier",
     "ServiceCategory",
-    
     # FLYFOX Platform (Built Like GoHighLevel from Scratch)
     "FLYFOXPlatformGoHighLevel",
     "GoHighLevelPlatformConfig",
@@ -83,14 +82,13 @@ __all__ = [
     "CRMModule",
     "MarketingModule",
     "FunnelModule",
-    
     # Client Communication System
     "ClientCommunicationSystem",
     "ContactForm",
-    "SupportTicket", 
+    "SupportTicket",
     "CommunicationRecord",
     "CommunicationType",
     "PriorityLevel",
     "Status",
-    "TeamMember"
+    "TeamMember",
 ]

@@ -13,11 +13,19 @@ from .dynex_client import get_dynex_client
 
 logger = logging.getLogger("quantum_diffusion")
 
+
 class QuantumDiffusion:
     def __init__(self):
         self.dynex = get_dynex_client()
 
-    async def generate(self, tokens: List[str], steps: int = 5, quantum_steps: int = 3, algorithm: str = "qaoa", parameters: Optional[dict] = None) -> List[str]:
+    async def generate(
+        self,
+        tokens: List[str],
+        steps: int = 5,
+        quantum_steps: int = 3,
+        algorithm: str = "qaoa",
+        parameters: Optional[dict] = None,
+    ) -> List[str]:
         """
         Quantum diffusion process for token generation.
         - tokens: input tokens (with masks)
@@ -31,7 +39,9 @@ class QuantumDiffusion:
             if step < quantum_steps:
                 # Quantum token selection (QUBO)
                 qubo = self._tokens_to_qubo(current_tokens)
-                qubo_result = await self.dynex.submit_qubo(qubo, algorithm=algorithm, parameters=parameters)
+                qubo_result = await self.dynex.submit_qubo(
+                    qubo, algorithm=algorithm, parameters=parameters
+                )
                 current_tokens = self._apply_qubo_result(current_tokens, qubo_result)
             else:
                 # Classical refinement (stub)
@@ -49,5 +59,6 @@ class QuantumDiffusion:
     def _classical_refine(self, tokens: List[str]) -> List[str]:
         # TODO: Classical LLM refinement
         return [t.replace("[MASK]", "word") for t in tokens]
+
 
 quantum_diffusion = QuantumDiffusion()

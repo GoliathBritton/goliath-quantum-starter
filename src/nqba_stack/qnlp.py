@@ -56,8 +56,11 @@ class QNLP:
         qubo = np.eye(n)
         return qubo
 
-    def decode_summarization_result(self, qubo_result: Dict[str, Any], sentences: list) -> str:
+    def decode_summarization_result(
+        self, qubo_result: Dict[str, Any], sentences: list
+    ) -> str:
         logger.info(f"Decoding summarization QUBO result: {qubo_result}")
         return sentences[0]
+
 
 qnlp = QNLP()
