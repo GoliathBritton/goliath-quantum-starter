@@ -1,0 +1,4 @@
+# file: C:\Users\johnb\goliath-quantum-starter\src\nqba_stack\business_pods\__init__.py
+# hypothesis_version: 6.138.4
+
+['BUSINESS_PODS', 'FLYFOX AI', 'FLYFOX_AI_POD', 'GOLIATH_TRADE_POD', 'Goliath Trade Energy', 'Goliath of All Trade', 'SIGMA_SELECT_POD', 'Sigma Select', 'asset_guardian', 'blockchain_analytics', 'capabilities', 'defi_optimization', 'description', 'energy_optimization', 'energy_scheduling', 'energy_trading', 'flyfox_ai', 'gas_optimization', 'get_business_pod', 'get_pod_capabilities', 'get_pod_solutions', 'goliath_trade', 'lead_prioritization', 'lead_scoring', 'name', 'next_best_action', 'nft_optimization', 'operations_hub', 'pod_id', 'portfolio_allocation', 'quality_control', 'quality_enhancement', 'qubo_problems', 'risk_assessment', 'risk_optimization', 'sales_optimization', 'sigma_select', 'solutions', 'uptime_optimization']

@@ -1,0 +1,12 @@
+{
+  "total_benchmarks": 150,
+  "successful_benchmarks": 150,
+  "average_quantum_advantage": 410.6614868009025,
+  "median_quantum_advantage": 304.34635190755023,
+  "min_quantum_advantage": 15.969537333944114,
+  "max_quantum_advantage": 1424.9714285714285,
+  "total_classical_time": 219.58012080192566,
+  "total_quantum_time": 4.651885271072388,
+  "overall_time_savings": 214.92823553085327,
+  "success_rate": 1.0
+}

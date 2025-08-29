@@ -1,0 +1,123 @@
+{
+  "test_suite": "Phase 2.1 Features",
+  "start_time": "2025-08-28T01:02:12.340469",
+  "end_time": "2025-08-28T01:02:49.555367",
+  "total_tests": 16,
+  "passed_tests": 10,
+  "failed_tests": 6,
+  "success_rate": 62.5,
+  "test_results": [
+    {
+      "test_name": "Constraint Evolution - Evolve Constraints",
+      "success": true,
+      "details": "Generated 5 constraint updates",
+      "error": "",
+      "timestamp": "2025-08-28T01:02:14.418485"
+    },
+    {
+      "test_name": "Constraint Evolution - Performance Prediction",
+      "success": true,
+      "details": "Predicted performance: 0.961",
+      "error": "",
+      "timestamp": "2025-08-28T01:02:16.470205"
+    },
+    {
+      "test_name": "Constraint Evolution - Evolution History",
+      "success": true,
+      "details": "Retrieved 5 evolution records",
+      "error": "",
+      "timestamp": "2025-08-28T01:02:18.537498"
+    },
+    {
+      "test_name": "Predictive Scaling - Resource Demand Prediction",
+      "success": true,
+      "details": "Generated 3 resource predictions",
+      "error": "",
+      "timestamp": "2025-08-28T01:02:20.594720"
+    },
+    {
+      "test_name": "Predictive Scaling - Schedule Optimization",
+      "success": false,
+      "details": "HTTP 500: {\"detail\":\"'COMPUTE' is not a valid ResourceType\"}",
+      "error": "",
+      "timestamp": "2025-08-28T01:02:22.634760"
+    },
+    {
+      "test_name": "Predictive Scaling - Apply Schedule",
+      "success": true,
+      "details": "Applied 3 scaling actions",
+      "error": "",
+      "timestamp": "2025-08-28T01:02:24.672688"
+    },
+    {
+      "test_name": "Enterprise Integration - SAML Authentication",
+      "success": false,
+      "details": "HTTP 500: {\"detail\":\"401: Invalid SAML assertion\"}",
+      "error": "",
+      "timestamp": "2025-08-28T01:02:26.725494"
+    },
+    {
+      "test_name": "Enterprise Integration - Compliance Check",
+      "success": true,
+      "details": "Compliance status: Non-compliant, 0/0 requirements met",
+      "error": "",
+      "timestamp": "2025-08-28T01:02:28.781315"
+    },
+    {
+      "test_name": "Enterprise Integration - Audit Logging",
+      "success": true,
+      "details": "Created audit entry: audit_20250828_010230_844152",
+      "error": "",
+      "timestamp": "2025-08-28T01:02:30.849272"
+    },
+    {
+      "test_name": "Community Platform - Algorithm Submission",
+      "success": false,
+      "details": "Submission failed: Algorithm validation failed",
+      "error": "",
+      "timestamp": "2025-08-28T01:02:32.913071"
+    },
+    {
+      "test_name": "Community Platform - Algorithm Discovery",
+      "success": true,
+      "details": "Found 0 algorithms",
+      "error": "",
+      "timestamp": "2025-08-28T01:02:34.967128"
+    },
+    {
+      "test_name": "Community Platform - Tutorial Creation",
+      "success": false,
+      "details": "Tutorial creation failed: Tutorial validation failed",
+      "error": "",
+      "timestamp": "2025-08-28T01:02:37.022061"
+    },
+    {
+      "test_name": "Community Platform - Forum Listing",
+      "success": true,
+      "details": "Found 3 active forums",
+      "error": "",
+      "timestamp": "2025-08-28T01:02:39.076348"
+    },
+    {
+      "test_name": "Community Platform - Event Listing",
+      "success": true,
+      "details": "Found 0 upcoming events",
+      "error": "",
+      "timestamp": "2025-08-28T01:02:41.146937"
+    },
+    {
+      "test_name": "Integration Workflows - Enterprise Workflow",
+      "success": false,
+      "details": "Workflow failed at compliance check step",
+      "error": "",
+      "timestamp": "2025-08-28T01:02:45.450027"
+    },
+    {
+      "test_name": "Integration Workflows - Scaling + Evolution",
+      "success": false,
+      "details": "Workflow failed at schedule optimization step",
+      "error": "",
+      "timestamp": "2025-08-28T01:02:49.553360"
+    }
+  ]
+}

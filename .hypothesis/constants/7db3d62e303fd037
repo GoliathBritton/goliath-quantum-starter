@@ -1,0 +1,4 @@
+# file: C:\Users\johnb\goliath-quantum-starter\src\nqba_stack\core\dynex_adapter.py
+# hypothesis_version: 6.138.4
+
+[0.0, 0.5, 1.0, 100, 150, 200, 300, 1000, 1500, 2000, 'NQBA_ENVIRONMENT', 'annealing_time', 'budget', 'description', 'development', 'dynex_default_reads', 'dynex_mainnet', 'energy costs', 'equipment_schedule', 'high', 'inf', 'job_id', 'mainnet', 'num_reads', 'off_peak_hours', 'pain_points', 'peak_hours', 'production', 'production delays', 'urgency', 'urgent', 'very high', 'very urgent', 'x']

@@ -7,6 +7,8 @@ Components:
 - LTC Logger: Living Technical Codex for traceability
 - Dynex Adapter: Quantum optimization interface
 - Settings: Configuration management
+- Quantum High Council: 95%+ automated governance
+- Quantum Digital Agents: Digital strategy and orchestration
 """
 
 from .orchestrator import (
@@ -41,12 +43,50 @@ from .settings import (
     is_testing
 )
 
+# Quantum High Council
+from .quantum_high_council import (
+    QuantumHighCouncil,
+    QHCDecisionType,
+    QHCBusinessUnit,
+    QHCMemberRole,
+    QHCDecision,
+    QHCMember,
+    get_quantum_high_council,
+    initialize_quantum_high_council
+)
+
+# Quantum Digital Agents
+from .quantum_digital_agents import (
+    QuantumDigitalAgentOrchestrator,
+    QuantumDigitalAgentType,
+    DigitalOperationType,
+    DigitalOperation,
+    QuantumDigitalAgent,
+    get_quantum_digital_agent_orchestrator,
+    initialize_quantum_digital_agent_orchestrator
+)
+
 __all__ = [
     # Core classes
     "NQBAStackOrchestrator",
     "LTCLogger",
     "DynexAdapter", 
     "NQBASettings",
+    
+    # Quantum High Council
+    "QuantumHighCouncil",
+    "QHCDecisionType",
+    "QHCBusinessUnit",
+    "QHCMemberRole",
+    "QHCDecision",
+    "QHCMember",
+    
+    # Quantum Digital Agents
+    "QuantumDigitalAgentOrchestrator",
+    "QuantumDigitalAgentType",
+    "DigitalOperationType",
+    "DigitalOperation",
+    "QuantumDigitalAgent",
     
     # Core functions
     "get_orchestrator",
@@ -56,6 +96,10 @@ __all__ = [
     "log_operation",
     "solve_qubo",
     "score_leads",
+    "get_quantum_high_council",
+    "initialize_quantum_high_council",
+    "get_quantum_digital_agent_orchestrator",
+    "initialize_quantum_digital_agent_orchestrator",
     
     # Utility functions
     "is_production",

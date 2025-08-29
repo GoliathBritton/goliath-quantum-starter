@@ -1,0 +1,4 @@
+# file: C:\Users\johnb\goliath-quantum-starter\src\nqba_stack\quantum\registry\provider_registry.py
+# hypothesis_version: 6.138.7
+
+[3600, 'active_providers', 'error_count', 'health_status', 'is_active', 'last_error', 'last_heartbeat', 'providers_by_status', 'total_providers', 'unknown']

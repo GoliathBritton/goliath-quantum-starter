@@ -1,0 +1,4 @@
+# file: C:\Users\johnb\goliath-quantum-starter\src\nqba_stack\quantum\__init__.py
+# hypothesis_version: 6.138.7
+
+['1.0.0', 'AuditRecord', 'CapabilitiesResponse', 'CapabilityRegistry', 'FLYFOX AI', 'Job', 'JobStatus', 'JobStatusResponse', 'Problem', 'ProblemType', 'ProviderInfo', 'ProviderListResponse', 'ProviderRegistry', 'QuantumCapability', 'QuantumLLMRequest', 'QuantumResponse', 'Result', 'ResultFormat', 'UsageResponse', 'get_capability', 'get_provider', 'list_capabilities', 'list_providers', 'register_capability', 'register_provider', 'unregister_provider']

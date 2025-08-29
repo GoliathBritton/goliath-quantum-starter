@@ -9,9 +9,9 @@ from enum import Enum
 import time
 
 # Import our components
-from nqba.engine import NQBAEngine, ExecutionMode
-from nqba.quantum_adapter import QuantumAdapter
-from nqba.decision_logic import DecisionLogicEngine
+from nqba_stack.engine import NQBAEngine, ExecutionMode
+from nqba_stack.quantum_adapter import QuantumAdapter
+from nqba_stack.decision_logic import DecisionLogicEngine
 from .sigmaeq_engine import SigmaEQEngine, OptimizationProblem, ProblemType, OptimizationAlgorithm
 from .dynex_integration import DynexAPI, DynexPoUWManager, DynexNetwork, PoUWType
 

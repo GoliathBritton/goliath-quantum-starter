@@ -1,0 +1,4 @@
+# file: C:\Users\johnb\goliath-quantum-starter\src\nqba\decision_logic.py
+# hypothesis_version: 6.138.7
+
+[0.0, 0.3, 0.4, 0.5, 0.95, 15.0, 25.0, 'action', 'approve', 'assets', 'bonds', 'business', 'business_assessment', 'business_unit', 'company_size', 'consumption', 'credit_score', 'crypto', 'decision_id', 'default', 'employees', 'energy', 'energy_optimization', 'estimated_savings', 'explanation', 'growth_potential', 'growth_rate', 'industry', 'large', 'market_cap', 'medium', 'nqba_core', 'optimization_type', 'peak_hours', 'portfolio_allocation', 'quantum_enhanced', 'r', 'recommendations', 'reject', 'result', 'revenue', 'risk_tolerance', 'score', 'stocks', 'technology', 'threshold', 'timestamp', 'trade', 'trade_optimization', 'type', 'unknown', 'utf-8', 'weights']

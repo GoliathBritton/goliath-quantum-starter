@@ -1,0 +1,5 @@
+# LTC Log File: ltc_20250827_172211.jsonl
+# Created: 2025-08-27T17:22:11.588189
+# Format: JSON Lines
+
+{"entry_id": "fc909951-3763-4a0d-8960-9fa2dfaa1596", "timestamp": "2025-08-27T22:22:20.247150+00:00", "operation_type": "lead_scoring_quantum_error", "component": "sigma_select", "user_id": null, "session_id": null, "thread_id": "61148", "input_data": null, "execution_context": null, "result_data": null, "performance_metrics": null, "error_data": {"error": "object float can't be used in 'await' expression", "leads_data": [{"name": "Test Lead 1", "company": "Test Corp", "budget": 50000}, {"name": "Test Lead 2", "company": "Test Inc", "budget": 75000}]}, "metadata": null, "hash": "5bc9d37a2d28520d57a564677bd9a6856eae6ad3a190a13eed3b8fc07fd4aa65", "parent_entry_id": null, "child_entry_ids": []}

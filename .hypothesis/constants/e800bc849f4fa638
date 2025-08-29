@@ -1,0 +1,4 @@
+# file: C:\Users\johnb\goliath-quantum-starter\src\nqba\settings.py
+# hypothesis_version: 6.138.7
+
+[8000, '..', './cache', './data', './logs', '0.0.0.0', 'NQBA Core', 'core', 'development', 'dynex', 'ipfs', 'llm', 'mock', 'not_configured', 'nqba_stack', 'web3']

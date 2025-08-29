@@ -1,4 +1,4 @@
-# FLYFOX AI Quantum Computing Platform Dependencies
+# NQBA (Neuromorphic Quantum Business Architecture) Platform Dependencies
 
 # Core quantum computing libraries
 qiskit>=0.44.0
@@ -17,23 +17,23 @@ anthropic>=0.7.0
 transformers>=4.30.0
 torch>=2.0.0
 numpy>=1.24.0
-scipy>=1.10.0
-scikit-learn>=1.3.0
-
-# Web framework and API
-fastapi>=0.100.0
-uvicorn>=0.23.0
-pydantic>=2.0.0
-httpx>=0.24.0
-requests>=2.31.0
-
-# CLI and configuration
-click>=8.1.0
-pyyaml>=6.0
+numpy>=1.26.0
+dimod>=0.12.0
+pytest>=8.0.0
+pytest-cov>=4.0.0
+hypothesis>=6.0.0
+fastapi>=0.110.0
+uvicorn[standard]>=0.29.0
+web3>=6.0.0
+python-jose[cryptography]>=3.3.0
+ipfshttpclient>=0.8.0
+pydantic-settings>=2.0.0
 python-dotenv>=1.0.0
-configparser>=5.3.0
-
-# Logging and monitoring
+prometheus-client>=0.19.0
+opentelemetry-api>=1.24.0
+opentelemetry-sdk>=1.24.0
+celery>=5.3.0
+redis>=5.0.0
 structlog>=23.1.0
 colorama>=0.4.6
 

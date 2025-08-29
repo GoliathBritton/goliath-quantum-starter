@@ -1,3 +1,4 @@
+from branding import BRANDING
 """
 NQBA Stack Settings
 Centralized configuration management with secure credential handling
@@ -5,61 +6,68 @@ Centralized configuration management with secure credential handling
 import os
 from pathlib import Path
 from typing import Optional, Dict, Any
-from pydantic import BaseSettings, Field, validator
+from pydantic_settings import BaseSettings
+from pydantic import Field, field_validator
+from pydantic import ConfigDict
 import logging
 
 logger = logging.getLogger(__name__)
 
 class NQBASettings(BaseSettings):
     """NQBA Stack Configuration Settings"""
-    
+    model_config = ConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        case_sensitive=False
+    )
     # Environment
-    environment: str = Field(default="development", env="NQBA_ENVIRONMENT")
-    debug: bool = Field(default=False, env="NQBA_DEBUG")
-    
+    environment: str = Field(default="development", json_schema_extra={"env": "NQBA_ENVIRONMENT"})
+    debug: bool = Field(default=False, json_schema_extra={"env": "NQBA_DEBUG"})
     # Company Information
-    company_name: str = Field(default="FLYFOX AI", env="NQBA_COMPANY_NAME")
-    business_unit: str = Field(default="NQBA Core", env="NQBA_BUSINESS_UNIT")
-    
+    company_name: str = Field(default=f"{BRANDING['goliath']['name']} | {BRANDING['flyfox']['name']} | {BRANDING['sigma_select']['name']}", json_schema_extra={"env": "NQBA_COMPANY_NAME"})
+    business_unit: str = Field(default=f"{BRANDING['goliath']['name']} / {BRANDING['flyfox']['name']} / {BRANDING['sigma_select']['name']}", json_schema_extra={"env": "NQBA_BUSINESS_UNIT"})
     # API Credentials (SECURE - Never log or expose these)
-    dynex_api_key: Optional[str] = Field(default=None, env="DYNEX_API_KEY", description="DynexSolve API key")
-    ipfs_project_id: Optional[str] = Field(default=None, env="IPFS_PROJECT_ID", description="IPFS project identifier")
-    ipfs_project_secret: Optional[str] = Field(default=None, env="IPFS_PROJECT_SECRET", description="IPFS project secret")
-    llm_api_key: Optional[str] = Field(default=None, env="LLM_API_KEY", description="LLM service API key")
-    openai_api_key: Optional[str] = Field(default=None, env="OPENAI_API_KEY", description="OpenAI API key")
-    
+    dynex_api_key: Optional[str] = Field(default=None, json_schema_extra={"env": "DYNEX_API_KEY", "description": "DynexSolve API key"})
+    dynex_api_secret: Optional[str] = Field(default=None, json_schema_extra={"env": "DYNEX_API_SECRET", "description": "Dynex API secret"})
+    dynex_api_endpoint: Optional[str] = Field(default=None, json_schema_extra={"env": "DYNEX_API_ENDPOINT", "description": "Dynex API endpoint"})
+    dynex_ftp_host: Optional[str] = Field(default=None, json_schema_extra={"env": "DYNEX_FTP_HOST", "description": "Dynex FTP host"})
+    dynex_ftp_user: Optional[str] = Field(default=None, json_schema_extra={"env": "DYNEX_FTP_USER", "description": "Dynex FTP username"})
+    dynex_ftp_pass: Optional[str] = Field(default=None, json_schema_extra={"env": "DYNEX_FTP_PASS", "description": "Dynex FTP password"})
+    ipfs_project_id: Optional[str] = Field(default=None, json_schema_extra={"env": "IPFS_PROJECT_ID", "description": "IPFS project identifier"})
+    ipfs_project_secret: Optional[str] = Field(default=None, json_schema_extra={"env": "IPFS_PROJECT_SECRET", "description": "IPFS project secret"})
+    ipfs_gateway_url: Optional[str] = Field(default="https://gateway.pinata.cloud", json_schema_extra={"env": "IPFS_GATEWAY_URL", "description": "IPFS gateway URL"})
+    llm_api_key: Optional[str] = Field(default=None, json_schema_extra={"env": "LLM_API_KEY", "description": "LLM service API key"})
+    openai_api_key: Optional[str] = Field(default=None, json_schema_extra={"env": "OPENAI_API_KEY", "description": "OpenAI API key"})
     # Web3 Configuration
-    web3_provider_url: Optional[str] = Field(default=None, env="WEB3_PROVIDER_URL", description="Web3 provider URL")
-    
+    web3_provider_url: Optional[str] = Field(default=None, json_schema_extra={"env": "WEB3_PROVIDER_URL", "description": "Web3 provider URL"})
     # Data and Storage
-    data_dir: Path = Field(default=Path("./data"), env="NQBA_DATA_DIR")
-    log_dir: Path = Field(default=Path("./logs"), env="NQBA_LOG_DIR")
-    cache_dir: Path = Field(default=Path("./cache"), env="NQBA_CACHE_DIR")
-    
+    data_dir: Path = Field(default=Path("./data"), json_schema_extra={"env": "NQBA_DATA_DIR"})
+    log_dir: Path = Field(default=Path("./logs"), json_schema_extra={"env": "NQBA_LOG_DIR"})
+    cache_dir: Path = Field(default=Path("./cache"), json_schema_extra={"env": "NQBA_CACHE_DIR"})
     # API Configuration
-    api_host: str = Field(default="0.0.0.0", env="NQBA_API_HOST")
-    api_port: int = Field(default=8000, env="NQBA_API_PORT")
-    api_workers: int = Field(default=1, env="NQBA_API_WORKERS")
-    
+    api_host: str = Field(default="0.0.0.0", json_schema_extra={"env": "NQBA_API_HOST"})
+    api_port: int = Field(default=8000, json_schema_extra={"env": "NQBA_API_PORT"})
+    api_workers: int = Field(default=1, json_schema_extra={"env": "NQBA_API_WORKERS"})
     # Quantum Configuration
-    quantum_timeout: int = Field(default=300, env="NQBA_QUANTUM_TIMEOUT")
-    quantum_max_qubits: int = Field(default=64, env="NQBA_QUANTUM_MAX_QUBITS")
-    quantum_backend: str = Field(default="dynex", env="NQBA_QUANTUM_BACKEND")
-    
+    quantum_timeout: int = Field(default=300, json_schema_extra={"env": "NQBA_QUANTUM_TIMEOUT"})
+    quantum_max_qubits: int = Field(default=64, json_schema_extra={"env": "NQBA_QUANTUM_MAX_QUBITS"})
+    quantum_backend: str = Field(default="dynex", json_schema_extra={"env": "NQBA_QUANTUM_BACKEND"})
     # LTC Configuration
-    ltc_backup_interval: int = Field(default=3600, env="NQBA_LTC_BACKUP_INTERVAL")
-    ltc_max_entries: int = Field(default=10000, env="NQBA_LTC_MAX_ENTRIES")
-    ltc_enable_ipfs: bool = Field(default=True, env="NQBA_LTC_ENABLE_IPFS")
-    
+    ltc_backup_interval: int = Field(default=3600, json_schema_extra={"env": "NQBA_LTC_BACKUP_INTERVAL"})
+    ltc_max_entries: int = Field(default=10000, json_schema_extra={"env": "NQBA_LTC_MAX_ENTRIES"})
+    ltc_enable_ipfs: bool = Field(default=True, json_schema_extra={"env": "NQBA_LTC_ENABLE_IPFS"})
     # Security Configuration
-    enable_cors: bool = Field(default=True, env="NQBA_ENABLE_CORS")
-    cors_origins: list = Field(default=["*"], env="NQBA_CORS_ORIGINS")
-    enable_rate_limiting: bool = Field(default=True, env="NQBA_ENABLE_RATE_LIMITING")
-    rate_limit_requests: int = Field(default=100, env="NQBA_RATE_LIMIT_REQUESTS")
-    rate_limit_window: int = Field(default=60, env="NQBA_RATE_LIMIT_WINDOW")
+    enable_cors: bool = Field(default=True, json_schema_extra={"env": "NQBA_ENABLE_CORS"})
+    cors_origins: list = Field(default=["*"], json_schema_extra={"env": "NQBA_CORS_ORIGINS"})
+    enable_rate_limiting: bool = Field(default=True, json_schema_extra={"env": "NQBA_ENABLE_RATE_LIMITING"})
+    rate_limit_requests: int = Field(default=100, json_schema_extra={"env": "NQBA_RATE_LIMIT_REQUESTS"})
+    rate_limit_window: int = Field(default=60, json_schema_extra={"env": "NQBA_RATE_LIMIT_WINDOW"})
     
     # Validation and Security
-    @validator('dynex_api_key')
+    from pydantic import field_validator
+
+    @field_validator('dynex_api_key')
+    @classmethod
     def validate_dynex_api_key(cls, v):
         """Validate Dynex API key format"""
         if v is not None:
@@ -68,24 +76,27 @@ class NQBASettings(BaseSettings):
             if len(v) < 20:
                 logger.warning("Dynex API key seems too short")
         return v
-    
-    @validator('ipfs_project_id')
+
+    @field_validator('ipfs_project_id')
+    @classmethod
     def validate_ipfs_project_id(cls, v):
         """Validate IPFS project ID format"""
         if v is not None:
             if not v.startswith('Qm') and not v.startswith('bafy'):
                 logger.warning("IPFS project ID should start with 'Qm' or 'bafy'")
         return v
-    
-    @validator('openai_api_key')
+
+    @field_validator('openai_api_key')
+    @classmethod
     def validate_openai_api_key(cls, v):
         """Validate OpenAI API key format"""
         if v is not None:
             if not v.startswith('sk-'):
                 logger.warning("OpenAI API key should start with 'sk-'")
         return v
-    
-    @validator('llm_api_key')
+
+    @field_validator('llm_api_key')
+    @classmethod
     def validate_llm_api_key(cls, v):
         """Validate LLM API key format"""
         if v is not None:
@@ -199,10 +210,7 @@ class NQBASettings(BaseSettings):
             }
         }
     
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
-        case_sensitive = False
+    # Removed Config class for Pydantic v2 compliance
 
 # Global settings instance
 _settings: Optional[NQBASettings] = None

@@ -3,6 +3,9 @@ NQBA Core API Server
 FastAPI server providing the central orchestration layer for the NQBA Stack
 Integrates with the NQBA Stack Orchestrator for quantum-enhanced business operations
 """
+# Import GraphQL and monitoring routes (must be before app initialization)
+from web3.graph_integration import graphql_router
+from monitoring import app as monitoring_app
 from fastapi import FastAPI, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -38,32 +41,14 @@ from nqba_stack.core.scheduled_audits import (
     subscribe_company,
     get_subscription_stats,
     SubscriptionTier,
-    AuditFrequency
-)
-
-# Add import for automated data collection
-from nqba_stack.core.automated_data_collection import (
-    get_audit_readiness,
-    get_data_summary,
-    add_custom_data_point,
-    DataSource,
-    DataCategory
-)
-
-# Add import for FLYFOX AI Quantum Hub
-from nqba_stack.api.quantum_hub_api import quantum_hub_app
-from nqba_stack.core.flyfox_quantum_hub import (
-    QuantumOperation,
-    QuantumProvider,
-    submit_quantum_request,
-    get_request_status
+    AuditFrequency,
+    scheduled_audits
 )
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Initialize FastAPI app
 app = FastAPI(
     title="NQBA Core API",
     description="Neuromorphic Quantum Business Architecture Core Orchestration API",
@@ -71,6 +56,103 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc"
 )
+
+# Mount GraphQL and monitoring endpoints
+app.include_router(graphql_router)
+app.mount("/monitoring", monitoring_app)
+
+# --- DYNEX QUANTUM ADVANCED API ROUTES ---
+from fastapi import APIRouter, UploadFile, File
+from nqba_stack.quantum.adapters.dynex_adapter import DynexAdapter, AdapterConfig
+from nqba_stack.core.dynex_ftp_client import DynexFTPClient
+from nqba_stack.core.dynex_api_client import DynexAPIClient
+import json as _json
+import asyncio as _asyncio
+
+dynex_router = APIRouter(prefix="/v1/quantum/dynex", tags=["Dynex Quantum"])
+
+@dynex_router.post('/qubo')
+async def submit_dynex_qubo(qubo: dict, mode: str = None):
+    config = AdapterConfig()
+    adapter = DynexAdapter(config)
+    if mode:
+        adapter.dynex_mode = mode
+    job_id = await adapter.submit_qubo(qubo)
+    return {"job_id": job_id}
+
+@dynex_router.get('/result/{job_id}')
+async def get_dynex_result(job_id: str):
+    config = AdapterConfig()
+    adapter = DynexAdapter(config)
+    res = await adapter.result(job_id)
+    return res
+
+@dynex_router.post('/ftp/download')
+async def dynex_ftp_download(remote_path: str, local_path: str):
+    ftp = DynexFTPClient()
+    await ftp.download(remote_path, local_path)
+    return {"status": "downloaded", "remote": remote_path, "local": local_path}
+
+@dynex_router.post('/ftp/upload')
+async def dynex_ftp_upload(local_path: str, remote_path: str):
+    ftp = DynexFTPClient()
+    await ftp.upload(local_path, remote_path)
+    return {"status": "uploaded", "local": local_path, "remote": remote_path}
+
+@dynex_router.post('/api/post')
+async def dynex_api_post(path: str, data: dict = {}):
+    api = DynexAPIClient()
+    res = await api.post(path, data=data)
+    return res
+
+@dynex_router.get('/api/get')
+async def dynex_api_get(path: str, params: str = '{}'):
+    api = DynexAPIClient()
+    query = _json.loads(params)
+    res = await api.get(path, params=query)
+    return res
+
+app.include_router(dynex_router)
+
+# Add import for automated data collection
+from nqba_stack.core.automated_data_collection import (
+    get_audit_readiness,
+    get_data_summary,
+    add_custom_data_point,
+    DataSource,
+    DataCategory,
+    automated_data_collection
+)
+
+# Start scheduled audits scheduler and automated data collection on startup
+@app.on_event("startup")
+async def start_background_services():
+    await scheduled_audits.start_scheduler()
+    await automated_data_collection.start_collection()
+
+# Add import for NQBA Quantum Hub
+
+
+# Import GraphQL and monitoring routes (must be before app initialization)
+from web3.graph_integration import graphql_router
+from monitoring import app as monitoring_app
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+
+app = FastAPI(
+    title="NQBA Core API",
+    description="Neuromorphic Quantum Business Architecture Core Orchestration API",
+    version="1.0.0",
+    docs_url="/docs",
+    redoc_url="/redoc"
+)
+
+# Mount GraphQL and monitoring endpoints
+app.include_router(graphql_router)
+app.mount("/monitoring", monitoring_app)
 
 # Add CORS middleware
 app.add_middleware(
@@ -139,6 +221,12 @@ class PortfolioOptimizationResponse(BaseModel):
     quantum_enhanced: bool
     ltc_reference: str
 
+
+from fastapi import Depends
+from fastapi.security import OAuth2PasswordBearer
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
+
 class SystemHealthResponse(BaseModel):
     orchestrator_status: str
     business_pods: int
@@ -146,6 +234,19 @@ class SystemHealthResponse(BaseModel):
     task_routes: int
     metrics: Dict[str, Any]
     timestamp: str
+
+# Simple health endpoint for external monitoring
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
+# Example secure endpoint with JWT token dependency
+@app.get("/secure-endpoint")
+def secure_endpoint(token: str = Depends(oauth2_scheme)):
+    # Add JWT validation here
+    if not token:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    return {"message": "Secure data"}
 
 # Health check endpoint
 @app.get("/")
@@ -245,7 +346,7 @@ async def generate_sales_script(
         logger.error(f"Script generation failed: {e}")
         raise HTTPException(status_code=500, detail=f"Script generation failed: {str(e)}")
 
-# FLYFOX AI - Energy Optimization
+# NQBA Energy Optimization
 @app.post("/v1/energy/optimize", response_model=EnergyOptimizationResponse)
 async def optimize_energy(request: EnergyOptimizationRequest):
     """Optimize energy schedules using quantum optimization"""

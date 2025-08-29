@@ -36,9 +36,18 @@ jobs:
         pip install -r requirements.txt
         pip install -e .
     
-    - name: Run tests
-      run: |
-        pytest tests/ -v --cov=src --cov-report=xml --cov-report=html
+      - name: Run all tests (unit, integration, quantum)
+        run: |
+          export PYTHONPATH=$PYTHONPATH:$(pwd)/src
+          pytest tests/ -v --cov=src --cov-report=xml --cov-report=html
+          pytest tests/test_dynex_integration.py -v
+          pytest tests/test_dynex_api_ftp.py -v
+          pytest tests/test_sigma_select_quantum.py -v
+          pytest tests/test_flyfox_energy_quantum.py -v
+          pytest tests/test_goliath_trade_quantum.py -v
+        pytest tests/test_sigma_select_quantum.py -v
+        pytest tests/test_flyfox_energy_quantum.py -v
+        pytest tests/test_goliath_trade_quantum.py -v
     
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3

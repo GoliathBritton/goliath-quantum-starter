@@ -1,0 +1,4 @@
+# file: C:\Users\johnb\goliath-quantum-starter\src\nqba\..\nqba_stack\q_cortex_parser.py
+# hypothesis_version: 6.138.7
+
+[100, '__main__', 'action', 'advanced_rules', 'algorithm', 'audit_frequency', 'automated', 'backup_strategy', 'classification', 'company_size', 'compliance', 'compliance_breach', 'compliant', 'config', 'council.yaml', 'council_directives', 'council_review', 'decision_type', 'enabled', 'enforce', 'enterprise', 'escalation_path', 'factors', 'halt_all_operations', 'hash_chaining', 'immediate', 'ipfs_decentralized', 'jsonl', 'lead_classification', 'lead_score', 'lead_scoring', 'log_format', 'mandatory', 'mandatory_logging', 'monthly', 'next_best_action', 'notification', 'permanent', 'postgresql', 'principle', 'principles', 'quantum_shutdown', 'quantum_threshold', 'r', 'recommendations', 'retention_policy', 'risk_management', 'scoring_range', 'storage_backend', 'thread_references', 'trigger', 'utf-8', 'validation_method', 'violations']

@@ -1,0 +1,4 @@
+# file: C:\Users\johnb\goliath-quantum-starter\src\nqba_stack\algorithms\energy_algorithms.py
+# hypothesis_version: 6.138.7
+
+[0.0, 0.02, 0.1, 0.2, 0.22, 0.23, 0.25, 0.5, 0.6, 0.8, 0.9, 1.0, 5.0, 10.0, 30.0, 40.0, 50.0, 60.0, 80.0, 100.0, 1000.0, 100, 1000, '_', 'backend', 'classical_greedy', 'classical_rule_based', 'classical_timeseries', 'demand', 'dynex', 'error', 'forecast', 'forecast_horizon', 'fossil', 'generation', 'grid_optimizer', 'hydro', 'inf', 'integration_plan', 'load', 'method', 'n_demands', 'n_supplies', 'nuclear', 'num_reads', 'patterns_used', 'qaoa', 'quantum_advantage', 'quantum_enhanced', 'solar', 'solution', 'storage', 'storage_schedule', 'temperature', 'timestamp', 'total_storage_used', 'transformer', 'utilization_rate', 'wind']

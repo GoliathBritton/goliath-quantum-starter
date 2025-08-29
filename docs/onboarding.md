@@ -1,3 +1,15 @@
+# Branding
+<div align="center">
+    <img src="../docs/goliath_logo.png" width="180" alt="Goliath Logo" style="margin:1em;"/>
+    <img src="../docs/flyfox_logo.png" width="120" alt="Fly Fox Logo" style="margin:1em;"/>
+    <img src="../docs/sigma_select_logo.png" width="120" alt="Sigma Select Logo" style="margin:1em;"/>
+    <h1>Goliath of All Trade | Fly Fox AI | Sigma Select</h1>
+    <p><em>Unifying Quantum, AI, and Automation for the Next Era of Business</em></p>
+    <p><strong>Goliath:</strong> The Quantum Operating System for Business<br>
+         <strong>Fly Fox:</strong> AI-Driven Automation for Every Workflow<br>
+         <strong>Sigma Select:</strong> Quantum-Enhanced Decision Intelligence
+    </p>
+</div>
 # 🚀 NQBA Developer Onboarding Guide
 ## Setup for FLYFOX AI, Goliath of All Trade, Sigma Select
 

@@ -1,0 +1,4 @@
+# file: C:\Users\johnb\goliath-quantum-starter\src\nqba_stack\algorithms\risk_algorithms.py
+# hypothesis_version: 6.138.7
+
+[-0.4, -0.3, -0.25, -0.2, -0.15, -0.1, -0.05, -0.03, -0.02, -0.01, 0.0, 0.01, 0.02, 0.03, 0.05, 0.1, 0.12, 0.15, 0.18, 0.2, 0.22, 0.25, 0.3, 0.4, 0.5, 0.6, 0.75, 0.8, 0.9, 0.95, 0.99, 1.0, 1.2, 1.3, 1.5, 1.8, 2.0, 2.5, 100.0, 1000.0, 100, 252, 256, 500, 1000, 'Asian Crisis 1997', 'COVID-19 Crash 2020', 'Dot-com Bubble 2000', 'Russian Default 1998', 'asset_names', 'average_correlation', 'backend', 'calculation_time', 'classical_garch', 'classical_greedy', 'confidence_level', 'correlation_matrix', 'dynex', 'error', 'forecast_horizon', 'forecasts', 'historical', 'inf', 'interest_rate_shock', 'method', 'monte_carlo', 'num_reads', 'parameters', 'qaoa', 'quantum_advantage', 'quantum_enhanced', 'regimes_identified', 'risk_metrics', 'scenario', 'selected_assets', 'solution', 'time_horizon', 'timestamp', 'var_calculator']

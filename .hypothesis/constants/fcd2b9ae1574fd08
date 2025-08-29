@@ -1,0 +1,4 @@
+# file: C:\Users\johnb\goliath-quantum-starter\src\nqba_stack\quantum\schemas\requests.py
+# hypothesis_version: 6.138.7
+
+[0.5, 0.7, 300, '@', 'Additional context', 'Client identifier', 'Current asset prices', 'Historical returns', 'Input prompt for LLM', 'Integration name', 'Integration version', 'Invalid email format', 'Organization name', 'Organization website', 'Portfolio name', 'Problem constraints', 'QAOA', 'Request description', 'Request priority', 'Request tags', 'Risk tolerance (0-1)', 'Sampling temperature', 'Webhook URL', 'api_key', 'assets', 'budget', 'contact_email', 'cost_limit', 'http://', 'https://', 'max_runtime', 'max_tokens', 'normal', 'prices', 'public', 'retry_count', 'risk_tolerance', 'temperature', 'text', 'timeout', 'url']

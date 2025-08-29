@@ -41,7 +41,7 @@ class ExecutionResult:
     metadata: Optional[Dict[str, Any]] = None
 
 class NQBAEngine:
-    """Neuromorphic Quantum Base Architecture Engine"""
+    """Neuromorphic Quantum Business Architecture Engine"""
     
     def __init__(self, 
                  mode: ExecutionMode = ExecutionMode.SIMULATOR,

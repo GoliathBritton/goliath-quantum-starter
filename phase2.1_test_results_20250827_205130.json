@@ -1,0 +1,123 @@
+{
+  "test_suite": "Phase 2.1 Features",
+  "start_time": "2025-08-27T20:50:55.122855",
+  "end_time": "2025-08-27T20:51:30.179443",
+  "total_tests": 16,
+  "passed_tests": 7,
+  "failed_tests": 9,
+  "success_rate": 43.75,
+  "test_results": [
+    {
+      "test_name": "Constraint Evolution - Evolve Constraints",
+      "success": false,
+      "details": "HTTP 500: {\"detail\":\"'LTCLogger' object has no attribute 'log_activity'\"}",
+      "error": "",
+      "timestamp": "2025-08-27T20:50:57.174047"
+    },
+    {
+      "test_name": "Constraint Evolution - Performance Prediction",
+      "success": true,
+      "details": "Predicted performance: 0.958",
+      "error": "",
+      "timestamp": "2025-08-27T20:50:59.235822"
+    },
+    {
+      "test_name": "Constraint Evolution - Evolution History",
+      "success": true,
+      "details": "Retrieved 0 evolution records",
+      "error": "",
+      "timestamp": "2025-08-27T20:51:01.278029"
+    },
+    {
+      "test_name": "Predictive Scaling - Resource Demand Prediction",
+      "success": false,
+      "details": "HTTP 500: {\"detail\":\"'LTCLogger' object has no attribute 'log_activity'\"}",
+      "error": "",
+      "timestamp": "2025-08-27T20:51:03.313635"
+    },
+    {
+      "test_name": "Predictive Scaling - Schedule Optimization",
+      "success": false,
+      "details": "HTTP 500: {\"detail\":\"'PredictiveScaler' object has no attribute '_get_scaling_policies'\"}",
+      "error": "",
+      "timestamp": "2025-08-27T20:51:05.333693"
+    },
+    {
+      "test_name": "Predictive Scaling - Apply Schedule",
+      "success": true,
+      "details": "Applied 3 scaling actions",
+      "error": "",
+      "timestamp": "2025-08-27T20:51:07.378649"
+    },
+    {
+      "test_name": "Enterprise Integration - SAML Authentication",
+      "success": false,
+      "details": "HTTP 500: {\"detail\":\"401: Invalid SAML assertion\"}",
+      "error": "",
+      "timestamp": "2025-08-27T20:51:09.430572"
+    },
+    {
+      "test_name": "Enterprise Integration - Compliance Check",
+      "success": true,
+      "details": "Compliance status: Non-compliant, 0/0 requirements met",
+      "error": "",
+      "timestamp": "2025-08-27T20:51:11.487887"
+    },
+    {
+      "test_name": "Enterprise Integration - Audit Logging",
+      "success": false,
+      "details": "HTTP 422: {\"detail\":[{\"type\":\"missing\",\"loc\":[\"body\"],\"msg\":\"Field required\",\"input\":null}]}",
+      "error": "",
+      "timestamp": "2025-08-27T20:51:13.532619"
+    },
+    {
+      "test_name": "Community Platform - Algorithm Submission",
+      "success": false,
+      "details": "Submission failed: Algorithm validation failed",
+      "error": "",
+      "timestamp": "2025-08-27T20:51:15.572016"
+    },
+    {
+      "test_name": "Community Platform - Algorithm Discovery",
+      "success": true,
+      "details": "Found 0 algorithms",
+      "error": "",
+      "timestamp": "2025-08-27T20:51:17.629831"
+    },
+    {
+      "test_name": "Community Platform - Tutorial Creation",
+      "success": false,
+      "details": "Tutorial creation failed: Tutorial validation failed",
+      "error": "",
+      "timestamp": "2025-08-27T20:51:19.687888"
+    },
+    {
+      "test_name": "Community Platform - Forum Listing",
+      "success": true,
+      "details": "Found 3 active forums",
+      "error": "",
+      "timestamp": "2025-08-27T20:51:21.759962"
+    },
+    {
+      "test_name": "Community Platform - Event Listing",
+      "success": true,
+      "details": "Found 0 upcoming events",
+      "error": "",
+      "timestamp": "2025-08-27T20:51:23.805288"
+    },
+    {
+      "test_name": "Integration Workflows - Enterprise Workflow",
+      "success": false,
+      "details": "Workflow failed at compliance check step",
+      "error": "",
+      "timestamp": "2025-08-27T20:51:28.118886"
+    },
+    {
+      "test_name": "Integration Workflows - Scaling + Evolution",
+      "success": false,
+      "details": "Workflow failed at demand prediction step",
+      "error": "",
+      "timestamp": "2025-08-27T20:51:30.178039"
+    }
+  ]
+}

@@ -28,9 +28,7 @@ from .schemas import (
     JobStatusResponse,
     CapabilitiesResponse,
     ProviderListResponse,
-    UsageResponse,
-    OptimizationResultResponse,
-    LLMResultResponse
+    UsageResponse
 )
 
 from .registry import (
@@ -76,8 +74,6 @@ __all__ = [
     "CapabilitiesResponse",
     "ProviderListResponse",
     "UsageResponse",
-    "OptimizationResultResponse",
-    "LLMResultResponse",
     
     # Registry components
     "CapabilityRegistry",

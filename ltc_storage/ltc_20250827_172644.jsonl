@@ -1,0 +1,5 @@
+# LTC Log File: ltc_20250827_172644.jsonl
+# Created: 2025-08-27T17:26:44.616600
+# Format: JSON Lines
+
+{"entry_id": "199690bf-a124-440f-bf08-f80a4328a69f", "timestamp": "2025-08-27T22:26:59.474808+00:00", "operation_type": "energy_optimization_error", "component": "flyfox_ai", "user_id": null, "session_id": null, "thread_id": "53140", "input_data": null, "execution_context": null, "result_data": null, "performance_metrics": null, "error_data": {"error": "object list can't be used in 'await' expression", "energy_data": {"consumption": [100, 120, 90, 110], "costs": [50, 60, 45, 55]}}, "metadata": null, "hash": "f7f1b6fc8f5f6a8714bcca698b4dbe32862a3acd6811b9092ff68cded3352a1d", "parent_entry_id": null, "child_entry_ids": []}

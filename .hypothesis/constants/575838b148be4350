@@ -1,0 +1,4 @@
+# file: C:\Users\johnb\goliath-quantum-starter\src\nqba_stack\algorithms\portfolio_algorithms.py
+# hypothesis_version: 6.138.7
+
+[0.0, 0.02, 0.15, 0.5, 1.0, 1000.0, 252, 1000, 'SLSQP', 'annualized_return', 'assets', 'backend', 'black_litterman', 'calmar_ratio', 'constraints', 'cvar', 'cvar_95', 'dynex', 'eq', 'error', 'factor_model', 'fun', 'max_drawdown', 'maximize_return', 'maximize_sharpe', 'minimize_variance', 'monthly', 'num_reads', 'optimal_solution', 'optimization_time', 'portfolio_optimizer', 'qaoa', 'quantum_advantage', 'quantum_enhanced', 'quantum_used', 'risk_parity', 'semi_variance', 'sharpe_ratio', 'solution', 'strategy', 'timestamp', 'total_return', 'type', 'var', 'var_95', 'variance', 'volatility']

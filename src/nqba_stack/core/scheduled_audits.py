@@ -1,3 +1,4 @@
+from src.branding import BRANDING
 """
 NQBA Scheduled Audit System
 Automated business assessment scheduling and execution
@@ -44,13 +45,13 @@ class SubscriptionTier(Enum):
 class AuditSchedule:
     """Audit schedule configuration"""
     company_id: str
-    company_name: str
     subscription_tier: SubscriptionTier
     audit_frequency: AuditFrequency
     audit_types: List[AuditType]
     framework: BEMFramework
     use_quantum: bool
     next_audit_date: datetime
+    company_name: str = f"{BRANDING['goliath']['name']} | {BRANDING['flyfox']['name']} | {BRANDING['sigma_select']['name']}"
     last_audit_date: Optional[datetime] = None
     is_active: bool = True
 
@@ -81,9 +82,13 @@ class NQBAScheduledAudits:
         # Subscription tier configurations
         self.tier_configs = self._initialize_tier_configurations()
         
-        # Start the scheduler
+        # Scheduler must be started explicitly in an async context
         self.scheduler_running = False
-        asyncio.create_task(self._start_scheduler())
+
+    async def start_scheduler(self):
+        if not self.scheduler_running:
+            self.scheduler_running = True
+            await self._start_scheduler()
     
     def _initialize_tier_configurations(self) -> Dict[SubscriptionTier, Dict[str, Any]]:
         """Initialize subscription tier configurations"""
@@ -285,7 +290,9 @@ class NQBAScheduledAudits:
     async def _send_audit_notifications(self, audit_schedule: AuditSchedule, assessment_result: AssessmentResult):
         """Send audit notifications to stakeholders"""
         # Placeholder implementation - would integrate with notification system
-        logger.info(f"Audit notification sent for {audit_schedule.company_name}")
+        subject = f"[{BRANDING['goliath']['name']} | {BRANDING['flyfox']['name']} | {BRANDING['sigma_select']['name']}] Audit Notification"
+        message = f"Hello,\n\nYour scheduled audit for {audit_schedule.company_name} is complete.\n\nResult: {assessment_result.summary}\n\n--\n{BRANDING['goliath']['name']} | {BRANDING['flyfox']['name']} | {BRANDING['sigma_select']['name']}\n{BRANDING['goliath']['tagline']} | {BRANDING['flyfox']['tagline']} | {BRANDING['sigma_select']['tagline']}"
+        logger.info(f"[EMAIL] Subject: {subject}\nMessage: {message}")
     
     # Public API methods
     

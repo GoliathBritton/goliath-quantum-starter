@@ -1,3 +1,11 @@
+try:
+    from src.branding import BRANDING
+except ImportError:
+    BRANDING = {
+        'goliath': {'name': 'Goliath of All Trade'},
+        'flyfox': {'name': 'Fly Fox AI'},
+        'sigma_select': {'name': 'Sigma Select'}
+    }
 """Logging Management Utility"""
 
 import logging
@@ -12,8 +20,8 @@ class StructuredFormatter(logging.Formatter):
     """Custom formatter for structured logging"""
     
     def format(self, record: logging.LogRecord) -> str:
-        """Format log record with structured data"""
-        log_data = {
+        structured = {
+            'brand': f"{BRANDING['goliath']['name']} | {BRANDING['flyfox']['name']} | {BRANDING['sigma_select']['name']}",
             'timestamp': datetime.fromtimestamp(record.created).isoformat(),
             'level': record.levelname,
             'logger': record.name,
@@ -22,16 +30,11 @@ class StructuredFormatter(logging.Formatter):
             'function': record.funcName,
             'line': record.lineno,
         }
-        
-        # Add extra fields if present
         if hasattr(record, 'extra_fields'):
-            log_data.update(record.extra_fields)
-        
-        # Add exception info if present
+            structured.update(record.extra_fields)
         if record.exc_info:
-            log_data['exception'] = self.formatException(record.exc_info)
-        
-        return json.dumps(log_data, ensure_ascii=False)
+            structured['exception'] = self.formatException(record.exc_info)
+        return json.dumps(structured, ensure_ascii=False)
 
 class ColoredFormatter(logging.Formatter):
     """Colored console formatter"""

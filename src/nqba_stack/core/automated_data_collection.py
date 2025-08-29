@@ -91,9 +91,13 @@ class NQBAAutomatedDataCollection:
         # Audit document templates
         self.audit_templates = self._initialize_audit_templates()
         
-        # Start automated collection
+        # Automated collection must be started explicitly in an async context
         self.collection_running = False
-        asyncio.create_task(self._start_automated_collection())
+
+    async def start_collection(self):
+        if not self.collection_running:
+            self.collection_running = True
+            await self._start_automated_collection()
     
     def _initialize_collection_rules(self) -> Dict[DataSource, Dict[str, Any]]:
         """Initialize data collection rules"""

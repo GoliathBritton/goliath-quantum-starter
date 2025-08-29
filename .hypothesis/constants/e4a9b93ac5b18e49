@@ -1,0 +1,4 @@
+# file: C:\Users\johnb\goliath-quantum-starter\src\nqba_stack\core\dynex_ftp_client.py
+# hypothesis_version: 6.138.7
+
+['DYNEX_FTP_HOST', 'DYNEX_FTP_PASS', 'DYNEX_FTP_USER']

@@ -1,0 +1,12 @@
+name: lead_score_v1
+inputs: [company_size, industry, engagement]
+weights:
+  company_size: 0.3
+  industry: 0.2
+  engagement: 0.5
+tiers:
+  A: 0.8
+  B: 0.6
+  C: 0.4
+quantum:
+  prefer: false

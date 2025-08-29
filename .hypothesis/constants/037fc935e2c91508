@@ -1,0 +1,4 @@
+# file: C:\Users\johnb\goliath-quantum-starter\src\nqba\api_server.py
+# hypothesis_version: 6.138.7
+
+[401, 404, 500, '/healthz', '/v1/decide', '/v1/optimize', '0.1.0', 'Automation name', 'NQBA Core', 'assignment', 'backend', 'decision.logic', 'decision_id', 'explanation', 'features', 'ltc_id', 'ltc_ref', 'maximize', 'objective_value', 'ok', 'optimize.qubo', 'result', 'status', 'unauthorized', 'variables']
