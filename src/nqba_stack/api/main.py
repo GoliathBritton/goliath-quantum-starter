@@ -1,80 +1,91 @@
+#!/usr/bin/env python3
 """
-NQBA Main API Application
+🚀 NQBA Stack - Main FastAPI Application
 
-FastAPI application with CORS, middleware, and router setup
-for the NQBA ecosystem.
+Main FastAPI application for the NQBA ecosystem with business unit
+integration, authentication, and comprehensive API endpoints.
 """
 
+import time
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse
-import time
-import logging
-from contextlib import asynccontextmanager
+from fastapi.exceptions import RequestValidationError
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from .business_units import router as business_units_router
 from .high_council import router as high_council_router
 from .monitoring import router as monitoring_router
+from .auth import router as auth_router
+from ..business_integration import business_unit_manager
+from ..business_integration.flyfox_ai import FLYFOXAIBusinessUnit
+from ..core.settings import get_settings
+from ..core.ltc_automation import LTCLogger
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
+# Initialize logger
+logger = LTCLogger("nqba_api")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan manager"""
     # Startup
-    logger.info("Starting NQBA API Server...")
-    logger.info("Initializing business unit integration...")
-
-    # Import and initialize business unit manager
+    logger.info("🚀 Starting NQBA Stack API...")
+    
     try:
-        from ..business_integration import business_unit_manager
-        from ..business_integration import FLYFOXAIBusinessUnit
-
+        # Initialize business unit manager
+        await business_unit_manager.initialize()
+        logger.info("✅ Business unit manager initialized")
+        
         # Register FLYFOX AI business unit
-        flyfox_ai = FLYFOXAIBusinessUnit()
-        await business_unit_manager.register_business_unit(flyfox_ai)
-
-        # Start monitoring
-        await business_unit_manager.start_monitoring()
-
-        logger.info("NQBA API Server started successfully")
-        logger.info(
-            f"Registered business units: {len(await business_unit_manager.get_all_business_units())}"
-        )
-
+        flyfox_ai_unit = FLYFOXAIBusinessUnit()
+        await business_unit_manager.register_business_unit(flyfox_ai_unit)
+        logger.info("✅ FLYFOX AI business unit registered")
+        
+        # Initialize authentication system
+        from ..auth import AuthManager
+        auth_manager = AuthManager()
+        logger.info("✅ Authentication system initialized")
+        
+        logger.info("🚀 NQBA Stack API startup complete!")
+        
     except Exception as e:
-        logger.error(f"Failed to initialize business units: {e}")
+        logger.error(f"❌ Startup error: {str(e)}")
         raise
-
+    
     yield
-
+    
     # Shutdown
-    logger.info("Shutting down NQBA API Server...")
+    logger.info("🔄 Shutting down NQBA Stack API...")
+    
     try:
-        await business_unit_manager.stop_monitoring()
-        logger.info("Business unit monitoring stopped")
+        # Shutdown business unit manager
+        await business_unit_manager.shutdown()
+        logger.info("✅ Business unit manager shutdown complete")
+        
+        logger.info("✅ NQBA Stack API shutdown complete!")
+        
     except Exception as e:
-        logger.error(f"Error during shutdown: {e}")
+        logger.error(f"❌ Shutdown error: {str(e)}")
 
-
-# Create FastAPI application
+# Create FastAPI app
 app = FastAPI(
-    title="NQBA (Neuromorphic Quantum Business Architecture) API",
-    description="API for the NQBA ecosystem - FLYFOX AI, Goliath of All Trade, and Sigma Select",
+    title="NQBA Stack API",
+    description="Neuromorphic Quantum Business Architecture - The Operating System of the Intelligence Economy",
     version="2.0.0",
     docs_url="/docs",
     redoc_url="/redoc",
-    lifespan=lifespan,
+    lifespan=lifespan
 )
+
+# Get settings
+settings = get_settings()
 
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, restrict to specific domains
+    allow_origins=settings.ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -83,154 +94,122 @@ app.add_middleware(
 # Add trusted host middleware
 app.add_middleware(
     TrustedHostMiddleware,
-    allowed_hosts=["*"],  # In production, restrict to specific hosts
+    allowed_hosts=settings.ALLOWED_HOSTS
 )
 
-
-@app.middleware("http")
-async def add_process_time_header(request: Request, call_next):
-    """Add processing time header to responses"""
-    start_time = time.time()
-    response = await call_next(request)
-    process_time = time.time() - start_time
-    response.headers["X-Process-Time"] = str(process_time)
-    return response
-
-
+# Request logging middleware
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
-    """Log all API requests"""
+    """Log all incoming requests"""
     start_time = time.time()
-
+    
     # Log request
-    logger.info(f"Request: {request.method} {request.url.path}")
-
+    logger.info(f"📥 {request.method} {request.url.path} - {request.client.host}")
+    
+    # Process request
     response = await call_next(request)
-
-    # Log response
+    
+    # Calculate processing time
     process_time = time.time() - start_time
-    logger.info(f"Response: {response.status_code} - {process_time:.3f}s")
-
+    
+    # Log response
+    logger.info(f"📤 {request.method} {request.url.path} - {response.status_code} - {process_time:.3f}s")
+    
+    # Add processing time header
+    response.headers["X-Process-Time"] = str(process_time)
+    
     return response
 
-
-@app.exception_handler(Exception)
-async def global_exception_handler(request: Request, exc: Exception):
-    """Global exception handler"""
-    logger.error(f"Unhandled exception: {exc}")
-    return JSONResponse(
-        status_code=500,
-        content={
-            "error": "Internal server error",
-            "message": "An unexpected error occurred",
-            "timestamp": time.time(),
-        },
-    )
-
-
-@app.exception_handler(HTTPException)
-async def http_exception_handler(request: Request, exc: HTTPException):
-    """HTTP exception handler"""
-    logger.warning(f"HTTP exception: {exc.status_code} - {exc.detail}")
+# Global exception handlers
+@app.exception_handler(StarletteHTTPException)
+async def http_exception_handler(request: Request, exc: StarletteHTTPException):
+    """Handle HTTP exceptions"""
+    logger.error(f"HTTP Exception: {exc.status_code} - {exc.detail}")
     return JSONResponse(
         status_code=exc.status_code,
-        content={
-            "error": "HTTP error",
-            "message": exc.detail,
-            "status_code": exc.status_code,
-            "timestamp": time.time(),
-        },
+        content={"error": exc.detail, "status_code": exc.status_code}
     )
 
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    """Handle request validation errors"""
+    logger.error(f"Validation Error: {exc.errors()}")
+    return JSONResponse(
+        status_code=422,
+        content={"error": "Validation error", "details": exc.errors()}
+    )
 
-@app.get("/")
+@app.exception_handler(Exception)
+async def general_exception_handler(request: Request, exc: Exception):
+    """Handle general exceptions"""
+    logger.error(f"General Exception: {str(exc)}")
+    return JSONResponse(
+        status_code=500,
+        content={"error": "Internal server error", "detail": str(exc)}
+    )
+
+# Core endpoints
+@app.get("/", tags=["Core"])
 async def root():
-    """Root endpoint"""
+    """Root endpoint with NQBA ecosystem information"""
     return {
-        "message": "Welcome to NQBA (Neuromorphic Quantum Business Architecture) API",
+        "message": "🚀 Welcome to NQBA Stack - The Operating System of the Intelligence Economy",
         "version": "2.0.0",
-        "description": "API for the NQBA ecosystem",
-        "business_units": [
-            "FLYFOX AI - Energy Optimization",
-            "Goliath of All Trade - Financial Operations",
-            "Sigma Select - Sales Intelligence",
-        ],
-        "documentation": "/docs",
+        "ecosystem": "Neuromorphic Quantum Business Architecture",
         "status": "operational",
+        "docs": "/docs",
+        "health": "/health",
+        "info": "/info"
     }
 
-
-@app.get("/health")
+@app.get("/health", tags=["Core"])
 async def health_check():
     """Health check endpoint"""
     try:
-        from ..business_integration import business_unit_manager
-
-        # Get ecosystem status
+        # Check business unit manager health
         ecosystem_status = await business_unit_manager.get_ecosystem_status()
-
+        
         return {
             "status": "healthy",
             "timestamp": time.time(),
             "ecosystem": ecosystem_status,
-            "api_version": "2.0.0",
+            "version": "2.0.0"
         }
-
     except Exception as e:
-        logger.error(f"Health check failed: {e}")
-        return {"status": "unhealthy", "error": str(e), "timestamp": time.time()}
+        logger.error(f"Health check failed: {str(e)}")
+        raise HTTPException(status_code=503, detail="Service unhealthy")
 
-
-@app.get("/info")
-async def api_info():
-    """API information endpoint"""
+@app.get("/info", tags=["Core"])
+async def system_info():
+    """System information endpoint"""
+    settings = get_settings()
+    
     return {
-        "name": "NQBA API",
+        "system": "NQBA Stack",
         "version": "2.0.0",
-        "description": "Neuromorphic Quantum Business Architecture API",
-        "business_units": {
-            "flyfox_ai": {
-                "name": "FLYFOX AI",
-                "description": "Energy optimization and consumption management",
-                "endpoints": "/api/v1/flyfox-ai",
-                "quantum_advantage": "3.2x energy optimization",
-            },
-            "goliath_trade": {
-                "name": "Goliath of All Trade",
-                "description": "Financial trading and portfolio optimization",
-                "endpoints": "/api/v1/goliath-trade",
-                "quantum_advantage": "4.1x portfolio performance",
-            },
-            "sigma_select": {
-                "name": "Sigma Select",
-                "description": "Sales intelligence and lead scoring",
-                "endpoints": "/api/v1/sigma-select",
-                "quantum_advantage": "2.8x lead conversion",
-            },
-        },
-        "features": [
-            "Quantum-enhanced business operations",
-            "Real-time monitoring and analytics",
-            "Cross-business unit communication",
-            "High Council administrative dashboard",
-            "Automated decision making",
-        ],
-        "documentation": "/docs",
-        "redoc": "/redoc",
+        "description": "Neuromorphic Quantum Business Architecture",
+        "environment": settings.ENVIRONMENT,
+        "debug": settings.DEBUG,
+        "allowed_hosts": settings.ALLOWED_HOSTS,
+        "cors_origins": settings.ALLOWED_ORIGINS,
+        "api_docs": "/docs",
+        "redoc": "/redoc"
     }
 
-
 # Include routers
-app.include_router(business_units_router, prefix="/api/v1", tags=["Business Units"])
+app.include_router(auth_router, prefix="/api/v1")
+app.include_router(business_units_router, prefix="/api/v1")
+app.include_router(high_council_router, prefix="/api/v1")
+app.include_router(monitoring_router, prefix="/api/v1")
 
-app.include_router(
-    high_council_router, prefix="/api/v1/high-council", tags=["High Council"]
-)
+# Startup event
+@app.on_event("startup")
+async def startup_event():
+    """Additional startup tasks"""
+    logger.info("🚀 NQBA Stack API startup event triggered")
 
-app.include_router(monitoring_router, prefix="/api/v1/monitoring", tags=["Monitoring"])
-
-
-if __name__ == "__main__":
-    import uvicorn
-
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True, log_level="info")
+# Shutdown event
+@app.on_event("shutdown")
+async def shutdown_event():
+    """Additional shutdown tasks"""
+    logger.info("🔄 NQBA Stack API shutdown event triggered")
