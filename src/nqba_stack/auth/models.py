@@ -13,50 +13,58 @@ from dataclasses import dataclass, field
 from enum import Enum
 from pydantic import BaseModel, Field
 
+
 class UserStatus(str, Enum):
     """User account status"""
+
     ACTIVE = "active"
     SUSPENDED = "suspended"
     PENDING = "pending"
     LOCKED = "locked"
 
+
 class RoleLevel(str, Enum):
     """Role hierarchy levels"""
-    FOUNDER = "founder"           # Absolute control - you
-    EXECUTIVE = "executive"        # High council members
-    ARCHITECT = "architect"        # Technical architects
-    ADMIN = "admin"               # System administrators
-    MANAGER = "manager"           # Business unit managers
-    USER = "user"                 # Regular users
-    GUEST = "guest"               # Limited access
+
+    FOUNDER = "founder"  # Absolute control - you
+    EXECUTIVE = "executive"  # High council members
+    ARCHITECT = "architect"  # Technical architects
+    ADMIN = "admin"  # System administrators
+    MANAGER = "manager"  # Business unit managers
+    USER = "user"  # Regular users
+    GUEST = "guest"  # Limited access
+
 
 class PermissionCategory(str, Enum):
     """Permission categories"""
-    SYSTEM = "system"             # System-level operations
-    BUSINESS = "business"         # Business unit operations
-    ECOSYSTEM = "ecosystem"       # Ecosystem layer operations
-    DATA = "data"                 # Data access and manipulation
-    USER = "user"                 # User management
-    FINANCIAL = "financial"       # Financial operations
-    QUANTUM = "quantum"           # Quantum operations
+
+    SYSTEM = "system"  # System-level operations
+    BUSINESS = "business"  # Business unit operations
+    ECOSYSTEM = "ecosystem"  # Ecosystem layer operations
+    DATA = "data"  # Data access and manipulation
+    USER = "user"  # User management
+    FINANCIAL = "financial"  # Financial operations
+    QUANTUM = "quantum"  # Quantum operations
+
 
 class Permission(BaseModel):
     """Individual permission definition"""
+
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str
     category: PermissionCategory
     description: str
-    resource: str                  # Resource this permission applies to
-    action: str                   # Action allowed (read, write, delete, etc.)
+    resource: str  # Resource this permission applies to
+    action: str  # Action allowed (read, write, delete, etc.)
     created_at: datetime = Field(default_factory=datetime.utcnow)
-    
+
     class Config:
-        json_encoders = {
-            datetime: lambda v: v.isoformat()
-        }
+        json_encoders = {datetime: lambda v: v.isoformat()}
+
 
 class Role(BaseModel):
     """Role definition with permissions"""
+
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str
     level: RoleLevel
@@ -65,14 +73,14 @@ class Role(BaseModel):
     is_system_role: bool = False
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
-    
+
     class Config:
-        json_encoders = {
-            datetime: lambda v: v.isoformat()
-        }
+        json_encoders = {datetime: lambda v: v.isoformat()}
+
 
 class UserSession(BaseModel):
     """User session tracking"""
+
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     user_id: str
     session_token: str
@@ -82,14 +90,14 @@ class UserSession(BaseModel):
     expires_at: datetime
     is_active: bool = True
     last_activity: datetime = Field(default_factory=datetime.utcnow)
-    
+
     class Config:
-        json_encoders = {
-            datetime: lambda v: v.isoformat()
-        }
+        json_encoders = {datetime: lambda v: v.isoformat()}
+
 
 class User(BaseModel):
     """User account model"""
+
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     username: str
     email: str
@@ -108,14 +116,14 @@ class User(BaseModel):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
     metadata: Dict[str, str] = Field(default_factory=dict)
-    
+
     class Config:
-        json_encoders = {
-            datetime: lambda v: v.isoformat()
-        }
+        json_encoders = {datetime: lambda v: v.isoformat()}
+
 
 class UserCreate(BaseModel):
     """User creation request"""
+
     username: str
     email: str
     first_name: str
@@ -124,8 +132,10 @@ class UserCreate(BaseModel):
     roles: List[str] = Field(default_factory=list)
     metadata: Dict[str, str] = Field(default_factory=dict)
 
+
 class UserUpdate(BaseModel):
     """User update request"""
+
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     email: Optional[str] = None
@@ -134,26 +144,34 @@ class UserUpdate(BaseModel):
     is_2fa_enabled: Optional[bool] = None
     metadata: Optional[Dict[str, str]] = None
 
+
 class LoginRequest(BaseModel):
     """Login request"""
+
     username: str
     password: str
     remember_me: bool = False
 
+
 class LoginResponse(BaseModel):
     """Login response"""
+
     access_token: str
     refresh_token: str
     token_type: str = "bearer"
     expires_in: int
     user: User
 
+
 class PasswordChangeRequest(BaseModel):
     """Password change request"""
+
     current_password: str
     new_password: str
 
+
 class TwoFactorSetup(BaseModel):
     """2FA setup request"""
+
     secret: str
     code: str

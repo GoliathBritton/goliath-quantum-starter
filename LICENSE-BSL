@@ -1,0 +1,37 @@
+Business Source License 1.1
+
+Copyright (c) 2024 FLYFOX AI. All rights reserved.
+
+This software is licensed under the Business Source License 1.1 (the "License") by FLYFOX AI.
+
+You may not use this software except in compliance with the License. You can obtain a copy of the License at:
+
+https://mariadb.com/bsl11/
+
+Software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+
+See the License for the specific language governing permissions and limitations under the License.
+
+Additional Use Grant: You may make use of the Licensed Work, provided that you use the Licensed Work in a Commercial Offering that does not compete with the Licensed Work.
+
+Commercial Offering means software or services made available in exchange for compensation, including but not limited to:
+- Software-as-a-Service (SaaS) offerings
+- Cloud-based services
+- Consulting services
+- Training services
+- Support services
+
+Competing means offering software or services that provide the same or substantially similar functionality as the Licensed Work, or that could reasonably be expected to replace or substitute for the Licensed Work in the marketplace.
+
+Change Date: 2027-01-01
+
+Change License: Apache License, Version 2.0
+
+For any software released after the Change Date, the License shall be the Apache License, Version 2.0, as published by the Apache Software Foundation.
+
+The Apache License, Version 2.0 is available at:
+http://www.apache.org/licenses/LICENSE-2.0
+
+You may also obtain a commercial license from FLYFOX AI for use of this software in commercial applications that compete with the Licensed Work. Please contact licensing@flyfox.ai for more information.
+
+NOTICE: This software includes components licensed under the Apache License, Version 2.0, including but not limited to the Dynex SDK and other open source dependencies. Please see the NOTICE file for additional information.

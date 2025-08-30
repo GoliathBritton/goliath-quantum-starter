@@ -27,47 +27,50 @@ from ..core.ltc_automation import LTCLogger
 # Initialize logger
 logger = LTCLogger("nqba_api")
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan manager"""
     # Startup
     logger.info("🚀 Starting NQBA Stack API...")
-    
+
     try:
         # Initialize business unit manager
         await business_unit_manager.initialize()
         logger.info("✅ Business unit manager initialized")
-        
+
         # Register FLYFOX AI business unit
         flyfox_ai_unit = FLYFOXAIBusinessUnit()
         await business_unit_manager.register_business_unit(flyfox_ai_unit)
         logger.info("✅ FLYFOX AI business unit registered")
-        
+
         # Initialize authentication system
         from ..auth import AuthManager
-        auth_manager = AuthManager()
+
+        _ = AuthManager()  # Initialize AuthManager
         logger.info("✅ Authentication system initialized")
-        
+
         logger.info("🚀 NQBA Stack API startup complete!")
-        
+
     except Exception as e:
         logger.error(f"❌ Startup error: {str(e)}")
         raise
-    
+
     yield
-    
+
     # Shutdown
     logger.info("🔄 Shutting down NQBA Stack API...")
-    
+
     try:
         # Shutdown business unit manager
         await business_unit_manager.shutdown()
         logger.info("✅ Business unit manager shutdown complete")
-        
+
         logger.info("✅ NQBA Stack API shutdown complete!")
-        
+
     except Exception as e:
         logger.error(f"❌ Shutdown error: {str(e)}")
+
 
 # Create FastAPI app
 app = FastAPI(
@@ -76,7 +79,7 @@ app = FastAPI(
     version="2.0.0",
     docs_url="/docs",
     redoc_url="/redoc",
-    lifespan=lifespan
+    lifespan=lifespan,
 )
 
 # Get settings
@@ -92,33 +95,34 @@ app.add_middleware(
 )
 
 # Add trusted host middleware
-app.add_middleware(
-    TrustedHostMiddleware,
-    allowed_hosts=settings.ALLOWED_HOSTS
-)
+app.add_middleware(TrustedHostMiddleware, allowed_hosts=settings.ALLOWED_HOSTS)
+
 
 # Request logging middleware
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
     """Log all incoming requests"""
     start_time = time.time()
-    
+
     # Log request
     logger.info(f"📥 {request.method} {request.url.path} - {request.client.host}")
-    
+
     # Process request
     response = await call_next(request)
-    
+
     # Calculate processing time
     process_time = time.time() - start_time
-    
+
     # Log response
-    logger.info(f"📤 {request.method} {request.url.path} - {response.status_code} - {process_time:.3f}s")
-    
+    logger.info(
+        f"📤 {request.method} {request.url.path} - {response.status_code} - {process_time:.3f}s"
+    )
+
     # Add processing time header
     response.headers["X-Process-Time"] = str(process_time)
-    
+
     return response
+
 
 # Global exception handlers
 @app.exception_handler(StarletteHTTPException)
@@ -127,26 +131,27 @@ async def http_exception_handler(request: Request, exc: StarletteHTTPException):
     logger.error(f"HTTP Exception: {exc.status_code} - {exc.detail}")
     return JSONResponse(
         status_code=exc.status_code,
-        content={"error": exc.detail, "status_code": exc.status_code}
+        content={"error": exc.detail, "status_code": exc.status_code},
     )
+
 
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
     """Handle request validation errors"""
     logger.error(f"Validation Error: {exc.errors()}")
     return JSONResponse(
-        status_code=422,
-        content={"error": "Validation error", "details": exc.errors()}
+        status_code=422, content={"error": "Validation error", "details": exc.errors()}
     )
+
 
 @app.exception_handler(Exception)
 async def general_exception_handler(request: Request, exc: Exception):
     """Handle general exceptions"""
     logger.error(f"General Exception: {str(exc)}")
     return JSONResponse(
-        status_code=500,
-        content={"error": "Internal server error", "detail": str(exc)}
+        status_code=500, content={"error": "Internal server error", "detail": str(exc)}
     )
+
 
 # Core endpoints
 @app.get("/", tags=["Core"])
@@ -159,8 +164,9 @@ async def root():
         "status": "operational",
         "docs": "/docs",
         "health": "/health",
-        "info": "/info"
+        "info": "/info",
     }
+
 
 @app.get("/health", tags=["Core"])
 async def health_check():
@@ -168,22 +174,23 @@ async def health_check():
     try:
         # Check business unit manager health
         ecosystem_status = await business_unit_manager.get_ecosystem_status()
-        
+
         return {
             "status": "healthy",
             "timestamp": time.time(),
             "ecosystem": ecosystem_status,
-            "version": "2.0.0"
+            "version": "2.0.0",
         }
     except Exception as e:
         logger.error(f"Health check failed: {str(e)}")
         raise HTTPException(status_code=503, detail="Service unhealthy")
 
+
 @app.get("/info", tags=["Core"])
 async def system_info():
     """System information endpoint"""
     settings = get_settings()
-    
+
     return {
         "system": "NQBA Stack",
         "version": "2.0.0",
@@ -193,8 +200,9 @@ async def system_info():
         "allowed_hosts": settings.ALLOWED_HOSTS,
         "cors_origins": settings.ALLOWED_ORIGINS,
         "api_docs": "/docs",
-        "redoc": "/redoc"
+        "redoc": "/redoc",
     }
+
 
 # Include routers
 app.include_router(auth_router, prefix="/api/v1")
@@ -202,11 +210,13 @@ app.include_router(business_units_router, prefix="/api/v1")
 app.include_router(high_council_router, prefix="/api/v1")
 app.include_router(monitoring_router, prefix="/api/v1")
 
+
 # Startup event
 @app.on_event("startup")
 async def startup_event():
     """Additional startup tasks"""
     logger.info("🚀 NQBA Stack API startup event triggered")
+
 
 # Shutdown event
 @app.on_event("shutdown")

@@ -1,0 +1,1219 @@
+openapi: 3.1.0
+info:
+  title: NQBA Ecosystem API
+  description: |
+    Neuromorphic Quantum Business Architecture - The Operating System of the Intelligence Economy
+    
+    Powered by FLYFOX AI and Dynex Neuromorphic Quantum optimization.
+    
+    ## Core Capabilities
+    - **Quantum-AI Workflows**: Execute quantum-optimized business processes
+    - **Lead Scoring**: SigmaEQ-powered sales intelligence with quantum optimization
+    - **Investor Portal**: Secure access to live KPIs and performance metrics
+    - **Ecosystem Integration**: Connect with Goliath family business units
+    
+    ## Authentication
+    All endpoints require JWT authentication via Bearer token in Authorization header.
+    
+    ## Rate Limiting
+    - Free tier: 100 requests/hour
+    - Business tier: 1,000 requests/hour
+    - Premium tier: 10,000 requests/hour
+    - Luxury tier: 100,000 requests/hour
+    
+    ## Support
+    - Documentation: https://docs.flyfox.ai
+    - Support: support@flyfox.ai
+    - Developer Portal: https://developers.flyfox.ai
+    
+  version: 2.0.0
+  contact:
+    name: FLYFOX AI API Support
+    url: https://flyfox.ai/support
+    email: api@flyfox.ai
+  license:
+    name: Business Source License 1.1
+    url: https://mariadb.com/bsl11/
+  x-logo:
+    url: https://flyfox.ai/logo.png
+    altText: FLYFOX AI Logo
+
+servers:
+  - url: https://api.flyfox.ai/v1
+    description: Production server
+  - url: https://staging.flyfox.ai/v1
+    description: Staging server
+  - url: http://localhost:8000/v1
+    description: Local development server
+
+tags:
+  - name: Authentication
+    description: User authentication and authorization
+  - name: Sales
+    description: SigmaEQ lead scoring and sales workflows
+  - name: Investor
+    description: Investor portal and access endpoints
+  - name: Workflow
+    description: Quantum-AI workflow execution
+  - name: Ecosystem
+    description: Goliath family business unit integrations
+  - name: Quantum
+    description: Direct quantum optimization endpoints
+  - name: Analytics
+    description: Performance metrics and analytics
+  - name: Management
+    description: System administration and management
+
+paths:
+  /auth/login:
+    post:
+      tags: [Authentication]
+      summary: Authenticate user
+      description: Login with username/email and password to receive JWT tokens
+      operationId: loginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Too many login attempts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/refresh:
+    post:
+      tags: [Authentication]
+      summary: Refresh access token
+      description: Use refresh token to get new access token
+      operationId: refreshToken
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshRequest'
+      responses:
+        '200':
+          description: Token refreshed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Invalid refresh token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /sales/score:
+    post:
+      tags: [Sales]
+      summary: Score a sales lead
+      description: |
+        Uses SigmaEQ + Dynex QRBM for lead scoring and prioritization.
+        
+        **Quantum Advantage**: Leverages quantum optimization to find optimal lead scoring weights
+        that maximize conversion probability while minimizing false positives.
+      operationId: scoreLead
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Lead'
+      responses:
+        '200':
+          description: Lead scored successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeadScoreResponse'
+          headers:
+            X-RateLimit-Remaining:
+              description: Remaining requests for this rate limit window
+              schema:
+                type: integer
+        '400':
+          description: Invalid lead data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /sales/batch-score:
+    post:
+      tags: [Sales]
+      summary: Score multiple leads in batch
+      description: |
+        Batch process multiple leads for efficient scoring.
+        
+        **Quantum Advantage**: Processes multiple leads simultaneously using quantum parallelism,
+        providing 2-5x speedup for large batches.
+      operationId: batchScoreLeads
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchLeadRequest'
+      responses:
+        '200':
+          description: Batch scoring completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchLeadResponse'
+        '400':
+          description: Invalid batch data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /investor/access:
+    post:
+      tags: [Investor]
+      summary: Request investor portal access
+      description: |
+        Returns a signed link to the investor dashboard with live KPIs.
+        
+        **Live Metrics**: Real-time ARR, quantum advantage, customer savings, and market performance.
+      operationId: requestInvestorAccess
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvestorAccessRequest'
+      responses:
+        '200':
+          description: Investor portal link returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvestorAccessResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /investor/metrics:
+    get:
+      tags: [Investor]
+      summary: Get live investor metrics
+      description: |
+        Retrieve real-time KPIs and performance metrics for investor presentations.
+        
+        **Metrics Include**:
+        - ARR by tier (Free, Business, Premium, Luxury)
+        - Quantum vs classical solver win rates
+        - Customer savings delivered
+        - Market penetration metrics
+      operationId: getInvestorMetrics
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: timeframe
+          in: query
+          description: Time period for metrics (1d, 7d, 30d, 90d, 1y)
+          required: false
+          schema:
+            type: string
+            enum: [1d, 7d, 30d, 90d, 1y]
+            default: 30d
+      responses:
+        '200':
+          description: Investor metrics retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvestorMetrics'
+
+  /workflow/run:
+    post:
+      tags: [Workflow]
+      summary: Execute a quantum-AI workflow
+      description: |
+        Runs a workflow on the NQBA layer, routed via Dynex SDK.
+        
+        **Workflow Types**:
+        - Energy optimization
+        - Portfolio optimization
+        - Supply chain optimization
+        - Marketing campaign optimization
+        
+        **Quantum Advantage**: Automatically selects quantum or classical solver based on problem complexity
+        and current quantum availability.
+      operationId: runWorkflow
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/WorkflowRequest'
+      responses:
+        '200':
+          description: Workflow executed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowResponse'
+        '202':
+          description: Workflow accepted for processing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowAccepted'
+        '400':
+          description: Invalid workflow request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /workflow/status/{workflow_id}:
+    get:
+      tags: [Workflow]
+      summary: Get workflow status
+      description: Check the current status and progress of a workflow
+      operationId: getWorkflowStatus
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: workflow_id
+          in: path
+          required: true
+          description: Unique workflow identifier
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Workflow status retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowStatus'
+
+  /ecosystem/energy:
+    get:
+      tags: [Ecosystem]
+      summary: Energy optimization demo
+      description: |
+        Quantum scheduling for cost savings in energy management.
+        
+        **Use Case**: Optimize energy consumption patterns for manufacturing facilities,
+        data centers, and commercial buildings.
+        
+        **Quantum Advantage**: 15-25% additional savings compared to classical optimization.
+      operationId: getEnergyOptimization
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: facility_type
+          in: query
+          description: Type of facility to optimize
+          required: false
+          schema:
+            type: string
+            enum: [manufacturing, datacenter, commercial, residential]
+            default: manufacturing
+        - name: optimization_horizon
+          in: query
+          description: Optimization time horizon in hours
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 168
+            default: 24
+      responses:
+        '200':
+          description: Energy optimization returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnergyOptimization'
+
+  /ecosystem/capital:
+    get:
+      tags: [Ecosystem]
+      summary: Capital optimization demo
+      description: |
+        Portfolio optimization using quantum algorithms.
+        
+        **Use Case**: Optimize investment portfolios for maximum return with risk constraints.
+        
+        **Quantum Advantage**: Better risk-adjusted returns through quantum portfolio optimization.
+      operationId: getCapitalOptimization
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Capital optimization returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CapitalOptimization'
+
+  /ecosystem/insurance:
+    get:
+      tags: [Ecosystem]
+      summary: Insurance risk assessment
+      description: |
+        Quantum-powered risk assessment for insurance underwriting.
+        
+        **Use Case**: Evaluate complex risk scenarios and determine optimal premium pricing.
+        
+        **Quantum Advantage**: More accurate risk modeling through quantum probability estimation.
+      operationId: getInsuranceAssessment
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Insurance assessment returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InsuranceAssessment'
+
+  /quantum/optimize:
+    post:
+      tags: [Quantum]
+      summary: Direct quantum optimization
+      description: |
+        Submit optimization problems directly to quantum solvers.
+        
+        **Supported Problems**:
+        - QUBO (Quadratic Unconstrained Binary Optimization)
+        - Ising model
+        - Traveling Salesman Problem
+        - Graph coloring
+        
+        **Fallback**: Automatically falls back to classical solvers if quantum is unavailable.
+      operationId: optimizeQuantum
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuantumOptimizationRequest'
+      responses:
+        '200':
+          description: Optimization completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuantumOptimizationResponse'
+        '202':
+          description: Optimization queued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuantumOptimizationQueued'
+
+  /analytics/performance:
+    get:
+      tags: [Analytics]
+      summary: Get system performance metrics
+      description: |
+        Retrieve comprehensive performance analytics including quantum advantage metrics.
+        
+        **Metrics Include**:
+        - Quantum vs classical solver performance
+        - Response time percentiles
+        - Success rates by endpoint
+        - Resource utilization
+      operationId: getPerformanceMetrics
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: start_time
+          in: query
+          description: Start time for metrics (ISO 8601)
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: end_time
+          in: query
+          description: End time for metrics (ISO 8601)
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: Performance metrics retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PerformanceMetrics'
+
+  /management/health:
+    get:
+      tags: [Management]
+      summary: System health check
+      description: |
+        Comprehensive health check for all system components.
+        
+        **Checks Include**:
+        - API server status
+        - Quantum backend connectivity
+        - Database connectivity
+        - External service dependencies
+      operationId: getSystemHealth
+      responses:
+        '200':
+          description: System healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthCheck'
+        '503':
+          description: System unhealthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthCheck'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token from /auth/login endpoint
+
+  schemas:
+    LoginRequest:
+      type: object
+      required: [username, password]
+      properties:
+        username:
+          type: string
+          description: Username or email address
+          example: "john.doe@company.com"
+        password:
+          type: string
+          description: User password
+          example: "SecurePassword123!"
+        two_factor_code:
+          type: string
+          description: Optional 2FA code
+          example: "123456"
+
+    LoginResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: JWT access token
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        refresh_token:
+          type: string
+          description: JWT refresh token
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        token_type:
+          type: string
+          default: "bearer"
+        expires_in:
+          type: integer
+          description: Token expiration time in seconds
+          example: 3600
+        user:
+          $ref: '#/components/schemas/User'
+
+    RefreshRequest:
+      type: object
+      required: [refresh_token]
+      properties:
+        refresh_token:
+          type: string
+          description: JWT refresh token
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        username:
+          type: string
+          example: "john.doe"
+        email:
+          type: string
+          format: email
+          example: "john.doe@company.com"
+        roles:
+          type: array
+          items:
+            type: string
+          example: ["user", "analyst"]
+        tier:
+          type: string
+          enum: [free, business, premium, luxury]
+          example: "business"
+
+    Lead:
+      type: object
+      required: [name, email, company, budget]
+      properties:
+        name:
+          type: string
+          description: Lead's full name
+          example: "Jane Smith"
+        email:
+          type: string
+          format: email
+          description: Lead's email address
+          example: "jane.smith@company.com"
+        company:
+          type: string
+          description: Company name
+          example: "Acme Corporation"
+        budget:
+          type: number
+          format: float
+          description: Budget range in USD
+          example: 50000
+        industry:
+          type: string
+          description: Industry sector
+          example: "Technology"
+        company_size:
+          type: string
+          enum: [startup, smb, enterprise]
+          description: Company size category
+          example: "smb"
+        pain_points:
+          type: array
+          items:
+            type: string
+          description: Business challenges
+          example: ["cost optimization", "efficiency improvement"]
+
+    LeadScoreResponse:
+      type: object
+      properties:
+        lead_id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        score:
+          type: integer
+          minimum: 0
+          maximum: 100
+          description: Lead score (0-100)
+          example: 85
+        confidence:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 1
+          description: Confidence in the score
+          example: 0.92
+        recommendations:
+          type: array
+          items:
+            type: string
+          description: Action recommendations
+          example: ["Schedule demo", "Send case study"]
+        ltc_ipfs_hash:
+          type: string
+          description: IPFS hash for LTC proof
+          example: "Qmabcdef12345"
+        quantum_advantage:
+          type: number
+          format: float
+          description: Performance improvement vs classical
+          example: 2.3
+
+    BatchLeadRequest:
+      type: object
+      required: [leads]
+      properties:
+        leads:
+          type: array
+          items:
+            $ref: '#/components/schemas/Lead'
+          minItems: 1
+          maxItems: 100
+          description: Array of leads to score
+
+    BatchLeadResponse:
+      type: object
+      properties:
+        batch_id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/LeadScoreResponse'
+        processing_time:
+          type: number
+          format: float
+          description: Total processing time in seconds
+          example: 2.45
+        quantum_advantage:
+          type: number
+          format: float
+          description: Average performance improvement
+          example: 2.1
+
+    InvestorAccessRequest:
+      type: object
+      required: [email, company, investment_interest]
+      properties:
+        email:
+          type: string
+          format: email
+          description: Investor email address
+          example: "investor@fund.com"
+        company:
+          type: string
+          description: Investment firm name
+          example: "Venture Capital Fund"
+        investment_interest:
+          type: string
+          enum: [seed, series_a, series_b, growth, strategic]
+          description: Investment stage of interest
+          example: "series_a"
+        message:
+          type: string
+          description: Optional message
+          example: "Interested in quantum computing applications"
+
+    InvestorAccessResponse:
+      type: object
+      properties:
+        portal_link:
+          type: string
+          format: uri
+          description: Secure investor portal link
+          example: "https://flyfox.ai/investor?token=abcdef12345"
+        expires_at:
+          type: string
+          format: date-time
+          description: Link expiration time
+          example: "2024-02-01T12:00:00Z"
+        access_level:
+          type: string
+          enum: [basic, premium, full]
+          description: Access level granted
+          example: "premium"
+
+    InvestorMetrics:
+      type: object
+      properties:
+        arr_by_tier:
+          type: object
+          properties:
+            free:
+              type: number
+              example: 0
+            business:
+              type: number
+              example: 250000
+            premium:
+              type: number
+              example: 1200000
+            luxury:
+              type: number
+              example: 5000000
+        quantum_advantage:
+          type: object
+          properties:
+            overall_win_rate:
+              type: number
+              format: float
+              example: 0.78
+            average_speedup:
+              type: number
+              format: float
+              example: 2.4
+            problems_solved:
+              type: integer
+              example: 15420
+        customer_savings:
+          type: object
+          properties:
+            total_savings:
+              type: number
+              example: 25000000
+            average_savings_per_customer:
+              type: number
+              example: 125000
+            savings_by_domain:
+              type: object
+              properties:
+                energy:
+                  type: number
+                  example: 12000000
+                capital:
+                  type: number
+                  example: 8000000
+                insurance:
+                  type: number
+                  example: 5000000
+
+    WorkflowRequest:
+      type: object
+      required: [workflow_type, input_data]
+      properties:
+        workflow_type:
+          type: string
+          enum: [energy, capital, insurance, marketing, supply_chain]
+          description: Type of workflow to execute
+          example: "energy"
+        input_data:
+          type: object
+          description: Workflow-specific input data
+        optimization_target:
+          type: string
+          enum: [cost, efficiency, risk, revenue]
+          description: Primary optimization objective
+          example: "cost"
+        constraints:
+          type: object
+          description: Optimization constraints
+        quantum_preference:
+          type: string
+          enum: [auto, quantum_only, classical_only]
+          description: Solver preference
+          default: "auto"
+
+    WorkflowResponse:
+      type: object
+      properties:
+        workflow_id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        status:
+          type: string
+          enum: [completed, failed, running]
+          example: "completed"
+        results:
+          type: object
+          description: Workflow results
+        execution_time:
+          type: number
+          format: float
+          description: Total execution time in seconds
+          example: 45.2
+        solver_used:
+          type: string
+          enum: [quantum, classical, hybrid]
+          description: Solver type used
+          example: "quantum"
+        quantum_advantage:
+          type: number
+          format: float
+          description: Performance improvement vs classical
+          example: 1.8
+
+    WorkflowAccepted:
+      type: object
+      properties:
+        workflow_id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        status:
+          type: string
+          default: "queued"
+        estimated_completion:
+          type: string
+          format: date-time
+          description: Estimated completion time
+          example: "2024-01-15T14:30:00Z"
+        queue_position:
+          type: integer
+          description: Position in processing queue
+          example: 5
+
+    WorkflowStatus:
+      type: object
+      properties:
+        workflow_id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        status:
+          type: string
+          enum: [queued, running, completed, failed, cancelled]
+          example: "running"
+        progress:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 100
+          description: Progress percentage
+          example: 65
+        current_step:
+          type: string
+          description: Current processing step
+          example: "Quantum optimization"
+        estimated_completion:
+          type: string
+          format: date-time
+          description: Updated completion estimate
+          example: "2024-01-15T14:25:00Z"
+
+    EnergyOptimization:
+      type: object
+      properties:
+        facility_type:
+          type: string
+          example: "manufacturing"
+        optimization_horizon:
+          type: integer
+          description: Hours optimized
+          example: 24
+        baseline_cost:
+          type: number
+          format: float
+          description: Baseline energy cost in USD
+          example: 12500.0
+        optimized_cost:
+          type: number
+          format: float
+          description: Optimized energy cost in USD
+          example: 9800.0
+        savings_percent:
+          type: number
+          format: float
+          description: Percentage cost savings
+          example: 21.6
+        quantum_advantage:
+          type: number
+          format: float
+          description: Additional savings from quantum optimization
+          example: 5.2
+        recommendations:
+          type: array
+          items:
+            type: string
+          description: Energy optimization recommendations
+          example: ["Shift heavy loads to off-peak hours", "Optimize HVAC scheduling"]
+
+    CapitalOptimization:
+      type: object
+      properties:
+        portfolio_size:
+          type: integer
+          description: Number of assets
+          example: 50
+        target_return:
+          type: number
+          format: float
+          description: Target annual return
+          example: 0.15
+        risk_tolerance:
+          type: string
+          enum: [low, medium, high]
+          example: "medium"
+        baseline_return:
+          type: number
+          format: float
+          description: Baseline portfolio return
+          example: 0.12
+        optimized_return:
+          type: number
+          format: float
+          description: Optimized portfolio return
+          example: 0.18
+        risk_adjustment:
+          type: number
+          format: float
+          description: Risk-adjusted return improvement
+          example: 0.25
+        quantum_advantage:
+          type: number
+          format: float
+          description: Additional return from quantum optimization
+          example: 0.03
+
+    InsuranceAssessment:
+      type: object
+      properties:
+        risk_category:
+          type: string
+          enum: [low, medium, high, extreme]
+          example: "medium"
+        risk_score:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 100
+          description: Risk score (0-100)
+          example: 65
+        premium_recommendation:
+          type: number
+          format: float
+          description: Recommended premium in USD
+          example: 2500.0
+        coverage_recommendations:
+          type: array
+          items:
+            type: string
+          description: Coverage recommendations
+          example: ["Increase liability coverage", "Add cyber insurance"]
+        quantum_advantage:
+          type: number
+          format: float
+          description: Risk assessment accuracy improvement
+          example: 0.15
+
+    QuantumOptimizationRequest:
+      type: object
+      required: [problem_type, problem_data]
+      properties:
+        problem_type:
+          type: string
+          enum: [qubo, ising, tsp, graph_coloring, custom]
+          description: Type of optimization problem
+          example: "qubo"
+        problem_data:
+          type: object
+          description: Problem-specific data
+        solver_preference:
+          type: string
+          enum: [auto, quantum, classical, hybrid]
+          description: Solver preference
+          default: "auto"
+        timeout_seconds:
+          type: integer
+          description: Maximum execution time
+          example: 300
+        quality_threshold:
+          type: number
+          format: float
+          description: Minimum solution quality
+          example: 0.95
+
+    QuantumOptimizationResponse:
+      type: object
+      properties:
+        optimization_id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        status:
+          type: string
+          enum: [completed, failed, timeout]
+          example: "completed"
+        solution:
+          type: object
+          description: Optimization solution
+        objective_value:
+          type: number
+          format: float
+          description: Objective function value
+          example: -15.7
+        execution_time:
+          type: number
+          format: float
+          description: Execution time in seconds
+          example: 45.2
+        solver_used:
+          type: string
+          enum: [quantum, classical, hybrid]
+          example: "quantum"
+        quantum_advantage:
+          type: number
+          format: float
+          description: Performance improvement vs classical
+          example: 2.1
+
+    QuantumOptimizationQueued:
+      type: object
+      properties:
+        optimization_id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        status:
+          type: string
+          default: "queued"
+        estimated_start:
+          type: string
+          format: date-time
+          description: Estimated start time
+          example: "2024-01-15T14:30:00Z"
+        queue_position:
+          type: integer
+          description: Position in quantum queue
+          example: 3
+
+    PerformanceMetrics:
+      type: object
+      properties:
+        time_range:
+          type: object
+          properties:
+            start:
+              type: string
+              format: date-time
+              example: "2024-01-01T00:00:00Z"
+            end:
+              type: string
+              format: date-time
+              example: "2024-01-31T23:59:59Z"
+        api_metrics:
+          type: object
+          properties:
+            total_requests:
+              type: integer
+              example: 15420
+            success_rate:
+              type: number
+              format: float
+              example: 0.987
+            average_response_time:
+              type: number
+              format: float
+              example: 0.245
+            p95_response_time:
+              type: number
+              format: float
+              example: 0.892
+        quantum_metrics:
+          type: object
+          properties:
+            problems_solved:
+              type: integer
+              example: 8920
+            quantum_win_rate:
+              type: number
+              format: float
+              example: 0.78
+            average_quantum_advantage:
+              type: number
+              format: float
+              example: 2.4
+            quantum_availability:
+              type: number
+              format: float
+              example: 0.95
+
+    HealthCheck:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [healthy, degraded, unhealthy]
+          example: "healthy"
+        timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T14:30:00Z"
+        version:
+          type: string
+          example: "2.0.0"
+        components:
+          type: object
+          properties:
+            api_server:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [healthy, unhealthy]
+                  example: "healthy"
+                response_time:
+                  type: number
+                  format: float
+                  example: 0.012
+            quantum_backend:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [healthy, unhealthy]
+                  example: "healthy"
+                connectivity:
+                  type: string
+                  enum: [connected, disconnected]
+                  example: "connected"
+            database:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [healthy, unhealthy]
+                  example: "healthy"
+                response_time:
+                  type: number
+                  format: float
+                  example: 0.045
+
+    ErrorResponse:
+      type: object
+      required: [error, message]
+      properties:
+        error:
+          type: string
+          description: Error type
+          example: "validation_error"
+        message:
+          type: string
+          description: Human-readable error message
+          example: "Invalid input data provided"
+        details:
+          type: object
+          description: Additional error details
+        timestamp:
+          type: string
+          format: date-time
+          description: Error timestamp
+          example: "2024-01-15T14:30:00Z"
+        request_id:
+          type: string
+          format: uuid
+          description: Unique request identifier
+          example: "123e4567-e89b-12d3-a456-426614174000"
+
+externalDocs:
+  description: Additional documentation and examples
+  url: https://docs.flyfox.ai/api
