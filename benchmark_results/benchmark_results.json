@@ -1,0 +1,86 @@
+[
+  {
+    "problem_name": "Portfolio_Optimization",
+    "solver_name": "Classical",
+    "execution_time": 0.008615255355834961,
+    "solution_quality": 0,
+    "memory_usage": 0.0078125,
+    "energy_consumption": 1.7230510711669922,
+    "cost_per_solution": 8.615255355834961e-05,
+    "metadata": {
+      "problem_size": 50,
+      "solver_version": "1.0.0",
+      "timestamp": 1756535137.684723
+    }
+  },
+  {
+    "problem_name": "Portfolio_Optimization",
+    "solver_name": "Quantum",
+    "execution_time": 0.0014467239379882812,
+    "solution_quality": 0.8743035510149979,
+    "memory_usage": 0.18359375,
+    "energy_consumption": 1.4467239379882812,
+    "cost_per_solution": 0.00014467239379882814,
+    "metadata": {
+      "problem_size": 50,
+      "solver_version": "1.0.0",
+      "timestamp": 1756535137.68696
+    }
+  },
+  {
+    "problem_name": "Traveling_Salesman",
+    "solver_name": "Classical",
+    "execution_time": 0.00015115737915039062,
+    "solution_quality": -694.755461350136,
+    "memory_usage": 0.0,
+    "energy_consumption": 0.030231475830078125,
+    "cost_per_solution": 1.5115737915039062e-06,
+    "metadata": {
+      "problem_size": 50,
+      "solver_version": "1.0.0",
+      "timestamp": 1756535137.6892111
+    }
+  },
+  {
+    "problem_name": "Traveling_Salesman",
+    "solver_name": "Quantum",
+    "execution_time": 0.02312922477722168,
+    "solution_quality": -1785.2514521404412,
+    "memory_usage": 0.0703125,
+    "energy_consumption": 23.12922477722168,
+    "cost_per_solution": 0.002312922477722168,
+    "metadata": {
+      "problem_size": 50,
+      "solver_version": "1.0.0",
+      "timestamp": 1756535137.7142458
+    }
+  },
+  {
+    "problem_name": "Knapsack_Problem",
+    "solver_name": "Classical",
+    "execution_time": 8.0108642578125e-05,
+    "solution_quality": 1695.4181373053173,
+    "memory_usage": 0.0,
+    "energy_consumption": 0.016021728515625,
+    "cost_per_solution": 8.0108642578125e-07,
+    "metadata": {
+      "problem_size": 50,
+      "solver_version": "1.0.0",
+      "timestamp": 1756535137.7151957
+    }
+  },
+  {
+    "problem_name": "Knapsack_Problem",
+    "solver_name": "Quantum",
+    "execution_time": 0.0002810955047607422,
+    "solution_quality": 981.7815370319075,
+    "memory_usage": 0.015625,
+    "energy_consumption": 0.2810955047607422,
+    "cost_per_solution": 2.810955047607422e-05,
+    "metadata": {
+      "problem_size": 50,
+      "solver_version": "1.0.0",
+      "timestamp": 1756535137.7157266
+    }
+  }
+]
