@@ -19,6 +19,7 @@ from .business_units import router as business_units_router
 from .high_council import router as high_council_router
 from .monitoring import router as monitoring_router
 from .auth import router as auth_router
+from .qih import router as qih_router
 from ..business_integration import business_unit_manager
 from ..business_integration.flyfox_ai import FLYFOXAIBusinessUnit
 from ..core.settings import get_settings
@@ -209,6 +210,7 @@ app.include_router(auth_router, prefix="/api/v1")
 app.include_router(business_units_router, prefix="/api/v1")
 app.include_router(high_council_router, prefix="/api/v1")
 app.include_router(monitoring_router, prefix="/api/v1")
+app.include_router(qih_router, prefix="/api/v1")
 
 
 # Startup event
