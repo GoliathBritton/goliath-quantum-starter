@@ -524,7 +524,14 @@ class QuantumIntegrationHub:
 
     def _start_cleanup_task(self):
         """Start background task to clean up old jobs"""
-        asyncio.create_task(self._cleanup_old_jobs())
+        # Only start cleanup task if there's a running event loop
+        try:
+            loop = asyncio.get_running_loop()
+            asyncio.create_task(self._cleanup_old_jobs())
+        except RuntimeError:
+            # No running event loop, skip for now
+            # The cleanup task will be started when the first job is submitted
+            pass
 
     async def _cleanup_old_jobs(self):
         """Clean up old completed/failed jobs"""

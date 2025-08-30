@@ -25,7 +25,8 @@ from ..quantum.qih import (
     JobPriority,
 )
 from ..core.entitlements import require_feature, Feature, get_user_tier
-from ..auth.auth_manager import get_auth_manager, verify_token
+from ..auth import AuthManager, JWTHandler
+from ..core.settings import get_settings
 
 logger = logging.getLogger(__name__)
 
@@ -116,8 +117,11 @@ async def get_current_user(
 ) -> str:
     """Extract and verify current user from JWT token"""
     try:
-        auth_manager = get_auth_manager()
-        payload = verify_token(credentials.credentials)
+        # Create JWT handler instance
+        jwt_handler = JWTHandler()
+        payload = jwt_handler.verify_token(credentials.credentials, "access")
+        if not payload:
+            raise HTTPException(status_code=401, detail="Invalid token")
         user_id = payload.get("sub")
         if not user_id:
             raise HTTPException(status_code=401, detail="Invalid token")
@@ -311,7 +315,7 @@ async def list_user_jobs(
 
 
 @router.get("/usage", response_model=UsageMetricsModel)
-@require_feature(Feature.ADVANCED_ANALYTICS)
+@require_feature(Feature.ADVANCED_OPTIMIZATION)
 async def get_user_usage(current_user: str = Depends(get_current_user)):
     """
     Get usage metrics for the current user

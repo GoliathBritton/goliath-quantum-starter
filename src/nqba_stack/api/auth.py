@@ -19,12 +19,12 @@ from ..auth import (
     LoginResponse,
     PasswordChangeRequest,
 )
-from ..core.ltc_automation import LTCLogger
+from ..core.ltc_logger import LTCLogger
 
 # Initialize router and dependencies
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 security = HTTPBearer()
-logger = LTCLogger("auth_api")
+logger = LTCLogger()
 
 # Global auth manager instance
 auth_manager = AuthManager()

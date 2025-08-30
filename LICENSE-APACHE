@@ -61,10 +61,8 @@
       copyright license to use, reproduce, modify, merge, publish,
       distribute, sublicense, and/or sell copies of the Work, and to
       permit persons to whom the Work is furnished to do so, subject to
-      the following conditions:
-
-      The above copyright notice and this permission notice shall be
-      included in all copies or substantial portions of the Work.
+      the above copyright notice and this paragraph including the License
+      on all such copies and derivative works.
 
    3. Grant of Patent License. Subject to the terms and conditions of
       this License, each Contributor hereby grants to You a perpetual,
@@ -94,8 +92,8 @@
           stating that You changed the files; and
 
       (c) You must retain, in the Source form of any Derivative Works
-          that You distribute, all copyright, trademark, attribution,
-          and other notices from the Source form of the Work,
+          that You distribute, all copyright, trademark, patent,
+          and attribution notices from the Source form of the Work,
           excluding those notices that do not pertain to any part of
           the Derivative Works; and
 
@@ -178,7 +176,7 @@
       the brackets!)  The text should be enclosed in the appropriate
       comment syntax for the file format. We also recommend that a
       file or class name and description of purpose be included on the
-      same page as the copyright notice for easier identification within
+      same page as the copyright notice, for easier identification within
       third-party archives.
 
    Copyright [yyyy] [name of copyright owner]

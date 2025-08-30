@@ -1,12 +1,10 @@
-from branding import BRANDING
-
 """
 NQBA Stack Settings
 Centralized configuration management with secure credential handling
 """
 import os
 from pathlib import Path
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List
 from pydantic_settings import BaseSettings
 from pydantic import Field, field_validator
 from pydantic import ConfigDict
@@ -28,11 +26,11 @@ class NQBASettings(BaseSettings):
     debug: bool = Field(default=False, json_schema_extra={"env": "NQBA_DEBUG"})
     # Company Information
     company_name: str = Field(
-        default=f"{BRANDING['goliath']['name']} | {BRANDING['flyfox']['name']} | {BRANDING['sigma_select']['name']}",
+        default="Goliath of All Trade | FLYFOX AI | Sigma Select",
         json_schema_extra={"env": "NQBA_COMPANY_NAME"},
     )
     business_unit: str = Field(
-        default=f"{BRANDING['goliath']['name']} / {BRANDING['flyfox']['name']} / {BRANDING['sigma_select']['name']}",
+        default="Goliath of All Trade / FLYFOX AI / Sigma Select",
         json_schema_extra={"env": "NQBA_BUSINESS_UNIT"},
     )
     # API Credentials (SECURE - Never log or expose these)
@@ -100,6 +98,22 @@ class NQBASettings(BaseSettings):
     openai_api_key: Optional[str] = Field(
         default=None,
         json_schema_extra={"env": "OPENAI_API_KEY", "description": "OpenAI API key"},
+    )
+    # Security Keys
+    SECRET_KEY: str = Field(
+        default="your-secret-key-change-this-in-production",
+        json_schema_extra={"env": "SECRET_KEY", "description": "Secret key for JWT token signing"},
+    )
+    
+    # CORS Settings
+    ALLOWED_ORIGINS: List[str] = Field(
+        default=["http://localhost:3000", "http://localhost:8000", "https://nqba.com"],
+        json_schema_extra={"env": "ALLOWED_ORIGINS", "description": "Allowed CORS origins"},
+    )
+    
+    ALLOWED_HOSTS: List[str] = Field(
+        default=["localhost", "127.0.0.1", "nqba.com"],
+        json_schema_extra={"env": "ALLOWED_HOSTS", "description": "Allowed host headers"},
     )
     # Web3 Configuration
     web3_provider_url: Optional[str] = Field(

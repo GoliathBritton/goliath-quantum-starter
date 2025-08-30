@@ -23,10 +23,18 @@ from .qih import router as qih_router
 from ..business_integration import business_unit_manager
 from ..business_integration.flyfox_ai import FLYFOXAIBusinessUnit
 from ..core.settings import get_settings
-from ..core.ltc_automation import LTCLogger
+from ..core.ltc_logger import LTCLogger
+
+# Import observability components
+from ..observability import (
+    get_tracer,
+    instrument_fastapi,
+    TracingMiddleware,
+    NQBADashboard,
+)
 
 # Initialize logger
-logger = LTCLogger("nqba_api")
+logger = LTCLogger()
 
 
 @asynccontextmanager
@@ -36,6 +44,14 @@ async def lifespan(app: FastAPI):
     logger.info("🚀 Starting NQBA Stack API...")
 
     try:
+        # Initialize observability system
+        logger.info("🔍 Initializing observability system...")
+        tracer = get_tracer()
+        
+        # Instrument FastAPI with OpenTelemetry
+        instrument_fastapi(app, tracer)
+        logger.info("✅ OpenTelemetry instrumentation complete")
+
         # Initialize business unit manager
         await business_unit_manager.initialize()
         logger.info("✅ Business unit manager initialized")
@@ -97,6 +113,10 @@ app.add_middleware(
 
 # Add trusted host middleware
 app.add_middleware(TrustedHostMiddleware, allowed_hosts=settings.ALLOWED_HOSTS)
+
+# Add observability tracing middleware
+tracer = get_tracer()
+app.add_middleware(TracingMiddleware, tracer=tracer)
 
 
 # Request logging middleware
@@ -211,6 +231,123 @@ app.include_router(business_units_router, prefix="/api/v1")
 app.include_router(high_council_router, prefix="/api/v1")
 app.include_router(monitoring_router, prefix="/api/v1")
 app.include_router(qih_router, prefix="/api/v1")
+
+
+# Observability endpoints
+@app.get("/observability/metrics", tags=["Observability"])
+async def get_observability_metrics():
+    """Get observability metrics and system health"""
+    try:
+        from ..observability import MetricsCollector
+        
+        collector = MetricsCollector()
+        
+        return {
+            "status": "success",
+            "timestamp": time.time(),
+            "metrics": {
+                "system_health": collector.get_system_health(),
+                "performance": collector.get_performance_metrics(),
+                "business": collector.get_business_metrics(),
+                "quantum": collector.get_quantum_metrics(),
+                "workflows": collector.get_workflow_metrics(),
+            }
+        }
+    except Exception as e:
+        logger.error(f"Failed to collect observability metrics: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to collect metrics")
+
+
+@app.get("/observability/tracing", tags=["Observability"])
+async def get_tracing_status():
+    """Get OpenTelemetry tracing status and configuration"""
+    try:
+        tracer = get_tracer()
+        
+        return {
+            "status": "success",
+            "timestamp": time.time(),
+            "tracing": {
+                "enabled": tracer.config.enabled,
+                "service_name": tracer.config.service_name,
+                "service_version": tracer.config.service_version,
+                "environment": tracer.config.environment,
+                "tracer_available": tracer.tracer is not None,
+                "exporters": {
+                    "console": tracer.config.console_export,
+                    "jaeger": tracer.config.jaeger_endpoint is not None,
+                    "otlp": tracer.config.otlp_endpoint is not None,
+                }
+            }
+        }
+    except Exception as e:
+        logger.error(f"Failed to get tracing status: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to get tracing status")
+
+
+@app.get("/observability/dashboard", tags=["Observability"])
+async def get_dashboard_info():
+    """Get dashboard information and access details"""
+    try:
+        from ..observability import DashboardConfig
+        
+        config = DashboardConfig()
+        
+        return {
+            "status": "success",
+            "timestamp": time.time(),
+            "dashboard": {
+                "refresh_interval": config.refresh_interval,
+                "history_hours": config.history_hours,
+                "quantum_advantage_threshold": config.quantum_advantage_threshold,
+                "slo_targets": config.slo_targets,
+                "access": {
+                    "streamlit_command": "streamlit run src/nqba_stack/observability/dashboard.py",
+                    "default_port": 8501,
+                    "url": "http://localhost:8501"
+                }
+            }
+        }
+    except Exception as e:
+        logger.error(f"Failed to get dashboard info: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to get dashboard info")
+
+
+@app.get("/observability/incidents", tags=["Observability"])
+async def get_incident_info():
+    """Get incident response information and runbooks"""
+    try:
+        return {
+            "status": "success",
+            "timestamp": time.time(),
+            "incident_response": {
+                "severity_levels": [
+                    "P0 (Critical): Complete system outage, data loss, security breach",
+                    "P1 (High): Major functionality degraded, significant performance impact",
+                    "P2 (Medium): Minor functionality issues, moderate performance impact",
+                    "P3 (Low): Cosmetic issues, minor performance degradation"
+                ],
+                "supported_incidents": [
+                    "Dynex Outage",
+                    "IPFS Pin Failures", 
+                    "Quota Exhaustion",
+                    "Delayed Jobs",
+                    "Billing Drift",
+                    "API Rate Limit Exceeded",
+                    "Authentication Failures",
+                    "Quantum Job Failures"
+                ],
+                "documentation": "/docs/runbooks.md",
+                "contact": {
+                    "slack": "#nqba-incidents",
+                    "email": "incidents@flyfoxai.io",
+                    "status_page": "[Status Page URL]"
+                }
+            }
+        }
+    except Exception as e:
+        logger.error(f"Failed to get incident info: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to get incident info")
 
 
 # Startup event

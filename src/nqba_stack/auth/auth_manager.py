@@ -23,7 +23,7 @@ from .models import (
 from .password_manager import PasswordManager
 from .jwt_handler import JWTHandler
 from .rbac import RoleBasedAccessControl
-from ..core.ltc_automation import LTCLogger
+from ..core.ltc_logger import LTCLogger
 
 
 class AuthManager:
@@ -35,7 +35,7 @@ class AuthManager:
         self.password_manager = PasswordManager()
         self.jwt_handler = JWTHandler()
         self.rbac = RoleBasedAccessControl()
-        self.logger = LTCLogger("auth_manager")
+        self.logger = LTCLogger()
 
         # Initialize with founder account
         self._initialize_founder_account()
@@ -44,27 +44,37 @@ class AuthManager:
         """Initialize the founder account with absolute control"""
         founder_role = self.rbac.get_role_by_name("Founder")
         if not founder_role:
-            self.logger.error("Founder role not found during initialization")
+            self.logger.log_operation(
+                operation_type="founder_role_not_found",
+                operation_data={"error": "Founder role not found during initialization"},
+                thread_ref="auth_manager_init",
+                metadata={"status": "error"}
+            )
             return
 
-        # Create founder user (you)
+        # Hash password first
+        password_hash, salt = self.password_manager.hash_password("Founder@2024!")
+
+        # Create founder user (you) with all required fields
         founder_user = User(
             username="founder",
             email="founder@nqba.com",
             first_name="Founder",
             last_name="NQBA",
+            password_hash=password_hash,
+            salt=salt,
             roles=[founder_role.id],
             status=UserStatus.ACTIVE,
             is_verified=True,
         )
 
-        # Set founder password (you'll change this)
-        password_hash, salt = self.password_manager.hash_password("Founder@2024!")
-        founder_user.password_hash = password_hash
-        founder_user.salt = salt
-
         self.users[founder_user.id] = founder_user
-        self.logger.info(f"Founder account initialized: {founder_user.username}")
+        self.logger.log_operation(
+            operation_type="founder_account_initialized",
+            operation_data={"username": founder_user.username, "user_id": founder_user.id},
+            thread_ref="auth_manager_init",
+            metadata={"status": "success"}
+        )
 
     def create_user(
         self, user_data: UserCreate, creator_roles: List[str]
@@ -119,8 +129,11 @@ class AuthManager:
                 return False, f"Invalid role ID: {role_id}", None
 
         self.users[user.id] = user
-        self.logger.info(
-            f"User created: {user.username} by user with roles: {creator_roles}"
+        self.logger.log_operation(
+            operation_type="user_created",
+            operation_data={"username": user.username, "creator_roles": creator_roles},
+            thread_ref="auth_manager",
+            metadata={"status": "success"}
         )
 
         return True, "User created successfully", user
@@ -171,7 +184,12 @@ class AuthManager:
             if user.login_attempts >= 5:
                 user.status = UserStatus.LOCKED
                 user.locked_until = datetime.utcnow() + timedelta(minutes=30)
-                self.logger.warning(f"Account locked for user: {user.username}")
+                self.logger.log_operation(
+                    operation_type="account_locked",
+                    operation_data={"username": user.username, "lockout_duration": "30 minutes"},
+                    thread_ref="auth_manager",
+                    metadata={"status": "warning"}
+                )
                 return (
                     False,
                     "Account locked due to multiple failed login attempts",
@@ -208,7 +226,12 @@ class AuthManager:
             user=user,
         )
 
-        self.logger.info(f"User authenticated successfully: {user.username}")
+        self.logger.log_operation(
+            operation_type="user_authenticated",
+            operation_data={"username": user.username},
+            thread_ref="auth_manager",
+            metadata={"status": "success"}
+        )
         return True, "Authentication successful", response
 
     def refresh_token(
@@ -330,8 +353,11 @@ class AuthManager:
 
         user.updated_at = datetime.utcnow()
 
-        self.logger.info(
-            f"User updated: {user.username} by user with roles: {updater_roles}"
+        self.logger.log_operation(
+            operation_type="user_updated",
+            operation_data={"username": user.username, "updater_roles": updater_roles},
+            thread_ref="auth_manager",
+            metadata={"status": "success"}
         )
         return True, "User updated successfully"
 
@@ -375,8 +401,11 @@ class AuthManager:
         for s_id in sessions_to_remove:
             del self.sessions[s_id]
 
-        self.logger.info(
-            f"User deleted: {user.username} by user with roles: {deleter_roles}"
+        self.logger.log_operation(
+            operation_type="user_deleted",
+            operation_data={"username": user.username, "deleter_roles": deleter_roles},
+            thread_ref="auth_manager",
+            metadata={"status": "success"}
         )
         return True, "User deleted successfully"
 
@@ -446,7 +475,12 @@ class AuthManager:
         for s_id in sessions_to_remove:
             del self.sessions[s_id]
 
-        self.logger.info(f"User logged out: {user_id}")
+        self.logger.log_operation(
+            operation_type="user_logged_out",
+            operation_data={"user_id": user_id},
+            thread_ref="auth_manager",
+            metadata={"status": "success"}
+        )
         return True, "Logout successful"
 
     def get_system_status(self) -> Dict[str, Any]:
