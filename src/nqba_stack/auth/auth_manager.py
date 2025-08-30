@@ -46,9 +46,11 @@ class AuthManager:
         if not founder_role:
             self.logger.log_operation(
                 operation_type="founder_role_not_found",
-                operation_data={"error": "Founder role not found during initialization"},
+                operation_data={
+                    "error": "Founder role not found during initialization"
+                },
                 thread_ref="auth_manager_init",
-                metadata={"status": "error"}
+                metadata={"status": "error"},
             )
             return
 
@@ -71,9 +73,12 @@ class AuthManager:
         self.users[founder_user.id] = founder_user
         self.logger.log_operation(
             operation_type="founder_account_initialized",
-            operation_data={"username": founder_user.username, "user_id": founder_user.id},
+            operation_data={
+                "username": founder_user.username,
+                "user_id": founder_user.id,
+            },
             thread_ref="auth_manager_init",
-            metadata={"status": "success"}
+            metadata={"status": "success"},
         )
 
     def create_user(
@@ -133,7 +138,7 @@ class AuthManager:
             operation_type="user_created",
             operation_data={"username": user.username, "creator_roles": creator_roles},
             thread_ref="auth_manager",
-            metadata={"status": "success"}
+            metadata={"status": "success"},
         )
 
         return True, "User created successfully", user
@@ -186,9 +191,12 @@ class AuthManager:
                 user.locked_until = datetime.utcnow() + timedelta(minutes=30)
                 self.logger.log_operation(
                     operation_type="account_locked",
-                    operation_data={"username": user.username, "lockout_duration": "30 minutes"},
+                    operation_data={
+                        "username": user.username,
+                        "lockout_duration": "30 minutes",
+                    },
                     thread_ref="auth_manager",
-                    metadata={"status": "warning"}
+                    metadata={"status": "warning"},
                 )
                 return (
                     False,
@@ -230,7 +238,7 @@ class AuthManager:
             operation_type="user_authenticated",
             operation_data={"username": user.username},
             thread_ref="auth_manager",
-            metadata={"status": "success"}
+            metadata={"status": "success"},
         )
         return True, "Authentication successful", response
 
@@ -357,7 +365,7 @@ class AuthManager:
             operation_type="user_updated",
             operation_data={"username": user.username, "updater_roles": updater_roles},
             thread_ref="auth_manager",
-            metadata={"status": "success"}
+            metadata={"status": "success"},
         )
         return True, "User updated successfully"
 
@@ -405,7 +413,7 @@ class AuthManager:
             operation_type="user_deleted",
             operation_data={"username": user.username, "deleter_roles": deleter_roles},
             thread_ref="auth_manager",
-            metadata={"status": "success"}
+            metadata={"status": "success"},
         )
         return True, "User deleted successfully"
 
@@ -479,7 +487,7 @@ class AuthManager:
             operation_type="user_logged_out",
             operation_data={"user_id": user_id},
             thread_ref="auth_manager",
-            metadata={"status": "success"}
+            metadata={"status": "success"},
         )
         return True, "Logout successful"
 

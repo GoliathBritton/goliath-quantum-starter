@@ -47,7 +47,7 @@ async def lifespan(app: FastAPI):
         # Initialize observability system
         logger.info("🔍 Initializing observability system...")
         tracer = get_tracer()
-        
+
         # Instrument FastAPI with OpenTelemetry
         instrument_fastapi(app, tracer)
         logger.info("✅ OpenTelemetry instrumentation complete")
@@ -239,9 +239,9 @@ async def get_observability_metrics():
     """Get observability metrics and system health"""
     try:
         from ..observability import MetricsCollector
-        
+
         collector = MetricsCollector()
-        
+
         return {
             "status": "success",
             "timestamp": time.time(),
@@ -251,7 +251,7 @@ async def get_observability_metrics():
                 "business": collector.get_business_metrics(),
                 "quantum": collector.get_quantum_metrics(),
                 "workflows": collector.get_workflow_metrics(),
-            }
+            },
         }
     except Exception as e:
         logger.error(f"Failed to collect observability metrics: {str(e)}")
@@ -263,7 +263,7 @@ async def get_tracing_status():
     """Get OpenTelemetry tracing status and configuration"""
     try:
         tracer = get_tracer()
-        
+
         return {
             "status": "success",
             "timestamp": time.time(),
@@ -277,8 +277,8 @@ async def get_tracing_status():
                     "console": tracer.config.console_export,
                     "jaeger": tracer.config.jaeger_endpoint is not None,
                     "otlp": tracer.config.otlp_endpoint is not None,
-                }
-            }
+                },
+            },
         }
     except Exception as e:
         logger.error(f"Failed to get tracing status: {str(e)}")
@@ -290,9 +290,9 @@ async def get_dashboard_info():
     """Get dashboard information and access details"""
     try:
         from ..observability import DashboardConfig
-        
+
         config = DashboardConfig()
-        
+
         return {
             "status": "success",
             "timestamp": time.time(),
@@ -304,9 +304,9 @@ async def get_dashboard_info():
                 "access": {
                     "streamlit_command": "streamlit run src/nqba_stack/observability/dashboard.py",
                     "default_port": 8501,
-                    "url": "http://localhost:8501"
-                }
-            }
+                    "url": "http://localhost:8501",
+                },
+            },
         }
     except Exception as e:
         logger.error(f"Failed to get dashboard info: {str(e)}")
@@ -325,25 +325,25 @@ async def get_incident_info():
                     "P0 (Critical): Complete system outage, data loss, security breach",
                     "P1 (High): Major functionality degraded, significant performance impact",
                     "P2 (Medium): Minor functionality issues, moderate performance impact",
-                    "P3 (Low): Cosmetic issues, minor performance degradation"
+                    "P3 (Low): Cosmetic issues, minor performance degradation",
                 ],
                 "supported_incidents": [
                     "Dynex Outage",
-                    "IPFS Pin Failures", 
+                    "IPFS Pin Failures",
                     "Quota Exhaustion",
                     "Delayed Jobs",
                     "Billing Drift",
                     "API Rate Limit Exceeded",
                     "Authentication Failures",
-                    "Quantum Job Failures"
+                    "Quantum Job Failures",
                 ],
                 "documentation": "/docs/runbooks.md",
                 "contact": {
                     "slack": "#nqba-incidents",
                     "email": "incidents@flyfoxai.io",
-                    "status_page": "[Status Page URL]"
-                }
-            }
+                    "status_page": "[Status Page URL]",
+                },
+            },
         }
     except Exception as e:
         logger.error(f"Failed to get incident info: {str(e)}")

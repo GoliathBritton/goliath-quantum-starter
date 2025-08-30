@@ -7,8 +7,15 @@ for the NQBA ecosystem with absolute control for the founding team.
 """
 
 from .models import (
-    User, Role, Permission, UserSession,
-    UserCreate, UserUpdate, LoginRequest, LoginResponse, PasswordChangeRequest
+    User,
+    Role,
+    Permission,
+    UserSession,
+    UserCreate,
+    UserUpdate,
+    LoginRequest,
+    LoginResponse,
+    PasswordChangeRequest,
 )
 from .auth_manager import AuthManager
 from .rbac import RoleBasedAccessControl
@@ -17,7 +24,7 @@ from .password_manager import PasswordManager
 
 __all__ = [
     "User",
-    "Role", 
+    "Role",
     "Permission",
     "UserSession",
     "UserCreate",
