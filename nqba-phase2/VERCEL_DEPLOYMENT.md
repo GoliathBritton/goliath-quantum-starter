@@ -35,12 +35,12 @@ NEXT_PUBLIC_API_BASE=https://api.flyfoxai.io
 
 In Vercel dashboard:
 1. Go to Domains
-2. Add: `portal.flyfoxai.io`
+2. Add: `portal.goliathomniedge.com`
 3. Update DNS records as shown
 
 ## 📍 Live URLs
 
-**Frontend**: https://nqba-phase2-web.vercel.app
+**Frontend**: https://portal.goliathomniedge.com
 **API**: Deploy separately to Render/Railway/Fly
 
 ## 🔗 Next Steps

@@ -8,7 +8,7 @@
     }
   ],
   "env": {
-    "NEXT_PUBLIC_API_BASE": "https://api.flyfoxai.io"
+    "NEXT_PUBLIC_API_BASE": "https://api.goliathomniedge.com"
   },
   "functions": {
     "app/**/*.tsx": {
