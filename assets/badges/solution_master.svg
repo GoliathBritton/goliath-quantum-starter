@@ -1,0 +1,30 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="60" cy="60" r="55" fill="#9C27B0" stroke="#7B1FA2" stroke-width="2"/>
+  
+  <!-- Inner Circle -->
+  <circle cx="60" cy="60" r="45" fill="#BA68C8" stroke="#9C27B0" stroke-width="1"/>
+  
+  <!-- Lightbulb -->
+  <g transform="translate(60, 60)">
+    <!-- Bulb -->
+    <circle cx="0" cy="-5" r="12" fill="#FFD700" stroke="#FFA500" stroke-width="1"/>
+    <!-- Base -->
+    <rect x="-4" y="7" width="8" height="6" fill="#FFA500" stroke="#FF8C00" stroke-width="1"/>
+    <!-- Filament -->
+    <path d="M-8,-5 L8,-5 M-5,-8 L5,-8 M-2,-11 L2,-11" fill="none" stroke="#FF8C00" stroke-width="1"/>
+  </g>
+  
+  <!-- Text -->
+  <text x="60" y="85" text-anchor="middle" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="9" font-weight="bold">SOLUTION</text>
+  <text x="60" y="98" text-anchor="middle" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="9" font-weight="bold">MASTER</text>
+  
+  <!-- Decorative Elements -->
+  <circle cx="60" cy="60" r="35" fill="none" stroke="#FFFFFF" stroke-width="1" opacity="0.3"/>
+  
+  <!-- Code Elements -->
+  <g transform="translate(60, 45)">
+    <rect x="-12" y="-8" width="24" height="16" fill="none" stroke="#FFFFFF" stroke-width="1" opacity="0.5"/>
+    <text x="0" y="0" text-anchor="middle" fill="#FFFFFF" font-family="monospace" font-size="8" opacity="0.7">{}</text>
+  </g>
+</svg>

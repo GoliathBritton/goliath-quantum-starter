@@ -1,0 +1,5 @@
+# LTC Log File: ltc_20250827_192906.jsonl
+# Created: 2025-08-27T19:29:06.516413
+# Format: JSON Lines
+
+{"entry_id": "8f7f2610-e3ef-4e74-9fae-dc6300736e16", "timestamp": "2025-08-28T00:29:08.174761+00:00", "operation_type": "target_registration", "component": "ghost_neuroq_pod", "user_id": null, "session_id": null, "thread_id": "38908", "input_data": {"name": "CompetitorCorp", "organization": "CompetitorCorp Inc", "industry": "technology", "risk_level": 0.7, "data_sources": ["public_filings", "social_media", "industry_reports"], "dependencies": ["supply_chain", "market_share"], "market_position": 0.8, "financial_strength": 0.75, "competitive_position": 0.7, "dependency_level": 0.6, "vulnerability_level": 0.5}, "execution_context": null, "result_data": {"target_id": "target_1", "risk_assessment": "medium"}, "performance_metrics": {"quantum_optimized": true}, "error_data": null, "metadata": null, "hash": "3bc45bd61034c6c421edf4722c2425cb88bc26387ddbd8220e9bb5ed1e5b93a8", "parent_entry_id": null, "child_entry_ids": []}

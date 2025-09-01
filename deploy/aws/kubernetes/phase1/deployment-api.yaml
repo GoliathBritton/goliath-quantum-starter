@@ -1,0 +1,113 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: partner-api
+  namespace: partner-system
+  labels:
+    app: partner-api
+    component: backend
+    phase: phase1
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: partner-api
+  template:
+    metadata:
+      labels:
+        app: partner-api
+        component: backend
+        phase: phase1
+    spec:
+      containers:
+      - name: partner-api
+        image: goliath-partner-api:latest
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: ENVIRONMENT
+          valueFrom:
+            configMapKeyRef:
+              name: partner-system-config
+              key: ENVIRONMENT
+        - name: API_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: partner-system-config
+              key: API_HOST
+        - name: API_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: partner-system-config
+              key: API_PORT
+        - name: DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: partner-system-config
+              key: DATABASE_URL
+        - name: REDIS_URL
+          valueFrom:
+            configMapKeyRef:
+              name: partner-system-config
+              key: REDIS_URL
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: partner-system-config
+              key: LOG_LEVEL
+        - name: DEBUG
+          valueFrom:
+            configMapKeyRef:
+              name: partner-system-config
+              key: DEBUG
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: partner-system-secrets
+              key: db-password
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: partner-system-secrets
+              key: jwt-secret
+        - name: STRIPE_PUBLISHABLE_KEY
+          valueFrom:
+            secretKeyRef:
+              name: partner-system-secrets
+              key: stripe-publishable-key
+        - name: STRIPE_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: partner-system-secrets
+              key: stripe-secret-key
+        - name: SENTRY_DSN
+          valueFrom:
+            secretKeyRef:
+              name: partner-system-secrets
+              key: sentry-dsn
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+          runAsUser: 1000
+      securityContext:
+        fsGroup: 1000

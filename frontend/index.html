@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FLYFOX AI - The Intelligence Economy | NQBA Stack</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .hero-bg {
+            background: linear-gradient(135deg, #1a1a1a, #4b0082);
+        }
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .flywheel {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            margin: 0 auto;
+        }
+        .segment {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 50%);
+            background-color: #ff4500;
+            text-align: center;
+            padding-top: 20%;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        .segment:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+            z-index: 10;
+        }
+        .segment:nth-child(1) { transform: translate(-50%, -50%) rotate(0deg); }
+        .segment:nth-child(2) { transform: translate(-50%, -50%) rotate(60deg); }
+        .segment:nth-child(3) { transform: translate(-50%, -50%) rotate(120deg); }
+        .segment:nth-child(4) { transform: translate(-50%, -50%) rotate(180deg); }
+        .segment:nth-child(5) { transform: translate(-50%, -50%) rotate(240deg); }
+        .segment:nth-child(6) { transform: translate(-50%, -50%) rotate(300deg); }
+        
+        .quantum-badge {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .demo-container {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .status-badge {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .status-active { background-color: #10b981; }
+        .status-warning { background-color: #f59e0b; }
+        .status-error { background-color: #ef4444; }
+    </style>
+</head>
+<body class="font-sans text-gray-800 bg-gray-50">
+    <!-- Quantum Badge (Only Once - Per Branding Rule) -->
+    <div class="quantum-badge">
+        ⚛️ Quantum Powered by Dynex
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-bg text-white py-20 text-center">
+        <div class="max-w-6xl mx-auto px-4">
+            <h1 class="text-5xl font-bold mb-4">The World's First Quantum-Powered Intelligence Economy</h1>
+            <p class="text-2xl mb-6">FLYFOX AI and the Goliath family of companies are uniting quantum AI, blockchain, finance, energy, insurance, and education into one adaptive platform. Built for enterprises, designed for people.</p>
+            
+            <!-- Live Status Badge -->
+            <div class="mb-6">
+                <span class="status-badge status-active"></span>
+                <span class="text-green-400 font-semibold">NQBA Stack Operational</span>
+            </div>
+            
+            <div class="flex justify-center gap-4 flex-wrap">
+                <button onclick="openDemo('energy')" class="bg-orange-600 text-white py-3 px-6 rounded-md hover:bg-orange-700 transition-colors">
+                    🚀 See Live Demo
+                </button>
+                <button onclick="openDemo('capital')" class="bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 transition-colors">
+                    📞 Book a Discovery Call
+                </button>
+                <button onclick="openDemo('investor')" class="bg-purple-600 text-white py-3 px-6 rounded-md hover:bg-purple-700 transition-colors">
+                    💼 Investor Portal
+                </button>
+            </div>
+            
+            <!-- Company Logos -->
+            <div class="flex justify-center gap-8 mt-8 flex-wrap">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-orange-600 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-2">F</div>
+                    <span class="text-sm">FLYFOX AI</span>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-2">G</div>
+                    <span class="text-sm">Goliath Capital</span>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-2">E</div>
+                    <span class="text-sm">Goliath Energy</span>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-2">S</div>
+                    <span class="text-sm">SFG Insurance</span>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-2">Σ</div>
+                    <span class="text-sm">Sigma Select</span>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-teal-600 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-2">E</div>
+                    <span class="text-sm">EduVerse AI</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Intelligence Economy Flywheel -->
+    <section class="py-16 text-center bg-white">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-8">A Self-Sustaining Intelligence Economy</h2>
+            <p class="text-lg mb-6">Every solution strengthens the next. Together, they create a living economy that grows with every client, every transaction, every decision.</p>
+            
+            <div class="flywheel">
+                <button onclick="openDemo('sigma')" class="segment bg-blue-600 hover:bg-blue-700">
+                    Train Leaders<br>Sigma Select
+                </button>
+                <button onclick="openDemo('capital')" class="segment bg-green-600 hover:bg-green-700">
+                    Fund Growth<br>Goliath Capital
+                </button>
+                <button onclick="openDemo('energy')" class="segment bg-purple-600 hover:bg-purple-700">
+                    Optimize Costs<br>Goliath Energy
+                </button>
+                <button onclick="openDemo('insurance')" class="segment bg-red-600 hover:bg-red-700">
+                    Protect Wealth<br>SFG Insurance
+                </button>
+                <button onclick="openDemo('ai')" class="segment bg-orange-600 hover:bg-orange-700">
+                    Automate Intelligence<br>FLYFOX AI
+                </button>
+                <button onclick="openDemo('eduverse')" class="segment bg-teal-600 hover:bg-teal-700">
+                    Educate Everyone<br>EduVerse AI
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Demo Showcase -->
+    <section class="py-16 bg-gray-100">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-8 text-center">Experience the Future, Now</h2>
+            <p class="text-lg mb-8 text-center">Don't just read about it—see it in action. From AI lead scoring to energy optimization, to quantum portfolio analysis, our live demos prove that the Intelligence Economy is already here.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="demo-container">
+                    <h3 class="text-xl font-bold mb-4 text-white">Energy Optimization Demo</h3>
+                    <p class="text-gray-300 mb-4">Upload your energy usage data and see quantum-powered cost savings in real-time.</p>
+                    <button onclick="openDemo('energy')" class="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 w-full">
+                        Launch Energy Demo
+                    </button>
+                </div>
+                
+                <div class="demo-container">
+                    <h3 class="text-xl font-bold mb-4 text-white">Capital Funding Demo</h3>
+                    <p class="text-gray-300 mb-4">Experience our AI-powered funding assessment and approval process.</p>
+                    <button onclick="openDemo('capital')" class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 w-full">
+                        Launch Capital Demo
+                    </button>
+                </div>
+                
+                <div class="demo-container">
+                    <h3 class="text-xl font-bold mb-4 text-white">Insurance Risk Demo</h3>
+                    <p class="text-gray-300 mb-4">See how quantum algorithms assess and price risk in real-time.</p>
+                    <button onclick="openDemo('insurance')" class="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 w-full">
+                        Launch Insurance Demo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Investor & Partner Section -->
+    <section class="py-16 bg-white">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-8">Invest in the Future of Intelligence</h2>
+            <p class="text-lg mb-6">The Intelligence Economy is more than a platform—it's a self-sustaining ecosystem. Each business pod fuels the others, creating compounding value for clients and investors alike.</p>
+            
+            <div class="flex justify-center gap-8 mb-8 flex-wrap">
+                <div class="text-center">
+                    <div class="w-32 h-32 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-2xl mb-2">D</div>
+                    <span class="text-sm">Dynex</span>
+                </div>
+                <div class="text-center">
+                    <div class="w-32 h-32 bg-gradient-to-br from-green-600 to-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-2xl mb-2">S</div>
+                    <span class="text-sm">SFG</span>
+                </div>
+                <div class="text-center">
+                    <div class="w-32 h-32 bg-gradient-to-br from-orange-600 to-red-600 rounded-lg flex items-center justify-center text-white font-bold text-2xl mb-2">G</div>
+                    <span class="text-sm">Goliath</span>
+                </div>
+            </div>
+            
+            <button onclick="openDemo('investor')" class="bg-orange-600 text-white py-3 px-6 rounded-md hover:bg-orange-700 text-lg">
+                🚀 Access Investor Portal
+            </button>
+        </div>
+    </section>
+
+    <!-- About / Contact Section -->
+    <section class="py-16 bg-gray-100">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-8">Built for a Smarter, More Connected World</h2>
+            <p class="text-lg mb-6">Founded by John Britton, FLYFOX AI and the Goliath family of companies are on a mission to create a future where AI, quantum computing, and blockchain converge to power a self-sustaining economy.</p>
+            
+            <div class="flex justify-center gap-4 flex-wrap">
+                <button onclick="openDemo('contact')" class="bg-orange-600 text-white py-3 px-6 rounded-md hover:bg-orange-700">
+                    📞 Schedule a Discovery Call
+                </button>
+                <a href="mailto:hello@flyfoxai.io" class="bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700">
+                    📧 hello@flyfoxai.io
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Modal -->
+    <div id="demoModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg max-w-4xl w-full max-h-screen overflow-y-auto">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 id="demoTitle" class="text-2xl font-bold">Demo</h3>
+                        <button onclick="closeDemo()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+                    </div>
+                    <div id="demoContent" class="space-y-4">
+                        <!-- Demo content will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Demo Management
+        function openDemo(type) {
+            const modal = document.getElementById('demoModal');
+            const title = document.getElementById('demoTitle');
+            const content = document.getElementById('demoContent');
+            
+            modal.classList.remove('hidden');
+            
+            switch(type) {
+                case 'energy':
+                    title.textContent = 'Energy Optimization Demo';
+                    content.innerHTML = `
+                        <div class="space-y-4">
+                            <p class="text-gray-600">Upload your energy usage data and see quantum-powered cost savings in real-time.</p>
+                            
+                            <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                                <input type="file" id="energyFile" accept=".csv" class="hidden" />
+                                <label for="energyFile" class="cursor-pointer">
+                                    <div class="text-4xl mb-2">📁</div>
+                                    <div class="text-gray-600">Click to upload energy usage CSV</div>
+                                    <div class="text-sm text-gray-400 mt-2">or drag and drop</div>
+                                </label>
+                            </div>
+                            
+                            <button onclick="runEnergyDemo()" class="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 w-full">
+                                🚀 Run Quantum Optimization
+                            </button>
+                            
+                            <div id="energyResults" class="hidden">
+                                <h4 class="font-bold text-lg mb-2">Optimization Results</h4>
+                                <div class="bg-gray-100 p-4 rounded">
+                                    <div class="grid grid-cols-2 gap-4 text-sm">
+                                        <div>Current Cost: <span class="font-bold">$12,450/month</span></div>
+                                        <div>Optimized Cost: <span class="font-bold text-green-600">$9,870/month</span></div>
+                                        <div>Savings: <span class="font-bold text-green-600">$2,580/month</span></div>
+                                        <div>ROI: <span class="font-bold text-green-600">20.7%</span></div>
+                                    </div>
+                                </div>
+                                <canvas id="energyChart" class="mt-4"></canvas>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'capital':
+                    title.textContent = 'Capital Funding Demo';
+                    content.innerHTML = `
+                        <div class="space-y-4">
+                            <p class="text-gray-600">Experience our AI-powered funding assessment and approval process.</p>
+                            
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Company Name</label>
+                                    <input type="text" id="companyName" class="w-full border border-gray-300 rounded-md px-3 py-2" placeholder="Enter company name" />
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Funding Request</label>
+                                    <input type="number" id="fundingAmount" class="w-full border border-gray-300 rounded-md px-3 py-2" placeholder="Amount in USD" />
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Business Type</label>
+                                    <select id="businessType" class="w-full border border-gray-300 rounded-md px-3 py-2">
+                                        <option>Technology</option>
+                                        <option>Manufacturing</option>
+                                        <option>Services</option>
+                                        <option>Healthcare</option>
+                                        <option>Energy</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <button onclick="runCapitalDemo()" class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 w-full">
+                                🚀 Assess Funding Eligibility
+                            </button>
+                            
+                            <div id="capitalResults" class="hidden">
+                                <h4 class="font-bold text-lg mb-2">AI Assessment Results</h4>
+                                <div class="bg-gray-100 p-4 rounded">
+                                    <div class="space-y-2 text-sm">
+                                        <div>Risk Score: <span class="font-bold text-green-600">Low (23/100)</span></div>
+                                        <div>Approval Probability: <span class="font-bold text-green-600">94%</span></div>
+                                        <div>Recommended Amount: <span class="font-bold text-green-600">$1,200,000</span></div>
+                                        <div>Processing Time: <span class="font-bold text-green-600">24-48 hours</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'investor':
+                    title.textContent = 'Investor Portal';
+                    content.innerHTML = `
+                        <div class="space-y-4">
+                            <p class="text-gray-600">Access comprehensive investor information and live metrics.</p>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-blue-50 p-4 rounded-lg">
+                                    <h4 class="font-bold text-blue-800">ARR Growth</h4>
+                                    <div class="text-2xl font-bold text-blue-600">$47.2M</div>
+                                    <div class="text-sm text-blue-600">+127% YoY</div>
+                                </div>
+                                <div class="bg-green-50 p-4 rounded-lg">
+                                    <h4 class="font-bold text-green-800">Customer Count</h4>
+                                    <div class="text-2xl font-bold text-green-600">1,247</div>
+                                    <div class="text-sm text-green-600">+89% YoY</div>
+                                </div>
+                                <div class="bg-purple-50 p-4 rounded-lg">
+                                    <h4 class="font-bold text-purple-800">Quantum Advantage</h4>
+                                    <div class="text-2xl font-bold text-purple-600">23.4x</div>
+                                    <div class="text-sm text-purple-600">vs Classical</div>
+                                </div>
+                                <div class="bg-orange-50 p-4 rounded-lg">
+                                    <h4 class="font-bold text-orange-800">Market Cap</h4>
+                                    <div class="text-2xl font-bold text-orange-600">$2.1B</div>
+                                    <div class="text-sm text-orange-600">Projected</div>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-2">
+                                <h4 class="font-bold">Recent Milestones</h4>
+                                <ul class="text-sm text-gray-600 space-y-1">
+                                    <li>✅ Dynex Partnership - Quantum Computing Access</li>
+                                    <li>✅ SFG Insurance Integration - Risk Assessment</li>
+                                    <li>✅ Sigma Select - Sales Training Platform</li>
+                                    <li>✅ Goliath Energy - Cost Optimization</li>
+                                    <li>🚀 FLYFOX AI - Core Platform Launch</li>
+                                </ul>
+                            </div>
+                            
+                            <button onclick="window.open('mailto:investor@flyfoxai.io')" class="bg-orange-600 text-white py-2 px-4 rounded hover:bg-orange-700 w-full">
+                                📧 Contact Investor Relations
+                            </button>
+                        </div>
+                    `;
+                    break;
+                    
+                default:
+                    title.textContent = 'Demo';
+                    content.innerHTML = '<p>Demo content coming soon...</p>';
+            }
+        }
+        
+        function closeDemo() {
+            document.getElementById('demoModal').classList.add('hidden');
+        }
+        
+        // Demo Functions
+        function runEnergyDemo() {
+            const results = document.getElementById('energyResults');
+            results.classList.remove('hidden');
+            
+            // Simulate API call
+            setTimeout(() => {
+                // Create chart
+                const ctx = document.getElementById('energyChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                        datasets: [{
+                            label: 'Current Cost',
+                            data: [12450, 12800, 13100, 12900, 13200, 12450],
+                            borderColor: 'rgb(239, 68, 68)',
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)'
+                        }, {
+                            label: 'Optimized Cost',
+                            data: [9870, 10100, 10300, 10200, 10400, 9870],
+                            borderColor: 'rgb(34, 197, 94)',
+                            backgroundColor: 'rgba(34, 197, 94, 0.1)'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Monthly Energy Cost Comparison'
+                            }
+                        }
+                    }
+                });
+            }, 1000);
+        }
+        
+        function runCapitalDemo() {
+            const results = document.getElementById('capitalResults');
+            results.classList.remove('hidden');
+        }
+        
+        // Close modal when clicking outside
+        document.getElementById('demoModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeDemo();
+            }
+        });
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('FLYFOX AI - Intelligence Economy Platform Loaded');
+        });
+    </script>
+</body>
+</html>

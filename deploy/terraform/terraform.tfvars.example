@@ -1,0 +1,41 @@
+# NQBA Ecosystem Terraform Variables Example
+# Copy this file to terraform.tfvars and update with your values
+
+# AWS Configuration
+aws_region = "us-east-1"
+environment = "production"
+
+# VPC Configuration
+vpc_cidr = "10.0.0.0/16"
+availability_zones = ["us-east-1a", "us-east-1b", "us-east-1c"]
+private_subnet_cidrs = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+public_subnet_cidrs = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+
+# EKS Configuration
+eks_cluster_version = "1.28"
+
+# RDS Configuration
+rds_instance_class = "db.t3.micro"
+rds_allocated_storage = 20
+rds_max_allocated_storage = 100
+backup_retention_period = 7
+
+# Redis Configuration
+redis_node_type = "cache.t3.micro"
+redis_num_cache_nodes = 1
+
+# Monitoring
+enable_monitoring = true
+enable_logging = true
+
+# Security
+deletion_protection = true
+
+# Tags
+tags = {
+  Project     = "NQBA-Ecosystem"
+  ManagedBy   = "Terraform"
+  CostCenter  = "Engineering"
+  Owner       = "YourTeam"
+  Environment = "Production"
+}

@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FLYFOX AI - Quantum AI Agent Factory</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=ARbHoAvcE25ruW5AoK414FTnkW_ufJWWiPwPgHyyU7ypOyDLIRKvNpoaEOGyV4j8U6Wxvtk-3OjA-LxK&currency=USD"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .quantum-glow {
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+        }
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .payment-loading {
+            display: none;
+        }
+        .payment-loading.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-2xl font-bold text-indigo-600">FLYFOX AI</h1>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="#dashboard" class="text-gray-700 hover:text-indigo-600">Dashboard</a>
+                    <a href="#marketplace" class="text-gray-700 hover:text-indigo-600">Marketplace</a>
+                    <a href="#academy" class="text-gray-700 hover:text-indigo-600">Academy</a>
+                    <button id="loginBtn" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">
+                        Login
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg text-white py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-5xl font-bold mb-6">Quantum AI Agent Factory</h1>
+            <p class="text-xl mb-8">Deploy intelligent agents that learn, adapt, and optimize your business processes</p>
+            <div class="flex justify-center space-x-4">
+                <button id="startTrialBtn" class="bg-white text-indigo-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100">
+                    Start Free Trial
+                </button>
+                <button class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-indigo-600">
+                    View Demo
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Agent Types Grid -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-12">Our Quantum AI Agent Portfolio</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Digital Agents -->
+                <div class="bg-gray-50 p-6 rounded-lg text-center hover:shadow-lg transition-shadow">
+                    <i class="fas fa-robot text-4xl text-indigo-600 mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">Digital Agents</h3>
+                    <p class="text-gray-600 mb-4">Autonomous business process automation</p>
+                    <button class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
+                        Learn More
+                    </button>
+                </div>
+
+                <!-- AI Voice Calling -->
+                <div class="bg-gray-50 p-6 rounded-lg text-center hover:shadow-lg transition-shadow">
+                    <i class="fas fa-phone-alt text-4xl text-indigo-600 mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">AI Voice Calling</h3>
+                    <p class="text-gray-600 mb-4">Natural language customer interactions</p>
+                    <button class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
+                        Learn More
+                    </button>
+                </div>
+
+                <!-- AI Agents -->
+                <div class="bg-gray-50 p-6 rounded-lg text-center hover:shadow-lg transition-shadow">
+                    <i class="fas fa-brain text-4xl text-indigo-600 mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">AI Agents</h3>
+                    <p class="text-gray-600 mb-4">Intelligent decision-making systems</p>
+                    <button class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
+                        Learn More
+                    </button>
+                </div>
+
+                <!-- AI Chatbots -->
+                <div class="bg-gray-50 p-6 rounded-lg text-center hover:shadow-lg transition-shadow">
+                    <i class="fas fa-comments text-4xl text-indigo-600 mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">AI Chatbots</h3>
+                    <p class="text-gray-600 mb-4">24/7 customer support automation</p>
+                    <button class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
+                        Learn More
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Tiers -->
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-12">Choose Your Plan</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Starter -->
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4">Starter</h3>
+                    <div class="text-4xl font-bold text-indigo-600 mb-6">$99<span class="text-lg text-gray-500">/month</span></div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>5 AI Agents</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Basic Analytics</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Email Support</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Standard Templates</li>
+                    </ul>
+                    
+                    <!-- Payment Options -->
+                    <div class="space-y-3">
+                        <button id="stripeStarterBtn" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 flex items-center justify-center">
+                            <i class="fab fa-stripe mr-2"></i>
+                            Pay with Card
+                        </button>
+                        <div id="paypalStarterBtn" class="w-full"></div>
+                    </div>
+                    
+                    <div id="starterLoading" class="payment-loading text-center mt-3">
+                        <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-indigo-600 mx-auto"></div>
+                        <p class="text-sm text-gray-600 mt-2">Processing payment...</p>
+                    </div>
+                </div>
+
+                <!-- Professional -->
+                <div class="bg-white p-8 rounded-lg shadow-lg border-2 border-indigo-600 relative">
+                    <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                        <span class="bg-indigo-600 text-white px-4 py-1 rounded-full text-sm">Most Popular</span>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Professional</h3>
+                    <div class="text-4xl font-bold text-indigo-600 mb-6">$299<span class="text-lg text-gray-500">/month</span></div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>25 AI Agents</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Advanced Analytics</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Priority Support</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Custom Templates</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>API Access</li>
+                    </ul>
+                    
+                    <!-- Payment Options -->
+                    <div class="space-y-3">
+                        <button id="stripeProfessionalBtn" class="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 flex items-center justify-center">
+                            <i class="fab fa-stripe mr-2"></i>
+                            Pay with Card
+                        </button>
+                        <div id="paypalProfessionalBtn" class="w-full"></div>
+                    </div>
+                    
+                    <div id="professionalLoading" class="payment-loading text-center mt-3">
+                        <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-indigo-600 mx-auto"></div>
+                        <p class="text-sm text-gray-600 mt-2">Processing payment...</p>
+                    </div>
+                </div>
+
+                <!-- Enterprise -->
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4">Enterprise</h3>
+                    <div class="text-4xl font-bold text-indigo-600 mb-6">Custom</div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Unlimited AI Agents</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Custom Analytics</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>Dedicated Support</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>White-label Solutions</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-500 mr-2"></i>SLA Guarantees</li>
+                    </ul>
+                    <button class="w-full bg-gray-600 text-white py-3 rounded-lg hover:bg-gray-700">
+                        Contact Sales
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Preview -->
+    <section id="dashboard" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-12">Agent Management Dashboard</h2>
+            <div class="bg-gray-50 p-8 rounded-lg">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-lg text-center">
+                        <div class="text-3xl font-bold text-indigo-600 mb-2">24</div>
+                        <div class="text-gray-600">Active Agents</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg text-center">
+                        <div class="text-3xl font-bold text-green-600 mb-2">98.7%</div>
+                        <div class="text-gray-600">Success Rate</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg text-center">
+                        <div class="text-3xl font-bold text-blue-600 mb-2">1,247</div>
+                        <div class="text-gray-600">Tasks Completed</div>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-4">Recent Agent Activity</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
+                            <span>Lead Generation Agent</span>
+                            <span class="text-green-600">✓ Completed</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
+                            <span>Customer Support Bot</span>
+                            <span class="text-blue-600">🔄 Running</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
+                            <span>Data Analysis Agent</span>
+                            <span class="text-green-600">✓ Completed</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Academy Section -->
+    <section id="academy" class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-12">FLYFOX Academy</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4">Training & Certification</h3>
+                    <p class="text-gray-600 mb-6">Master the art of AI agent development with our comprehensive training programs.</p>
+                    <ul class="space-y-3 mb-6">
+                        <li class="flex items-center"><i class="fas fa-graduation-cap text-indigo-600 mr-2"></i>Quantum AI Fundamentals</li>
+                        <li class="flex items-center"><i class="fas fa-graduation-cap text-indigo-600 mr-2"></i>Agent Development</li>
+                        <li class="flex items-center"><i class="fas fa-graduation-cap text-indigo-600 mr-2"></i>NQBA Integration</li>
+                        <li class="flex items-center"><i class="fas fa-graduation-cap text-indigo-600 mr-2"></i>Advanced Optimization</li>
+                    </ul>
+                    <button class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700">
+                        Enroll Now
+                    </button>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4">Developer Program</h3>
+                    <p class="text-gray-600 mb-6">Join our developer community and build the next generation of AI agents.</p>
+                    <ul class="space-y-3 mb-6">
+                        <li class="flex items-center"><i class="fas fa-code text-indigo-600 mr-2"></i>API Documentation</li>
+                        <li class="flex items-center"><i class="fas fa-code text-indigo-600 mr-2"></i>SDK Access</li>
+                        <li class="flex items-center"><i class="fas fa-code text-indigo-600 mr-2"></i>Community Support</li>
+                        <li class="flex items-center"><i class="fas fa-code text-indigo-600 mr-2"></i>Revenue Sharing</li>
+                    </ul>
+                    <button class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700">
+                        Join Program
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">FLYFOX AI</h3>
+                    <p class="text-gray-300">Quantum AI Agent Factory</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Products</h4>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><a href="#" class="hover:text-white">Digital Agents</a></li>
+                        <li><a href="#" class="hover:text-white">AI Voice Calling</a></li>
+                        <li><a href="#" class="hover:text-white">AI Agents</a></li>
+                        <li><a href="#" class="hover:text-white">AI Chatbots</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Resources</h4>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><a href="#" class="hover:text-white">Documentation</a></li>
+                        <li><a href="#" class="hover:text-white">API Reference</a></li>
+                        <li><a href="#" class="hover:text-white">Support</a></li>
+                        <li><a href="#" class="hover:text-white">Blog</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Company</h4>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><a href="#" class="hover:text-white">About</a></li>
+                        <li><a href="#" class="hover:text-white">Careers</a></li>
+                        <li><a href="#" class="hover:text-white">Contact</a></li>
+                        <li><a href="#" class="hover:text-white">Legal</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
+                <p>&copy; 2024 FLYFOX AI. All rights reserved. Powered by NQBA.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Stripe
+        const stripe = Stripe('pk_test_51RRxKJIBjkVTRTABcaUscCtedp1jMCzbOIdET4YJMVyAcZC2AjLflWIDEyaXzU4aETQnnx9v5HOEXPa4rWnf8T8A0066WNcoKD');
+        
+        // API Integration
+        const API_BASE = 'http://localhost:8000';
+        
+        // Payment Functions
+        async function createStripeCheckoutSession(planId, planName, amount) {
+            try {
+                const response = await fetch(`${API_BASE}/payments/create-checkout-session`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        plan_id: planId,
+                        plan_name: planName,
+                        amount: amount,
+                        currency: 'usd',
+                        success_url: window.location.origin + '/success',
+                        cancel_url: window.location.origin + '/cancel'
+                    })
+                });
+                
+                if (response.ok) {
+                    const session = await response.json();
+                    return stripe.redirectToCheckout({ sessionId: session.id });
+                } else {
+                    throw new Error('Failed to create checkout session');
+                }
+            } catch (error) {
+                console.error('Stripe error:', error);
+                alert('Payment failed. Please try again.');
+            }
+        }
+        
+        // PayPal Functions
+        function createPayPalButton(planId, planName, amount, containerId) {
+            paypal.Buttons({
+                createOrder: function(data, actions) {
+                    return actions.order.create({
+                        purchase_units: [{
+                            amount: {
+                                value: amount.toString()
+                            },
+                            description: `${planName} Plan - FLYFOX AI`
+                        }]
+                    });
+                },
+                onApprove: function(data, actions) {
+                    return actions.order.capture().then(function(details) {
+                        // Handle successful payment
+                        console.log('Payment completed:', details);
+                        alert('Payment successful! Welcome to FLYFOX AI.');
+                        
+                        // Redirect to dashboard or success page
+                        window.location.href = '#dashboard';
+                    });
+                },
+                onError: function(err) {
+                    console.error('PayPal error:', err);
+                    alert('Payment failed. Please try again.');
+                }
+            }).render(`#${containerId}`);
+        }
+        
+        // Initialize PayPal buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            // Starter Plan
+            createPayPalButton('starter', 'Starter', 99, 'paypalStarterBtn');
+            
+            // Professional Plan
+            createPayPalButton('professional', 'Professional', 299, 'paypalProfessionalBtn');
+            
+            // Stripe buttons
+            document.getElementById('stripeStarterBtn').addEventListener('click', function() {
+                createStripeCheckoutSession('starter', 'Starter', 9900); // $99.00 in cents
+            });
+            
+            document.getElementById('stripeProfessionalBtn').addEventListener('click', function() {
+                createStripeCheckoutSession('professional', 'Professional', 29900); // $299.00 in cents
+            });
+            
+            // Free trial button
+            document.getElementById('startTrialBtn').addEventListener('click', function() {
+                alert('Starting your 14-day free trial! You\'ll be redirected to the dashboard.');
+                window.location.href = '#dashboard';
+            });
+        });
+        
+        // Login functionality
+        document.getElementById('loginBtn').addEventListener('click', async () => {
+            try {
+                const response = await fetch(`${API_BASE}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: 'demo@flyfox.ai',
+                        password: 'demo123'
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem('token', data.access_token);
+                    document.getElementById('loginBtn').textContent = 'Dashboard';
+                    document.getElementById('loginBtn').onclick = () => window.location.href = '#dashboard';
+                }
+            } catch (error) {
+                console.error('Login failed:', error);
+            }
+        });
+
+        // Check authentication status
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            if (token) {
+                document.getElementById('loginBtn').textContent = 'Dashboard';
+                document.getElementById('loginBtn').onclick = () => window.location.href = '#dashboard';
+            }
+        }
+
+        // Load dashboard data
+        async function loadDashboardData() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/orchestrator/metrics`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    // Update dashboard with real data
+                    console.log('Dashboard data loaded:', data);
+                }
+            } catch (error) {
+                console.error('Failed to load dashboard data:', error);
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            loadDashboardData();
+        });
+    </script>
+</body>
+</html>

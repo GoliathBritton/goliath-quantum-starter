@@ -1,0 +1,10 @@
+risk:
+  max_cost_usd_per_decision: 0.50
+  require_ltc: true
+  quant_allowed: true
+compliance:
+  pii_allowed: false
+  export_controls: "auto-check"
+performance:
+  target_p95_ms_heuristic: 300
+  target_p95_ms_quantum: 3000

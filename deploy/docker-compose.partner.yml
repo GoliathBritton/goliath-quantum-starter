@@ -1,0 +1,112 @@
+version: '3.8'
+
+services:
+  # Partner Portal Frontend
+  partner-portal:
+    build:
+      context: ../ui
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+      - REACT_APP_PARTNER_API_URL=http://localhost:8000/api/partners
+      - REACT_APP_STRIPE_PUBLIC_KEY=${STRIPE_PUBLIC_KEY}
+    depends_on:
+      - partner-api
+    volumes:
+      - ../frontend/partner-portal:/app
+      - /app/node_modules
+    networks:
+      - partner-network
+
+  # Partner API Backend
+  partner-api:
+    build:
+      context: ../api
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - DATABASE_URL=postgresql://partner_user:partner_pass@partner-db:5432/partner_db
+      - REDIS_URL=redis://partner-redis:6379
+    depends_on:
+      - partner-db
+      - partner-redis
+    volumes:
+      - ../api:/app
+    networks:
+      - partner-network
+
+  # PostgreSQL Database
+  partner-db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=partner_db
+      - POSTGRES_USER=partner_user
+      - POSTGRES_PASSWORD=partner_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - partner-db-data:/var/lib/postgresql/data
+      - ../api/seeds:/docker-entrypoint-initdb.d
+    networks:
+      - partner-network
+
+  # Redis Cache & Message Queue
+  partner-redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - partner-redis-data:/data
+    networks:
+      - partner-network
+
+  # Nginx Reverse Proxy
+  partner-nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/partner.conf:/etc/nginx/nginx.conf
+      - ./nginx/ssl:/etc/nginx/ssl
+    depends_on:
+      - partner-portal
+      - partner-api
+    networks:
+      - partner-network
+
+  # Monitoring Stack
+  partner-monitoring:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - partner-network
+
+  # Partner Analytics Dashboard
+  partner-analytics:
+    image: grafana/grafana:latest
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - partner-grafana-data:/var/lib/grafana
+    networks:
+      - partner-network
+
+volumes:
+  partner-db-data:
+  partner-redis-data:
+  partner-grafana-data:
+
+networks:
+  partner-network:
+    driver: bridge
+
+# Health Checks - Configure in individual services as needed

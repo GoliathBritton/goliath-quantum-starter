@@ -1,0 +1,197 @@
+# NQBA Ecosystem Ingress Configuration
+# External access with SSL termination and routing
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nqba-ingress
+  namespace: nqba-ecosystem
+  annotations:
+    kubernetes.io/ingress.class: "alb"
+    alb.ingress.kubernetes.io/scheme: "internet-facing"
+    alb.ingress.kubernetes.io/target-type: "ip"
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:us-east-1:ACCOUNT_ID:certificate/CERTIFICATE_ID"
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+    alb.ingress.kubernetes.io/healthcheck-path: "/health"
+    alb.ingress.kubernetes.io/healthcheck-port: "8000"
+    alb.ingress.kubernetes.io/success-codes: "200"
+    alb.ingress.kubernetes.io/group.name: "nqba-ecosystem"
+    alb.ingress.kubernetes.io/tags: "Environment=production,Project=NQBA-Ecosystem"
+spec:
+  rules:
+  - host: "api.nqba.com"  # Replace with your domain
+    http:
+      paths:
+      - path: "/"
+        pathType: "Prefix"
+        backend:
+          service:
+            name: nqba-api-service
+            port:
+              number: 8000
+      - path: "/docs"
+        pathType: "Exact"
+        backend:
+          service:
+            name: nqba-api-service
+            port:
+              number: 8000
+      - path: "/openapi.json"
+        pathType: "Exact"
+        backend:
+          service:
+            name: nqba-api-service
+            port:
+              number: 8000
+      - path: "/health"
+        pathType: "Exact"
+        backend:
+          service:
+            name: nqba-api-service
+            port:
+              number: 8000
+      - path: "/ready"
+        pathType: "Exact"
+        backend:
+          service:
+            name: nqba-api-service
+            port:
+              number: 8000
+      - path: "/metrics"
+        pathType: "Exact"
+        backend:
+          service:
+            name: nqba-api-service
+            port:
+              number: 8000
+  
+  - host: "business.nqba.com"  # Replace with your domain
+    http:
+      paths:
+      - path: "/"
+        pathType: "Prefix"
+        backend:
+          service:
+            name: nqba-business-units-service
+            port:
+              number: 8001
+      - path: "/health"
+        pathType: "Exact"
+        backend:
+          service:
+            name: nqba-business-units-service
+            port:
+              number: 8001
+  
+  - host: "quantum.nqba.com"  # Replace with your domain
+    http:
+      paths:
+      - path: "/"
+        pathType: "Prefix"
+        backend:
+          service:
+            name: nqba-qih-service
+            port:
+              number: 8002
+      - path: "/health"
+        pathType: "Exact"
+        backend:
+          service:
+            name: nqba-qih-service
+            port:
+              number: 8002
+      - path: "/jobs"
+        pathType: "Prefix"
+        backend:
+          service:
+            name: nqba-qih-service
+            port:
+              number: 8002
+      - path: "/status"
+        pathType: "Exact"
+        backend:
+          service:
+            name: nqba-qih-service
+            port:
+              number: 8002
+
+---
+# Ingress for frontend (if using separate frontend service)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nqba-frontend-ingress
+  namespace: nqba-ecosystem
+  annotations:
+    kubernetes.io/ingress.class: "alb"
+    alb.ingress.kubernetes.io/scheme: "internet-facing"
+    alb.ingress.kubernetes.io/target-type: "ip"
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:us-east-1:ACCOUNT_ID:certificate/CERTIFICATE_ID"
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+    alb.ingress.kubernetes.io/group.name: "nqba-ecosystem"
+    alb.ingress.kubernetes.io/tags: "Environment=production,Project=NQBA-Ecosystem"
+spec:
+  rules:
+  - host: "nqba.com"  # Replace with your main domain
+    http:
+      paths:
+      - path: "/"
+        pathType: "Prefix"
+        backend:
+          service:
+            name: nqba-frontend-service  # You'll need to create this service
+            port:
+              number: 80
+      - path: "/demo"
+        pathType: "Prefix"
+        backend:
+          service:
+            name: nqba-frontend-service
+            port:
+              number: 80
+      - path: "/investors"
+        pathType: "Prefix"
+        backend:
+          service:
+            name: nqba-frontend-service
+            port:
+              number: 80
+
+---
+# Network Policy for ingress traffic
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: nqba-ingress-policy
+  namespace: nqba-ecosystem
+spec:
+  podSelector:
+    matchLabels:
+      app: nqba-api
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-nginx
+    ports:
+    - protocol: TCP
+      port: 8000
+    - protocol: TCP
+      port: 8001
+    - protocol: TCP
+      port: 8002
+  egress:
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 5432  # PostgreSQL
+    - protocol: TCP
+      port: 6379  # Redis
+    - protocol: TCP
+      port: 443   # HTTPS outbound
+    - protocol: TCP
+      port: 80    # HTTP outbound

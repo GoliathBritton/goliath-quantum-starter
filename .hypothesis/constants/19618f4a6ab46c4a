@@ -1,0 +1,4 @@
+# file: C:\Users\johnb\goliath-quantum-starter\src\nqba\decision_logic.py
+# hypothesis_version: 6.138.7
+
+[0.0, 0.5, 0.95, 'action', 'approve', 'business_unit', 'credit_score', 'decision_id', 'default', 'employees', 'explanation', 'growth_rate', 'industry', 'market_cap', 'nqba_core', 'r', 'reject', 'result', 'revenue', 'score', 'threshold', 'timestamp', 'unknown', 'utf-8', 'weights']

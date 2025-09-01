@@ -1,0 +1,4 @@
+# file: C:\Users\johnb\goliath-quantum-starter\src\nqba_stack\quantum\registry\capability_registry.py
+# hypothesis_version: 6.138.7
+
+[100, 1000, 3600, ':', 'problem_types', 'result_formats', 'total_capabilities', 'total_providers']

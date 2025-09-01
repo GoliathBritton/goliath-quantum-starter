@@ -1,0 +1,46 @@
+{
+  "demo_summary": {
+    "total_demos": 5,
+    "successful_demos": 0,
+    "failed_demos": 5,
+    "success_rate": 0.0,
+    "overall_automation_level": 0,
+    "execution_time": 2.784078
+  },
+  "demo_details": [
+    {
+      "demo_name": "Configuration Management",
+      "status": "failed",
+      "error": "unmatched ')' (advanced_automation_workflows.py, line 754)"
+    },
+    {
+      "demo_name": "Advanced Algorithm Templates",
+      "status": "failed",
+      "error": "'AlgorithmTemplate' object has no attribute 'template'"
+    },
+    {
+      "demo_name": "Advanced Automation Workflows",
+      "status": "failed",
+      "error": "'src.nqba_stack'"
+    },
+    {
+      "demo_name": "Workflow Orchestration",
+      "status": "failed",
+      "error": "'src.nqba_stack'"
+    },
+    {
+      "demo_name": "Performance & Integration",
+      "status": "failed",
+      "error": "'src.nqba_stack'"
+    }
+  ],
+  "timestamp": "2025-08-28T05:50:07.757800",
+  "platform_version": "2.0.0",
+  "capabilities_demonstrated": [
+    "Advanced Configuration Management",
+    "World-Class Algorithm Templates",
+    "Advanced Automation Workflows",
+    "Workflow Orchestration",
+    "Performance Integration"
+  ]
+}

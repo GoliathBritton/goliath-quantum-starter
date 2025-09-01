@@ -1,0 +1,26 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="60" cy="60" r="55" fill="#4ECDC4" stroke="#26A69A" stroke-width="2"/>
+  
+  <!-- Inner Circle -->
+  <circle cx="60" cy="60" r="45" fill="#81C784" stroke="#4ECDC4" stroke-width="1"/>
+  
+  <!-- Heart -->
+  <g transform="translate(60, 60)">
+    <path d="M0,15 C-8,-5 -20,-5 -20,5 C-20,15 -10,25 0,35 C10,25 20,15 20,5 C20,-5 8,-5 0,15 Z" fill="#FF6B6B" stroke="#E74C3C" stroke-width="1"/>
+  </g>
+  
+  <!-- Text -->
+  <text x="60" y="85" text-anchor="middle" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="9" font-weight="bold">CUSTOMER</text>
+  <text x="60" y="98" text-anchor="middle" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="9" font-weight="bold">CHAMPION</text>
+  
+  <!-- Decorative Elements -->
+  <circle cx="60" cy="60" r="35" fill="none" stroke="#FFFFFF" stroke-width="1" opacity="0.3"/>
+  
+  <!-- Customer Icons -->
+  <g transform="translate(60, 45)">
+    <circle cx="-15" cy="0" r="3" fill="#FFFFFF" opacity="0.8"/>
+    <circle cx="15" cy="0" r="3" fill="#FFFFFF" opacity="0.8"/>
+    <circle cx="0" cy="-15" r="3" fill="#FFFFFF" opacity="0.8"/>
+  </g>
+</svg>

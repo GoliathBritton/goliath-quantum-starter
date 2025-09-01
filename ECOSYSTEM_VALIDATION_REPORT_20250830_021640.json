@@ -1,0 +1,147 @@
+{
+  "timestamp": "2025-08-30T02:16:40.235617",
+  "tests": {
+    "internal_agent_integration": {
+      "status": "FAILED",
+      "error": "LTC logging failed",
+      "details": "NQBA self-optimization failed"
+    },
+    "cross_pod_orchestration": {
+      "status": "PASSED",
+      "details": "Cross-pod workflow executed successfully",
+      "workflow_id": "cross_pod_1756538200",
+      "lead_result": {
+        "company": "Quantum Finance Corp",
+        "revenue": "$50M",
+        "industry": "Financial Services",
+        "pain_points": [
+          "portfolio_optimization",
+          "risk_management"
+        ],
+        "risk_score": 0.6,
+        "conversion_probability": 0.44,
+        "identified_at": "2025-08-30T02:16:40.239111"
+      },
+      "stock_analysis": {
+        "company": "Quantum Finance Corp",
+        "stock_symbol": "UNKNOWN",
+        "analysis_timestamp": "2025-08-30T02:16:40.239131",
+        "quantum_analysis": {
+          "portfolio_optimization_score": 0.78,
+          "risk_adjustment_factor": 0.8200000000000001,
+          "quantum_advantage": "9x speedup in optimization",
+          "recommended_allocation": {
+            "recommended_percentage": 5.77,
+            "allocation_factors": {
+              "base_allocation": 0.1,
+              "risk_multiplier": 0.7,
+              "volatility_factor": 0.825
+            }
+          }
+        },
+        "market_analysis": {
+          "current_price": 25.0,
+          "volatility": 0.35,
+          "beta": 1.0,
+          "sector_performance": {
+            "performance": 0.1,
+            "trend": "neutral",
+            "volatility": 0.25
+          },
+          "market_sentiment": {
+            "sentiment_score": 0.65,
+            "sentiment_label": "moderately_positive",
+            "confidence": 0.78,
+            "key_factors": [
+              "Strong quarterly earnings",
+              "Innovation in core products",
+              "Market leadership position"
+            ]
+          }
+        },
+        "risk_assessment": {
+          "overall_risk_score": 0.6,
+          "market_risk": 0.35,
+          "sector_risk": 0.3,
+          "company_specific_risk": 0.37
+        },
+        "trading_recommendations": [
+          "Consider portfolio rebalancing based on quantum optimization",
+          "Monitor volatility for entry/exit opportunities",
+          "Implement risk management strategies",
+          "Evaluate sector rotation opportunities"
+        ]
+      },
+      "sales_recommendation": {
+        "company": "Quantum Finance Corp",
+        "approach": "quantum_advantage_demonstration",
+        "pricing_tier": "premium",
+        "key_messaging": "9x speedup in portfolio optimization with infinite quality improvement",
+        "risk_score": 0.6,
+        "conversion_probability": 0.44,
+        "recommended_actions": [
+          "Schedule quantum advantage demonstration",
+          "Present benchmark results (9x speedup)",
+          "Offer pilot project with success guarantee",
+          "Provide ROI analysis based on company size"
+        ],
+        "estimated_deal_size": "$150K - $300K",
+        "timeline": "30-60 days",
+        "success_metrics": [
+          "Pilot project completion",
+          "Measurable performance improvement",
+          "Contract signature",
+          "Reference customer status"
+        ]
+      }
+    },
+    "client_side_execution": {
+      "status": "PASSED",
+      "details": "External client job processed successfully",
+      "job_id": "client_portfolio_1756538200",
+      "pow_receipt": "pow_receipt_b7ca7b93-aef4-415a-bdd1-a1d2a89093e2",
+      "ltc_entry": {
+        "operation_id": "f845c4f78d2c4110",
+        "operation_type": "quantum_job_completion",
+        "operation_data": {
+          "job_id": "b7ca7b93-aef4-415a-bdd1-a1d2a89093e2",
+          "user_id": "external_client_001",
+          "problem_type": "portfolio_optimization",
+          "status": "completed"
+        },
+        "thread_ref": "QIH_SYSTEM",
+        "timestamp": "2025-08-30T02:16:40.240098",
+        "hash_chain": "091506575f4d63631964c3d9e679a9fbcd842831ca74568b90755437a633559b",
+        "ipfs_reference": null,
+        "metadata": {}
+      },
+      "result": {
+        "status": "completed",
+        "job_id": "b7ca7b93-aef4-415a-bdd1-a1d2a89093e2",
+        "pow_receipt": "pow_receipt_b7ca7b93-aef4-415a-bdd1-a1d2a89093e2",
+        "result": {
+          "optimal_weights": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "expected_return": 0.12,
+          "risk": 0.15,
+          "sharpe_ratio": 0.8
+        }
+      }
+    },
+    "quantum_luxury_gate": {
+      "status": "PASSED",
+      "details": "Entitlements engine correctly enforces tiered access",
+      "free_tier_blocked": true,
+      "luxury_tier_allowed": true,
+      "feature_tested": "intelligence_pod_access"
+    }
+  },
+  "overall_status": "NO-GO",
+  "recommendations": [
+    "Fix internal_agent_integration: LTC logging failed"
+  ]
+}

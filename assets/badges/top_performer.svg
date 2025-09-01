@@ -1,0 +1,31 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="60" cy="60" r="55" fill="#FF6B6B" stroke="#E74C3C" stroke-width="2"/>
+  
+  <!-- Inner Circle -->
+  <circle cx="60" cy="60" r="45" fill="#FF8E8E" stroke="#FF6B6B" stroke-width="1"/>
+  
+  <!-- Trophy -->
+  <g transform="translate(60, 60)">
+    <!-- Trophy Base -->
+    <rect x="-8" y="15" width="16" height="8" fill="#FFD700" stroke="#FFA500" stroke-width="1"/>
+    <!-- Trophy Cup -->
+    <path d="M-12,15 L-8,15 L-8,-5 L-4,-5 L-4,-15 L4,-15 L4,-5 L8,-5 L8,15 L12,15 L12,10 L-12,10 Z" fill="#FFD700" stroke="#FFA500" stroke-width="1"/>
+    <!-- Trophy Handles -->
+    <path d="M-12,-10 Q-15,-10 -15,-7 Q-15,-4 -12,-4" fill="none" stroke="#FFA500" stroke-width="2"/>
+    <path d="M12,-10 Q15,-10 15,-7 Q15,-4 12,-4" fill="none" stroke="#FFA500" stroke-width="2"/>
+  </g>
+  
+  <!-- Text -->
+  <text x="60" y="85" text-anchor="middle" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="10" font-weight="bold">TOP</text>
+  <text x="60" y="98" text-anchor="middle" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="10" font-weight="bold">PERFORMER</text>
+  
+  <!-- Decorative Elements -->
+  <circle cx="60" cy="60" r="35" fill="none" stroke="#FFFFFF" stroke-width="1" opacity="0.3"/>
+  
+  <!-- Sparkles -->
+  <circle cx="40" cy="30" r="2" fill="#FFFFFF" opacity="0.8"/>
+  <circle cx="80" cy="30" r="2" fill="#FFFFFF" opacity="0.8"/>
+  <circle cx="40" cy="90" r="2" fill="#FFFFFF" opacity="0.8"/>
+  <circle cx="80" cy="90" r="2" fill="#FFFFFF" opacity="0.8"/>
+</svg>

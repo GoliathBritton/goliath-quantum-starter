@@ -1,0 +1,4 @@
+# file: C:\Users\johnb\goliath-quantum-starter\src\nqba_stack\core\config_manager.py
+# hypothesis_version: 6.138.7
+
+[3600, 7200, './data/audit_backup', './data/quantum_cache', 'DYNEX_API_KEY', 'IPFS_GATEWAY_URL', 'IPFS_PROJECT_ID', 'IPFS_PROJECT_SECRET', 'LLM_API_KEY', 'LLM_ENDPOINT', 'OPENAI_API_KEY', 'WEB3_PROVIDER_URL', 'advanced_nlp', 'audit_backup', 'cache', 'cache_ttl', 'critical', 'degraded', 'degraded_features', 'disabled', 'distributed_storage', 'dnx_', 'dynex', 'enabled', 'endpoint', 'fallback_enabled', 'fallback_mode', 'fallbacks', 'gateway_url', 'generative_ai', 'health_check_enabled', 'healthy', 'ipfs', 'llm', 'local', 'local_storage_path', 'none', 'overall_health', 'project_id', 'quantum_optimization', 'qubo_solving', 'r', 'retry_attempts', 'services', 'timeout', 'using_fallback', 'w', 'web3']

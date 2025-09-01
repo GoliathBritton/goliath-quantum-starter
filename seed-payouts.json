@@ -1,0 +1,189 @@
+{
+  "payouts": [
+    {
+      "payout_id": "payout_001",
+      "partner_id": "partner_001",
+      "company": "Quantum Solutions Inc.",
+      "amount": 14175.00,
+      "currency": "USD",
+      "status": "completed",
+      "payout_date": "2024-01-15T10:00:00Z",
+      "processing_time": "2 business days",
+      "payment_method": "bank_transfer",
+      "reference_number": "BNK-2024-001-14175",
+      "commission_breakdown": {
+        "base_commission": 14175.00,
+        "performance_bonus": 0.00,
+        "quality_bonus": 0.00,
+        "tier_bonus": 0.00,
+        "total_bonus": 0.00
+      },
+      "performance_metrics": {
+        "uptime": 99.9,
+        "response_time": 95,
+        "customer_satisfaction": 4.8,
+        "security_score": 100,
+        "overall_performance": 98.5
+      },
+      "month": "January 2024",
+      "quarter": "Q1 2024",
+      "year": 2024
+    },
+    {
+      "payout_id": "payout_002",
+      "partner_id": "partner_002",
+      "company": "AI Dynamics Corp",
+      "amount": 11670.00,
+      "currency": "USD",
+      "status": "completed",
+      "payout_date": "2024-01-15T10:00:00Z",
+      "processing_time": "1 business day",
+      "payment_method": "stripe",
+      "reference_number": "STR-2024-001-11670",
+      "commission_breakdown": {
+        "base_commission": 11670.00,
+        "performance_bonus": 0.00,
+        "quality_bonus": 0.00,
+        "tier_bonus": 0.00,
+        "total_bonus": 0.00
+      },
+      "performance_metrics": {
+        "uptime": 99.8,
+        "response_time": 120,
+        "customer_satisfaction": 4.7,
+        "security_score": 98,
+        "overall_performance": 97.0
+      },
+      "month": "January 2024",
+      "quarter": "Q1 2024",
+      "year": 2024
+    },
+    {
+      "payout_id": "payout_003",
+      "partner_id": "partner_003",
+      "company": "Neural Tech Partners",
+      "amount": 7125.00,
+      "currency": "USD",
+      "status": "completed",
+      "payout_date": "2024-01-15T10:00:00Z",
+      "processing_time": "3 business days",
+      "payment_method": "bank_transfer",
+      "reference_number": "BNK-2024-001-7125",
+      "commission_breakdown": {
+        "base_commission": 7125.00,
+        "performance_bonus": 0.00,
+        "quality_bonus": 0.00,
+        "tier_bonus": 0.00,
+        "total_bonus": 0.00
+      },
+      "performance_metrics": {
+        "uptime": 99.7,
+        "response_time": 150,
+        "customer_satisfaction": 4.6,
+        "security_score": 97,
+        "overall_performance": 95.5
+      },
+      "month": "January 2024",
+      "quarter": "Q1 2024",
+      "year": 2024
+    },
+    {
+      "payout_id": "payout_004",
+      "partner_id": "partner_004",
+      "company": "Quantum Flow Systems",
+      "amount": 5600.00,
+      "currency": "USD",
+      "status": "completed",
+      "payout_date": "2024-01-15T10:00:00Z",
+      "processing_time": "2 business days",
+      "payment_method": "paypal",
+      "reference_number": "PPL-2024-001-5600",
+      "commission_breakdown": {
+        "base_commission": 5600.00,
+        "performance_bonus": 0.00,
+        "quality_bonus": 0.00,
+        "tier_bonus": 0.00,
+        "total_bonus": 0.00
+      },
+      "performance_metrics": {
+        "uptime": 99.5,
+        "response_time": 180,
+        "customer_satisfaction": 4.5,
+        "security_score": 96,
+        "overall_performance": 94.0
+      },
+      "month": "January 2024",
+      "quarter": "Q1 2024",
+      "year": 2024
+    },
+    {
+      "payout_id": "payout_005",
+      "partner_id": "partner_005",
+      "company": "IntelliQuantum Labs",
+      "amount": 2340.00,
+      "currency": "USD",
+      "status": "completed",
+      "payout_date": "2024-01-15T10:00:00Z",
+      "processing_time": "1 business day",
+      "payment_method": "stripe",
+      "reference_number": "STR-2024-001-2340",
+      "commission_breakdown": {
+        "base_commission": 2340.00,
+        "performance_bonus": 0.00,
+        "quality_bonus": 0.00,
+        "tier_bonus": 0.00,
+        "total_bonus": 0.00
+      },
+      "performance_metrics": {
+        "uptime": 99.3,
+        "response_time": 200,
+        "customer_satisfaction": 4.3,
+        "security_score": 95,
+        "overall_performance": 92.5
+      },
+      "month": "January 2024",
+      "quarter": "Q1 2024",
+      "year": 2024
+    }
+  ],
+  "pending_payouts": [
+    {
+      "payout_id": "pending_001",
+      "partner_id": "partner_001",
+      "company": "Quantum Solutions Inc.",
+      "amount": 15800.00,
+      "currency": "USD",
+      "status": "pending",
+      "estimated_payout_date": "2024-02-15T10:00:00Z",
+      "payment_method": "bank_transfer",
+      "commission_breakdown": {
+        "base_commission": 15000.00,
+        "performance_bonus": 300.00,
+        "quality_bonus": 300.00,
+        "tier_bonus": 200.00,
+        "total_bonus": 800.00
+      },
+      "month": "February 2024",
+      "quarter": "Q1 2024",
+      "year": 2024
+    }
+  ],
+  "metadata": {
+    "total_payouts": 5,
+    "total_amount": 40890.00,
+    "pending_amount": 15800.00,
+    "payment_methods": {
+      "bank_transfer": 3,
+      "stripe": 2,
+      "paypal": 1
+    },
+    "processing_times": {
+      "1_business_day": 2,
+      "2_business_days": 2,
+      "3_business_days": 1
+    },
+    "average_payout": 8178.00,
+    "largest_payout": 14175.00,
+    "smallest_payout": 2340.00
+  }
+}

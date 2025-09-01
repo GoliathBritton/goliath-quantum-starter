@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sigma Select - Quantum Learning Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=ARbHoAvcE25ruW5AoK414FTnkW_ufJWWiPwPgHyyU7ypOyDLIRKvNpoaEOGyV4j8U6Wxvtk-3OjA-LxK&currency=USD"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+        }
+        .course-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        .progress-ring-circle {
+            transition: stroke-dasharray 0.35s;
+            transform-origin: 50% 50%;
+        }
+        .payment-loading {
+            display: none;
+        }
+        .payment-loading.active {
+            display: block;
+        }
+        .enrollment-modal {
+            display: none;
+        }
+        .enrollment-modal.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-2xl font-bold text-green-600">SIGMA SELECT</h1>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="#dashboard" class="text-gray-700 hover:text-green-600">Dashboard</a>
+                    <a href="#courses" class="text-gray-700 hover:text-green-600">Courses</a>
+                    <a href="#certifications" class="text-gray-700 hover:text-green-600">Certifications</a>
+                    <a href="#community" class="text-gray-700 hover:text-green-600">Community</a>
+                    <button id="loginBtn" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+                        Login
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg text-white py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-5xl font-bold mb-6">Quantum Learning Management System</h1>
+            <p class="text-xl mb-8">Master the future with AI-powered education and quantum-enhanced learning experiences</p>
+            <div class="flex justify-center space-x-4">
+                <button id="startLearningBtn" class="bg-white text-green-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100">
+                    Start Learning
+                </button>
+                <button class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-green-600">
+                    Browse Courses
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Courses -->
+    <section id="courses" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-12">Featured Courses</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Quantum AI Fundamentals -->
+                <div class="course-card bg-white rounded-lg shadow-lg overflow-hidden">
+                    <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-48 flex items-center justify-center">
+                        <i class="fas fa-atom text-6xl text-white"></i>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center mb-2">
+                            <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded">Beginner</span>
+                            <span class="ml-2 text-sm text-gray-500">4.9 ★ (2.1k reviews)</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Quantum AI Fundamentals</h3>
+                        <p class="text-gray-600 mb-4">Learn the basics of quantum computing and AI integration</p>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-sm text-gray-500">Duration: 8 weeks</span>
+                            <span class="text-sm text-gray-500">Students: 15.2k</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-green-600">$299</span>
+                            <button class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700" onclick="showEnrollmentModal('quantum_ai_fundamentals', 'Quantum AI Fundamentals', 299)">
+                                Enroll Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advanced Machine Learning -->
+                <div class="course-card bg-white rounded-lg shadow-lg overflow-hidden">
+                    <div class="bg-gradient-to-r from-blue-500 to-teal-500 h-48 flex items-center justify-center">
+                        <i class="fas fa-brain text-6xl text-white"></i>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center mb-2">
+                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">Advanced</span>
+                            <span class="ml-2 text-sm text-gray-500">4.8 ★ (1.8k reviews)</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Advanced Machine Learning</h3>
+                        <p class="text-gray-600 mb-4">Master advanced ML algorithms and quantum optimization</p>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-sm text-gray-500">Duration: 12 weeks</span>
+                            <span class="text-sm text-gray-500">Students: 8.7k</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-green-600">$499</span>
+                            <button class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700" onclick="showEnrollmentModal('advanced_ml', 'Advanced Machine Learning', 499)">
+                                Enroll Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NQBA Integration -->
+                <div class="course-card bg-white rounded-lg shadow-lg overflow-hidden">
+                    <div class="bg-gradient-to-r from-green-500 to-emerald-500 h-48 flex items-center justify-center">
+                        <i class="fas fa-network-wired text-6xl text-white"></i>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center mb-2">
+                            <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">Intermediate</span>
+                            <span class="ml-2 text-sm text-gray-500">4.9 ★ (1.5k reviews)</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">NQBA Integration</h3>
+                        <p class="text-gray-600 mb-4">Build and deploy NQBA-powered applications</p>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-sm text-gray-500">Duration: 10 weeks</span>
+                            <span class="text-sm text-gray-500">Students: 12.3k</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-green-600">$399</span>
+                            <button class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700" onclick="showEnrollmentModal('nqba_integration', 'NQBA Integration', 399)">
+                                Enroll Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Course Enrollment Modal -->
+    <div id="enrollmentModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 hidden">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Course Enrollment</h3>
+                <div id="courseEnrollmentDetails" class="mb-4">
+                    <h4 id="enrollmentCourseName" class="font-semibold text-lg"></h4>
+                    <p id="enrollmentCoursePrice" class="text-green-600 text-xl font-bold"></p>
+                </div>
+                
+                <form id="enrollmentForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Full Name</label>
+                        <input type="text" id="studentName" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Email</label>
+                        <input type="email" id="studentEmail" required class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Phone (Optional)</label>
+                        <input type="tel" id="studentPhone" class="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2">
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <button type="button" id="stripeEnrollBtn" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 flex items-center justify-center">
+                            <i class="fab fa-stripe mr-2"></i>
+                            Pay with Card
+                        </button>
+                        <div id="paypalEnrollBtn" class="w-full"></div>
+                    </div>
+                    
+                    <div class="flex space-x-3">
+                        <button type="button" onclick="closeEnrollmentModal()" class="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-400">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+                
+                <div id="enrollmentLoading" class="payment-loading text-center mt-3">
+                    <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-green-600 mx-auto"></div>
+                    <p class="text-sm text-gray-600 mt-2">Processing enrollment...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Learning Paths -->
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-12">Learning Paths</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Data Science Path -->
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <div class="flex items-center mb-6">
+                        <i class="fas fa-chart-line text-4xl text-blue-600 mr-4"></i>
+                        <div>
+                            <h3 class="text-2xl font-bold">Data Science Path</h3>
+                            <p class="text-gray-600">From beginner to expert in 6 months</p>
+                        </div>
+                    </div>
+                    <div class="space-y-3 mb-6">
+                        <div class="flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                            <span>Python Fundamentals</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                            <span>Statistical Analysis</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                            <span>Machine Learning</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                            <span>Quantum Computing</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                            <span>Capstone Project</span>
+                        </div>
+                    </div>
+                    <button class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700" onclick="showEnrollmentModal('data_science_path', 'Data Science Path', 999)">
+                        Start Path
+                    </button>
+                </div>
+
+                <!-- AI Engineering Path -->
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <div class="flex items-center mb-6">
+                        <i class="fas fa-robot text-4xl text-purple-600 mr-4"></i>
+                        <div>
+                            <h3 class="text-2xl font-bold">AI Engineering Path</h3>
+                            <p class="text-gray-600">Build production AI systems</p>
+                        </div>
+                    </div>
+                    <div class="space-y-3 mb-6">
+                        <div class="flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                            <span>AI Fundamentals</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                            <span>Neural Networks</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                            <span>Deep Learning</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                            <span>MLOps & Deployment</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                            <span>Enterprise Integration</span>
+                        </div>
+                    </div>
+                    <button class="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700" onclick="showEnrollmentModal('ai_engineering_path', 'AI Engineering Path', 1299)">
+                        Start Path
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard -->
+    <section id="dashboard" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-12">Learning Dashboard</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Progress Overview -->
+                <div class="lg:col-span-2 bg-gray-50 p-8 rounded-lg">
+                    <h3 class="text-2xl font-semibold mb-6">Your Progress</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                        <div class="bg-white p-4 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-green-600">12</div>
+                            <div class="text-sm text-gray-600">Courses Enrolled</div>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-blue-600">8</div>
+                            <div class="text-sm text-gray-600">Courses Completed</div>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-purple-600">156</div>
+                            <div class="text-sm text-gray-600">Hours Learned</div>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-yellow-600">4</div>
+                            <div class="text-sm text-gray-600">Certificates</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Current Courses -->
+                    <div class="bg-white p-6 rounded-lg">
+                        <h4 class="text-xl font-semibold mb-4">Current Courses</h4>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded">
+                                <div>
+                                    <div class="font-semibold">Quantum AI Fundamentals</div>
+                                    <div class="text-sm text-gray-600">Week 3 of 8</div>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-16 h-16 relative mr-3">
+                                        <svg class="w-16 h-16 progress-ring">
+                                            <circle class="progress-ring-circle" stroke="#e5e7eb" stroke-width="4" fill="transparent" r="26" cx="32" cy="32"/>
+                                            <circle class="progress-ring-circle" stroke="#10b981" stroke-width="4" fill="transparent" r="26" cx="32" cy="32" stroke-dasharray="163.4" stroke-dashoffset="81.7"/>
+                                        </svg>
+                                        <div class="absolute inset-0 flex items-center justify-center text-sm font-bold">38%</div>
+                                    </div>
+                                    <button class="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700">
+                                        Continue
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded">
+                                <div>
+                                    <div class="font-semibold">Advanced Machine Learning</div>
+                                    <div class="text-sm text-gray-600">Week 7 of 12</div>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-16 h-16 relative mr-3">
+                                        <svg class="w-16 h-16 progress-ring">
+                                            <circle class="progress-ring-circle" stroke="#e5e7eb" stroke-width="4" fill="transparent" r="26" cx="32" cy="32"/>
+                                            <circle class="progress-ring-circle" stroke="#10b981" stroke-width="4" fill="transparent" r="26" cx="32" cy="32" stroke-dasharray="163.4" stroke-dashoffset="32.68"/>
+                                        </svg>
+                                        <div class="absolute inset-0 flex items-center justify-center text-sm font-bold">80%</div>
+                                    </div>
+                                    <button class="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700">
+                                        Continue
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Certifications & Achievements -->
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-semibold mb-4">Certifications</h3>
+                    <div class="space-y-4">
+                        <div class="bg-white p-4 rounded-lg">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-certificate text-yellow-500 mr-2"></i>
+                                <span class="font-semibold">Python Fundamentals</span>
+                            </div>
+                            <div class="text-sm text-gray-600">Completed: 2 weeks ago</div>
+                            <div class="text-xs text-gray-500">Score: 94%</div>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-certificate text-yellow-500 mr-2"></i>
+                                <span class="font-semibold">Data Analysis</span>
+                            </div>
+                            <div class="text-sm text-gray-600">Completed: 1 month ago</div>
+                            <div class="text-xs text-gray-500">Score: 89%</div>
+                        </div>
+                        
+                        <div class="bg-white p-4 rounded-lg">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-certificate text-yellow-500 mr-2"></i>
+                                <span class="font-semibold">Machine Learning Basics</span>
+                            </div>
+                            <div class="text-sm text-gray-600">Completed: 2 months ago</div>
+                            <div class="text-xs text-gray-500">Score: 92%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <h4 class="font-semibold mb-3">Recent Achievements</h4>
+                        <div class="space-y-2">
+                            <div class="flex items-center text-sm">
+                                <i class="fas fa-trophy text-yellow-500 mr-2"></i>
+                                <span>First Course Completed</span>
+                            </div>
+                            <div class="flex items-center text-sm">
+                                <i class="fas fa-fire text-red-500 mr-2"></i>
+                                <span>7-Day Learning Streak</span>
+                            </div>
+                            <div class="flex items-center text-sm">
+                                <i class="fas fa-star text-blue-500 mr-2"></i>
+                                <span>Perfect Score Achievement</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Section -->
+    <section id="community" class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-12">Learning Community</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-lg shadow-lg text-center">
+                    <i class="fas fa-users text-4xl text-green-600 mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">Study Groups</h3>
+                    <p class="text-gray-600 mb-4">Join study groups with peers learning the same topics</p>
+                    <button class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700">
+                        Find Groups
+                    </button>
+                </div>
+                
+                <div class="bg-white p-8 rounded-lg shadow-lg text-center">
+                    <i class="fas fa-comments text-4xl text-blue-600 mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">Discussion Forums</h3>
+                    <p class="text-gray-600 mb-4">Ask questions and share knowledge with the community</p>
+                    <button class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+                        Join Discussions
+                    </button>
+                </div>
+                
+                <div class="bg-white p-8 rounded-lg shadow-lg text-center">
+                    <i class="fas fa-calendar-alt text-4xl text-purple-600 mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">Live Events</h3>
+                    <p class="text-gray-600 mb-4">Attend webinars and live coding sessions</p>
+                    <button class="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700">
+                        View Events
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">SIGMA SELECT</h3>
+                    <p class="text-gray-300">Quantum Learning Management System</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Learning</h4>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><a href="#" class="hover:text-white">Courses</a></li>
+                        <li><a href="#" class="hover:text-white">Learning Paths</a></li>
+                        <li><a href="#" class="hover:text-white">Certifications</a></li>
+                        <li><a href="#" class="hover:text-white">Resources</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Community</h4>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><a href="#" class="hover:text-white">Study Groups</a></li>
+                        <li><a href="#" class="hover:text-white">Forums</a></li>
+                        <li><a href="#" class="hover:text-white">Events</a></li>
+                        <li><a href="#" class="hover:text-white">Blog</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Company</h4>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><a href="#" class="hover:text-white">About</a></li>
+                        <li><a href="#" class="hover:text-white">Careers</a></li>
+                        <li><a href="#" class="hover:text-white">Contact</a></li>
+                        <li><a href="#" class="hover:text-white">Support</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
+                <p>&copy; 2024 Sigma Select. All rights reserved. Powered by NQBA.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Stripe
+        const stripe = Stripe('pk_test_51RRxKJIBjkVTRTABcaUscCtedp1jMCzbOIdET4YJMVyAcZC2AjLflWIDEyaXzU4aETQnnx9v5HOEXPa4rWnf8T8A0066WNcoKD');
+        
+        // API Integration
+        const API_BASE = 'http://localhost:8000';
+        
+        // Course Enrollment Functions
+        let currentEnrollment = null;
+        
+        function showEnrollmentModal(courseId, courseName, price) {
+            currentEnrollment = { courseId, courseName, price };
+            document.getElementById('enrollmentModal').classList.remove('hidden');
+            document.getElementById('enrollmentCourseName').textContent = courseName;
+            document.getElementById('enrollmentCoursePrice').textContent = `$${price}`;
+            
+            // Initialize PayPal button for this course
+            createPayPalEnrollmentButton(courseId, courseName, price, 'paypalEnrollBtn');
+        }
+        
+        function closeEnrollmentModal() {
+            document.getElementById('enrollmentModal').classList.add('hidden');
+            document.getElementById('enrollmentForm').reset();
+            currentEnrollment = null;
+        }
+        
+        // Payment Functions
+        async function createStripeCheckoutSession(courseId, courseName, amount) {
+            try {
+                const response = await fetch(`${API_BASE}/payments/create-checkout-session`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        course_id: courseId,
+                        course_name: courseName,
+                        amount: amount * 100, // Convert to cents
+                        currency: 'usd',
+                        success_url: window.location.origin + '/success',
+                        cancel_url: window.location.origin + '/cancel'
+                    })
+                });
+                
+                if (response.ok) {
+                    const session = await response.json();
+                    return stripe.redirectToCheckout({ sessionId: session.id });
+                } else {
+                    throw new Error('Failed to create checkout session');
+                }
+            } catch (error) {
+                console.error('Stripe error:', error);
+                alert('Payment failed. Please try again.');
+            }
+        }
+        
+        // PayPal Functions
+        function createPayPalEnrollmentButton(courseId, courseName, amount, containerId) {
+            // Clear previous button
+            document.getElementById(containerId).innerHTML = '';
+            
+            paypal.Buttons({
+                createOrder: function(data, actions) {
+                    return actions.order.create({
+                        purchase_units: [{
+                            amount: {
+                                value: amount.toString()
+                            },
+                            description: `${courseName} - Sigma Select`
+                        }]
+                    });
+                },
+                onApprove: function(data, actions) {
+                    return actions.order.capture().then(function(details) {
+                        // Handle successful payment
+                        console.log('Payment completed:', details);
+                        alert('Payment successful! You are now enrolled in ' + courseName);
+                        
+                        // Submit enrollment to backend
+                        submitEnrollment(courseId, courseName, amount, details.id);
+                        
+                        // Close modal and redirect to dashboard
+                        closeEnrollmentModal();
+                        window.location.href = '#dashboard';
+                    });
+                },
+                onError: function(err) {
+                    console.error('PayPal error:', err);
+                    alert('Payment failed. Please try again.');
+                }
+            }).render(`#${containerId}`);
+        }
+        
+        // Submit enrollment to backend
+        async function submitEnrollment(courseId, courseName, amount, paymentId) {
+            try {
+                const formData = {
+                    course_id: courseId,
+                    course_name: courseName,
+                    amount: amount,
+                    payment_id: paymentId,
+                    student_name: document.getElementById('studentName').value,
+                    student_email: document.getElementById('studentEmail').value,
+                    student_phone: document.getElementById('studentPhone').value,
+                    enrollment_date: new Date().toISOString()
+                };
+                
+                const response = await fetch(`${API_BASE}/academy/enroll`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                if (response.ok) {
+                    console.log('Enrollment submitted successfully');
+                } else {
+                    console.error('Failed to submit enrollment');
+                }
+            } catch (error) {
+                console.error('Enrollment error:', error);
+            }
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Stripe enrollment button
+            document.getElementById('stripeEnrollBtn').addEventListener('click', function() {
+                if (currentEnrollment) {
+                    createStripeCheckoutSession(
+                        currentEnrollment.courseId,
+                        currentEnrollment.courseName,
+                        currentEnrollment.price
+                    );
+                }
+            });
+            
+            // Start learning button
+            document.getElementById('startLearningBtn').addEventListener('click', function() {
+                alert('Starting your learning journey! You\'ll be redirected to browse courses.');
+                window.location.href = '#courses';
+            });
+            
+            // Close modal when clicking outside
+            document.getElementById('enrollmentModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeEnrollmentModal();
+                }
+            });
+        });
+        
+        // Login functionality
+        document.getElementById('loginBtn').addEventListener('click', async () => {
+            try {
+                const response = await fetch(`${API_BASE}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: 'demo@sigma.select',
+                        password: 'demo123'
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem('token', data.access_token);
+                    document.getElementById('loginBtn').textContent = 'Dashboard';
+                    document.getElementById('loginBtn').onclick = () => window.location.href = '#dashboard';
+                }
+            } catch (error) {
+                console.error('Login failed:', error);
+            }
+        });
+
+        // Check authentication status
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            if (token) {
+                document.getElementById('loginBtn').textContent = 'Dashboard';
+                document.getElementById('loginBtn').onclick = () => window.location.href = '#dashboard';
+            }
+        }
+
+        // Load learning data
+        async function loadLearningData() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/academy/metrics`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    // Update dashboard with real data
+                    console.log('Learning data loaded:', data);
+                }
+            } catch (error) {
+                console.error('Failed to load learning data:', error);
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            loadLearningData();
+        });
+    </script>
+</body>
+</html>

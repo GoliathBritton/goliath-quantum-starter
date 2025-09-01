@@ -1,0 +1,6 @@
+# LTC Log File: ltc_20250827_172336.jsonl
+# Created: 2025-08-27T17:23:36.185468
+# Format: JSON Lines
+
+{"entry_id": "45e08220-eb91-46ca-9479-dd27b278598b", "timestamp": "2025-08-27T22:23:46.159936+00:00", "operation_type": "lead_scoring_quantum", "component": "sigma_select", "user_id": null, "session_id": null, "thread_id": "26444", "input_data": {"leads_count": 2, "scoring_criteria": {"budget": 0.4, "company_size": 0.3, "industry": 0.3}}, "execution_context": null, "result_data": {"scored_leads_count": 2, "avg_quantum_advantage": 1.0}, "performance_metrics": null, "error_data": null, "metadata": null, "hash": "cab38bb1a1d9b931b529ed95fdc1460071a66e66266d4203478316b3922ca19f", "parent_entry_id": null, "child_entry_ids": []}
+{"entry_id": "05a4a91f-da17-4231-92b1-8cf1e0c780ab", "timestamp": "2025-08-27T22:23:51.757549+00:00", "operation_type": "lead_scoring_quantum", "component": "sigma_select", "user_id": null, "session_id": null, "thread_id": "26444", "input_data": {"leads_count": 2, "scoring_criteria": {"budget": 0.4, "company_size": 0.3, "industry": 0.3}}, "execution_context": null, "result_data": {"scored_leads_count": 2, "avg_quantum_advantage": 1.0}, "performance_metrics": null, "error_data": null, "metadata": null, "hash": "46c92e650e8da2943dec710595d02991e72aad5db2ab29c097b2b385722b7189", "parent_entry_id": null, "child_entry_ids": []}

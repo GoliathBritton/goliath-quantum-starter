@@ -1,0 +1,4 @@
+# file: C:\Users\johnb\goliath-quantum-starter\src\nqba\business_pods.py
+# hypothesis_version: 6.138.7
+
+['Q', 'assignment', 'backend', 'constraints', 'decision', 'decision.logic', 'explanation', 'features', 'lead_score_v1', 'ltc', 'maximize', 'objective_value', 'optimization', 'optimize.qubo', 'result', 'sales.script.v1', 'script', 'script.logic', 'variables']

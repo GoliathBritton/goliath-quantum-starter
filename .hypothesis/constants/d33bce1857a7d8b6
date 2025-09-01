@@ -1,0 +1,4 @@
+# file: C:\Users\johnb\goliath-quantum-starter\web3\graph_integration.py
+# hypothesis_version: 6.138.4
+
+['/graphiql', '/graphql', 'GET', 'POST']

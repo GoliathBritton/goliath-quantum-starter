@@ -1,0 +1,123 @@
+{
+  "test_suite": "Phase 2.1 Features",
+  "start_time": "2025-08-28T01:05:07.425369",
+  "end_time": "2025-08-28T01:05:44.796377",
+  "total_tests": 16,
+  "passed_tests": 11,
+  "failed_tests": 5,
+  "success_rate": 68.75,
+  "test_results": [
+    {
+      "test_name": "Constraint Evolution - Evolve Constraints",
+      "success": true,
+      "details": "Generated 5 constraint updates",
+      "error": "",
+      "timestamp": "2025-08-28T01:05:09.493088"
+    },
+    {
+      "test_name": "Constraint Evolution - Performance Prediction",
+      "success": true,
+      "details": "Predicted performance: 0.963",
+      "error": "",
+      "timestamp": "2025-08-28T01:05:11.563475"
+    },
+    {
+      "test_name": "Constraint Evolution - Evolution History",
+      "success": true,
+      "details": "Retrieved 15 evolution records",
+      "error": "",
+      "timestamp": "2025-08-28T01:05:13.630255"
+    },
+    {
+      "test_name": "Predictive Scaling - Resource Demand Prediction",
+      "success": true,
+      "details": "Generated 3 resource predictions",
+      "error": "",
+      "timestamp": "2025-08-28T01:05:15.703896"
+    },
+    {
+      "test_name": "Predictive Scaling - Schedule Optimization",
+      "success": false,
+      "details": "HTTP 500: {\"detail\":\"ResourceDemandPrediction.__init__() got an unexpected keyword argument 'tenant_id'\"}",
+      "error": "",
+      "timestamp": "2025-08-28T01:05:17.782957"
+    },
+    {
+      "test_name": "Predictive Scaling - Apply Schedule",
+      "success": true,
+      "details": "Applied 3 scaling actions",
+      "error": "",
+      "timestamp": "2025-08-28T01:05:19.839705"
+    },
+    {
+      "test_name": "Enterprise Integration - SAML Authentication",
+      "success": true,
+      "details": "Authenticated user: user_user_02936c95",
+      "error": "",
+      "timestamp": "2025-08-28T01:05:22.027152"
+    },
+    {
+      "test_name": "Enterprise Integration - Compliance Check",
+      "success": true,
+      "details": "Compliance status: Non-compliant, 0/0 requirements met",
+      "error": "",
+      "timestamp": "2025-08-28T01:05:24.071597"
+    },
+    {
+      "test_name": "Enterprise Integration - Audit Logging",
+      "success": true,
+      "details": "Created audit entry: audit_20250828_010526_120214",
+      "error": "",
+      "timestamp": "2025-08-28T01:05:26.121418"
+    },
+    {
+      "test_name": "Community Platform - Algorithm Submission",
+      "success": false,
+      "details": "Submission failed: Algorithm validation failed",
+      "error": "",
+      "timestamp": "2025-08-28T01:05:28.184466"
+    },
+    {
+      "test_name": "Community Platform - Algorithm Discovery",
+      "success": true,
+      "details": "Found 0 algorithms",
+      "error": "",
+      "timestamp": "2025-08-28T01:05:30.233859"
+    },
+    {
+      "test_name": "Community Platform - Tutorial Creation",
+      "success": false,
+      "details": "Tutorial creation failed: Tutorial validation failed",
+      "error": "",
+      "timestamp": "2025-08-28T01:05:32.281664"
+    },
+    {
+      "test_name": "Community Platform - Forum Listing",
+      "success": true,
+      "details": "Found 3 active forums",
+      "error": "",
+      "timestamp": "2025-08-28T01:05:34.325253"
+    },
+    {
+      "test_name": "Community Platform - Event Listing",
+      "success": true,
+      "details": "Found 0 upcoming events",
+      "error": "",
+      "timestamp": "2025-08-28T01:05:36.373756"
+    },
+    {
+      "test_name": "Integration Workflows - Enterprise Workflow",
+      "success": false,
+      "details": "Workflow failed at compliance check step",
+      "error": "",
+      "timestamp": "2025-08-28T01:05:40.684224"
+    },
+    {
+      "test_name": "Integration Workflows - Scaling + Evolution",
+      "success": false,
+      "details": "Workflow failed at schedule optimization step",
+      "error": "",
+      "timestamp": "2025-08-28T01:05:44.794773"
+    }
+  ]
+}

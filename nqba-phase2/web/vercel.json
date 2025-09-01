@@ -18,7 +18,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://api.flyfoxai.io/v2/:path*"
+      "destination": "https://api.goliathomniedge.com/v2/:path*"
     }
   ]
 }

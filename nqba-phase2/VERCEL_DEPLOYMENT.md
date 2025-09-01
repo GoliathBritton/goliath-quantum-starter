@@ -28,7 +28,7 @@ vercel --prod
 
 Set these in Vercel dashboard:
 ```
-NEXT_PUBLIC_API_BASE=https://api.flyfoxai.io
+NEXT_PUBLIC_API_BASE=https://api.goliathomniedge.com
 ```
 
 ### 4. Custom Domain
@@ -46,7 +46,7 @@ In Vercel dashboard:
 ## 🔗 Next Steps
 
 1. **API Deployment**: Use Railway/Render for FastAPI backend
-2. **Domain Setup**: Point `portal.flyfoxai.io` to Vercel
+2. **Domain Setup**: Point `portal.goliathomniedge.com` to Vercel
 3. **Analytics**: Add Vercel Analytics
 4. **Monitoring**: Enable Vercel Edge Functions
 

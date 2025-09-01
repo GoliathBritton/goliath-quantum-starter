@@ -1,0 +1,4 @@
+# file: C:\Users\johnb\goliath-quantum-starter\src\nqba_stack\dynex_client.py
+# hypothesis_version: 6.138.7
+
+[0.0, 100, 1000, 'DynexClient QUBO job', 'annealing_time', 'demo', 'description', 'dynex', 'dynex_client', 'energies', 'first_energy', 'first_sample', 'job_id', 'linear', 'num_reads', 'offset', 'parameters', 'qaoa', 'quadratic', 'samples']

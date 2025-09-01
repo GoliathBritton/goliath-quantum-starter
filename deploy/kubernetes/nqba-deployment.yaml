@@ -1,0 +1,486 @@
+# NQBA Ecosystem Kubernetes Deployment
+# Production-ready deployment configuration
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: nqba-ecosystem
+  labels:
+    name: nqba-ecosystem
+    environment: production
+
+---
+# ConfigMap for application configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nqba-config
+  namespace: nqba-ecosystem
+data:
+  ENVIRONMENT: "production"
+  LOG_LEVEL: "INFO"
+  DATABASE_URL: "postgresql://nqba_user:nqba_password@nqba-postgres:5432/nqba_db"
+  REDIS_URL: "redis://nqba-redis:6379"
+  DYNEX_API_KEY: ""  # Will be set via secret
+  SECRET_KEY: ""      # Will be set via secret
+
+---
+# Secret for sensitive configuration
+apiVersion: v1
+kind: Secret
+metadata:
+  name: nqba-secrets
+  namespace: nqba-ecosystem
+type: Opaque
+data:
+  # Base64 encoded values - replace with actual values
+  dynex-api-key: ""  # echo -n "your-dynex-key" | base64
+  secret-key: ""     # echo -n "your-secret-key" | base64
+  postgres-password: ""  # echo -n "nqba_password" | base64
+  redis-password: ""     # echo -n "nqba_redis_password" | base64
+
+---
+# Service Account for NQBA API
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nqba-api-sa
+  namespace: nqba-ecosystem
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::ACCOUNT_ID:role/nqba-eks-role
+
+---
+# NQBA API Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nqba-api
+  namespace: nqba-ecosystem
+  labels:
+    app: nqba-api
+    version: v1.0.0
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: nqba-api
+  template:
+    metadata:
+      labels:
+        app: nqba-api
+        version: v1.0.0
+    spec:
+      serviceAccountName: nqba-api-sa
+      containers:
+      - name: nqba-api
+        image: nqba-ecosystem:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+          name: http
+        env:
+        - name: ENVIRONMENT
+          valueFrom:
+            configMapKeyRef:
+              name: nqba-config
+              key: ENVIRONMENT
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: nqba-config
+              key: LOG_LEVEL
+        - name: DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: nqba-config
+              key: DATABASE_URL
+        - name: REDIS_URL
+          valueFrom:
+            configMapKeyRef:
+              name: nqba-config
+              key: REDIS_URL
+        - name: DYNEX_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: nqba-secrets
+              key: dynex-api-key
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: nqba-secrets
+              key: secret-key
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        volumeMounts:
+        - name: nqba-data
+          mountPath: /app/data
+        - name: nqba-logs
+          mountPath: /app/logs
+        - name: nqba-reports
+          mountPath: /app/reports
+      volumes:
+      - name: nqba-data
+        persistentVolumeClaim:
+          claimName: nqba-data-pvc
+      - name: nqba-logs
+        persistentVolumeClaim:
+          claimName: nqba-logs-pvc
+      - name: nqba-reports
+        persistentVolumeClaim:
+          claimName: nqba-reports-pvc
+      nodeSelector:
+        NodeGroup: general
+      tolerations:
+      - key: "workload"
+        operator: "Equal"
+        value: "general"
+        effect: "NoSchedule"
+
+---
+# NQBA API Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: nqba-api-service
+  namespace: nqba-ecosystem
+  labels:
+    app: nqba-api
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8000
+    targetPort: 8000
+    protocol: TCP
+    name: http
+  selector:
+    app: nqba-api
+
+---
+# NQBA Business Units Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nqba-business-units
+  namespace: nqba-ecosystem
+  labels:
+    app: nqba-business-units
+    version: v1.0.0
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: nqba-business-units
+  template:
+    metadata:
+      labels:
+        app: nqba-business-units
+        version: v1.0.0
+    spec:
+      serviceAccountName: nqba-api-sa
+      containers:
+      - name: nqba-business-units
+        image: nqba-ecosystem:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8001
+          name: http
+        env:
+        - name: ENVIRONMENT
+          valueFrom:
+            configMapKeyRef:
+              name: nqba-config
+              key: ENVIRONMENT
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: nqba-config
+              key: LOG_LEVEL
+        - name: DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: nqba-config
+              key: DATABASE_URL
+        - name: REDIS_URL
+          valueFrom:
+            configMapKeyRef:
+              name: nqba-config
+              key: REDIS_URL
+        - name: DYNEX_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: nqba-secrets
+              key: dynex-api-key
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "125m"
+          limits:
+            memory: "512Mi"
+            cpu: "250m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8001
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8001
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+      nodeSelector:
+        NodeGroup: general
+      tolerations:
+      - key: "workload"
+        operator: "Equal"
+        value: "general"
+        effect: "NoSchedule"
+
+---
+# NQBA Business Units Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: nqba-business-units-service
+  namespace: nqba-ecosystem
+  labels:
+    app: nqba-business-units
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8001
+    targetPort: 8001
+    protocol: TCP
+    name: http
+  selector:
+    app: nqba-business-units
+
+---
+# NQBA Quantum Integration Hub Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nqba-qih
+  namespace: nqba-ecosystem
+  labels:
+    app: nqba-qih
+    version: v1.0.0
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: nqba-qih
+  template:
+    metadata:
+      labels:
+        app: nqba-qih
+        version: v1.0.0
+    spec:
+      serviceAccountName: nqba-api-sa
+      containers:
+      - name: nqba-qih
+        image: nqba-ecosystem:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8002
+          name: http
+        env:
+        - name: ENVIRONMENT
+          valueFrom:
+            configMapKeyRef:
+              name: nqba-config
+              key: ENVIRONMENT
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: nqba-config
+              key: LOG_LEVEL
+        - name: DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: nqba-config
+              key: DATABASE_URL
+        - name: REDIS_URL
+          valueFrom:
+            configMapKeyRef:
+              name: nqba-config
+              key: REDIS_URL
+        - name: DYNEX_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: nqba-secrets
+              key: dynex-api-key
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8002
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8002
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+      nodeSelector:
+        NodeGroup: quantum
+      tolerations:
+      - key: "workload"
+        operator: "Equal"
+        value: "quantum"
+        effect: "NoSchedule"
+
+---
+# NQBA QIH Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: nqba-qih-service
+  namespace: nqba-ecosystem
+  labels:
+    app: nqba-qih
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8002
+    targetPort: 8002
+    protocol: TCP
+    name: http
+  selector:
+    app: nqba-qih
+
+---
+# Persistent Volume Claims
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nqba-data-pvc
+  namespace: nqba-ecosystem
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: gp2
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nqba-logs-pvc
+  namespace: nqba-ecosystem
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: gp2
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nqba-reports-pvc
+  namespace: nqba-ecosystem
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: gp2
+
+---
+# Horizontal Pod Autoscaler
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: nqba-api-hpa
+  namespace: nqba-ecosystem
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: nqba-api
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 10
+        periodSeconds: 60
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+      - type: Percent
+        value: 100
+        periodSeconds: 15

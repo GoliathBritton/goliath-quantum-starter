@@ -1,0 +1,184 @@
+name: 🚀 Deploy Partner System to Production
+
+on:
+  push:
+    branches: [ main, production ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deploy to environment'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+        - staging
+        - production
+
+env:
+  AWS_REGION: us-east-1
+  ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com
+  ECR_REPOSITORY_API: goliath-partner-api
+  ECR_REPOSITORY_PORTAL: goliath-partner-portal
+  EKS_CLUSTER_NAME: goliath-partner-cluster
+
+jobs:
+  # Build and test
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 🚀 Checkout code
+      uses: actions/checkout@v4
+
+    - name: 🐍 Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: 📦 Install Python dependencies
+      run: |
+        cd api
+        pip install -r requirements.txt
+        pip install pytest pytest-asyncio httpx
+
+    - name: 🧪 Run API tests
+      run: |
+        cd api
+        python -m pytest tests/ -v
+
+    - name: 🐳 Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: 🔐 Log in to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: 🏗️ Build and push API image
+      run: |
+        docker build -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY_API }}:${{ github.sha }} ./api
+        docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY_API }}:${{ github.sha }}
+        echo "api-image=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY_API }}:${{ github.sha }}" >> $GITHUB_OUTPUT
+
+    - name: 🏗️ Build and push Portal image
+      run: |
+        docker build -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY_PORTAL }}:${{ github.sha }} ./ui
+        docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY_PORTAL }}:${{ github.sha }}" >> $GITHUB_OUTPUT
+
+  # Deploy to staging
+  deploy-staging:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.event.inputs.environment == 'staging'
+    environment: 
+      name: staging
+    
+    steps:
+    - name: 🚀 Checkout code
+      uses: actions/checkout@v4
+
+    - name: 🔐 Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: 📍 Update kube config
+      run: aws eks update-kubeconfig --name ${{ env.EKS_CLUSTER_NAME }}-staging --region ${{ env.AWS_REGION }}
+
+    - name: 🔄 Deploy to staging
+      run: |
+        # Update image tags in k8s manifests
+        sed -i "s|IMAGE_TAG_API|${{ needs.build-and-test.outputs.api-image }}|g" deploy/aws/kubernetes/staging/
+        sed -i "s|IMAGE_TAG_PORTAL|${{ needs.build-and-test.outputs.portal-image }}|g" deploy/aws/kubernetes/staging/
+        
+        # Deploy to staging
+        kubectl apply -f deploy/aws/kubernetes/staging/ --namespace=partner-system-staging
+        
+        # Wait for deployment
+        kubectl rollout status deployment/partner-api -n partner-system-staging
+        kubectl rollout status deployment/partner-portal -n partner-system-staging
+
+    - name: 🧪 Run staging tests
+      run: |
+        # Wait for services to be ready
+        sleep 30
+        
+        # Test staging endpoints
+        STAGING_URL="https://staging.partners.goliathomniedge.com"
+        curl -f $STAGING_URL/health || exit 1
+        curl -f $STAGING_URL/api/partners || exit 1
+
+  # Deploy to production
+  deploy-production:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/production' || github.event.inputs.environment == 'production'
+    environment: 
+      name: production
+    
+    steps:
+    - name: 🚀 Checkout code
+      uses: actions/checkout@v4
+
+    - name: 🔐 Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: 📍 Update kube config
+      run: aws eks update-kubeconfig --name ${{ env.EKS_CLUSTER_NAME }} --region ${{ env.AWS_REGION }}
+
+    - name: 🔄 Deploy to production
+      run: |
+        # Update image tags in k8s manifests
+        sed -i "s|IMAGE_TAG_API|${{ needs.build-and-test.outputs.api-image }}|g" deploy/aws/kubernetes/production/
+        sed -i "s|IMAGE_TAG_PORTAL|${{ needs.build-and-test.outputs.portal-image }}|g" deploy/aws/kubernetes/production/
+        
+        # Deploy to production
+        kubectl apply -f deploy/aws/kubernetes/production/ --namespace=partner-system
+        
+        # Wait for deployment
+        kubectl rollout status deployment/partner-api -n partner-system
+        kubectl rollout status deployment/partner-portal -n partner-system
+
+    - name: 🧪 Run production tests
+      run: |
+        # Wait for services to be ready
+        sleep 30
+        
+        # Test production endpoints
+        PROD_URL="https://partners.goliathomniedge.com"
+        curl -f $PROD_URL/health || exit 1
+        curl -f $PROD_URL/api/partners || exit 1
+
+    - name: 📊 Notify deployment success
+      run: |
+        echo "🚀 Partner System successfully deployed to production!"
+        echo "🌐 Portal: https://partners.goliathomniedge.com"
+        echo "🔌 API: https://api.goliathomniedge.com"
+        echo "📚 Docs: https://docs.goliathomniedge.com"
+
+  # Rollback on failure
+  rollback:
+    needs: [deploy-staging, deploy-production]
+    runs-on: ubuntu-latest
+    if: failure()
+    
+    steps:
+    - name: 🚨 Rollback deployment
+      run: |
+        echo "🚨 Deployment failed! Rolling back..."
+        
+        if [ "${{ github.event.inputs.environment }}" = "production" ]; then
+          kubectl rollout undo deployment/partner-api -n partner-system
+          kubectl rollout undo deployment/partner-portal -n partner-system
+        else
+          kubectl rollout undo deployment/partner-api -n partner-system-staging
+          kubectl rollout undo deployment/partner-portal -n partner-system-staging
+        fi
+        
+        echo "✅ Rollback completed"

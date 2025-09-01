@@ -1,0 +1,4 @@
+# file: C:\Users\johnb\goliath-quantum-starter\src\nqba_stack\quantum\schemas\responses.py
+# hypothesis_version: 6.138.7
+
+['Additional metadata', 'Algorithm used', 'Applied filters', 'Associated job ID', 'Client identifier', 'Confidence score', 'Cost by problem type', 'Cost by provider', 'Cost per qubit', 'Cost per second', 'Current job status', 'Current page number', 'Current queue length', 'Error code if failed', 'Generated response', 'Job identifier', 'Jobs by problem type', 'Jobs by provider', 'Number of iterations', 'Page size', 'Period end date', 'Period start date', 'Perplexity score', 'Provider name', 'Provider version', 'Quota limit', 'Quota used', 'Remaining quota', 'Request timestamp', 'Response data', 'Response message', 'Response timestamp', 'Result identifier', 'Result summary', 'Solution energy', 'Solution probability', 'Temperature used', 'Total number of jobs', 'Validation notes', 'When job completed']

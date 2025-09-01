@@ -1,0 +1,148 @@
+[
+  {
+    "payout_id": "payout_001",
+    "partner_id": "partner_001",
+    "company": "Quantum Solutions Inc.",
+    "period": "2024-06",
+    "gross_revenue": 47250,
+    "commission_rate": 0.30,
+    "commission_earned": 14175,
+    "fees": 283.50,
+    "net_payout": 13891.50,
+    "status": "processed",
+    "processed_date": "2024-07-15",
+    "payment_method": "bank_transfer",
+    "account_details": {
+      "bank_name": "Chase Bank",
+      "account_last4": "1234",
+      "routing_number": "021000021"
+    },
+    "breakdown": {
+      "base_commission": 14175,
+      "performance_bonus": 0,
+      "quality_bonus": 0,
+      "tier_bonus": 0
+    }
+  },
+  {
+    "payout_id": "payout_002",
+    "partner_id": "partner_002",
+    "company": "Neural Dynamics Corp",
+    "period": "2024-06",
+    "gross_revenue": 28500,
+    "commission_rate": 0.25,
+    "commission_earned": 7125,
+    "fees": 142.50,
+    "net_payout": 6982.50,
+    "status": "processed",
+    "processed_date": "2024-07-15",
+    "payment_method": "paypal",
+    "account_details": {
+      "paypal_email": "m.rodriguez@neuraldynamics.com"
+    },
+    "breakdown": {
+      "base_commission": 7125,
+      "performance_bonus": 0,
+      "quality_bonus": 0,
+      "tier_bonus": 0
+    }
+  },
+  {
+    "payout_id": "payout_003",
+    "partner_id": "partner_003",
+    "company": "DataFlow Systems",
+    "period": "2024-06",
+    "gross_revenue": 18200,
+    "commission_rate": 0.20,
+    "commission_earned": 3640,
+    "fees": 91.00,
+    "net_payout": 3549.00,
+    "status": "pending",
+    "processed_date": null,
+    "payment_method": "bank_transfer",
+    "account_details": {
+      "bank_name": "Wells Fargo",
+      "account_last4": "5678",
+      "routing_number": "121000248"
+    },
+    "breakdown": {
+      "base_commission": 3640,
+      "performance_bonus": 0,
+      "quality_bonus": 0,
+      "tier_bonus": 0
+    }
+  },
+  {
+    "payout_id": "payout_004",
+    "partner_id": "partner_004",
+    "company": "TechInnovate Labs",
+    "period": "2024-06",
+    "gross_revenue": 9500,
+    "commission_rate": 0.15,
+    "commission_earned": 1425,
+    "fees": 47.50,
+    "net_payout": 1377.50,
+    "status": "pending",
+    "processed_date": null,
+    "payment_method": "stripe",
+    "account_details": {
+      "stripe_account": "acct_1H2I3J4K5L6M7N8O9P0"
+    },
+    "breakdown": {
+      "base_commission": 1425,
+      "performance_bonus": 0,
+      "quality_bonus": 0,
+      "tier_bonus": 0
+    }
+  },
+  {
+    "payout_id": "payout_005",
+    "partner_id": "partner_005",
+    "company": "AI Masters Group",
+    "period": "2024-06",
+    "gross_revenue": 52000,
+    "commission_rate": 0.30,
+    "commission_earned": 15600,
+    "fees": 312.00,
+    "net_payout": 15288.00,
+    "status": "processed",
+    "processed_date": "2024-07-15",
+    "payment_method": "bank_transfer",
+    "account_details": {
+      "bank_name": "Bank of America",
+      "account_last4": "9012",
+      "routing_number": "026009593"
+    },
+    "breakdown": {
+      "base_commission": 15600,
+      "performance_bonus": 0,
+      "quality_bonus": 0,
+      "tier_bonus": 0
+    }
+  },
+  {
+    "payout_id": "payout_006",
+    "partner_id": "partner_001",
+    "company": "Quantum Solutions Inc.",
+    "period": "2024-05",
+    "gross_revenue": 45800,
+    "commission_rate": 0.30,
+    "commission_earned": 13740,
+    "fees": 274.80,
+    "net_payout": 13465.20,
+    "status": "processed",
+    "processed_date": "2024-06-15",
+    "payment_method": "bank_transfer",
+    "account_details": {
+      "bank_name": "Chase Bank",
+      "account_last4": "1234",
+      "routing_number": "021000021"
+    },
+    "breakdown": {
+      "base_commission": 13740,
+      "performance_bonus": 0,
+      "quality_bonus": 0,
+      "tier_bonus": 0
+    }
+  }
+]

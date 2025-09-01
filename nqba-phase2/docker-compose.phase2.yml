@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: nqba
+    ports: ["5433:5432"]
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:6
+    ports: ["6379:6379"]
+
+  api:
+    build: ./api
+    env_file: .env
+    ports: ["8000:8000"]
+    depends_on: ["db","redis"]
+
+  web:
+    build: ./web
+    env_file: .env
+    ports: ["3000:3000"]
+    depends_on: ["api"]
+
+volumes:
+  db_data:

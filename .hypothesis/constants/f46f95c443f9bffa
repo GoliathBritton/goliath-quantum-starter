@@ -1,0 +1,4 @@
+# file: C:\Users\johnb\goliath-quantum-starter\src\nqba_stack\business_pods\sigma_select\sigma_select_dashboard.py
+# hypothesis_version: 6.138.7
+
+[100, 200, '/v1/sigmaeq/score', '1.0.0', 'Authorization', 'Content-Type', 'Hash', 'Lead Name', 'Number of Leads', 'Qm', 'Score Distribution', 'SigmaEQ Score', 'TechCorp Solutions', 'Upload Leads CSV', '__main__', 'application/json', 'budget', 'count', 'csv', 'data.json', 'energy costs', 'file', 'high', 'ipfs_upload_failed', 'leads', 'ltc_ipfs_hash', 'medium', 'name', 'next_action', 'nqba_version', 'optimization_time', 'pain_points', 'production delays', 'quality issues', 'quantum_enhanced', 'records', 'score', 'scored_leads', 'src', 'text/csv', 'timestamp', 'transaction_type', 'unknown_hash', 'urgency', 'urgent', 'very high', 'very urgent', '✅ NQBA Core Active', '📊 Scored Leads', '📤 Export Results', '📥 Download CSV', '📥 Download JSON', '🔗 LTC Logging Ready']

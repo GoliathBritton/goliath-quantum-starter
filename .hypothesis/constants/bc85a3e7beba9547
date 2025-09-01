@@ -1,0 +1,4 @@
+# file: C:\Users\johnb\goliath-quantum-starter\src\nqba\sigma_graph.py
+# hypothesis_version: 6.138.7
+
+[0.7, 0.9, 'CEO', 'CFO', 'CTO', 'flags', 'leverage_scores', 'org_chart']

@@ -1,0 +1,182 @@
+{
+  "name": "FLYFOX AI - Lead Capture & Quantum Scoring",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "lead-capture",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Lead Capture Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "webhookId": "lead-capture-webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Validate and format incoming lead data\nconst leadData = $input.first().json;\n\n// Validate required fields\nif (!leadData.name || !leadData.email || !leadData.company) {\n  throw new Error('Missing required fields: name, email, company');\n}\n\n// Add metadata\nconst enrichedData = {\n  ...leadData,\n  timestamp: new Date().toISOString(),\n  source: 'n8n-webhook',\n  status: 'new',\n  budget: parseInt(leadData.budget) || 0,\n  signals: {\n    intent: Math.random() * 5, // Simulated intent signal\n    hiring: Math.random() * 3, // Simulated hiring signal\n    techfit: Math.random() * 4  // Simulated tech fit signal\n  }\n};\n\nreturn enrichedData;"
+      },
+      "id": "enrich-lead",
+      "name": "Enrich Lead Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:8000/v2/leads/quantum-scoring",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-FLYFOX-Source",
+              "value": "n8n-integration"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "company",
+              "value": "={{ $json.company }}"
+            },
+            {
+              "name": "industry",
+              "value": "={{ $json.industry || 'technology' }}"
+            },
+            {
+              "name": "signals",
+              "value": "={{ $json.signals }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "quantum-scoring",
+      "name": "Quantum Lead Scoring",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:8000/v2/dashboard/overview",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "update-dashboard",
+      "name": "Update Dashboard KPIs",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"status\": \"success\",\n  \"message\": \"Lead captured and scored successfully\",\n  \"lead_id\": $json.id || \"generated-id\",\n  \"quantum_score\": $(\"Quantum Lead Scoring\").first().json.score,\n  \"dashboard_updated\": true,\n  \"timestamp\": new Date().toISOString()\n}"
+      },
+      "id": "success-response",
+      "name": "Success Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1120, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"status\": \"error\",\n  \"message\": $json.message || \"Lead processing failed\",\n  \"timestamp\": new Date().toISOString()\n}",
+        "responseCode": 400
+      },
+      "id": "error-response",
+      "name": "Error Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1120, 500]
+    }
+  ],
+  "connections": {
+    "Lead Capture Webhook": {
+      "main": [
+        [
+          {
+            "node": "Enrich Lead Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enrich Lead Data": {
+      "main": [
+        [
+          {
+            "node": "Quantum Lead Scoring",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Quantum Lead Scoring": {
+      "main": [
+        [
+          {
+            "node": "Update Dashboard KPIs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Dashboard KPIs": {
+      "main": [
+        [
+          {
+            "node": "Success Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "id": "flyfox-lead-capture-workflow",
+  "tags": [
+    {
+      "createdAt": "2025-09-01T05:48:00.000Z",
+      "updatedAt": "2025-09-01T05:48:00.000Z",
+      "id": "flyfox-ai",
+      "name": "FLYFOX AI"
+    },
+    {
+      "createdAt": "2025-09-01T05:48:00.000Z",
+      "updatedAt": "2025-09-01T05:48:00.000Z",
+      "id": "quantum-scoring",
+      "name": "Quantum Scoring"
+    }
+  ]
+}

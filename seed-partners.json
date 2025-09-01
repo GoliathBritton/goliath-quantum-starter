@@ -1,0 +1,225 @@
+{
+  "partners": [
+    {
+      "partner_id": "partner_001",
+      "company": "Quantum Solutions Inc.",
+      "tier": "platinum",
+      "monthly_revenue": 47250,
+      "commission_earned": 14175,
+      "active_solutions": 24,
+      "customer_rating": 4.8,
+      "total_customers": 89,
+      "commission_rate": 0.30,
+      "tier_progress": 85,
+      "next_tier": "Diamond",
+      "solutions": [
+        "Quantum Portfolio Optimizer",
+        "AI Energy Management",
+        "Supply Chain Optimizer",
+        "Healthcare Analytics Suite",
+        "Financial Risk Assessment"
+      ],
+      "webhooks": [
+        "lead_created",
+        "commission_earned",
+        "tier_upgrade",
+        "solution_deployed",
+        "customer_onboarded"
+      ],
+      "contact": {
+        "email": "partners@quantumsolutions.com",
+        "phone": "+1 (555) 123-4567",
+        "website": "https://quantumsolutions.com"
+      },
+      "location": {
+        "city": "San Francisco",
+        "state": "CA",
+        "country": "USA"
+      },
+      "specialties": [
+        "quantum_computing",
+        "ai_optimization",
+        "financial_services",
+        "healthcare",
+        "energy"
+      ]
+    },
+    {
+      "partner_id": "partner_002",
+      "company": "AI Dynamics Corp",
+      "tier": "platinum",
+      "monthly_revenue": 38900,
+      "commission_earned": 11670,
+      "active_solutions": 18,
+      "customer_rating": 4.7,
+      "total_customers": 67,
+      "commission_rate": 0.30,
+      "tier_progress": 72,
+      "next_tier": "Diamond",
+      "solutions": [
+        "Neural Network Optimizer",
+        "Predictive Analytics Engine",
+        "Customer Behavior Analysis",
+        "Market Intelligence Platform",
+        "Process Automation Suite"
+      ],
+      "webhooks": [
+        "lead_created",
+        "commission_earned",
+        "solution_deployed"
+      ],
+      "contact": {
+        "email": "partnerships@aidynamics.com",
+        "phone": "+1 (555) 234-5678",
+        "website": "https://aidynamics.com"
+      },
+      "location": {
+        "city": "New York",
+        "state": "NY",
+        "country": "USA"
+      },
+      "specialties": [
+        "machine_learning",
+        "data_analytics",
+        "automation",
+        "retail",
+        "manufacturing"
+      ]
+    },
+    {
+      "partner_id": "partner_003",
+      "company": "Neural Tech Partners",
+      "tier": "gold",
+      "monthly_revenue": 28500,
+      "commission_earned": 7125,
+      "active_solutions": 15,
+      "customer_rating": 4.6,
+      "total_customers": 52,
+      "commission_rate": 0.25,
+      "tier_progress": 68,
+      "next_tier": "Platinum",
+      "solutions": [
+        "Deep Learning Framework",
+        "Computer Vision API",
+        "Natural Language Processor",
+        "Recommendation Engine",
+        "Anomaly Detection System"
+      ],
+      "webhooks": [
+        "lead_created",
+        "commission_earned"
+      ],
+      "contact": {
+        "email": "partners@neuraltech.com",
+        "phone": "+1 (555) 345-6789",
+        "website": "https://neuraltech.com"
+      },
+      "location": {
+        "city": "Austin",
+        "state": "TX",
+        "country": "USA"
+      },
+      "specialties": [
+        "deep_learning",
+        "computer_vision",
+        "nlp",
+        "ecommerce",
+        "security"
+      ]
+    },
+    {
+      "partner_id": "partner_004",
+      "company": "Quantum Flow Systems",
+      "tier": "gold",
+      "monthly_revenue": 22400,
+      "commission_earned": 5600,
+      "active_solutions": 12,
+      "customer_rating": 4.5,
+      "total_customers": 38,
+      "commission_rate": 0.25,
+      "tier_progress": 45,
+      "next_tier": "Platinum",
+      "solutions": [
+        "Quantum Algorithm Library",
+        "Optimization Engine",
+        "Simulation Framework",
+        "Research Tools",
+        "Educational Platform"
+      ],
+      "webhooks": [
+        "lead_created"
+      ],
+      "contact": {
+        "email": "partnerships@quantumflow.com",
+        "phone": "+1 (555) 456-7890",
+        "website": "https://quantumflow.com"
+      },
+      "location": {
+        "city": "Boston",
+        "state": "MA",
+        "country": "USA"
+      },
+      "specialties": [
+        "quantum_algorithms",
+        "research",
+        "education",
+        "academia",
+        "government"
+      ]
+    },
+    {
+      "partner_id": "partner_005",
+      "company": "IntelliQuantum Labs",
+      "tier": "silver",
+      "monthly_revenue": 15600,
+      "commission_earned": 2340,
+      "active_solutions": 8,
+      "customer_rating": 4.3,
+      "total_customers": 25,
+      "commission_rate": 0.15,
+      "tier_progress": 78,
+      "next_tier": "Gold",
+      "solutions": [
+        "Smart Contract Analyzer",
+        "Blockchain Optimizer",
+        "DeFi Analytics",
+        "Crypto Portfolio Manager",
+        "NFT Marketplace Tools"
+      ],
+      "webhooks": [
+        "lead_created"
+      ],
+      "contact": {
+        "email": "partners@intelliquantum.com",
+        "phone": "+1 (555) 567-8901",
+        "website": "https://intelliquantum.com"
+      },
+      "location": {
+        "city": "Miami",
+        "state": "FL",
+        "country": "USA"
+      },
+      "specialties": [
+        "blockchain",
+        "defi",
+        "cryptocurrency",
+        "smart_contracts",
+        "nft"
+      ]
+    }
+  ],
+  "metadata": {
+    "total_partners": 5,
+    "tier_distribution": {
+      "platinum": 2,
+      "gold": 2,
+      "silver": 1,
+      "bronze": 0
+    },
+    "total_revenue": 152650,
+    "total_commission": 40890,
+    "average_rating": 4.58,
+    "total_customers": 271,
+    "total_solutions": 77
+  }
+}

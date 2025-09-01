@@ -1,0 +1,4 @@
+# file: C:\Users\johnb\goliath-quantum-starter\src\nqba_stack\quantum\adapters\base_adapter.py
+# hypothesis_version: 6.138.7
+
+[0.0, 300, '1.0.0', 'api_key', 'cost_per_qubit', 'cost_per_second', 'endpoint', 'extra_config', 'max_qubits', 'problem_types', 'timeout']

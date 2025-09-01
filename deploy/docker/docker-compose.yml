@@ -1,0 +1,116 @@
+version: '3.8'
+
+services:
+  # NQBA API Server
+  nqba-api:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://nqba_user:nqba_password@postgres:5432/nqba_db
+      - REDIS_URL=redis://redis:6379
+      - SECRET_KEY=${SECRET_KEY}
+      - ENVIRONMENT=production
+      - LOG_LEVEL=INFO
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - nqba_data:/app/data
+      - nqba_logs:/app/logs
+      - nqba_reports:/app/reports
+    restart: unless-stopped
+    networks:
+      - nqba_network
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=nqba_db
+      - POSTGRES_USER=nqba_user
+      - POSTGRES_PASSWORD=nqba_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    networks:
+      - nqba_network
+
+  # Redis Cache & Message Queue
+  redis:
+    image: redis:7-alpine
+    command: redis-server --appendonly yes --requirepass nqba_redis_password
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    networks:
+      - nqba_network
+
+  # Prometheus Monitoring
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    restart: unless-stopped
+    networks:
+      - nqba_network
+
+  # Grafana Dashboards
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=nqba_grafana_password
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    restart: unless-stopped
+    networks:
+      - nqba_network
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/ssl:/etc/nginx/ssl
+    depends_on:
+      - nqba-api
+    restart: unless-stopped
+    networks:
+      - nqba_network
+
+volumes:
+  nqba_data:
+  nqba_logs:
+  nqba_reports:
+  postgres_data:
+  redis_data:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  nqba_network:
+    driver: bridge

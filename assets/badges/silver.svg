@@ -1,0 +1,23 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="60" cy="60" r="55" fill="#C0C0C0" stroke="#808080" stroke-width="2"/>
+  
+  <!-- Inner Circle -->
+  <circle cx="60" cy="60" r="45" fill="#E6E6FA" stroke="#C0C0C0" stroke-width="1"/>
+  
+  <!-- Silver Star -->
+  <g transform="translate(60, 60)">
+    <path d="M0,-25 L7.5,-7.5 L25,0 L7.5,7.5 L0,25 L-7.5,7.5 L-25,0 L-7.5,-7.5 Z" fill="#FFFFFF" stroke="#808080" stroke-width="1"/>
+  </g>
+  
+  <!-- Text -->
+  <text x="60" y="85" text-anchor="middle" fill="#404040" font-family="Arial, sans-serif" font-size="12" font-weight="bold">SILVER</text>
+  <text x="60" y="100" text-anchor="middle" fill="#404040" font-family="Arial, sans-serif" font-size="10">PARTNER</text>
+  
+  <!-- Decorative Elements -->
+  <circle cx="60" cy="60" r="35" fill="none" stroke="#FFFFFF" stroke-width="1" opacity="0.5"/>
+  <circle cx="60" cy="60" r="25" fill="none" stroke="#FFFFFF" stroke-width="1" opacity="0.3"/>
+  
+  <!-- Shine Effect -->
+  <path d="M35,35 L45,45 L55,35" fill="none" stroke="#FFFFFF" stroke-width="2" opacity="0.8"/>
+</svg>

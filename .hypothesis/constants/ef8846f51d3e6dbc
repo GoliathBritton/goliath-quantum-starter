@@ -1,0 +1,4 @@
+# file: C:\Users\johnb\goliath-quantum-starter\src\nqba_stack\quantum_adapter.py
+# hypothesis_version: 6.138.7
+
+[0.0, 0.001, 0.05, 0.1, 'algorithms', 'api_key', 'available', 'cirq', 'cirq.Simulator', 'connected', 'default.qubit', 'default.qubit.torch', 'details', 'devices', 'dynex', 'dynex_network', 'endpoint', 'fallback_reason', 'gates', 'genetic_algorithm', 'green_credits', 'heuristic', 'mainnet', 'matrix', 'matrix_minimum', 'measurements', 'method', 'mock_dynex_api_key', 'network', 'particle_swarm', 'pennylane', 'proof_of_work', 'qaoa', 'qasm_simulator', 'qiskit', 'qubits', 'qubo', 'simulated', 'simulated_annealing', 'simulators', 'size', 'status', 'timestamp', 'type', 'unknown']

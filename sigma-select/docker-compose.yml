@@ -1,0 +1,21 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: sigma
+    ports: ["5432:5432"]
+  api:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgresql+psycopg2://postgres:postgres@db:5432/sigma
+      QUANTUM_BACKEND: dynex
+    ports: ["8080:8080"]
+    depends_on: [db]
+  portal:
+    build: ./portal
+    environment:
+      NEXT_PUBLIC_API_BASE: http://localhost:8080
+    ports: ["3000:3000"]
+    depends_on: [api]

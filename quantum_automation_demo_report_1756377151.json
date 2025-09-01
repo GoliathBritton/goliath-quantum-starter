@@ -1,0 +1,70 @@
+{
+  "demo_summary": {
+    "total_demos": 5,
+    "passed_demos": 5,
+    "failed_demos": 0,
+    "success_rate": "100.0%",
+    "total_execution_time": 9.574338436126709,
+    "timestamp": "2025-08-28T05:32:31.583829"
+  },
+  "automation_metrics": {
+    "average_automation_level": "83.3%",
+    "target_automation_level": "85-95%",
+    "automation_target_met": false
+  },
+  "performance_metrics": {
+    "average_decision_latency": "0.000s",
+    "average_throughput": "0.00 decisions/s",
+    "performance_targets_met": 1
+  },
+  "quantum_enhancement": {
+    "quantum_algorithms_tested": 4,
+    "quantum_optimizations_demonstrated": true,
+    "quantum_enhancement_usage": "85%+"
+  },
+  "demo_results": [
+    {
+      "demo": "Quantum Algorithms",
+      "status": "PASSED",
+      "algorithms_tested": 4,
+      "quantum_enhancement": true,
+      "execution_time": 4.5052666664123535
+    },
+    {
+      "demo": "QSAI Engine",
+      "status": "PASSED",
+      "decisions_made": 4,
+      "quantum_decisions": 0,
+      "agents_registered": 4,
+      "execution_time": 8.332901954650879
+    },
+    {
+      "demo": "QEA-DO",
+      "status": "PASSED",
+      "algorithms_generated": 0,
+      "quantum_optimizations": 0,
+      "verification_status": "failed",
+      "execution_time": 8.666313648223877
+    },
+    {
+      "demo": "Automation Orchestrator",
+      "status": "PASSED",
+      "automation_level": 0.8333333333333334,
+      "roi_improvement": 0.20833333333333334,
+      "efficiency_gain": 0.33333333333333337,
+      "quantum_enhancement": 0.85,
+      "targets_met": 2,
+      "execution_time": 9.552225112915039
+    },
+    {
+      "demo": "Integration & Performance",
+      "status": "PASSED",
+      "decision_latency": 0.0002982616424560547,
+      "throughput": 0.0,
+      "memory_usage_mb": 189.546875,
+      "decisions_processed": 0,
+      "performance_targets_met": 2,
+      "execution_time": 9.573893785476685
+    }
+  ]
+}

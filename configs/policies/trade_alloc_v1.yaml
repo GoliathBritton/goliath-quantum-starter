@@ -1,0 +1,7 @@
+name: trade_alloc_v1
+objective: risk_adjusted_return
+constraints:
+  max_drawdown: 0.12
+  max_position: 0.08
+quantum:
+  prefer: true

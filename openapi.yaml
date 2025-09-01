@@ -1,0 +1,1262 @@
+openapi: 3.0.3
+info:
+  title: FLYFOX AI - NQBA Ecosystem API
+  version: "2.0.0"
+  description: |
+    Complete API for FLYFOX AI's Neuromorphic Quantum Business Architecture (NQBA) ecosystem.
+    
+    ## Core Components
+    
+    ### 🎓 FLYFOX Academy
+    - Training program enrollment and progress tracking
+    - Certification issuance and verification
+    - Developer program access and marketplace integration
+    
+    ### 🔄 Cross-Agent Orchestrator
+    - Workflow execution and management
+    - Agent registration and capability discovery
+    - Cross-agent communication and collaboration
+    
+    ### ⚡ Quantum Integration Hub (QIH)
+    - Quantum job submission and management
+    - Optimization problem solving
+    - Performance benchmarking and analytics
+    
+    ### 🏢 Business Units
+    - FLYFOX AI (Energy Optimization)
+    - Goliath Trade (Financial Intelligence)
+    - Sigma Select (Lead Scoring & Sales)
+    
+    ### 🔐 Authentication & Entitlements
+    - JWT-based authentication
+    - Role-based access control (RBAC)
+    - Feature gating and tier management
+    
+    ## Technology Stack
+    - **Backend**: FastAPI + Python 3.11+
+    - **Quantum**: Dynex SDK integration
+    - **Database**: PostgreSQL + Redis
+    - **Monitoring**: OpenTelemetry + Prometheus + Grafana
+    - **Deployment**: Docker + Kubernetes + AWS EKS
+    
+    ## Getting Started
+    1. Obtain API credentials from FLYFOX AI
+    2. Authenticate using JWT tokens
+    3. Explore available endpoints and capabilities
+    4. Integrate with your business processes
+    
+    ## Support
+    - Documentation: https://docs.flyfoxai.io
+    - Support: support@flyfoxai.io
+    - Developer Portal: https://developers.flyfoxai.io
+
+  contact:
+    name: FLYFOX AI Support
+    email: support@flyfoxai.io
+    url: https://flyfoxai.io
+  
+  license:
+    name: Business Source License 1.1
+    url: https://mariadb.com/bsl11/
+
+servers:
+  - url: https://api.flyfoxai.io
+    description: Production API
+  - url: https://staging-api.flyfoxai.io
+    description: Staging API
+  - url: http://localhost:8000
+    description: Local Development
+
+paths:
+  # Health & Status Endpoints
+  /health:
+    get:
+      summary: System Health Check
+      description: Check the overall health of the NQBA ecosystem
+      tags: [System]
+      responses:
+        '200':
+          description: System healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "healthy"
+                  timestamp:
+                    type: string
+                    format: date-time
+                  components:
+                    type: object
+                    properties:
+                      academy:
+                        type: string
+                        example: "healthy"
+                      orchestrator:
+                        type: string
+                        example: "healthy"
+                      qih:
+                        type: string
+                        example: "healthy"
+                      business_units:
+                        type: string
+                        example: "healthy"
+
+  # FLYFOX Academy Endpoints
+  /academy/learning-paths:
+    get:
+      summary: Get Learning Paths
+      description: Retrieve all available learning paths for FLYFOX Academy
+      tags: [FLYFOX Academy]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of learning paths
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LearningPathResponse'
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal server error
+
+  /academy/enroll:
+    post:
+      summary: Enroll in Learning Path
+      description: Enroll a user in a specific learning path
+      tags: [FLYFOX Academy]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnrollmentRequest'
+      responses:
+        '201':
+          description: Successfully enrolled
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  path_id:
+                    type: string
+                  tier:
+                    type: string
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal server error
+
+  /academy/progress:
+    get:
+      summary: Get User Progress
+      description: Retrieve learning progress for the authenticated user
+      tags: [FLYFOX Academy]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User progress data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserProgressResponse'
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal server error
+
+    put:
+      summary: Update Progress
+      description: Update user progress in a learning path
+      tags: [FLYFOX Academy]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProgressUpdateRequest'
+      responses:
+        '200':
+          description: Progress updated successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal server error
+
+  /academy/certificate:
+    post:
+      summary: Request Certificate
+      description: Request a certificate for a completed learning path
+      tags: [FLYFOX Academy]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CertificateRequest'
+      responses:
+        '201':
+          description: Certificate issued successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  certificate_id:
+                    type: string
+                  path_id:
+                    type: string
+                  level:
+                    type: string
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal server error
+
+  /academy/certificates/{certificate_id}:
+    get:
+      summary: Get Certificate
+      description: Retrieve certificate details by ID
+      tags: [FLYFOX Academy]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: certificate_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Certificate details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CertificateResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Certificate not found
+        '500':
+          description: Internal server error
+
+  /academy/metrics:
+    get:
+      summary: Get Academy Metrics
+      description: Retrieve FLYFOX Academy performance metrics (admin only)
+      tags: [FLYFOX Academy]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Academy metrics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AcademyMetricsResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+
+  /academy/health:
+    get:
+      summary: Academy Health Check
+      description: Check the health of the FLYFOX Academy system
+      tags: [FLYFOX Academy]
+      responses:
+        '200':
+          description: Academy system healthy
+        '503':
+          description: Academy system unhealthy
+
+  # Cross-Agent Orchestrator Endpoints
+  /orchestrator/workflows/execute:
+    post:
+      summary: Execute Workflow
+      description: Execute a cross-agent workflow
+      tags: [Cross-Agent Orchestrator]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkflowExecutionRequest'
+      responses:
+        '202':
+          description: Workflow execution started
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  workflow_id:
+                    type: string
+                  workflow_name:
+                    type: string
+                  status:
+                    type: string
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal server error
+
+  /orchestrator/workflows/{workflow_id}/status:
+    get:
+      summary: Get Workflow Status
+      description: Get the current status of a workflow execution
+      tags: [Cross-Agent Orchestrator]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: workflow_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Workflow status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowStatusResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Workflow not found
+        '500':
+          description: Internal server error
+
+  /orchestrator/workflows/{workflow_id}/cancel:
+    post:
+      summary: Cancel Workflow
+      description: Cancel a running workflow
+      tags: [Cross-Agent Orchestrator]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: workflow_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Workflow cancelled successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal server error
+
+  /orchestrator/agents/register:
+    post:
+      summary: Register Agent
+      description: Register a new agent for orchestration
+      tags: [Cross-Agent Orchestrator]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentRegistrationRequest'
+      responses:
+        '201':
+          description: Agent registered successfully
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+
+  /orchestrator/agents/capabilities:
+    get:
+      summary: Get Agent Capabilities
+      description: Get available agent capabilities, optionally filtered by type
+      tags: [Cross-Agent Orchestrator]
+      parameters:
+        - name: agent_type
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/AgentType'
+      responses:
+        '200':
+          description: List of agent capabilities
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AgentCapabilityResponse'
+        '500':
+          description: Internal server error
+
+  /orchestrator/workflows/templates:
+    get:
+      summary: Get Workflow Templates
+      description: Get available workflow templates
+      tags: [Cross-Agent Orchestrator]
+      responses:
+        '200':
+          description: List of workflow templates
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WorkflowTemplateResponse'
+        '500':
+          description: Internal server error
+
+  /orchestrator/metrics:
+    get:
+      summary: Get Orchestrator Metrics
+      description: Get orchestrator performance metrics (admin only)
+      tags: [Cross-Agent Orchestrator]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Orchestrator metrics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrchestratorMetricsResponse'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal server error
+
+  /orchestrator/health:
+    get:
+      summary: Orchestrator Health Check
+      description: Check the health of the Cross-Agent Orchestrator system
+      tags: [Cross-Agent Orchestrator]
+      responses:
+        '200':
+          description: Orchestrator system healthy
+        '503':
+          description: Orchestrator system unhealthy
+
+  /orchestrator/demo/customer-onboarding:
+    get:
+      summary: Customer Onboarding Workflow Demo
+      description: Demo the customer onboarding workflow
+      tags: [Cross-Agent Orchestrator]
+      responses:
+        '200':
+          description: Workflow demo information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowDemoResponse'
+        '404':
+          description: Workflow template not found
+        '500':
+          description: Internal server error
+
+  # Quantum Integration Hub (QIH) Endpoints
+  /qih/submit:
+    post:
+      summary: Submit Quantum Job
+      description: Submit a job to the Quantum Integration Hub
+      tags: [Quantum Integration Hub]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QIHJobRequest'
+      responses:
+        '200':
+          description: Job submitted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QIHJobResponse'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal server error
+
+  /qih/jobs/{job_id}/status:
+    get:
+      summary: Get Job Status
+      description: Get the status of a quantum job
+      tags: [Quantum Integration Hub]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: job_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Job status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QIHJobStatusResponse'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Job not found
+        '500':
+          description: Internal server error
+
+  # Business Units Endpoints
+  /business/energy-optimization:
+    post:
+      summary: Energy Optimization Demo
+      description: Run FLYFOX AI energy optimization demo
+      tags: [Business Units]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnergyOptimizationRequest'
+      responses:
+        '200':
+          description: Energy optimization results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnergyOptimizationResponse'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal server error
+
+  /business/capital-funding:
+    post:
+      summary: Capital Funding Demo
+      description: Run Goliath Trade capital funding demo
+      tags: [Business Units]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CapitalFundingRequest'
+      responses:
+        '200':
+          description: Capital funding analysis results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CapitalFundingResponse'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal server error
+
+  /business/insurance-risk:
+    post:
+      summary: Insurance Risk Assessment Demo
+      description: Run Sigma Select insurance risk assessment demo
+      tags: [Business Units]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InsuranceRiskRequest'
+      responses:
+        '200':
+          description: Insurance risk assessment results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InsuranceRiskResponse'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal server error
+
+  # Authentication Endpoints
+  /auth/login:
+    post:
+      summary: User Login
+      description: Authenticate user and receive JWT token
+      tags: [Authentication]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Invalid credentials
+        '500':
+          description: Internal server error
+
+  /auth/register:
+    post:
+      summary: User Registration
+      description: Register a new user account
+      tags: [Authentication]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistrationRequest'
+      responses:
+        '201':
+          description: User registered successfully
+        '400':
+          description: Bad request
+        '409':
+          description: User already exists
+        '500':
+          description: Internal server error
+
+  /auth/refresh:
+    post:
+      summary: Refresh Token
+      description: Refresh JWT access token
+      tags: [Authentication]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Token refreshed successfully
+        '401':
+          description: Invalid refresh token
+        '500':
+          description: Internal server error
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token for API authentication
+
+  schemas:
+    # FLYFOX Academy Schemas
+    AcademyTier:
+      type: string
+      enum: [free, student, professional, enterprise, partner]
+      description: Academy access tiers for different user types
+
+    CertificationLevel:
+      type: string
+      enum: [bronze, silver, gold, platinum, master]
+      description: Certification levels for quantum AI expertise
+
+    EnrollmentRequest:
+      type: object
+      required:
+        - path_id
+        - tier
+      properties:
+        path_id:
+          type: string
+          description: ID of the learning path to enroll in
+        tier:
+          $ref: '#/components/schemas/AcademyTier'
+
+    ProgressUpdateRequest:
+      type: object
+      required:
+        - path_id
+        - module_completion
+        - time_spent
+      properties:
+        path_id:
+          type: string
+          description: ID of the learning path
+        module_completion:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 100
+          description: Module completion percentage
+        time_spent:
+          type: integer
+          minimum: 0
+          description: Time spent in minutes
+
+    CertificateRequest:
+      type: object
+      required:
+        - path_id
+        - level
+      properties:
+        path_id:
+          type: string
+          description: ID of the completed learning path
+        level:
+          $ref: '#/components/schemas/CertificationLevel'
+
+    LearningPathResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        difficulty:
+          type: string
+        estimated_hours:
+          type: integer
+        modules:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              description:
+                type: string
+              duration_minutes:
+                type: integer
+              content_type:
+                type: string
+
+    UserProgressResponse:
+      type: object
+      properties:
+        path_id:
+          type: string
+        completion_percentage:
+          type: number
+          format: float
+        time_spent_minutes:
+          type: integer
+        assessments_passed:
+          type: integer
+        total_assessments:
+          type: integer
+        certificate_earned:
+          type: string
+          nullable: true
+
+    CertificateResponse:
+      type: object
+      properties:
+        certificate_id:
+          type: string
+        path_id:
+          type: string
+        level:
+          type: string
+        issued_date:
+          type: string
+          format: date-time
+        expiry_date:
+          type: string
+          format: date-time
+        metadata:
+          type: object
+
+    AcademyMetricsResponse:
+      type: object
+      properties:
+        total_enrollments:
+          type: integer
+        active_learners:
+          type: integer
+        certification_completions:
+          type: integer
+        developer_onboardings:
+          type: integer
+        marketplace_contributions:
+          type: integer
+        revenue_mrr:
+          type: number
+          format: float
+        satisfaction_score:
+          type: number
+          format: float
+
+    # Cross-Agent Orchestrator Schemas
+    AgentType:
+      type: string
+      enum: [digital_agent, voice_agent, chatbot_agent, quantum_agent, analytics_agent, workflow_agent]
+      description: Types of FLYFOX AI agents available for orchestration
+
+    WorkflowStatus:
+      type: string
+      enum: [pending, running, completed, failed, cancelled]
+      description: Status of cross-agent workflows
+
+    WorkflowExecutionRequest:
+      type: object
+      required:
+        - workflow_name
+        - input_data
+      properties:
+        workflow_name:
+          type: string
+          description: Name of the workflow template to execute
+        input_data:
+          type: object
+          description: Input data for the workflow
+
+    AgentRegistrationRequest:
+      type: object
+      required:
+        - agent_id
+        - agent_type
+        - capabilities
+        - input_schema
+        - output_schema
+      properties:
+        agent_id:
+          type: string
+          description: Unique identifier for the agent
+        agent_type:
+          $ref: '#/components/schemas/AgentType'
+        capabilities:
+          type: array
+          items:
+            type: string
+          description: List of agent capabilities
+        input_schema:
+          type: object
+          description: JSON schema for agent input
+        output_schema:
+          type: object
+          description: JSON schema for agent output
+        execution_timeout:
+          type: integer
+          default: 300
+          description: Execution timeout in seconds
+        cost_per_execution:
+          type: number
+          format: float
+          default: 0.0
+          description: Cost per execution
+
+    WorkflowStatusResponse:
+      type: object
+      properties:
+        workflow_id:
+          type: string
+        status:
+          $ref: '#/components/schemas/WorkflowStatus'
+        steps_completed:
+          type: integer
+        total_steps:
+          type: integer
+        current_step:
+          type: string
+          nullable: true
+        error_message:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        started_at:
+          type: string
+          format: date-time
+          nullable: true
+        completed_at:
+          type: string
+          format: date-time
+          nullable: true
+
+    AgentCapabilityResponse:
+      type: object
+      properties:
+        agent_id:
+          type: string
+        agent_type:
+          type: string
+        capabilities:
+          type: array
+          items:
+            type: string
+        input_schema:
+          type: object
+        output_schema:
+          type: object
+        execution_timeout:
+          type: integer
+        cost_per_execution:
+          type: number
+          format: float
+        availability:
+          type: number
+          format: float
+
+    WorkflowTemplateResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        steps:
+          type: array
+          items:
+            type: object
+            properties:
+              step_id:
+                type: string
+              agent_id:
+                type: string
+              step_type:
+                type: string
+              input_mapping:
+                type: object
+              config:
+                type: object
+
+    OrchestratorMetricsResponse:
+      type: object
+      properties:
+        total_workflows_executed:
+          type: integer
+        successful_workflows:
+          type: integer
+        failed_workflows:
+          type: integer
+        success_rate:
+          type: number
+          format: float
+        average_execution_time:
+          type: number
+          format: float
+        total_cost_saved:
+          type: number
+          format: float
+        active_workflows:
+          type: integer
+        registered_agents:
+          type: integer
+
+    WorkflowDemoResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        workflow_id:
+          type: string
+        description:
+          type: string
+        steps:
+          type: array
+          items:
+            type: object
+            properties:
+              step_id:
+                type: string
+              agent_type:
+                type: string
+              description:
+                type: string
+        demo_input:
+          type: object
+        estimated_duration:
+          type: string
+
+    # Quantum Integration Hub Schemas
+    QIHJobRequest:
+      type: object
+      required:
+        - job_type
+        - payload
+      properties:
+        job_type:
+          type: string
+          enum: [optimization, sampling, machine_learning]
+          description: Type of quantum job
+        payload:
+          type: object
+          description: Job-specific payload data
+        priority:
+          type: string
+          enum: [low, normal, high, urgent]
+          default: normal
+          description: Job priority level
+
+    QIHJobResponse:
+      type: object
+      properties:
+        job_id:
+          type: string
+        status:
+          type: string
+        message:
+          type: string
+
+    QIHJobStatusResponse:
+      type: object
+      properties:
+        job_id:
+          type: string
+        status:
+          type: string
+        progress:
+          type: number
+          format: float
+        result:
+          type: object
+          nullable: true
+        error:
+          type: string
+          nullable: true
+
+    # Business Units Schemas
+    EnergyOptimizationRequest:
+      type: object
+      required:
+        - facility_data
+        - optimization_target
+      properties:
+        facility_data:
+          type: object
+          description: Facility energy consumption data
+        optimization_target:
+          type: string
+          enum: [cost_reduction, efficiency_improvement, carbon_reduction]
+        constraints:
+          type: object
+          description: Optimization constraints
+
+    EnergyOptimizationResponse:
+      type: object
+      properties:
+        optimization_id:
+          type: string
+        results:
+          type: object
+        cost_savings:
+          type: number
+          format: float
+        efficiency_improvement:
+          type: number
+          format: float
+        quantum_advantage:
+          type: number
+          format: float
+
+    CapitalFundingRequest:
+      type: object
+      required:
+        - company_data
+        - funding_amount
+      properties:
+        company_data:
+          type: object
+          description: Company financial and operational data
+        funding_amount:
+          type: number
+          format: float
+        funding_type:
+          type: string
+          enum: [equity, debt, hybrid]
+
+    CapitalFundingResponse:
+      type: object
+      properties:
+        analysis_id:
+          type: string
+        funding_score:
+          type: number
+          format: float
+        risk_assessment:
+          type: object
+        recommendations:
+          type: array
+          items:
+            type: string
+
+    InsuranceRiskRequest:
+      type: object
+      required:
+        - applicant_data
+        - coverage_type
+      properties:
+        applicant_data:
+          type: object
+          description: Applicant information and history
+        coverage_type:
+          type: string
+          enum: [life, health, property, liability]
+        coverage_amount:
+          type: number
+          format: float
+
+    InsuranceRiskResponse:
+      type: object
+      properties:
+        assessment_id:
+          type: string
+        risk_score:
+          type: number
+          format: float
+        premium_estimate:
+          type: number
+          format: float
+        risk_factors:
+          type: array
+          items:
+            type: string
+        recommendations:
+          type: array
+          items:
+            type: string
+
+    # Authentication Schemas
+    LoginRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          description: User's username or email
+        password:
+          type: string
+          description: User's password
+
+    LoginResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: JWT access token
+        refresh_token:
+          type: string
+          description: JWT refresh token
+        token_type:
+          type: string
+          default: bearer
+        expires_in:
+          type: integer
+          description: Token expiration time in seconds
+        user:
+          type: object
+          properties:
+            user_id:
+              type: string
+            username:
+              type: string
+            email:
+              type: string
+            role:
+              type: string
+
+    UserRegistrationRequest:
+      type: object
+      required:
+        - username
+        - email
+        - password
+      properties:
+        username:
+          type: string
+          description: Desired username
+        email:
+          type: string
+          format: email
+          description: User's email address
+        password:
+          type: string
+          minLength: 8
+          description: User's password
+        first_name:
+          type: string
+          description: User's first name
+        last_name:
+          type: string
+          description: User's last name
+
+tags:
+  - name: FLYFOX Academy
+    description: Training, certification, and developer programs for the quantum AI ecosystem
+  - name: Cross-Agent Orchestrator
+    description: Cross-agent workflow orchestration and collaboration
+  - name: Quantum Integration Hub
+    description: Quantum job submission and management
+  - name: Business Units
+    description: FLYFOX AI, Goliath Trade, and Sigma Select business solutions
+  - name: Authentication
+    description: User authentication and authorization
+  - name: System
+    description: System health and status endpoints

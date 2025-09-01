@@ -1,0 +1,5 @@
+# LTC Log File: ltc_20250827_172253.jsonl
+# Created: 2025-08-27T17:22:53.588934
+# Format: JSON Lines
+
+{"entry_id": "58a6cd23-1df2-4ca9-ad7b-4b961988bc04", "timestamp": "2025-08-27T22:23:05.672662+00:00", "operation_type": "lead_scoring_quantum_error", "component": "sigma_select", "user_id": null, "session_id": null, "thread_id": "60328", "input_data": null, "execution_context": null, "result_data": null, "performance_metrics": null, "error_data": {"error": "unsupported operand type(s) for /: 'coroutine' and 'float'", "leads_data": [{"name": "Test Lead 1", "company": "Test Corp", "budget": 50000}, {"name": "Test Lead 2", "company": "Test Inc", "budget": 75000}]}, "metadata": null, "hash": "a53cf7351108def0a232f487a178f0ea2420967f8ad851c3430b2ff7eb6fcd4a", "parent_entry_id": null, "child_entry_ids": []}

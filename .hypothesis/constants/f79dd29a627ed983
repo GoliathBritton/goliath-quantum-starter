@@ -1,0 +1,4 @@
+# file: C:\Users\johnb\goliath-quantum-starter\src\nqba_stack\quantum\registry\__init__.py
+# hypothesis_version: 6.138.7
+
+['CapabilityRegistry', 'ProviderRegistry', 'get_capability', 'get_provider', 'list_capabilities', 'list_providers', 'register_capability', 'register_provider', 'unregister_provider']
