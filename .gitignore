@@ -1,0 +1,33 @@
+__pycache__/
+*.pyc
+.env
+.env.*
+*.sqlite3
+.coverage
+htmlcov/
+.cache/
+.idea/
+.vscode/
+*.egg-info/
+venv*/
+.venv*/
+
+# Node / Next.js
+node_modules/
+**/node_modules/
+.npmrc
+npm-debug.log*
+.next/
+**/.next/
+out/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project-specific
+nqba-phase2/web/node_modules/
+nqba-phase2/web/.next/
+ui/node_modules/
+sigma-select/portal/node_modules/
+qsales_deployment.log

@@ -1,0 +1,24 @@
+{
+  "version": 2,
+  "name": "nqba-phase2-web",
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/next"
+    }
+  ],
+  "env": {
+    "NEXT_PUBLIC_API_BASE": "https://api.flyfoxai.io"
+  },
+  "functions": {
+    "app/**/*.tsx": {
+      "includeFiles": "**"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://api.flyfoxai.io/v2/:path*"
+    }
+  ]
+}
