@@ -1,19 +1,10 @@
 {
   "version": 2,
-  "name": "nqba-phase2-web",
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/next"
-    }
-  ],
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "installCommand": "npm install",
   "env": {
     "NEXT_PUBLIC_API_BASE": "https://api.goliathomniedge.com"
-  },
-  "functions": {
-    "app/**/*.tsx": {
-      "includeFiles": "**"
-    }
   },
   "rewrites": [
     {
