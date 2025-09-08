@@ -104,8 +104,8 @@ class ConsentRecord:
     consent_timestamp: datetime
     consent_method: str
     consent_version: str
-    withdrawal_timestamp: Optional[datetime] = None
     legal_basis: str
+    withdrawal_timestamp: Optional[datetime] = None
     data_categories: List[str] = field(default_factory=list)
     third_parties: List[str] = field(default_factory=list)
 
@@ -766,8 +766,14 @@ class ComplianceManager:
                     logger.error(f"Error in compliance monitoring: {e}")
                     await asyncio.sleep(3600)  # Wait 1 hour on error
 
-        # Start the background task
-        asyncio.create_task(monitoring_task())
+        # Start the background task only if there's a running event loop
+        try:
+            loop = asyncio.get_running_loop()
+            self._monitoring_task = loop.create_task(monitoring_task())
+        except RuntimeError:
+            # No running event loop, skip background task
+            logger.debug("No running event loop, skipping compliance monitoring")
+            self._monitoring_task = None
 
     async def _check_overdue_assessments(self):
         """Check for overdue SOC 2 assessments"""

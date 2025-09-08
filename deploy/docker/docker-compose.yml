@@ -1,97 +1,237 @@
+# NQBA Platform - Production Docker Compose Configuration
+# Optimized for production deployment with security and performance
+
 version: '3.8'
 
 services:
-  # NQBA API Server
-  api:
+  # =============================================================================
+  # NQBA API Server - Main Application
+  # =============================================================================
+  nqba-api:
     build:
       context: ../..
       dockerfile: deploy/docker/Dockerfile.api
-      target: development
-    ports:
-      - "8000:8000"
-    environment:
-      - NQBA_DEBUG=true
-      - NQBA_DATABASE_URL=postgresql://nqba:nqba_password@postgres:5432/nqba
-      - NQBA_REDIS_URL=redis://redis:6379/0
-      - NQBA_SECRET_KEY=dev-secret-key-change-in-production
-      - NQBA_CORS_ORIGINS=http://localhost:3000,http://localhost:8080
-    volumes:
-      - ../../src:/app/src
-      - ../../api_server.py:/app/api_server.py
-      - api_logs:/app/logs
-    depends_on:
-      - postgres
-      - redis
-    networks:
-      - nqba-network
+      target: runtime
+      args:
+        - BUILD_DATE=${BUILD_DATE:-$(date -u +'%Y-%m-%dT%H:%M:%SZ')}
+        - VCS_REF=${VCS_REF:-$(git rev-parse --short HEAD)}
+        - VERSION=${VERSION:-latest}
+    image: nqba-platform/api:${VERSION:-latest}
+    container_name: nqba-api
     restart: unless-stopped
+    ports:
+      - "${API_PORT:-8000}:8000"
+    environment:
+      # Core Configuration
+      - ENVIRONMENT=${ENVIRONMENT:-production}
+      - DEBUG=${DEBUG:-false}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - WORKERS=${WORKERS:-4}
+      
+      # Security
+      - SECRET_KEY=${SECRET_KEY}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY}
+      
+      # Database
+      - DATABASE_URL=${DATABASE_URL:-postgresql://nqba:${POSTGRES_PASSWORD}@postgres:5432/nqba_platform}
+      - DATABASE_POOL_SIZE=${DATABASE_POOL_SIZE:-20}
+      - DATABASE_MAX_OVERFLOW=${DATABASE_MAX_OVERFLOW:-30}
+      
+      # Redis
+      - REDIS_URL=${REDIS_URL:-redis://redis:6379/0}
+      - REDIS_POOL_SIZE=${REDIS_POOL_SIZE:-20}
+      
+      # External APIs
+      - DYNEX_API_KEY=${DYNEX_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - FLYFOX_API_KEY=${FLYFOX_API_KEY}
+      
+      # Monitoring
+      - METRICS_ENABLED=${METRICS_ENABLED:-true}
+      - TRACING_ENABLED=${TRACING_ENABLED:-true}
+      - JAEGER_ENDPOINT=${JAEGER_ENDPOINT}
+      
+      # Performance
+      - CACHE_ENABLED=${CACHE_ENABLED:-true}
+      - CACHE_TTL=${CACHE_TTL:-3600}
+    volumes:
+      - api_logs:/app/logs
+      - api_data:/app/data
+      - api_tmp:/app/tmp
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - nqba-backend
+      - nqba-frontend
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 40s
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          cpus: '${API_CPU_LIMIT:-2.0}'
+          memory: ${API_MEMORY_LIMIT:-2G}
+        reservations:
+          cpus: '${API_CPU_RESERVATION:-1.0}'
+          memory: ${API_MEMORY_RESERVATION:-1G}
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp:noexec,nosuid,size=100m
+      - /app/tmp:noexec,nosuid,size=200m
 
-  # Frontend Application
-  frontend:
+  # =============================================================================
+  # Frontend Application (Optional for development)
+  # =============================================================================
+  nqba-frontend:
     build:
       context: ../../landing-page
-      dockerfile: ../deploy/docker/Dockerfile.frontend
-    ports:
-      - "3000:3000"
-    environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:8000
-      - NODE_ENV=development
-    volumes:
-      - ../../landing-page:/app
-      - /app/node_modules
-      - /app/.next
-    networks:
-      - nqba-network
+      dockerfile: Dockerfile
+      target: production
+    image: nqba-platform/frontend:${VERSION:-latest}
+    container_name: nqba-frontend
     restart: unless-stopped
-    depends_on:
-      - api
+    ports:
+      - "${FRONTEND_PORT:-3000}:80"
+    environment:
+      - REACT_APP_API_URL=${REACT_APP_API_URL:-https://api.flyfox.ai}
+      - REACT_APP_ENVIRONMENT=${ENVIRONMENT:-production}
+      - REACT_APP_VERSION=${VERSION:-latest}
+    networks:
+      - nqba-frontend
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: '${FRONTEND_CPU_LIMIT:-0.5}'
+          memory: ${FRONTEND_MEMORY_LIMIT:-256M}
+        reservations:
+          cpus: '${FRONTEND_CPU_RESERVATION:-0.25}'
+          memory: ${FRONTEND_MEMORY_RESERVATION:-128M}
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp:noexec,nosuid,size=50m
+      - /var/cache/nginx:noexec,nosuid,size=50m
 
-  # PostgreSQL Database
+  # =============================================================================
+  # PostgreSQL Database - Primary Data Store
+  # =============================================================================
   postgres:
     image: postgres:15-alpine
+    container_name: nqba-postgres
+    restart: unless-stopped
     environment:
-      - POSTGRES_DB=nqba
-      - POSTGRES_USER=nqba
-      - POSTGRES_PASSWORD=nqba_password
-      - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=C --lc-ctype=C
+      - POSTGRES_DB=${POSTGRES_DB:-nqba_platform}
+      - POSTGRES_USER=${POSTGRES_USER:-nqba}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_INITDB_ARGS=--auth-host=scram-sha-256
+      - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./init-scripts:/docker-entrypoint-initdb.d
+      - postgres_logs:/var/log/postgresql
+      - ../configs/database.prod.yaml:/docker-entrypoint-initdb.d/init.sql:ro
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT:-5432}:5432"
     networks:
-      - nqba-network
-    restart: unless-stopped
+      - nqba-backend
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U nqba -d nqba"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-nqba} -d ${POSTGRES_DB:-nqba_platform}"]
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          cpus: '${POSTGRES_CPU_LIMIT:-1.0}'
+          memory: ${POSTGRES_MEMORY_LIMIT:-1G}
+        reservations:
+          cpus: '${POSTGRES_CPU_RESERVATION:-0.5}'
+          memory: ${POSTGRES_MEMORY_RESERVATION:-512M}
+    security_opt:
+      - no-new-privileges:true
+    command: >
+      postgres
+      -c shared_buffers=256MB
+      -c max_connections=200
+      -c effective_cache_size=1GB
+      -c maintenance_work_mem=64MB
+      -c checkpoint_completion_target=0.9
+      -c wal_buffers=16MB
+      -c default_statistics_target=100
+      -c random_page_cost=1.1
+      -c effective_io_concurrency=200
+      -c work_mem=4MB
+      -c min_wal_size=1GB
+      -c max_wal_size=4GB
+      -c log_statement=mod
+      -c log_min_duration_statement=1000
+      -c log_checkpoints=on
+      -c log_connections=on
+      -c log_disconnections=on
 
-  # Redis Cache
+  # =============================================================================
+  # Redis Cache - Session Store and Caching
+  # =============================================================================
   redis:
     image: redis:7-alpine
-    command: redis-server --appendonly yes --requirepass redis_password
-    environment:
-      - REDIS_PASSWORD=redis_password
+    container_name: nqba-redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
     volumes:
       - redis_data:/data
-    ports:
-      - "6379:6379"
+      - redis_logs:/var/log/redis
     networks:
-      - nqba-network
-    restart: unless-stopped
+      - nqba-backend
     healthcheck:
-      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 3s
       retries: 5
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: '${REDIS_CPU_LIMIT:-0.5}'
+          memory: ${REDIS_MEMORY_LIMIT:-512M}
+        reservations:
+          cpus: '${REDIS_CPU_RESERVATION:-0.25}'
+          memory: ${REDIS_MEMORY_RESERVATION:-256M}
+    security_opt:
+      - no-new-privileges:true
+    command: >
+      redis-server
+      --maxmemory 256mb
+      --maxmemory-policy allkeys-lru
+      --save 900 1
+      --save 300 10
+      --save 60 10000
+      --rdbcompression yes
+      --rdbchecksum yes
+      --appendonly yes
+      --appendfsync everysec
+      --auto-aof-rewrite-percentage 100
+      --auto-aof-rewrite-min-size 64mb
+      --tcp-keepalive 300
+      --timeout 0
+      --tcp-backlog 511
+      --databases 16
 
   # Background Worker
   worker:
@@ -133,14 +273,21 @@ services:
       - nqba-network
     restart: unless-stopped
 
-  # Prometheus Monitoring
+  # =============================================================================
+  # Monitoring and Observability (Optional)
+  # =============================================================================
   prometheus:
     image: prom/prometheus:latest
+    container_name: nqba-prometheus
+    restart: unless-stopped
     ports:
-      - "9090:9090"
+      - "${PROMETHEUS_PORT:-9090}:9090"
     volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus_data:/prometheus
+      - ../configs/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    networks:
+      - nqba-monitoring
+      - nqba-backend
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
@@ -148,26 +295,43 @@ services:
       - '--web.console.templates=/etc/prometheus/consoles'
       - '--storage.tsdb.retention.time=200h'
       - '--web.enable-lifecycle'
-    networks:
-      - nqba-network
-    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+    profiles:
+      - monitoring
 
-  # Grafana Dashboard
   grafana:
     image: grafana/grafana:latest
+    container_name: nqba-grafana
+    restart: unless-stopped
     ports:
-      - "3001:3000"
-    environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-      - GF_USERS_ALLOW_SIGN_UP=false
+      - "${GRAFANA_PORT:-3001}:3000"
     volumes:
       - grafana_data:/var/lib/grafana
-      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ../configs/grafana:/etc/grafana/provisioning:ro
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    networks:
+      - nqba-monitoring
     depends_on:
       - prometheus
-    networks:
-      - nqba-network
-    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+    profiles:
+      - monitoring
 
   # Jaeger Tracing
   jaeger:
@@ -181,25 +345,73 @@ services:
       - nqba-network
     restart: unless-stopped
 
+# =============================================================================
+# Volumes - Persistent Data Storage
+# =============================================================================
 volumes:
+  # Database
   postgres_data:
     driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${DATA_PATH:-./data}/postgres
+  postgres_logs:
+    driver: local
+  
+  # Cache
   redis_data:
     driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${DATA_PATH:-./data}/redis
+  redis_logs:
+    driver: local
+  
+  # Application
   api_logs:
     driver: local
-  worker_logs:
+  api_data:
     driver: local
-  nginx_logs:
+  api_tmp:
     driver: local
+  
+  # Monitoring
   prometheus_data:
     driver: local
   grafana_data:
     driver: local
 
+# =============================================================================
+# Networks - Service Communication
+# =============================================================================
 networks:
-  nqba-network:
+  # Backend services (API, Database, Cache)
+  nqba-backend:
+    driver: bridge
+    internal: true
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.1.0/24
+          gateway: 172.20.1.1
+  
+  # Frontend services
+  nqba-frontend:
     driver: bridge
     ipam:
+      driver: default
       config:
-        - subnet: 172.20.0.0/16
+        - subnet: 172.20.2.0/24
+          gateway: 172.20.2.1
+  
+  # Monitoring services
+  nqba-monitoring:
+    driver: bridge
+    internal: true
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.3.0/24
+          gateway: 172.20.3.1

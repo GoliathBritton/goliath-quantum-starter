@@ -1,50 +1,104 @@
 # NQBA Platform API Server Dockerfile
-FROM python:3.11-slim as base
+# Multi-stage build for production optimization and security
 
-# Set environment variables
+# =============================================================================
+# Build Stage - Compile dependencies and prepare application
+# =============================================================================
+FROM python:3.11-slim-bullseye as builder
+
+# Set build environment variables
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     PIP_NO_CACHE_DIR=1 \
-    PIP_DISABLE_PIP_VERSION_CHECK=1
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    POETRY_NO_INTERACTION=1 \
+    POETRY_VENV_IN_PROJECT=1 \
+    POETRY_CACHE_DIR=/tmp/poetry_cache
 
-# Install system dependencies
+# Install build dependencies
 RUN apt-get update && apt-get install -y \
-    build-essential \
+    gcc \
+    g++ \
+    libpq-dev \
+    libssl-dev \
+    libffi-dev \
     curl \
     git \
-    libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Create non-root user
-RUN groupadd -r nqba && useradd -r -g nqba nqba
+# Install Poetry for dependency management
+RUN pip install poetry==1.6.1
 
 # Set working directory
 WORKDIR /app
 
-# Copy requirements first for better caching
-COPY requirements.txt .
+# Copy dependency files
+COPY pyproject.toml poetry.lock* requirements.txt ./
 COPY requirements-dev.txt .
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Install dependencies to virtual environment
+RUN if [ -f pyproject.toml ]; then \
+        poetry install --only=main --no-root && rm -rf $POETRY_CACHE_DIR; \
+    else \
+        python -m venv /app/.venv && \
+        . /app/.venv/bin/activate && \
+        pip install --no-cache-dir -r requirements.txt; \
+    fi
 
-# Copy application code
+# Copy application source code
 COPY src/ ./src/
 COPY api_server.py .
 COPY setup.py .
 
-# Install the package
-RUN pip install -e .
+# Install the application
+RUN . /app/.venv/bin/activate && pip install -e .
 
-# Create necessary directories
-RUN mkdir -p /app/logs /app/data && \
-    chown -R nqba:nqba /app
+# =============================================================================
+# Runtime Stage - Minimal production image
+# =============================================================================
+FROM python:3.11-slim-bullseye as runtime
+
+# Set runtime environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PATH="/app/.venv/bin:$PATH" \
+    PYTHONPATH="/app/src:$PYTHONPATH"
+
+# Install only runtime dependencies and security updates
+RUN apt-get update && apt-get install -y \
+    libpq5 \
+    libssl1.1 \
+    libffi7 \
+    curl \
+    ca-certificates \
+    && apt-get upgrade -y \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Create non-root user with specific UID/GID for security
+RUN groupadd -r -g 1001 nqba && \
+    useradd -r -u 1001 -g nqba -d /app -s /bin/bash nqba
+
+# Set working directory
+WORKDIR /app
+
+# Copy virtual environment from builder stage
+COPY --from=builder --chown=nqba:nqba /app/.venv /app/.venv
+
+# Copy application code from builder stage
+COPY --from=builder --chown=nqba:nqba /app/src /app/src
+COPY --from=builder --chown=nqba:nqba /app/api_server.py /app/api_server.py
+
+# Create necessary directories with proper permissions
+RUN mkdir -p /app/logs /app/data /app/tmp && \
+    chown -R nqba:nqba /app && \
+    chmod 755 /app/logs /app/data /app/tmp
 
 # Switch to non-root user
 USER nqba
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+# Health check with improved reliability
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
     CMD curl -f http://localhost:8000/health || exit 1
 
 # Expose port

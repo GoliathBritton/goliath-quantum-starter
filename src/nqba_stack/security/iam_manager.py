@@ -574,8 +574,14 @@ class IAMManager:
                     logger.error(f"Error in cleanup task: {e}")
                     await asyncio.sleep(300)  # Wait 5 minutes on error
 
-        # Start the background task
-        asyncio.create_task(cleanup_task())
+        # Start the background task only if there's a running event loop
+        try:
+            loop = asyncio.get_running_loop()
+            self._cleanup_task = loop.create_task(cleanup_task())
+        except RuntimeError:
+            # No running event loop, skip background task
+            logger.debug("No running event loop, skipping cleanup task")
+            self._cleanup_task = None
 
     async def _cleanup_expired_keys(self):
         """Clean up expired API keys"""

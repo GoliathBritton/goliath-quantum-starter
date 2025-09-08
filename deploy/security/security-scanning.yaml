@@ -1,0 +1,448 @@
+# NQBA Platform - Security Scanning and Compliance
+# Implements automated security scanning and compliance checks
+
+# =============================================================================
+# Falco Security Monitoring
+# =============================================================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: falco-config
+  namespace: nqba-platform
+  labels:
+    app: nqba-platform
+    component: security-scanning
+    environment: production
+data:
+  falco.yaml: |
+    rules_file:
+      - /etc/falco/falco_rules.yaml
+      - /etc/falco/falco_rules.local.yaml
+      - /etc/falco/k8s_audit_rules.yaml
+      - /etc/falco/rules.d
+    
+    time_format_iso_8601: true
+    json_output: true
+    json_include_output_property: true
+    json_include_tags_property: true
+    
+    log_stderr: true
+    log_syslog: false
+    log_level: info
+    
+    priority: debug
+    
+    buffered_outputs: false
+    outputs_queue_capacity: 0
+    
+    syscall_event_drops:
+      actions:
+        - log
+        - alert
+      rate: 0.03333
+      max_burst: 1000
+    
+    outputs:
+      rate: 1
+      max_burst: 1000
+    
+    syslog_output:
+      enabled: false
+    
+    file_output:
+      enabled: true
+      keep_alive: false
+      filename: /var/log/falco/events.log
+    
+    stdout_output:
+      enabled: true
+    
+    webserver:
+      enabled: true
+      listen_port: 8765
+      k8s_healthz_endpoint: /healthz
+      ssl_enabled: false
+      ssl_certificate: /etc/ssl/falco/falco.pem
+    
+    grpc:
+      enabled: false
+      bind_address: "0.0.0.0:5060"
+      threadiness: 0
+    
+    grpc_output:
+      enabled: false
+  
+  falco_rules.local.yaml: |
+    # NQBA Platform specific security rules
+    
+    - rule: NQBA Unauthorized API Access
+      desc: Detect unauthorized access to NQBA API endpoints
+      condition: >
+        k8s_audit and
+        ka.verb in (create, update, delete) and
+        ka.uri.path startswith "/api/v1/quantum" and
+        not ka.user.name in (nqba-api, nqba-worker)
+      output: >
+        Unauthorized NQBA API access
+        (user=%ka.user.name verb=%ka.verb uri=%ka.uri.path
+        resp=%ka.response_code reason=%ka.response_reason)
+      priority: WARNING
+      tags: [nqba, api, security]
+    
+    - rule: NQBA Database Access from Unauthorized Pod
+      desc: Detect database access from unauthorized pods
+      condition: >
+        spawned_process and
+        proc.name in (psql, pg_dump, pg_restore) and
+        not k8s.pod.label.app = "nqba-platform"
+      output: >
+        Database access from unauthorized pod
+        (pod=%k8s.pod.name namespace=%k8s.ns.name
+        command=%proc.cmdline user=%user.name)
+      priority: CRITICAL
+      tags: [nqba, database, security]
+    
+    - rule: NQBA Quantum Service Anomaly
+      desc: Detect anomalous behavior in quantum services
+      condition: >
+        spawned_process and
+        k8s.pod.label.component = "quantum" and
+        proc.name in (nc, netcat, wget, curl) and
+        not proc.args contains "health"
+      output: >
+        Anomalous network activity in quantum service
+        (pod=%k8s.pod.name command=%proc.cmdline
+        connection=%fd.name user=%user.name)
+      priority: WARNING
+      tags: [nqba, quantum, anomaly]
+    
+    - rule: NQBA Privilege Escalation Attempt
+      desc: Detect privilege escalation attempts in NQBA pods
+      condition: >
+        spawned_process and
+        k8s.pod.label.app = "nqba-platform" and
+        proc.name in (sudo, su, setuid) and
+        not user.name = "root"
+      output: >
+        Privilege escalation attempt in NQBA pod
+        (pod=%k8s.pod.name user=%user.name
+        command=%proc.cmdline parent=%proc.pname)
+      priority: CRITICAL
+      tags: [nqba, privilege-escalation, security]
+
+---
+# =============================================================================
+# Trivy Vulnerability Scanner
+# =============================================================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: trivy-config
+  namespace: nqba-platform
+  labels:
+    app: nqba-platform
+    component: security-scanning
+    environment: production
+data:
+  trivy.yaml: |
+    # Trivy configuration for NQBA Platform
+    
+    # Database settings
+    db:
+      repository: "ghcr.io/aquasecurity/trivy-db"
+      java-repository: "ghcr.io/aquasecurity/trivy-java-db"
+    
+    # Vulnerability settings
+    vulnerability:
+      type:
+        - os
+        - library
+      severity:
+        - UNKNOWN
+        - LOW
+        - MEDIUM
+        - HIGH
+        - CRITICAL
+    
+    # Output settings
+    format: json
+    output: /tmp/trivy-results.json
+    
+    # Cache settings
+    cache:
+      dir: /tmp/trivy-cache
+    
+    # Timeout settings
+    timeout: 5m0s
+    
+    # Skip files
+    skip-files:
+      - "**/*.md"
+      - "**/LICENSE*"
+      - "**/NOTICE*"
+    
+    # Skip directories
+    skip-dirs:
+      - "/tmp"
+      - "/var/tmp"
+      - "/var/cache"
+
+---
+# =============================================================================
+# OPA Gatekeeper Policies
+# =============================================================================
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: nqbarequiredsecuritycontext
+  labels:
+    app: nqba-platform
+    component: security-scanning
+    environment: production
+spec:
+  crd:
+    spec:
+      names:
+        kind: NQBARequiredSecurityContext
+      validation:
+        type: object
+        properties:
+          runAsNonRoot:
+            type: boolean
+          readOnlyRootFilesystem:
+            type: boolean
+          allowPrivilegeEscalation:
+            type: boolean
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package nqbarequiredsecuritycontext
+        
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.containers[_]
+          not container.securityContext.runAsNonRoot
+          msg := "Container must run as non-root user"
+        }
+        
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.containers[_]
+          not container.securityContext.readOnlyRootFilesystem
+          msg := "Container must have read-only root filesystem"
+        }
+        
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.containers[_]
+          container.securityContext.allowPrivilegeEscalation == true
+          msg := "Container must not allow privilege escalation"
+        }
+
+---
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: NQBARequiredSecurityContext
+metadata:
+  name: nqba-security-context-constraint
+  labels:
+    app: nqba-platform
+    component: security-scanning
+    environment: production
+spec:
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Pod"]
+    namespaces: ["nqba-platform"]
+  parameters:
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+
+---
+# =============================================================================
+# Kube-bench Security Benchmark
+# =============================================================================
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kube-bench-security-scan
+  namespace: nqba-platform
+  labels:
+    app: nqba-platform
+    component: security-scanning
+    environment: production
+  annotations:
+    kubernetes.io/description: "CIS Kubernetes Benchmark security scan"
+spec:
+  template:
+    metadata:
+      labels:
+        app: kube-bench
+        component: security-scanning
+    spec:
+      hostPID: true
+      nodeSelector:
+        kubernetes.io/os: linux
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          operator: Exists
+          effect: NoSchedule
+      restartPolicy: Never
+      containers:
+        - name: kube-bench
+          image: aquasec/kube-bench:v0.6.15
+          command: ["kube-bench"]
+          args: ["--json", "--outputfile", "/tmp/kube-bench-results.json"]
+          volumeMounts:
+            - name: var-lib-etcd
+              mountPath: /var/lib/etcd
+              readOnly: true
+            - name: var-lib-kubelet
+              mountPath: /var/lib/kubelet
+              readOnly: true
+            - name: var-lib-kube-scheduler
+              mountPath: /var/lib/kube-scheduler
+              readOnly: true
+            - name: var-lib-kube-controller-manager
+              mountPath: /var/lib/kube-controller-manager
+              readOnly: true
+            - name: etc-systemd
+              mountPath: /etc/systemd
+              readOnly: true
+            - name: lib-systemd
+              mountPath: /lib/systemd/
+              readOnly: true
+            - name: srv-kubernetes
+              mountPath: /srv/kubernetes/
+              readOnly: true
+            - name: etc-kubernetes
+              mountPath: /etc/kubernetes
+              readOnly: true
+            - name: usr-bin
+              mountPath: /usr/local/mount-from-host/bin
+              readOnly: true
+            - name: etc-cni-netd
+              mountPath: /etc/cni/net.d/
+              readOnly: true
+            - name: opt-cni-bin
+              mountPath: /opt/cni/bin/
+              readOnly: true
+            - name: results
+              mountPath: /tmp
+          securityContext:
+            runAsNonRoot: false
+            runAsUser: 0
+            readOnlyRootFilesystem: true
+      volumes:
+        - name: var-lib-etcd
+          hostPath:
+            path: "/var/lib/etcd"
+        - name: var-lib-kubelet
+          hostPath:
+            path: "/var/lib/kubelet"
+        - name: var-lib-kube-scheduler
+          hostPath:
+            path: "/var/lib/kube-scheduler"
+        - name: var-lib-kube-controller-manager
+          hostPath:
+            path: "/var/lib/kube-controller-manager"
+        - name: etc-systemd
+          hostPath:
+            path: "/etc/systemd"
+        - name: lib-systemd
+          hostPath:
+            path: "/lib/systemd"
+        - name: srv-kubernetes
+          hostPath:
+            path: "/srv/kubernetes"
+        - name: etc-kubernetes
+          hostPath:
+            path: "/etc/kubernetes"
+        - name: usr-bin
+          hostPath:
+            path: "/usr/bin"
+        - name: etc-cni-netd
+          hostPath:
+            path: "/etc/cni/net.d/"
+        - name: opt-cni-bin
+          hostPath:
+            path: "/opt/cni/bin/"
+        - name: results
+          emptyDir: {}
+
+---
+# =============================================================================
+# Security Scanning CronJob
+# =============================================================================
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nqba-security-scan
+  namespace: nqba-platform
+  labels:
+    app: nqba-platform
+    component: security-scanning
+    environment: production
+  annotations:
+    kubernetes.io/description: "Automated security scanning for NQBA Platform"
+spec:
+  schedule: "0 2 * * *"  # Daily at 2 AM
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: nqba-security-scan
+            component: security-scanning
+        spec:
+          restartPolicy: OnFailure
+          serviceAccountName: nqba-monitoring
+          containers:
+            - name: trivy-scanner
+              image: aquasecurity/trivy:0.48.3
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  echo "Starting NQBA Platform security scan..."
+                  
+                  # Scan NQBA API image
+                  trivy image --format json --output /tmp/api-scan.json nqba-platform/api:latest
+                  
+                  # Scan NQBA Worker image
+                  trivy image --format json --output /tmp/worker-scan.json nqba-platform/worker:latest
+                  
+                  # Scan NQBA Frontend image
+                  trivy image --format json --output /tmp/frontend-scan.json nqba-platform/frontend:latest
+                  
+                  # Scan Kubernetes cluster
+                  trivy k8s --format json --output /tmp/k8s-scan.json cluster
+                  
+                  # Upload results to monitoring system
+                  curl -X POST "http://prometheus-pushgateway:9091/metrics/job/security-scan" \
+                    --data-binary @/tmp/scan-metrics.txt
+                  
+                  echo "Security scan completed"
+              volumeMounts:
+                - name: scan-results
+                  mountPath: /tmp
+                - name: trivy-cache
+                  mountPath: /root/.cache/trivy
+              securityContext:
+                runAsNonRoot: true
+                runAsUser: 1000
+                readOnlyRootFilesystem: true
+                allowPrivilegeEscalation: false
+              resources:
+                requests:
+                  memory: "512Mi"
+                  cpu: "250m"
+                limits:
+                  memory: "1Gi"
+                  cpu: "500m"
+          volumes:
+            - name: scan-results
+              emptyDir: {}
+            - name: trivy-cache
+              emptyDir: {}

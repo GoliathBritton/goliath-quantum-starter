@@ -1,15 +1,34 @@
-# NQBA Stack 🚀
+# FLYFOX AI Platform - NQBA Stack 🚀
 
-**The World's First Quantum-Powered Intelligence Economy**
+**The World's First Quantum-Powered Business Intelligence Platform**
 
-[![CI/CD Pipeline](https://github.com/johnbritton/goliath-quantum-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/johnbritton/goliath-quantum-starter/actions/workflows/ci.yml)
+[![CI/CD Pipeline](https://github.com/FLYFOX-AI/flyfox-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/FLYFOX-AI/flyfox-platform/actions/workflows/ci.yml)
 [![License: BSL](https://img.shields.io/badge/License-BSL%201.1-blue.svg)](https://mariadb.com/bsl11/)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green.svg)](https://fastapi.tiangolo.com/)
+[![Documentation](https://img.shields.io/badge/docs-comprehensive-brightgreen.svg)](docs/FLYFOX_AI_DOCUMENTATION_INDEX.md)
 
-## 🌟 **Investor-Ready Platform**
+<div align="center">
+
+![FLYFOX AI Logo](https://flyfox.ai/logo.svg)
+
+**Quantum-Powered Business Intelligence Platform**
+
+*Revolutionizing Enterprise Solutions with Neuromorphic Quantum Computing*
+
+</div>
+
+## 🌟 **Enterprise-Ready Platform**
 
 **FLYFOX AI** and the **Goliath family of companies** are uniting quantum AI, blockchain, finance, energy, insurance, and education into one adaptive platform. Built for enterprises, designed for people.
+
+### 📚 **Complete Documentation Suite**
+
+- **[📖 Complete Documentation Index](docs/FLYFOX_AI_DOCUMENTATION_INDEX.md)** - Your gateway to all FLYFOX AI documentation
+- **[💰 Payment & Pricing Guide](docs/FLYFOX_AI_PAYMENT_PRICING.md)** - Subscription tiers and pricing information
+- **[🔐 Client Access Guide](docs/FLYFOX_AI_CLIENT_ACCESS.md)** - Platform access and capabilities
+- **[👨‍💻 Developer Guide](docs/FLYFOX_AI_DEVELOPER_GUIDE.md)** - Complete development documentation
+- **[🏗️ Platform Architecture](docs/FLYFOX_AI_PLATFORM_ARCHITECTURE.md)** - Technical architecture details
 
 ### **🚀 Live Demo Capabilities**
 
@@ -57,8 +76,8 @@
 ### **1. Clone & Setup**
 
 ```bash
-git clone https://github.com/johnbritton/goliath-quantum-starter.git
-cd goliath-quantum-starter
+git clone https://github.com/FLYFOX-AI/flyfox-platform.git
+cd flyfox-platform
 
 # Create virtual environment
 python -m venv .venv1
@@ -339,20 +358,27 @@ Contact: licensing@flyfoxai.io
 
 ## 📞 **Contact & Support**
 
+### **📞 Contact & Support**
+
 ### **Business Inquiries**
-- **Email**: hello@flyfoxai.io
-- **Investor Relations**: investor@flyfoxai.io
-- **Partnerships**: partnerships@flyfoxai.io
+- **Sales**: sales@flyfox.ai
+- **Partnerships**: partners@flyfox.ai
+- **Investor Relations**: investor@flyfox.ai
+- **General**: hello@flyfox.ai
 
 ### **Technical Support**
-- **Documentation**: [docs.nqba.com](https://docs.nqba.com)
-- **Issues**: [GitHub Issues](https://github.com/johnbritton/goliath-quantum-starter/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/johnbritton/goliath-quantum-starter/discussions)
+- **24/7 Support**: support@flyfox.ai
+- **Technical**: technical@flyfox.ai
+- **Documentation**: [Complete Documentation Index](docs/FLYFOX_AI_DOCUMENTATION_INDEX.md)
+- **Issues**: [GitHub Issues](https://github.com/FLYFOX-AI/flyfox-platform/issues)
+- **Community**: [GitHub Discussions](https://github.com/FLYFOX-AI/flyfox-platform/discussions)
 
-### **Founder**
+### **Leadership**
 **John Britton** - CEO & Founder, FLYFOX AI
-- Vision: Creating the world's first quantum-powered intelligence economy
-- Mission: Uniting AI, quantum computing, and blockchain for enterprise transformation
+- **Phone**: (517) 213-8392
+- **Email**: john.britton@goliathomniedge.com
+- **Vision**: Creating the world's first quantum-powered intelligence economy
+- **Mission**: Uniting AI, quantum computing, and blockchain for enterprise transformation
 
 ---
 

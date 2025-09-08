@@ -11,7 +11,7 @@ import pytest_asyncio
 from datetime import datetime, timedelta
 from unittest.mock import Mock, patch
 
-from nqba_stack.auth import (
+from src.nqba_stack.auth import (
     AuthManager,
     User,
     Role,
@@ -25,33 +25,33 @@ from nqba_stack.auth import (
     RoleLevel,
     PermissionCategory,
 )
-from nqba_stack.auth.password_manager import PasswordManager
-from nqba_stack.auth.jwt_handler import JWTHandler
-from nqba_stack.auth.rbac import RoleBasedAccessControl
+from src.nqba_stack.auth.password_manager import PasswordManager
+from src.nqba_stack.auth.jwt_handler import JWTHandler
+from src.nqba_stack.auth.rbac import RoleBasedAccessControl
 
 
 # Test fixtures
-@pytest_asyncio.fixture
-async def auth_manager():
+@pytest.fixture
+def auth_manager():
     """Create a fresh auth manager for testing"""
     return AuthManager()
 
 
-@pytest_asyncio.fixture
-async def password_manager():
+@pytest.fixture
+def password_manager():
     """Create password manager for testing"""
     return PasswordManager()
 
 
-@pytest_asyncio.fixture
-async def jwt_handler():
+@pytest.fixture
+def jwt_handler():
     """Create JWT handler for testing"""
     return JWTHandler()
 
 
-@pytest_asyncio.fixture
-async def rbac():
-    """Create RBAC system for testing"""
+@pytest.fixture
+def rbac():
+    """Create RBAC instance for testing"""
     return RoleBasedAccessControl()
 
 

@@ -1,8 +1,25 @@
-# 🚀 Getting Started with Goliath Quantum Starter
+# 🚀 Getting Started with FLYFOX AI Platform
 
-**Transform your business with quantum advantage in under 5 minutes.**
+<div align="center">
 
-This guide will walk you through setting up the Goliath Quantum Starter platform and running your first quantum operation.
+![FLYFOX AI Logo](https://flyfox.ai/logo.svg)
+
+**Quantum-Powered Business Intelligence Platform**
+
+*Transform your business with quantum advantage in under 5 minutes*
+
+</div>
+
+This guide will walk you through setting up the FLYFOX AI Platform and running your first quantum-powered business operation.
+
+## 📚 Complete Documentation
+
+For comprehensive information, visit our **[Complete Documentation Index](docs/FLYFOX_AI_DOCUMENTATION_INDEX.md)** which includes:
+
+- **[💰 Payment & Pricing Guide](docs/FLYFOX_AI_PAYMENT_PRICING.md)** - Subscription tiers and pricing
+- **[🔐 Client Access Guide](docs/FLYFOX_AI_CLIENT_ACCESS.md)** - Platform capabilities and access
+- **[👨‍💻 Developer Guide](docs/FLYFOX_AI_DEVELOPER_GUIDE.md)** - Complete development documentation
+- **[🏗️ Platform Architecture](docs/FLYFOX_AI_PLATFORM_ARCHITECTURE.md)** - Technical architecture details
 
 ---
 
@@ -16,6 +33,7 @@ This guide will walk you through setting up the Goliath Quantum Starter platform
 - **Network**: Internet connection for quantum computing access
 
 ### Required Accounts
+- **FLYFOX AI Account**: Sign up at [app.flyfox.ai](https://app.flyfox.ai)
 - **GitHub**: For accessing the repository
 - **Dynex**: For neuromorphic quantum computing (optional for demo)
 - **OpenAI/Anthropic**: For AI-enhanced features (optional for demo)
@@ -24,7 +42,24 @@ This guide will walk you through setting up the Goliath Quantum Starter platform
 
 ## 🚀 Quick Start (5 Minutes)
 
-### Step 1: Clone the Repository
+### Step 1: Get Started with FLYFOX AI
+
+#### Option A: Use FLYFOX AI CLI (Recommended)
+```bash
+# Install FLYFOX AI CLI
+npm install -g @flyfox/cli
+# or
+pip install flyfox-cli
+
+# Authenticate with your FLYFOX AI account
+flyfox auth login
+
+# Create a new quantum-powered project
+flyfox create my-quantum-app
+cd my-quantum-app
+```
+
+#### Option B: Clone the Repository
 ```bash
 # Clone the repository
 git clone https://github.com/GoliathBritton/goliath-quantum-starter
@@ -49,13 +84,13 @@ drwxr-xr-x   4 user  staff    128 Jan 15 10:00 tests/
 ### Step 2: Install Dependencies
 ```bash
 # Create a virtual environment (recommended)
-python -m venv goliath-env
+python -m venv flyfox-env
 
 # Activate the virtual environment
 # On Windows:
-goliath-env\Scripts\activate
+flyfox-env\Scripts\activate
 # On macOS/Linux:
-source goliath-env/bin/activate
+source flyfox-env/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
@@ -74,21 +109,26 @@ Successfully installed qiskit-0.44.0 dynex-0.1.0 fastapi-0.110.0 ...
 ### Step 3: Set Up Environment Variables (Optional)
 ```bash
 # For full functionality, set these environment variables
+export FLYFOX_API_KEY="your_flyfox_api_key_here"
 export DYNEX_API_KEY="your_dynex_api_key_here"
 export OPENAI_API_KEY="your_openai_api_key_here"
 export ANTHROPIC_API_KEY="your_anthropic_api_key_here"
 
 # On Windows, use:
+# set FLYFOX_API_KEY=your_flyfox_api_key_here
 # set DYNEX_API_KEY=your_dynex_api_key_here
 # set OPENAI_API_KEY=your_openai_api_key_here
 ```
 
-**Note**: You can run the demo without these keys, but some features will be limited.
+**Note**: You can run the demo without these keys, but some features will be limited. Get your FLYFOX AI API key from [app.flyfox.ai](https://app.flyfox.ai).
 
-### Step 4: Start the API Server
+### Step 4: Start the FLYFOX AI Platform
 ```bash
-# Start the FastAPI server
-uvicorn src.nqba_stack.api_server:app --reload --host 0.0.0.0 --port 8000
+# Start the FLYFOX AI Platform server
+uvicorn src.nqba_stack.api.main:app --reload --host 0.0.0.0 --port 8000
+
+# Or use the FLYFOX AI CLI
+flyfox dev start
 ```
 
 **Expected Output**:
@@ -96,8 +136,9 @@ uvicorn src.nqba_stack.api_server:app --reload --host 0.0.0.0 --port 8000
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
 INFO:     Started reloader process [12345] using WatchFiles
 INFO:     Started server process [12346]
-INFO:     Started server process [12346]
-INFO:     Application startup complete.
+INFO:     FLYFOX AI Platform startup complete.
+INFO:     Quantum computing ready - Dynex integration active
+INFO:     AI Agent Suite initialized
 ```
 
 ### Step 5: Run Your First Quantum Operation
@@ -368,9 +409,9 @@ result = await quantum_adapter.solve_qubo(
 - **📊 [Performance Benchmarks](docs/benchmarks.md)** - Optimization strategies
 
 ### 3. Join the Community
-- **💬 [Discord Community](https://discord.gg/goliath-quantum)** - Real-time support
-- **🐛 [GitHub Issues](https://github.com/GoliathBritton/goliath-quantum-starter/issues)** - Report bugs and request features
-- **📧 [Email Support](mailto:support@goliathquantum.com)** - Enterprise inquiries
+- **💬 [Discord Community](https://discord.gg/flyfox-ai)** - Real-time support
+- **🐛 [GitHub Issues](https://github.com/FLYFOX-AI/flyfox-platform/issues)** - Report bugs and request features
+- **📧 [Email Support](mailto:support@flyfox.ai)** - Enterprise inquiries
 
 ---
 
@@ -402,24 +443,24 @@ python examples/benchmark_quantum_advantage.py
 
 ## 🏆 Congratulations!
 
-You've successfully set up the Goliath Quantum Starter platform and are now ready to:
+You've successfully set up the FLYFOX AI Platform and are now ready to:
 
 - **🚀 Run quantum operations** with 90% cost reduction
 - **🤖 Build AI-enhanced business applications**
 - **📊 Optimize complex business problems** with quantum advantage
 - **🌐 Scale your solutions** across multiple business domains
 
-**Welcome to the future of quantum business computing!**
+**Welcome to the future of quantum business computing with FLYFOX AI!**
 
 ---
 
 ## 📞 Need Help?
 
-- **💬 [Discord Community](https://discord.gg/goliath-quantum)** - Real-time support
-- **🐛 [GitHub Issues](https://github.com/GoliathBritton/goliath-quantum-starter/issues)** - Bug reports & feature requests
-- **📧 [Email Support](mailto:support@goliathquantum.com)** - Enterprise inquiries
-- **📖 [Documentation](https://docs.goliathquantum.com)** - Complete guides
+- **💬 [Discord Community](https://discord.gg/flyfox-ai)** - Real-time support
+- **🐛 [GitHub Issues](https://github.com/FLYFOX-AI/flyfox-platform/issues)** - Bug reports & feature requests
+- **📧 [Email Support](mailto:support@flyfox.ai)** - Enterprise inquiries
+- **📖 [Documentation](https://docs.flyfox.ai)** - Complete guides
 
 ---
 
-*This guide is part of the Goliath Quantum Starter ecosystem. For the latest updates, check our [GitHub repository](https://github.com/GoliathBritton/goliath-quantum-starter).*
+*This guide is part of the FLYFOX AI Platform ecosystem. For the latest updates, check our [GitHub repository](https://github.com/FLYFOX-AI/flyfox-platform).*

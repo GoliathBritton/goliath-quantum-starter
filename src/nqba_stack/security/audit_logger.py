@@ -497,8 +497,14 @@ class AuditLogger:
                     logger.error(f"Error in export task: {e}")
                     await asyncio.sleep(3600)  # Wait 1 hour on error
 
-        # Start the background task
-        asyncio.create_task(export_task())
+        # Start the background task only if there's a running event loop
+        try:
+            loop = asyncio.get_running_loop()
+            self._export_task = loop.create_task(export_task())
+        except RuntimeError:
+            # No running event loop, skip background task
+            logger.debug("No running event loop, skipping export task")
+            self._export_task = None
 
     def get_audit_statistics(self) -> Dict[str, Any]:
         """Get audit log statistics"""

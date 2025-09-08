@@ -1,8 +1,20 @@
-# NQBA Ecosystem - Incident Response Runbooks
+# NQBA Platform - Operational Runbooks
 
 ## Overview
 
-This document provides step-by-step procedures for responding to common incidents in the NQBA ecosystem. Each runbook includes detection, response, and recovery procedures.
+This document provides comprehensive operational procedures for the NQBA Platform, including daily operations, incident response, maintenance procedures, and emergency protocols.
+
+## Table of Contents
+
+1. [Daily Operations](#daily-operations)
+2. [Incident Response](#incident-response)
+3. [Maintenance Procedures](#maintenance-procedures)
+4. [Scaling Operations](#scaling-operations)
+5. [Security Procedures](#security-procedures)
+6. [Backup and Recovery](#backup-and-recovery)
+7. [Performance Tuning](#performance-tuning)
+8. [Emergency Procedures](#emergency-procedures)
+9. [NQBA-Specific Incidents](#nqba-specific-incidents)
 
 ## Incident Severity Levels
 
@@ -11,7 +23,226 @@ This document provides step-by-step procedures for responding to common incident
 - **P2 (Medium)**: Minor functionality issues, moderate performance impact
 - **P3 (Low)**: Cosmetic issues, minor performance degradation
 
-## Runbook Index
+## Daily Operations
+
+### Morning Health Check
+
+**Frequency**: Daily at 9:00 AM
+**Duration**: 15 minutes
+**Owner**: Operations Team
+
+#### Checklist
+
+```bash
+# 1. Check cluster health
+kubectl get nodes
+kubectl get pods --all-namespaces | grep -v Running
+kubectl top nodes
+
+# 2. Check application status
+kubectl get pods -n nqba-platform
+kubectl get svc -n nqba-platform
+kubectl get ingress -n nqba-platform
+
+# 3. Check HPA status
+kubectl get hpa -n nqba-platform
+
+# 4. Check recent deployments
+kubectl rollout status deployment/nqba-api -n nqba-platform
+kubectl rollout status deployment/nqba-worker -n nqba-platform
+
+# 5. Check monitoring systems
+kubectl get pods -n monitoring
+curl -s http://prometheus.monitoring.svc.cluster.local:9090/-/healthy
+curl -s http://grafana.monitoring.svc.cluster.local:3000/api/health
+
+# 6. Check NQBA-specific services
+curl -f https://api.nqba.flyfox.ai/health
+curl -f https://api.nqba.flyfox.ai/quantum/status
+```
+
+#### Expected Results
+- All nodes should be in "Ready" state
+- All pods should be "Running" or "Completed"
+- CPU/Memory usage should be within normal ranges (< 80%)
+- All services should have endpoints
+- HPA should show current/desired replica counts
+- Monitoring systems should return healthy status
+- NQBA API should return 200 status
+
+### Log Review
+
+**Frequency**: Daily at 10:00 AM
+**Duration**: 30 minutes
+**Owner**: Operations Team
+
+```bash
+# 1. Check application logs for errors
+kubectl logs -l app=nqba-platform -n nqba-platform --since=24h | grep -i error
+
+# 2. Check worker logs for failed jobs
+kubectl logs -l component=worker -n nqba-platform --since=24h | grep -i "failed\|error"
+
+# 3. Check quantum job logs
+kubectl logs -l app=nqba-platform -n nqba-platform --since=24h | grep -i "quantum\|dynex"
+
+# 4. Check IPFS logs
+kubectl logs -l component=ipfs -n nqba-platform --since=24h | grep -i "pin\|failed"
+
+# 5. Check billing logs
+kubectl logs -l app=nqba-platform -n nqba-platform --since=24h | grep -i "billing\|quota"
+```
+
+## Incident Response
+
+### P0 - Critical Incident Response
+
+**Response Time**: 15 minutes
+**Resolution Time**: 4 hours
+
+#### Immediate Actions (0-15 minutes)
+
+1. **Acknowledge the incident**
+   ```bash
+   # Create incident channel
+   # Post in #incidents Slack channel
+   echo "P0 INCIDENT: [Brief description] - Incident Commander: [Name]"
+   ```
+
+2. **Assess the scope**
+   ```bash
+   # Check overall system health
+   kubectl get nodes
+   kubectl get pods --all-namespaces | grep -v Running
+   
+   # Check external dependencies
+   curl -I https://api.nqba.flyfox.ai/health
+   curl -I https://dynex.co/api/health  # Check Dynex status
+   
+   # Check monitoring dashboards
+   # Access Grafana and review system metrics
+   ```
+
+3. **Implement immediate mitigation**
+   ```bash
+   # If API is down, check recent deployments
+   kubectl rollout history deployment/nqba-api -n nqba-platform
+   
+   # If needed, rollback to last known good version
+   kubectl rollout undo deployment/nqba-api -n nqba-platform
+   
+   # Scale up if performance issue
+   kubectl scale deployment nqba-api --replicas=10 -n nqba-platform
+   
+   # Enable quantum fallback if Dynex is down
+   kubectl patch configmap nqba-config -n nqba-platform \
+     -p '{"data":{"QUANTUM_FALLBACK_ENABLED":"true"}}'
+   ```
+
+## Maintenance Procedures
+
+### Weekly Maintenance Window
+
+**Schedule**: Sundays 2:00 AM - 4:00 AM UTC
+**Duration**: 2 hours
+**Owner**: Operations Team
+
+#### Pre-maintenance Checklist
+
+```bash
+# 1. Verify backup completion
+kubectl get jobs -n nqba-platform | grep backup
+aws rds describe-db-snapshots --db-instance-identifier nqba-production-db
+
+# 2. Check system health
+kubectl get pods --all-namespaces | grep -v Running
+kubectl top nodes
+
+# 3. Check quantum job queue
+kubectl logs -l component=worker -n nqba-platform | grep "queue_size"
+
+# 4. Notify stakeholders
+# Send maintenance notification 24 hours in advance
+
+# 5. Prepare rollback plan
+kubectl get deployments -n nqba-platform -o yaml > pre-maintenance-state.yaml
+```
+
+## Scaling Operations
+
+### Quantum Workload Scaling
+
+```bash
+# Check quantum job queue depth
+kubectl logs -l component=worker -n nqba-platform | grep "queue_depth"
+
+# Scale quantum workers based on demand
+kubectl scale deployment nqba-worker --replicas=10 -n nqba-platform
+
+# Monitor Dynex API rate limits
+kubectl logs -l app=nqba-platform -n nqba-platform | grep "rate_limit"
+```
+
+## Security Procedures
+
+### Quantum API Key Rotation
+
+```bash
+# 1. Generate new Dynex API key
+# (Done through Dynex portal)
+
+# 2. Update Kubernetes secret
+kubectl create secret generic nqba-quantum-secret-new \
+  --from-literal=dynex-api-key=new-api-key \
+  -n nqba-platform
+
+# 3. Update deployment
+kubectl patch deployment nqba-worker -n nqba-platform \
+  -p '{"spec":{"template":{"spec":{"containers":[{"name":"worker","envFrom":[{"secretRef":{"name":"nqba-quantum-secret-new"}}]}]}}}}'
+
+# 4. Verify quantum jobs still work
+kubectl logs -l component=worker -n nqba-platform | grep "quantum_job_success"
+```
+
+## Performance Tuning
+
+### Quantum Job Optimization
+
+```bash
+# Monitor quantum job performance
+kubectl logs -l component=worker -n nqba-platform | grep "job_duration"
+
+# Adjust quantum worker resources
+kubectl patch deployment nqba-worker -n nqba-platform \
+  -p '{"spec":{"template":{"spec":{"containers":[{"name":"worker","resources":{"requests":{"memory":"4Gi","cpu":"2000m"},"limits":{"memory":"8Gi","cpu":"4000m"}}}]}}}}'
+
+# Tune quantum job batching
+kubectl patch configmap nqba-config -n nqba-platform \
+  -p '{"data":{"QUANTUM_BATCH_SIZE":"5","QUANTUM_TIMEOUT":"300"}}'
+```
+
+## Emergency Procedures
+
+### Dynex Service Outage
+
+```bash
+# 1. Enable classical fallback immediately
+kubectl patch configmap nqba-config -n nqba-platform \
+  -p '{"data":{"QUANTUM_FALLBACK_ENABLED":"true","FALLBACK_SOLVER":"classical"}}'
+
+# 2. Restart workers to pick up new config
+kubectl rollout restart deployment/nqba-worker -n nqba-platform
+
+# 3. Update status page
+echo "Quantum computing services temporarily using classical fallback due to external provider issues."
+
+# 4. Monitor fallback performance
+kubectl logs -l component=worker -n nqba-platform | grep "fallback_job"
+```
+
+## NQBA-Specific Incidents
+
+### Runbook Index
 
 1. [Dynex Outage](#dynex-outage)
 2. [IPFS Pin Failures](#ipfs-pin-failures)

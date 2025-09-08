@@ -54,88 +54,83 @@ class TestKMSManager:
         """Setup test environment"""
         self.kms_manager = KMSManager(provider=KMSProvider.LOCAL)
 
-    def test_create_secret(self):
+    @pytest.mark.asyncio
+    async def test_create_secret(self):
         """Test secret creation"""
-        secret_id = asyncio.run(
-            self.kms_manager.create_secret(
-                name="test_secret", value="test_value", description="Test secret"
-            )
+        secret_id = await self.kms_manager.create_secret(
+            name="test_secret", value="test_value", description="Test secret"
         )
 
         assert secret_id is not None
         assert secret_id.startswith("test_secret_")
 
         # Verify secret was stored
-        metadata = asyncio.run(self.kms_manager.get_secret_metadata(secret_id))
+        metadata = await self.kms_manager.get_secret_metadata(secret_id)
         assert metadata is not None
         assert metadata.name == "test_secret"
         assert metadata.description == "Test secret"
 
-    def test_get_secret(self):
+    @pytest.mark.asyncio
+    async def test_get_secret(self):
         """Test secret retrieval"""
         # Create a secret
-        secret_id = asyncio.run(
-            self.kms_manager.create_secret(
-                name="retrieval_test",
-                value="secret_value",
-                description="Test retrieval",
-            )
+        secret_id = await self.kms_manager.create_secret(
+            name="retrieval_test",
+            value="secret_value",
+            description="Test retrieval",
         )
 
         # Retrieve the secret
-        value = asyncio.run(self.kms_manager.get_secret(secret_id))
+        value = await self.kms_manager.get_secret(secret_id)
         assert value == "secret_value"
 
-    def test_update_secret(self):
+    @pytest.mark.asyncio
+    async def test_update_secret(self):
         """Test secret update"""
         # Create a secret
-        secret_id = asyncio.run(
-            self.kms_manager.create_secret(
-                name="update_test", value="old_value", description="Test update"
-            )
+        secret_id = await self.kms_manager.create_secret(
+            name="update_test", value="old_value", description="Test update"
         )
 
         # Update the secret
-        success = asyncio.run(self.kms_manager.update_secret(secret_id, "new_value"))
+        success = await self.kms_manager.update_secret(secret_id, "new_value")
         assert success is True
 
-        # Verify update
-        value = asyncio.run(self.kms_manager.get_secret(secret_id))
+        # Verify the update
+        value = await self.kms_manager.get_secret(secret_id)
         assert value == "new_value"
 
-    def test_delete_secret(self):
+    @pytest.mark.asyncio
+    async def test_delete_secret(self):
         """Test secret deletion"""
         # Create a secret
-        secret_id = asyncio.run(
-            self.kms_manager.create_secret(
-                name="delete_test", value="delete_value", description="Test deletion"
-            )
+        secret_id = await self.kms_manager.create_secret(
+            name="delete_test", value="delete_value", description="Test deletion"
         )
 
         # Delete the secret
-        success = asyncio.run(self.kms_manager.delete_secret(secret_id))
+        success = await self.kms_manager.delete_secret(secret_id)
         assert success is True
 
         # Verify deletion
         with pytest.raises(ValueError):
-            asyncio.run(self.kms_manager.get_secret(secret_id))
+            await self.kms_manager.get_secret(secret_id)
 
-    def test_rotation_status(self):
+    @pytest.mark.asyncio
+    async def test_rotation_status(self):
         """Test rotation status reporting"""
         # Create multiple secrets
         secret_ids = []
         for i in range(3):
-            secret_id = asyncio.run(
-                self.kms_manager.create_secret(
-                    name=f"rotation_test_{i}",
-                    value=f"value_{i}",
-                    description=f"Test rotation {i}",
-                )
+            secret_id = await self.kms_manager.create_secret(
+                name=f"rotation_test_{i}",
+                value=f"value_{i}",
+                description=f"Test rotation {i}",
             )
             secret_ids.append(secret_id)
 
         # Get rotation status
-        status = asyncio.run(self.kms_manager.get_rotation_status())
+        status = await self.kms_manager.get_rotation_status()
         assert status["total_secrets"] == 3
         assert status["secrets_needing_rotation"] == 0
         assert status["secrets_expired"] == 0
@@ -551,7 +546,8 @@ class TestSecurityIntegration:
         self.audit_logger = AuditLogger()
         self.compliance_manager = ComplianceManager()
 
-    def test_end_to_end_security_workflow(self):
+    @pytest.mark.asyncio
+    async def test_end_to_end_security_workflow(self):
         """Test complete security workflow"""
         # 1. Create organization and user
         org_result = self.iam_manager.create_organization(
@@ -587,12 +583,10 @@ class TestSecurityIntegration:
         encrypted_data = self.encryption_manager.encrypt_data(sensitive_data, tenant_id)
 
         # 5. Store encryption key in KMS
-        secret_id = asyncio.run(
-            self.kms_manager.create_secret(
-                name="encryption_key",
-                value="test_encryption_key",
-                description="Key for tenant encryption",
-            )
+        secret_id = await self.kms_manager.create_secret(
+            name="encryption_key",
+            value="test_encryption_key",
+            description="Key for tenant encryption",
         )
 
         # 6. Log security events

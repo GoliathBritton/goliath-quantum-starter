@@ -1,11 +1,14 @@
-# 🚀 **NQBA DEPLOYMENT GUIDE**
+# 🚀 **FLYFOX AI Platform - NQBA DEPLOYMENT GUIDE**
+
+![FLYFOX AI Logo](https://flyfox.ai/logo.svg)
+
 ## **Complete Deployment Strategy with 5-Layer Architecture and Target Metrics**
 
 ---
 
 ## 🎯 **EXECUTIVE SUMMARY**
 
-This guide provides a comprehensive deployment strategy for the **NQBA (Neuromorphic Quantum Business Architecture)** platform, integrating the proven 5-Layer Architectural Model with our business ecosystem. The deployment ensures problem-free operation while maintaining our target testing metrics of **410.7x quantum advantage**.
+This guide provides a comprehensive deployment strategy for the **FLYFOX AI Platform** powered by the **NQBA (Neuromorphic Quantum Business Architecture)** stack, integrating the proven 5-Layer Architectural Model with our business ecosystem. The deployment ensures problem-free operation while maintaining our target testing metrics of **410.7x quantum advantage**.
 
 ---
 
@@ -50,13 +53,13 @@ This guide provides a comprehensive deployment strategy for the **NQBA (Neuromor
 
 #### **1.1 Environment Preparation**
 ```bash
-# 1. Clone and setup NQBA repository
-git clone https://github.com/NQBA-Platform/nqba-quantum-starter.git
-cd nqba-quantum-starter
+# 1. Clone and setup FLYFOX AI Platform repository
+git clone https://github.com/FLYFOX-AI/flyfox-platform.git
+cd flyfox-platform
 
 # 2. Setup Python virtual environment
-python -m venv nqba-env
-source nqba-env/bin/activate  # On Windows: nqba-env\Scripts\activate
+python -m venv flyfox-env
+source flyfox-env/bin/activate  # On Windows: flyfox-env\Scripts\activate
 
 # 3. Install dependencies
 pip install -r requirements.txt

@@ -1,8 +1,10 @@
-# 🚀 Dual Track Execution - NQBA-Core MVP
+# 🚀 FLYFOX AI Platform - Dual Track Execution
+
+![FLYFOX AI Logo](https://flyfox.ai/logo.svg)
 
 **FLYFOX AI's Strategic Approach: Demo for Proof + Landing Page for Pitch**
 
-This repository implements the dual-track execution strategy that gives you both **proof of concept** and **pitch-ready assets** simultaneously.
+This repository implements the dual-track execution strategy that gives you both **proof of concept** and **pitch-ready assets** simultaneously for the FLYFOX AI Platform powered by NQBA-Core MVP.
 
 ---
 
@@ -71,7 +73,7 @@ This repository implements the dual-track execution strategy that gives you both
 ## 📁 **Repository Structure**
 
 ```
-goliath-quantum-starter/
+flyfox-platform/
 ├── config/                          # Q-Cortex Configuration
 │   ├── council.yaml                 # High Council Directives
 │   └── sigma_select_rules.yaml     # Sigma Select Business Rules

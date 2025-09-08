@@ -1,6 +1,8 @@
-# Contributing to NQBA Stack
+# Contributing to FLYFOX AI Platform
 
-Thank you for your interest in contributing to the NQBA (Neuromorphic Quantum Business Architecture) Stack! This document provides guidelines and information for contributors.
+![FLYFOX AI Logo](https://flyfox.ai/logo.svg)
+
+Thank you for your interest in contributing to the FLYFOX AI Platform powered by the NQBA (Neuromorphic Quantum Business Architecture) Stack! This document provides guidelines and information for contributors.
 
 ## Table of Contents
 
@@ -30,14 +32,14 @@ This project adheres to our [Code of Conduct](CODE_OF_CONDUCT.md). By participat
 
 1. **Fork the repository**
    ```bash
-   git clone https://github.com/your-username/goliath-quantum-starter.git
-   cd goliath-quantum-starter
+   git clone https://github.com/your-username/flyfox-platform.git
+   cd flyfox-platform
    ```
 
 2. **Set up development environment**
    ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   python -m venv flyfox-env
+   source flyfox-env/bin/activate  # On Windows: flyfox-env\Scripts\activate
    pip install -r requirements.txt
    pip install -r requirements-dev.txt
    ```

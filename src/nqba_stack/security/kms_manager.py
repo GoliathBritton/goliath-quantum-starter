@@ -296,7 +296,7 @@ class KMSManager:
 
     def _start_rotation_monitor(self):
         """Start background task to monitor secret rotation"""
-
+        
         async def monitor_rotation():
             while True:
                 try:
@@ -306,8 +306,14 @@ class KMSManager:
                     logger.error(f"Error in rotation monitor: {e}")
                     await asyncio.sleep(300)  # Wait 5 minutes on error
 
-        # Start the background task
-        asyncio.create_task(monitor_rotation())
+        # Start the background task only if there's a running event loop
+        try:
+            loop = asyncio.get_running_loop()
+            self._rotation_task = loop.create_task(monitor_rotation())
+        except RuntimeError:
+            # No running event loop, skip background task
+            logger.debug("No running event loop, skipping rotation monitor")
+            self._rotation_task = None
 
     async def _check_expiring_secrets(self):
         """Check for secrets that need rotation"""

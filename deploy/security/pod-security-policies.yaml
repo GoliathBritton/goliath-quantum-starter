@@ -1,0 +1,406 @@
+# NQBA Platform - Pod Security Policies
+# Enforces security standards for all pods in the platform
+
+# =============================================================================
+# Pod Security Policy for API Services
+# =============================================================================
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: nqba-api-psp
+  labels:
+    app: nqba-platform
+    component: security
+    environment: production
+  annotations:
+    kubernetes.io/description: "Restricted security policy for NQBA API services"
+    seccomp.security.alpha.kubernetes.io/allowedProfileNames: 'runtime/default'
+    seccomp.security.alpha.kubernetes.io/defaultProfileName: 'runtime/default'
+    apparmor.security.beta.kubernetes.io/allowedProfileNames: 'runtime/default'
+    apparmor.security.beta.kubernetes.io/defaultProfileName: 'runtime/default'
+spec:
+  # Privilege and access controls
+  privileged: false
+  allowPrivilegeEscalation: false
+  requiredDropCapabilities:
+    - ALL
+  allowedCapabilities: []
+  
+  # Host controls
+  hostNetwork: false
+  hostIPC: false
+  hostPID: false
+  hostPorts:
+  - min: 0
+    max: 0
+  
+  # Volume controls
+  volumes:
+    - 'configMap'
+    - 'emptyDir'
+    - 'projected'
+    - 'secret'
+    - 'downwardAPI'
+    - 'persistentVolumeClaim'
+    - 'csi'
+  allowedHostPaths: []
+  
+  # User and group controls
+  runAsUser:
+    rule: 'MustRunAsNonRoot'
+  runAsGroup:
+    rule: 'MustRunAs'
+    ranges:
+      - min: 1000
+        max: 65535
+  supplementalGroups:
+    rule: 'MustRunAs'
+    ranges:
+      - min: 1000
+        max: 65535
+  fsGroup:
+    rule: 'MustRunAs'
+    ranges:
+      - min: 1000
+        max: 65535
+  
+  # Security context
+  readOnlyRootFilesystem: true
+  defaultAllowPrivilegeEscalation: false
+  forbiddenSysctls:
+    - '*'
+  
+  # SELinux
+  seLinux:
+    rule: 'RunAsAny'
+
+---
+# =============================================================================
+# Pod Security Policy for Database Services
+# =============================================================================
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: nqba-database-psp
+  labels:
+    app: nqba-platform
+    component: security
+    environment: production
+  annotations:
+    kubernetes.io/description: "Security policy for NQBA database services with specific requirements"
+    seccomp.security.alpha.kubernetes.io/allowedProfileNames: 'runtime/default'
+    seccomp.security.alpha.kubernetes.io/defaultProfileName: 'runtime/default'
+spec:
+  # Privilege and access controls
+  privileged: false
+  allowPrivilegeEscalation: false
+  requiredDropCapabilities:
+    - ALL
+  allowedCapabilities:
+    - CHOWN
+    - DAC_OVERRIDE
+    - FOWNER
+    - SETGID
+    - SETUID
+  
+  # Host controls
+  hostNetwork: false
+  hostIPC: false
+  hostPID: false
+  hostPorts:
+  - min: 0
+    max: 0
+  
+  # Volume controls
+  volumes:
+    - 'configMap'
+    - 'emptyDir'
+    - 'projected'
+    - 'secret'
+    - 'downwardAPI'
+    - 'persistentVolumeClaim'
+    - 'csi'
+  allowedHostPaths: []
+  
+  # User and group controls
+  runAsUser:
+    rule: 'MustRunAs'
+    ranges:
+      - min: 999
+        max: 999
+  runAsGroup:
+    rule: 'MustRunAs'
+    ranges:
+      - min: 999
+        max: 999
+  supplementalGroups:
+    rule: 'MustRunAs'
+    ranges:
+      - min: 999
+        max: 65535
+  fsGroup:
+    rule: 'MustRunAs'
+    ranges:
+      - min: 999
+        max: 999
+  
+  # Security context
+  readOnlyRootFilesystem: false
+  defaultAllowPrivilegeEscalation: false
+  forbiddenSysctls:
+    - '*'
+  
+  # SELinux
+  seLinux:
+    rule: 'RunAsAny'
+
+---
+# =============================================================================
+# Pod Security Policy for Monitoring Services
+# =============================================================================
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: nqba-monitoring-psp
+  labels:
+    app: nqba-platform
+    component: security
+    environment: production
+  annotations:
+    kubernetes.io/description: "Security policy for NQBA monitoring services"
+    seccomp.security.alpha.kubernetes.io/allowedProfileNames: 'runtime/default'
+    seccomp.security.alpha.kubernetes.io/defaultProfileName: 'runtime/default'
+spec:
+  # Privilege and access controls
+  privileged: false
+  allowPrivilegeEscalation: false
+  requiredDropCapabilities:
+    - ALL
+  allowedCapabilities: []
+  
+  # Host controls
+  hostNetwork: true  # Monitoring may need host network access
+  hostIPC: false
+  hostPID: false
+  hostPorts:
+  - min: 9090
+    max: 9100
+  
+  # Volume controls
+  volumes:
+    - 'configMap'
+    - 'emptyDir'
+    - 'projected'
+    - 'secret'
+    - 'downwardAPI'
+    - 'persistentVolumeClaim'
+    - 'hostPath'
+    - 'csi'
+  allowedHostPaths:
+    - pathPrefix: "/proc"
+      readOnly: true
+    - pathPrefix: "/sys"
+      readOnly: true
+    - pathPrefix: "/var/lib/docker/containers"
+      readOnly: true
+  
+  # User and group controls
+  runAsUser:
+    rule: 'MustRunAsNonRoot'
+  runAsGroup:
+    rule: 'MustRunAs'
+    ranges:
+      - min: 1000
+        max: 65535
+  supplementalGroups:
+    rule: 'MustRunAs'
+    ranges:
+      - min: 1000
+        max: 65535
+  fsGroup:
+    rule: 'MustRunAs'
+    ranges:
+      - min: 1000
+        max: 65535
+  
+  # Security context
+  readOnlyRootFilesystem: true
+  defaultAllowPrivilegeEscalation: false
+  forbiddenSysctls:
+    - '*'
+  
+  # SELinux
+  seLinux:
+    rule: 'RunAsAny'
+
+---
+# =============================================================================
+# Cluster Roles for Pod Security Policies
+# =============================================================================
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: nqba-api-psp-user
+  labels:
+    app: nqba-platform
+    component: security
+    environment: production
+rules:
+- apiGroups: ['policy']
+  resources: ['podsecuritypolicies']
+  verbs: ['use']
+  resourceNames:
+  - nqba-api-psp
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: nqba-database-psp-user
+  labels:
+    app: nqba-platform
+    component: security
+    environment: production
+rules:
+- apiGroups: ['policy']
+  resources: ['podsecuritypolicies']
+  verbs: ['use']
+  resourceNames:
+  - nqba-database-psp
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: nqba-monitoring-psp-user
+  labels:
+    app: nqba-platform
+    component: security
+    environment: production
+rules:
+- apiGroups: ['policy']
+  resources: ['podsecuritypolicies']
+  verbs: ['use']
+  resourceNames:
+  - nqba-monitoring-psp
+
+---
+# =============================================================================
+# Role Bindings for Pod Security Policies
+# =============================================================================
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: nqba-api-psp-binding
+  labels:
+    app: nqba-platform
+    component: security
+    environment: production
+roleRef:
+  kind: ClusterRole
+  name: nqba-api-psp-user
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- kind: ServiceAccount
+  name: nqba-api
+  namespace: nqba-platform
+- kind: ServiceAccount
+  name: nqba-worker
+  namespace: nqba-platform
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: nqba-database-psp-binding
+  labels:
+    app: nqba-platform
+    component: security
+    environment: production
+roleRef:
+  kind: ClusterRole
+  name: nqba-database-psp-user
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- kind: ServiceAccount
+  name: postgres
+  namespace: nqba-platform
+- kind: ServiceAccount
+  name: redis
+  namespace: nqba-platform
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: nqba-monitoring-psp-binding
+  labels:
+    app: nqba-platform
+    component: security
+    environment: production
+roleRef:
+  kind: ClusterRole
+  name: nqba-monitoring-psp-user
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- kind: ServiceAccount
+  name: nqba-monitoring
+  namespace: nqba-platform
+- kind: ServiceAccount
+  name: prometheus
+  namespace: nqba-platform
+- kind: ServiceAccount
+  name: grafana
+  namespace: nqba-platform
+
+---
+# =============================================================================
+# Security Context Constraints (OpenShift compatibility)
+# =============================================================================
+apiVersion: security.openshift.io/v1
+kind: SecurityContextConstraints
+metadata:
+  name: nqba-restricted-scc
+  labels:
+    app: nqba-platform
+    component: security
+    environment: production
+  annotations:
+    kubernetes.io/description: "Restricted SCC for NQBA Platform services"
+allowHostDirVolumePlugin: false
+allowHostIPC: false
+allowHostNetwork: false
+allowHostPID: false
+allowHostPorts: false
+allowPrivilegedContainer: false
+allowedCapabilities: []
+defaultAddCapabilities: []
+requiredDropCapabilities:
+- ALL
+allowedFlexVolumes: []
+fsGroup:
+  type: MustRunAs
+  ranges:
+  - min: 1000
+    max: 65535
+readOnlyRootFilesystem: true
+runAsUser:
+  type: MustRunAsNonRoot
+seLinuxContext:
+  type: MustRunAs
+supplementalGroups:
+  type: MustRunAs
+  ranges:
+  - min: 1000
+    max: 65535
+volumes:
+- configMap
+- downwardAPI
+- emptyDir
+- persistentVolumeClaim
+- projected
+- secret
+- csi
+users: []
+groups: []
+priority: 10

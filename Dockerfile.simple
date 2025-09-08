@@ -1,0 +1,47 @@
+FROM python:3.11-slim
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+# Set working directory
+WORKDIR /app
+
+# Install only essential system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install core dependencies first
+RUN pip install --no-cache-dir \
+    fastapi==0.104.1 \
+    uvicorn[standard]==0.24.0 \
+    pydantic==2.5.0 \
+    requests==2.31.0 \
+    python-dotenv==1.0.0 \
+    web3==6.11.3 \
+    numpy==1.24.3 \
+    scipy==1.11.4
+
+# Copy requirements for reference
+COPY requirements.txt .
+COPY requirements-dev.txt .
+
+# Copy application code
+COPY src/ ./src/
+COPY api_server.py .
+COPY *.py ./
+
+# Create non-root user
+RUN useradd -m -u 1000 nqba && chown -R nqba:nqba /app
+USER nqba
+
+# Expose port
+EXPOSE 8000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+
+# Run the application
+CMD ["python", "api_server.py"]

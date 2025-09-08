@@ -1,19 +1,43 @@
 version: '3.8'
+
 services:
-  app:
-    build: .
+  nqba-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.simple
     ports:
-      - "8080:8080"
+      - "8000:8000"
     environment:
-      - ENV=production
-    depends_on:
-      - redis
+      - ENVIRONMENT=production
+      - PYTHONPATH=/app
+    volumes:
+      - ./logs:/app/logs
+    restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/healthz"]
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 30s
       timeout: 10s
       retries: 3
+      start_period: 40s
+    networks:
+      - nqba-network
+
   redis:
-    image: redis:7
+    image: redis:7-alpine
     ports:
       - "6379:6379"
+    restart: unless-stopped
+    networks:
+      - nqba-network
+    volumes:
+      - redis_data:/data
+
+networks:
+  nqba-network:
+    driver: bridge
+
+volumes:
+  logs:
+    driver: local
+  redis_data:
+    driver: local

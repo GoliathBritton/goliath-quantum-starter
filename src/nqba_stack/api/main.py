@@ -7,6 +7,7 @@ integration, authentication, and comprehensive API endpoints.
 """
 
 import time
+import logging
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -34,7 +35,7 @@ from ..observability import (
 )
 
 # Initialize logger
-logger = LTCLogger()
+logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
@@ -52,9 +53,8 @@ async def lifespan(app: FastAPI):
         instrument_fastapi(app, tracer)
         logger.info("✅ OpenTelemetry instrumentation complete")
 
-        # Initialize business unit manager
-        await business_unit_manager.initialize()
-        logger.info("✅ Business unit manager initialized")
+        # Business unit manager is already initialized
+        logger.info("✅ Business unit manager ready")
 
         # Register FLYFOX AI business unit
         flyfox_ai_unit = FLYFOXAIBusinessUnit()
@@ -116,7 +116,7 @@ app.add_middleware(TrustedHostMiddleware, allowed_hosts=settings.ALLOWED_HOSTS)
 
 # Add observability tracing middleware
 tracer = get_tracer()
-app.add_middleware(TracingMiddleware, tracer=tracer)
+# Note: TracingMiddleware will be integrated via decorator pattern for specific endpoints
 
 
 # Request logging middleware
@@ -350,15 +350,4 @@ async def get_incident_info():
         raise HTTPException(status_code=500, detail="Failed to get incident info")
 
 
-# Startup event
-@app.on_event("startup")
-async def startup_event():
-    """Additional startup tasks"""
-    logger.info("🚀 NQBA Stack API startup event triggered")
-
-
-# Shutdown event
-@app.on_event("shutdown")
-async def shutdown_event():
-    """Additional shutdown tasks"""
-    logger.info("🔄 NQBA Stack API shutdown event triggered")
+# Deprecated on_event handlers removed - functionality moved to lifespan context manager

@@ -1,0 +1,291 @@
+# NQBA Platform - Production Database Configuration
+# PostgreSQL optimized for high-performance quantum computing workloads
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+  namespace: nqba-platform
+  labels:
+    app: postgres
+    component: database
+    environment: production
+data:
+  postgresql.conf: |
+    # =============================================================================
+    # POSTGRESQL PRODUCTION CONFIGURATION
+    # Optimized for NQBA Platform quantum computing workloads
+    # =============================================================================
+    
+    # Connection Settings
+    listen_addresses = '*'
+    port = 5432
+    max_connections = 200
+    superuser_reserved_connections = 3
+    
+    # Memory Settings (adjust based on available RAM)
+    shared_buffers = 2GB                    # 25% of RAM for 8GB system
+    effective_cache_size = 6GB              # 75% of RAM
+    work_mem = 64MB                         # Per-operation memory
+    maintenance_work_mem = 512MB            # Maintenance operations
+    
+    # Checkpoint Settings
+    checkpoint_completion_target = 0.9
+    wal_buffers = 64MB
+    checkpoint_timeout = 15min
+    max_wal_size = 4GB
+    min_wal_size = 1GB
+    
+    # Query Planner
+    random_page_cost = 1.1                  # SSD optimized
+    effective_io_concurrency = 200          # SSD concurrent I/O
+    
+    # Logging
+    logging_collector = on
+    log_destination = 'stderr'
+    log_directory = '/var/log/postgresql'
+    log_filename = 'postgresql-%Y-%m-%d_%H%M%S.log'
+    log_rotation_age = 1d
+    log_rotation_size = 100MB
+    log_truncate_on_rotation = on
+    log_line_prefix = '%t [%p]: [%l-1] user=%u,db=%d,app=%a,client=%h '
+    log_checkpoints = on
+    log_connections = on
+    log_disconnections = on
+    log_lock_waits = on
+    log_temp_files = 10MB
+    log_autovacuum_min_duration = 0
+    log_error_verbosity = default
+    log_statement = 'mod'                   # Log modifications
+    log_min_duration_statement = 1000       # Log slow queries (1s+)
+    
+    # Autovacuum (critical for quantum data cleanup)
+    autovacuum = on
+    autovacuum_max_workers = 4
+    autovacuum_naptime = 30s
+    autovacuum_vacuum_threshold = 50
+    autovacuum_analyze_threshold = 50
+    autovacuum_vacuum_scale_factor = 0.1
+    autovacuum_analyze_scale_factor = 0.05
+    autovacuum_vacuum_cost_delay = 10ms
+    autovacuum_vacuum_cost_limit = 1000
+    
+    # Security
+    ssl = on
+    ssl_cert_file = '/etc/ssl/certs/server.crt'
+    ssl_key_file = '/etc/ssl/private/server.key'
+    ssl_ca_file = '/etc/ssl/certs/ca.crt'
+    ssl_ciphers = 'ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256'
+    ssl_prefer_server_ciphers = on
+    password_encryption = scram-sha-256
+    
+    # Replication (for high availability)
+    wal_level = replica
+    max_wal_senders = 3
+    max_replication_slots = 3
+    hot_standby = on
+    hot_standby_feedback = on
+    
+    # Performance Monitoring
+    shared_preload_libraries = 'pg_stat_statements,auto_explain'
+    pg_stat_statements.max = 10000
+    pg_stat_statements.track = all
+    auto_explain.log_min_duration = 5000    # Log plans for 5s+ queries
+    auto_explain.log_analyze = on
+    auto_explain.log_buffers = on
+    
+    # Quantum-specific optimizations
+    # Large objects for quantum circuit storage
+    max_locks_per_transaction = 256
+    max_pred_locks_per_transaction = 256
+    
+    # Parallel processing for quantum computations
+    max_parallel_workers = 8
+    max_parallel_workers_per_gather = 4
+    max_parallel_maintenance_workers = 4
+    parallel_tuple_cost = 0.1
+    parallel_setup_cost = 1000.0
+    
+    # Time zone
+    timezone = 'UTC'
+    log_timezone = 'UTC'
+    
+    # Locale
+    lc_messages = 'en_US.UTF-8'
+    lc_monetary = 'en_US.UTF-8'
+    lc_numeric = 'en_US.UTF-8'
+    lc_time = 'en_US.UTF-8'
+    default_text_search_config = 'pg_catalog.english'
+
+  pg_hba.conf: |
+    # PostgreSQL Client Authentication Configuration
+    # TYPE  DATABASE        USER            ADDRESS                 METHOD
+    
+    # Local connections
+    local   all             postgres                                peer
+    local   all             all                                     md5
+    
+    # IPv4 local connections
+    host    all             all             127.0.0.1/32            scram-sha-256
+    
+    # IPv6 local connections
+    host    all             all             ::1/128                 scram-sha-256
+    
+    # Kubernetes pod network (adjust CIDR as needed)
+    host    all             all             10.0.0.0/8              scram-sha-256
+    host    all             all             172.16.0.0/12           scram-sha-256
+    host    all             all             192.168.0.0/16          scram-sha-256
+    
+    # SSL connections from application
+    hostssl nqba_platform   nqba_user       0.0.0.0/0               scram-sha-256
+    hostssl nqba_platform   nqba_readonly   0.0.0.0/0               scram-sha-256
+    
+    # Replication connections
+    host    replication     replicator      10.0.0.0/8              scram-sha-256
+    hostssl replication     replicator      0.0.0.0/0               scram-sha-256
+
+---
+# Database initialization scripts
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-init-scripts
+  namespace: nqba-platform
+  labels:
+    app: postgres
+    component: init-scripts
+    environment: production
+data:
+  01-create-database.sql: |
+    -- NQBA Platform Database Initialization
+    -- Create production database and users
+    
+    -- Create database
+    CREATE DATABASE nqba_platform
+        WITH 
+        OWNER = postgres
+        ENCODING = 'UTF8'
+        LC_COLLATE = 'en_US.UTF-8'
+        LC_CTYPE = 'en_US.UTF-8'
+        TABLESPACE = pg_default
+        CONNECTION LIMIT = -1;
+    
+    -- Create application user
+    CREATE USER nqba_user WITH
+        LOGIN
+        NOSUPERUSER
+        NOCREATEDB
+        NOCREATEROLE
+        INHERIT
+        NOREPLICATION
+        CONNECTION LIMIT -1
+        PASSWORD 'CHANGE_ME_IN_PRODUCTION';
+    
+    -- Create read-only user for analytics
+    CREATE USER nqba_readonly WITH
+        LOGIN
+        NOSUPERUSER
+        NOCREATEDB
+        NOCREATEROLE
+        INHERIT
+        NOREPLICATION
+        CONNECTION LIMIT 10
+        PASSWORD 'CHANGE_ME_IN_PRODUCTION';
+    
+    -- Create replication user
+    CREATE USER replicator WITH
+        LOGIN
+        NOSUPERUSER
+        NOCREATEDB
+        NOCREATEROLE
+        INHERIT
+        REPLICATION
+        CONNECTION LIMIT 5
+        PASSWORD 'CHANGE_ME_IN_PRODUCTION';
+    
+    -- Grant privileges
+    GRANT ALL PRIVILEGES ON DATABASE nqba_platform TO nqba_user;
+    GRANT CONNECT ON DATABASE nqba_platform TO nqba_readonly;
+    
+  02-create-extensions.sql: |
+    -- Connect to the NQBA database
+    \c nqba_platform;
+    
+    -- Enable required extensions
+    CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+    CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+    CREATE EXTENSION IF NOT EXISTS "pg_stat_statements";
+    CREATE EXTENSION IF NOT EXISTS "pg_trgm";
+    CREATE EXTENSION IF NOT EXISTS "btree_gin";
+    CREATE EXTENSION IF NOT EXISTS "btree_gist";
+    
+    -- For full-text search
+    CREATE EXTENSION IF NOT EXISTS "unaccent";
+    
+    -- For JSON operations
+    CREATE EXTENSION IF NOT EXISTS "jsonb_plpython3u" CASCADE;
+    
+  03-create-schemas.sql: |
+    -- Connect to the NQBA database
+    \c nqba_platform;
+    
+    -- Create application schemas
+    CREATE SCHEMA IF NOT EXISTS auth AUTHORIZATION nqba_user;
+    CREATE SCHEMA IF NOT EXISTS quantum AUTHORIZATION nqba_user;
+    CREATE SCHEMA IF NOT EXISTS security AUTHORIZATION nqba_user;
+    CREATE SCHEMA IF NOT EXISTS analytics AUTHORIZATION nqba_user;
+    CREATE SCHEMA IF NOT EXISTS audit AUTHORIZATION nqba_user;
+    
+    -- Grant schema usage
+    GRANT USAGE ON SCHEMA auth TO nqba_readonly;
+    GRANT USAGE ON SCHEMA quantum TO nqba_readonly;
+    GRANT USAGE ON SCHEMA security TO nqba_readonly;
+    GRANT USAGE ON SCHEMA analytics TO nqba_readonly;
+    GRANT USAGE ON SCHEMA audit TO nqba_readonly;
+    
+    -- Set default privileges for future tables
+    ALTER DEFAULT PRIVILEGES IN SCHEMA auth GRANT SELECT ON TABLES TO nqba_readonly;
+    ALTER DEFAULT PRIVILEGES IN SCHEMA quantum GRANT SELECT ON TABLES TO nqba_readonly;
+    ALTER DEFAULT PRIVILEGES IN SCHEMA security GRANT SELECT ON TABLES TO nqba_readonly;
+    ALTER DEFAULT PRIVILEGES IN SCHEMA analytics GRANT SELECT ON TABLES TO nqba_readonly;
+    ALTER DEFAULT PRIVILEGES IN SCHEMA audit GRANT SELECT ON TABLES TO nqba_readonly;
+    
+  04-performance-tuning.sql: |
+    -- Connect to the NQBA database
+    \c nqba_platform;
+    
+    -- Create performance monitoring views
+    CREATE OR REPLACE VIEW performance.slow_queries AS
+    SELECT 
+        query,
+        calls,
+        total_time,
+        mean_time,
+        rows,
+        100.0 * shared_blks_hit / nullif(shared_blks_hit + shared_blks_read, 0) AS hit_percent
+    FROM pg_stat_statements
+    WHERE mean_time > 1000  -- Queries taking more than 1 second
+    ORDER BY mean_time DESC;
+    
+    -- Create index usage monitoring
+    CREATE OR REPLACE VIEW performance.index_usage AS
+    SELECT 
+        schemaname,
+        tablename,
+        indexname,
+        idx_tup_read,
+        idx_tup_fetch,
+        idx_scan
+    FROM pg_stat_user_indexes
+    ORDER BY idx_scan DESC;
+    
+    -- Create table size monitoring
+    CREATE OR REPLACE VIEW performance.table_sizes AS
+    SELECT 
+        schemaname,
+        tablename,
+        pg_size_pretty(pg_total_relation_size(schemaname||'.'||tablename)) as size,
+        pg_total_relation_size(schemaname||'.'||tablename) as size_bytes
+    FROM pg_tables
+    WHERE schemaname NOT IN ('information_schema', 'pg_catalog')
+    ORDER BY size_bytes DESC;

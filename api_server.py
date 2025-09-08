@@ -15,6 +15,7 @@ import asyncio
 import logging
 from datetime import datetime
 import sys
+import os
 from pathlib import Path
 
 # Add src to path for NQBA imports
@@ -46,6 +47,31 @@ from nqba_stack.core.scheduled_audits import (
     scheduled_audits,
 )
 
+# Import authentication router
+from auth_router import auth_router
+from partners_router import partners_router
+from leads_router import leads_router
+from sigma_router import sigma_router
+from websocket_router import router as websocket_router
+from models import *
+
+# Import entitlements system
+from nqba_stack.core.entitlements import (
+    get_entitlements_engine,
+    require_feature,
+    Feature,
+    Tier,
+    check_usage_limit,
+    get_user_tier,
+)
+
+# Import configuration validation
+from nqba_stack.core.config_validator import (
+    ConfigValidator,
+    ServiceStatus,
+    validate_configuration,
+)
+
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -58,8 +84,13 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
-# Mount GraphQL and monitoring endpoints
+# Mount GraphQL, monitoring, and authentication endpoints
 app.include_router(graphql_router)
+app.include_router(auth_router, prefix="/v1")
+app.include_router(partners_router, prefix="/v1")
+app.include_router(leads_router, prefix="/v1")
+app.include_router(sigma_router, prefix="/v1")
+app.include_router(websocket_router, prefix="/v1")
 app.mount("/monitoring", monitoring_app)
 
 # --- DYNEX QUANTUM ADVANCED API ROUTES ---
@@ -122,6 +153,21 @@ async def dynex_api_get(path: str, params: str = "{}"):
 
 app.include_router(dynex_router)
 
+# Import and include recipe endpoints
+print("DEBUG: Importing recipe router...")
+from api.recipe_endpoints import router as recipe_router
+print(f"DEBUG: Recipe router imported: {recipe_router}")
+print(f"DEBUG: Recipe router routes: {[route.path for route in recipe_router.routes]}")
+app.include_router(recipe_router)
+print("DEBUG: Recipe router included in app")
+print(f"DEBUG: All app routes: {[route.path for route in app.routes]}")
+print(f"DEBUG: App router count: {len(app.routes)}")
+
+# Add a simple test route directly to the main app
+@app.get("/test-main-app")
+async def test_main_app():
+    return {"message": "Main app is working", "status": "ok", "timestamp": "updated"}
+
 # Add import for automated data collection
 from nqba_stack.core.automated_data_collection import (
     get_audit_readiness,
@@ -147,22 +193,7 @@ async def start_background_services():
 from web3.graph_integration import graphql_router
 from monitoring import app as monitoring_app
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-
-app = FastAPI(
-    title="NQBA Core API",
-    description="Neuromorphic Quantum Business Architecture Core Orchestration API",
-    version="1.0.0",
-    docs_url="/docs",
-    redoc_url="/redoc",
-)
-
-# Mount GraphQL and monitoring endpoints
-app.include_router(graphql_router)
-app.mount("/monitoring", monitoring_app)
+# Remove duplicate app initialization - using the one from line 53
 
 # Add CORS middleware
 app.add_middleware(
@@ -270,7 +301,7 @@ def secure_endpoint(token: str = Depends(oauth2_scheme)):
     return {"message": "Secure data"}
 
 
-# Health check endpoint
+# Root endpoint
 @app.get("/")
 async def root():
     """Root endpoint with NQBA Stack information"""
@@ -281,19 +312,6 @@ async def root():
         "business_pods": list(get_all_business_pods().keys()),
         "timestamp": datetime.now().isoformat(),
     }
-
-
-# System health endpoint
-@app.get("/v1/system/health", response_model=SystemHealthResponse)
-async def get_system_health():
-    """Get system health and status"""
-    try:
-        orchestrator = get_orchestrator()
-        status = orchestrator.get_system_status()
-        return SystemHealthResponse(**status)
-    except Exception as e:
-        logger.error(f"Health check failed: {e}")
-        raise HTTPException(status_code=500, detail=f"Health check failed: {str(e)}")
 
 
 # Sigma Select - Lead Scoring
@@ -1010,11 +1028,213 @@ Based on our work with companies like yours, I'd love to understand your specifi
     return script.strip(), sigmaeq_questions
 
 
+# Entitlements endpoints
+@app.get("/v1/entitlements/user/{user_id}")
+async def get_user_entitlements(user_id: str):
+    """Get user entitlements and tier information"""
+    try:
+        engine = get_entitlements_engine()
+        entitlements = engine.get_user_entitlements(user_id)
+        tier = engine.get_user_tier(user_id)
+        
+        return {
+            "user_id": user_id,
+            "tier": tier.value,
+            "entitlements": {
+                "features": [f.value for f in entitlements.features],
+                "limits": {
+                    "api_calls_per_day": entitlements.limits.api_calls_per_day,
+                    "quantum_jobs_per_day": entitlements.limits.quantum_jobs_per_day,
+                    "storage_gb": entitlements.limits.storage_gb,
+                    "concurrent_jobs": entitlements.limits.concurrent_jobs,
+                    "max_job_duration_hours": entitlements.limits.max_job_duration_hours
+                }
+            },
+            "usage": engine.get_usage_stats(user_id)
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get entitlements: {str(e)}")
+
+
+@app.post("/v1/entitlements/user/{user_id}/tier")
+async def set_user_tier(user_id: str, tier_data: dict):
+    """Set user tier"""
+    try:
+        tier_name = tier_data.get("tier")
+        if not tier_name:
+            raise HTTPException(status_code=400, detail="Tier is required")
+        
+        tier = Tier(tier_name)
+        engine = get_entitlements_engine()
+        engine.set_user_tier(user_id, tier)
+        
+        return {
+            "user_id": user_id,
+            "tier": tier.value,
+            "message": f"User tier updated to {tier.value}"
+        }
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=f"Invalid tier: {str(e)}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to set tier: {str(e)}")
+
+
+@app.get("/v1/entitlements/features")
+async def get_available_features():
+    """Get all available features and their descriptions"""
+    return {
+        "features": {
+            feature.value: {
+                "name": feature.value,
+                "description": f"Access to {feature.value.replace('_', ' ').title()}"
+            }
+            for feature in Feature
+        }
+    }
+
+
+@app.get("/v1/entitlements/tiers")
+async def get_available_tiers():
+    """Get all available tiers and their configurations"""
+    engine = get_entitlements_engine()
+    return {
+        "tiers": {
+            tier.value: {
+                "name": tier.value,
+                "features": [f.value for f in engine.tier_configs[tier].features],
+                "limits": {
+                    "api_calls_per_day": engine.tier_configs[tier].limits.api_calls_per_day,
+                    "quantum_jobs_per_day": engine.tier_configs[tier].limits.quantum_jobs_per_day,
+                    "storage_gb": engine.tier_configs[tier].limits.storage_gb,
+                    "concurrent_jobs": engine.tier_configs[tier].limits.concurrent_jobs,
+                    "max_job_duration_hours": engine.tier_configs[tier].limits.max_job_duration_hours
+                }
+            }
+            for tier in Tier
+        }
+    }
+
+
+# Health and configuration endpoints
+@app.get("/v1/system/health")
+async def health_check():
+    """Comprehensive health check including service configuration status"""
+    try:
+        # Validate all service configurations
+        validator = ConfigValidator()
+        validations = validator.validate_all_services()
+        
+        # Check orchestrator health
+        orchestrator_healthy = True
+        try:
+            orchestrator = get_orchestrator()
+        except Exception as e:
+            orchestrator_healthy = False
+            logger.error(f"Orchestrator health check failed: {e}")
+        
+        # Count configured services
+        configured_services = sum(1 for v in validations.values() 
+                                if v.status == ServiceStatus.CONFIGURED)
+        total_services = len(validations)
+        
+        # Determine overall health
+        overall_healthy = orchestrator_healthy and configured_services >= (total_services * 0.5)
+        
+        return {
+            "status": "healthy" if overall_healthy else "degraded",
+            "timestamp": datetime.now().isoformat(),
+            "version": "1.0.0",
+            "services": {
+                "orchestrator": "healthy" if orchestrator_healthy else "unhealthy",
+                "configuration": {
+                    "configured_services": configured_services,
+                    "total_services": total_services,
+                    "configuration_score": f"{(configured_services/total_services)*100:.1f}%",
+                    "services": {
+                        service: {
+                            "status": validation.status.value,
+                            "message": validation.message,
+                            "missing_vars": validation.missing_vars
+                        }
+                        for service, validation in validations.items()
+                    }
+                }
+            },
+            "endpoints": [
+                "/v1/sales/score",
+                "/v1/sales/script", 
+                "/v1/energy/optimize",
+                "/v1/energy/broker",
+                "/v1/system/health",
+                "/v1/system/config",
+                "/v1/ltc/query",
+                "/v1/entitlements/user/{user_id}",
+                "/v1/entitlements/features",
+                "/v1/entitlements/tiers"
+            ]
+        }
+    except Exception as e:
+        logger.error(f"Health check failed: {e}")
+        return {
+            "status": "unhealthy",
+            "timestamp": datetime.now().isoformat(),
+            "error": str(e)
+        }
+
+
+@app.get("/v1/system/config")
+async def get_configuration_status():
+    """Get detailed configuration status and setup guidance"""
+    try:
+        validator = ConfigValidator()
+        validations = validator.validate_all_services()
+        
+        return {
+            "configuration_status": {
+                service: {
+                    "status": validation.status.value,
+                    "message": validation.message,
+                    "required_vars": validation.required_vars,
+                    "missing_vars": validation.missing_vars,
+                    "suggestions": validation.suggestions
+                }
+                for service, validation in validations.items()
+            },
+            "setup_report": validator.generate_setup_report(),
+            "next_steps": [
+                "Copy .env.example to .env",
+                "Update .env with your actual configuration values",
+                "Restart the application",
+                "Check /v1/system/health for updated status"
+            ]
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get configuration status: {str(e)}")
+
+
 # Startup event
 @app.on_event("startup")
 async def startup_event():
     """Initialize NQBA Stack components on startup"""
     try:
+        # Validate configuration on startup
+        validator = ConfigValidator()
+        validations = validator.validate_all_services()
+        
+        # Log configuration status
+        configured_count = sum(1 for v in validations.values() 
+                             if v.status == ServiceStatus.CONFIGURED)
+        total_count = len(validations)
+        
+        logger.info(f"Configuration Status: {configured_count}/{total_count} services configured")
+        
+        # Log missing configurations as warnings
+        for service, validation in validations.items():
+            if validation.status != ServiceStatus.CONFIGURED:
+                logger.warning(f"{service.upper()}: {validation.message}")
+                if validation.missing_vars:
+                    logger.warning(f"Missing variables: {', '.join(validation.missing_vars)}")
+        
         # Get orchestrator to ensure it's initialized
         orchestrator = get_orchestrator()
         ltc_logger = get_ltc_logger()
@@ -1024,19 +1244,29 @@ async def startup_event():
             operation_type="api_server_started",
             operation_data={
                 "version": "1.0.0",
+                "configured_services": configured_count,
+                "total_services": total_count,
                 "endpoints": [
                     "/v1/sales/score",
                     "/v1/sales/script",
                     "/v1/energy/optimize",
                     "/v1/energy/broker",
                     "/v1/system/health",
+                    "/v1/system/config",
                     "/v1/ltc/query",
+                    "/v1/entitlements/user/{user_id}",
+                    "/v1/entitlements/features",
+                    "/v1/entitlements/tiers"
                 ],
             },
             thread_ref="API_SERVER_STARTUP",
         )
 
         logger.info("NQBA Core API Server started successfully")
+        
+        # Print configuration report if in development
+        if os.getenv("ENVIRONMENT", "development") == "development":
+            print(validator.generate_setup_report())
 
     except Exception as e:
         logger.error(f"Failed to initialize NQBA Stack: {e}")

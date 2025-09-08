@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+  <defs>
+    <linearGradient id="silverGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#E5E7EB;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#D1D5DB;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#9CA3AF;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="whiteGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#F9FAFB;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E5E7EB;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Fox Head Outline -->
+  <path d="M200 50 Q160 60 140 90 Q130 110 140 130 Q150 150 170 160 Q190 170 200 175 Q210 170 230 160 Q250 150 260 130 Q270 110 260 90 Q240 60 200 50 Z" fill="none" stroke="url(#silverGradient)" stroke-width="3"/>
+  
+  <!-- Left Ear -->
+  <path d="M160 70 Q150 50 140 60 Q135 70 145 80 Q155 85 160 80 Z" fill="none" stroke="url(#silverGradient)" stroke-width="3"/>
+  
+  <!-- Right Ear -->
+  <path d="M240 70 Q250 50 260 60 Q265 70 255 80 Q245 85 240 80 Z" fill="none" stroke="url(#silverGradient)" stroke-width="3"/>
+  
+  <!-- Inner Ear Details -->
+  <path d="M150 65 Q145 55 150 60 Q155 65 150 70" fill="none" stroke="url(#silverGradient)" stroke-width="2"/>
+  <path d="M250 65 Q255 55 250 60 Q245 65 250 70" fill="none" stroke="url(#silverGradient)" stroke-width="2"/>
+  
+  <!-- Left Eye -->
+  <ellipse cx="175" cy="110" rx="8" ry="12" fill="url(#whiteGradient)" stroke="url(#silverGradient)" stroke-width="2"/>
+  <circle cx="175" cy="110" r="3" fill="#374151"/>
+  
+  <!-- Right Eye -->
+  <ellipse cx="225" cy="110" rx="8" ry="12" fill="url(#whiteGradient)" stroke="url(#silverGradient)" stroke-width="2"/>
+  <circle cx="225" cy="110" r="3" fill="#374151"/>
+  
+  <!-- Snout -->
+  <path d="M200 130 Q185 140 180 150 Q185 155 200 155 Q215 155 220 150 Q215 140 200 130 Z" fill="none" stroke="url(#silverGradient)" stroke-width="3"/>
+  
+  <!-- Nose -->
+  <circle cx="200" cy="145" r="4" fill="url(#silverGradient)"/>
+  
+  <!-- Mouth Line -->
+  <path d="M200 150 Q190 155 185 160" fill="none" stroke="url(#silverGradient)" stroke-width="2"/>
+  <path d="M200 150 Q210 155 215 160" fill="none" stroke="url(#silverGradient)" stroke-width="2"/>
+  
+  <!-- Whiskers -->
+  <line x1="140" y1="120" x2="165" y2="125" stroke="url(#silverGradient)" stroke-width="2"/>
+  <line x1="140" y1="135" x2="165" y2="135" stroke="url(#silverGradient)" stroke-width="2"/>
+  <line x1="235" y1="125" x2="260" y2="120" stroke="url(#silverGradient)" stroke-width="2"/>
+  <line x1="235" y1="135" x2="260" y2="135" stroke="url(#silverGradient)" stroke-width="2"/>
+  
+  <!-- Company Name -->
+  <text x="200" y="220" font-family="serif" font-size="36" font-weight="bold" text-anchor="middle" fill="url(#whiteGradient)" letter-spacing="4px">FLY FOX AI</text>
+  
+  <!-- Tagline -->
+  <text x="200" y="250" font-family="sans-serif" font-size="12" text-anchor="middle" fill="url(#silverGradient)" letter-spacing="2px">SOLVE PROBLEMS & PROVIDE DYNAMIC AI SOLUTIONS</text>
+</svg>

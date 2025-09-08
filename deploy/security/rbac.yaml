@@ -1,0 +1,367 @@
+# NQBA Platform - Role-Based Access Control (RBAC)
+# Implements principle of least privilege for service accounts
+
+# =============================================================================
+# Service Accounts
+# =============================================================================
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nqba-api
+  namespace: nqba-platform
+  labels:
+    app: nqba-platform
+    component: api
+    environment: production
+  annotations:
+    eks.amazonaws.com/role-arn: "arn:aws:iam::<ACCOUNT_ID>:role/nqba-platform-api-role"
+    kubernetes.io/description: "Service account for NQBA API server with minimal required permissions"
+automountServiceAccountToken: true
+imagePullSecrets:
+- name: nqba-platform-registry
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nqba-worker
+  namespace: nqba-platform
+  labels:
+    app: nqba-platform
+    component: worker
+    environment: production
+  annotations:
+    eks.amazonaws.com/role-arn: "arn:aws:iam::<ACCOUNT_ID>:role/nqba-platform-worker-role"
+automountServiceAccountToken: true
+imagePullSecrets:
+- name: nqba-platform-registry
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nqba-backup
+  namespace: nqba-platform
+  labels:
+    app: nqba-platform
+    component: backup
+    environment: production
+  annotations:
+    eks.amazonaws.com/role-arn: "arn:aws:iam::<ACCOUNT_ID>:role/nqba-platform-backup-role"
+automountServiceAccountToken: true
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nqba-monitoring
+  namespace: nqba-platform
+  labels:
+    app: nqba-platform
+    component: monitoring
+    environment: production
+automountServiceAccountToken: true
+
+# =============================================================================
+# Cluster Roles - Define permissions
+# =============================================================================
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: nqba-api-role
+  labels:
+    app: nqba-platform
+    component: rbac
+    environment: production
+rules:
+# Read access to nodes for health monitoring
+- apiGroups: [""]
+  resources: ["nodes"]
+  verbs: ["get", "list"]
+
+# Read access to pods in own namespace for service discovery
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list"]
+  resourceNames: []
+
+# Read access to services for service discovery
+- apiGroups: [""]
+  resources: ["services"]
+  verbs: ["get", "list"]
+
+# Read access to endpoints for load balancing
+- apiGroups: [""]
+  resources: ["endpoints"]
+  verbs: ["get", "list"]
+
+# Read access to configmaps (for configuration)
+- apiGroups: [""]
+  resources: ["configmaps"]
+  verbs: ["get", "list"]
+  resourceNames: ["nqba-platform-config"]
+
+# Read access to secrets (for credentials)
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get"]
+  resourceNames: ["nqba-platform-secrets"]
+
+# Create events for logging
+- apiGroups: [""]
+  resources: ["events"]
+  verbs: ["create"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: nqba-worker-role
+  labels:
+    app: nqba-platform
+    component: rbac
+    environment: production
+rules:
+# Read access to pods for job coordination
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list"]
+
+# Read access to configmaps
+- apiGroups: [""]
+  resources: ["configmaps"]
+  verbs: ["get", "list"]
+  resourceNames: ["nqba-platform-config"]
+
+# Read access to secrets
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get"]
+  resourceNames: ["nqba-platform-secrets"]
+
+# Create events for logging
+- apiGroups: [""]
+  resources: ["events"]
+  verbs: ["create"]
+
+# Access to jobs for background processing
+- apiGroups: ["batch"]
+  resources: ["jobs"]
+  verbs: ["get", "list", "create", "update", "patch"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: nqba-backup-role
+  labels:
+    app: nqba-platform
+    component: rbac
+    environment: production
+rules:
+# Read access to persistent volumes for backup
+- apiGroups: [""]
+  resources: ["persistentvolumes", "persistentvolumeclaims"]
+  verbs: ["get", "list"]
+
+# Read access to pods for database backup
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list"]
+
+# Execute commands in pods for backup
+- apiGroups: [""]
+  resources: ["pods/exec"]
+  verbs: ["create"]
+
+# Read access to secrets for database credentials
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get"]
+  resourceNames: ["nqba-platform-secrets"]
+
+# Create events for logging
+- apiGroups: [""]
+  resources: ["events"]
+  verbs: ["create"]
+
+# Access to jobs for backup scheduling
+- apiGroups: ["batch"]
+  resources: ["jobs", "cronjobs"]
+  verbs: ["get", "list", "create", "update", "patch"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: nqba-monitoring-role
+  labels:
+    app: nqba-platform
+    component: rbac
+    environment: production
+rules:
+# Read access to all resources for monitoring
+- apiGroups: [""]
+  resources: ["nodes", "nodes/metrics", "services", "endpoints", "pods"]
+  verbs: ["get", "list", "watch"]
+
+# Read access to deployments and replicasets
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets"]
+  verbs: ["get", "list", "watch"]
+
+# Read access to ingresses
+- apiGroups: ["networking.k8s.io"]
+  resources: ["ingresses"]
+  verbs: ["get", "list", "watch"]
+
+# Read access to network policies
+- apiGroups: ["networking.k8s.io"]
+  resources: ["networkpolicies"]
+  verbs: ["get", "list", "watch"]
+
+# =============================================================================
+# Role Bindings - Assign permissions to service accounts
+# =============================================================================
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: nqba-api-binding
+  labels:
+    app: nqba-platform
+    component: rbac
+    environment: production
+subjects:
+- kind: ServiceAccount
+  name: nqba-api
+  namespace: nqba-platform
+roleRef:
+  kind: ClusterRole
+  name: nqba-api-role
+  apiGroup: rbac.authorization.k8s.io
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: nqba-worker-binding
+  labels:
+    app: nqba-platform
+    component: rbac
+    environment: production
+subjects:
+- kind: ServiceAccount
+  name: nqba-worker
+  namespace: nqba-platform
+roleRef:
+  kind: ClusterRole
+  name: nqba-worker-role
+  apiGroup: rbac.authorization.k8s.io
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: nqba-backup-binding
+  labels:
+    app: nqba-platform
+    component: rbac
+    environment: production
+subjects:
+- kind: ServiceAccount
+  name: nqba-backup
+  namespace: nqba-platform
+roleRef:
+  kind: ClusterRole
+  name: nqba-backup-role
+  apiGroup: rbac.authorization.k8s.io
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: nqba-monitoring-binding
+  labels:
+    app: nqba-platform
+    component: rbac
+    environment: production
+subjects:
+- kind: ServiceAccount
+  name: nqba-monitoring
+  namespace: nqba-platform
+roleRef:
+  kind: ClusterRole
+  name: nqba-monitoring-role
+  apiGroup: rbac.authorization.k8s.io
+
+# =============================================================================
+# Namespace-specific Roles
+# =============================================================================
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: nqba-platform
+  name: nqba-namespace-admin
+  labels:
+    app: nqba-platform
+    component: rbac
+    environment: production
+rules:
+# Full access to most resources in the namespace
+- apiGroups: [""]
+  resources: ["pods", "services", "configmaps", "persistentvolumeclaims"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+# Limited access to secrets (no delete)
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get", "list", "watch", "create", "update", "patch"]
+
+# Access to deployments and replicasets
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+# Access to jobs and cronjobs
+- apiGroups: ["batch"]
+  resources: ["jobs", "cronjobs"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: nqba-admin-binding
+  namespace: nqba-platform
+  labels:
+    app: nqba-platform
+    component: rbac
+    environment: production
+subjects:
+# Bind to specific users or groups (adjust as needed)
+- kind: User
+  name: nqba-admin@flyfox.ai
+  apiGroup: rbac.authorization.k8s.io
+- kind: Group
+  name: nqba-platform-admins
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: nqba-namespace-admin
+  apiGroup: rbac.authorization.k8s.io
+
+# =============================================================================
+# Pod Security Standards
+# =============================================================================
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: nqba-platform
+  labels:
+    name: nqba-platform
+    environment: production
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted
+  annotations:
+    kubernetes.io/description: "NQBA Platform production namespace with restricted pod security standards"

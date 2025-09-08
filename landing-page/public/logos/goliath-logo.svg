@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+  <defs>
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#FFA500;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#B8860B;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4169E1;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#0000FF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#000080;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Left Wing -->
+  <path d="M50 120 Q30 100 20 80 Q15 70 25 65 Q40 60 60 70 Q80 80 90 100 Q95 110 85 115 Q70 120 50 120" fill="url(#goldGradient)" stroke="#B8860B" stroke-width="2"/>
+  <path d="M60 130 Q40 110 30 90 Q25 80 35 75 Q50 70 70 80 Q90 90 100 110 Q105 120 95 125 Q80 130 60 130" fill="url(#goldGradient)" stroke="#B8860B" stroke-width="2"/>
+  <path d="M70 140 Q50 120 40 100 Q35 90 45 85 Q60 80 80 90 Q100 100 110 120 Q115 130 105 135 Q90 140 70 140" fill="url(#goldGradient)" stroke="#B8860B" stroke-width="2"/>
+  
+  <!-- Right Wing -->
+  <path d="M350 120 Q370 100 380 80 Q385 70 375 65 Q360 60 340 70 Q320 80 310 100 Q305 110 315 115 Q330 120 350 120" fill="url(#goldGradient)" stroke="#B8860B" stroke-width="2"/>
+  <path d="M340 130 Q360 110 370 90 Q375 80 365 75 Q350 70 330 80 Q310 90 300 110 Q295 120 305 125 Q320 130 340 130" fill="url(#goldGradient)" stroke="#B8860B" stroke-width="2"/>
+  <path d="M330 140 Q350 120 360 100 Q365 90 355 85 Q340 80 320 90 Q300 100 290 120 Q285 130 295 135 Q310 140 330 140" fill="url(#goldGradient)" stroke="#B8860B" stroke-width="2"/>
+  
+  <!-- Shield -->
+  <path d="M150 80 Q200 70 250 80 L250 180 Q200 220 150 180 Z" fill="url(#blueGradient)" stroke="url(#goldGradient)" stroke-width="4"/>
+  
+  <!-- Crown -->
+  <path d="M170 60 L180 45 L190 55 L200 40 L210 55 L220 45 L230 60 L225 70 L175 70 Z" fill="url(#goldGradient)" stroke="#B8860B" stroke-width="2"/>
+  <circle cx="200" cy="50" r="3" fill="#4169E1"/>
+  
+  <!-- Letter G -->
+  <text x="200" y="150" font-family="serif" font-size="60" font-weight="bold" text-anchor="middle" fill="url(#goldGradient)" stroke="#B8860B" stroke-width="1">G</text>
+  
+  <!-- Company Name -->
+  <text x="200" y="250" font-family="serif" font-size="24" font-weight="bold" text-anchor="middle" fill="url(#goldGradient)">GOLIATH OF ALL TRADE</text>
+  <text x="200" y="275" font-family="serif" font-size="12" text-anchor="middle" fill="url(#goldGradient)">CAPITAL FUNDING SOLUTIONS</text>
+</svg>
