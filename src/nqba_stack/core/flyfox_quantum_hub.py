@@ -82,9 +82,9 @@ class ThirdPartyIntegration:
     integration_id: str
     client_name: str
     api_key: str
-    webhook_url: Optional[str] = None
     allowed_operations: List[QuantumOperation]
     rate_limit_per_hour: int
+    webhook_url: Optional[str] = None
     is_active: bool = True
     created_at: datetime = None
     last_used: Optional[datetime] = None
@@ -577,5 +577,9 @@ async def register_third_party_integration(
 ) -> str:
     """Register a third-party integration"""
     return await flyfox_quantum_hub.register_third_party_integration(
-        client_name, api_key, allowed_operations, rate_limit_per_hour, webhook_url
+        client_name=client_name,
+        api_key=api_key,
+        allowed_operations=allowed_operations,
+        rate_limit_per_hour=rate_limit_per_hour,
+        webhook_url=webhook_url
     )

@@ -157,6 +157,13 @@ class NQBASettings(BaseSettings):
     quantum_backend: str = Field(
         default="dynex", json_schema_extra={"env": "NQBA_QUANTUM_BACKEND"}
     )
+    ibm_quantum_api_key: Optional[str] = Field(
+        default=None,
+        json_schema_extra={
+            "env": "IBM_QUANTUM_API_KEY",
+            "description": "IBM Quantum API key"
+        }
+    )
     # LTC Configuration
     ltc_backup_interval: int = Field(
         default=3600, json_schema_extra={"env": "NQBA_LTC_BACKUP_INTERVAL"}

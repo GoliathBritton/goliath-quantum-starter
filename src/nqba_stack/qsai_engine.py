@@ -261,8 +261,139 @@ class SafetyArbiter:
 
     def _check_resource_availability(self, required_resources: Dict[str, Any]) -> bool:
         """Check if required resources are available"""
-        # TODO: Implement resource checking logic
-        return True
+        try:
+            # Check computational resources
+            cpu_required = required_resources.get("cpu_cores", 0)
+            memory_required = required_resources.get("memory_mb", 0)
+            gpu_required = required_resources.get("gpu_memory_mb", 0)
+            
+            # Get current system resource usage
+            import psutil
+            
+            # Check CPU availability
+            cpu_percent = psutil.cpu_percent(interval=0.1)
+            available_cpu_percent = 100 - cpu_percent
+            cpu_cores_available = psutil.cpu_count() * (available_cpu_percent / 100)
+            
+            if cpu_required > cpu_cores_available:
+                logger.warning(f"Insufficient CPU: required {cpu_required}, available {cpu_cores_available:.2f}")
+                return False
+            
+            # Check memory availability
+            memory = psutil.virtual_memory()
+            available_memory_mb = memory.available / (1024 * 1024)
+            
+            if memory_required > available_memory_mb:
+                logger.warning(f"Insufficient memory: required {memory_required}MB, available {available_memory_mb:.2f}MB")
+                return False
+            
+            # Check GPU availability (if NVIDIA GPU is available)
+            if gpu_required > 0:
+                try:
+                    import GPUtil
+                    gpus = GPUtil.getGPUs()
+                    if not gpus:
+                        logger.warning("GPU required but no GPUs available")
+                        return False
+                    
+                    # Check if any GPU has sufficient memory
+                    gpu_available = False
+                    for gpu in gpus:
+                        available_gpu_memory = gpu.memoryFree
+                        if available_gpu_memory >= gpu_required:
+                            gpu_available = True
+                            break
+                    
+                    if not gpu_available:
+                        logger.warning(f"Insufficient GPU memory: required {gpu_required}MB")
+                        return False
+                        
+                except ImportError:
+                    # GPUtil not available, assume GPU check passes
+                    logger.info("GPUtil not available, skipping GPU resource check")
+            
+            # Check quantum computing resources
+            quantum_required = required_resources.get("quantum_nodes", 0)
+            if quantum_required > 0:
+                # Check Dynex network availability
+                try:
+                    # Simulate checking Dynex network status
+                    # In a real implementation, this would query the Dynex network
+                    dynex_nodes_available = self._check_dynex_availability()
+                    
+                    if quantum_required > dynex_nodes_available:
+                        logger.warning(f"Insufficient Dynex nodes: required {quantum_required}, available {dynex_nodes_available}")
+                        return False
+                        
+                except Exception as e:
+                    logger.error(f"Failed to check Dynex availability: {e}")
+                    # Allow execution to continue with classical fallback
+            
+            # Check network bandwidth requirements
+            bandwidth_required = required_resources.get("bandwidth_mbps", 0)
+            if bandwidth_required > 0:
+                # Simulate network bandwidth check
+                # In a real implementation, this would measure actual bandwidth
+                estimated_bandwidth = self._estimate_network_bandwidth()
+                
+                if bandwidth_required > estimated_bandwidth:
+                    logger.warning(f"Insufficient bandwidth: required {bandwidth_required}Mbps, estimated {estimated_bandwidth}Mbps")
+                    return False
+            
+            # Check storage requirements
+            storage_required = required_resources.get("storage_mb", 0)
+            if storage_required > 0:
+                disk_usage = psutil.disk_usage('/')
+                available_storage_mb = disk_usage.free / (1024 * 1024)
+                
+                if storage_required > available_storage_mb:
+                    logger.warning(f"Insufficient storage: required {storage_required}MB, available {available_storage_mb:.2f}MB")
+                    return False
+            
+            # All resource checks passed
+            logger.info(f"Resource availability check passed")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Error checking resource availability: {e}")
+            # Default to allowing execution if resource check fails
+            return True
+    
+    def _check_dynex_availability(self) -> int:
+        """Check available Dynex quantum computing nodes"""
+        try:
+            # Simulate checking Dynex network status
+            # In a real implementation, this would query the Dynex network API
+            import random
+            import time
+            
+            # Simulate network latency
+            time.sleep(0.1)
+            
+            # Return a simulated number of available nodes (10-100)
+            available_nodes = random.randint(10, 100)
+            logger.debug(f"Simulated Dynex nodes available: {available_nodes}")
+            return available_nodes
+            
+        except Exception as e:
+            logger.error(f"Failed to check Dynex network: {e}")
+            return 0
+    
+    def _estimate_network_bandwidth(self) -> float:
+        """Estimate available network bandwidth in Mbps"""
+        try:
+            # Simulate bandwidth estimation
+            # In a real implementation, this would perform actual bandwidth tests
+            import random
+            
+            # Return a simulated bandwidth (10-1000 Mbps)
+            estimated_bandwidth = random.uniform(10.0, 1000.0)
+            logger.debug(f"Estimated network bandwidth: {estimated_bandwidth:.2f}Mbps")
+            return estimated_bandwidth
+            
+        except Exception as e:
+            logger.error(f"Failed to estimate bandwidth: {e}")
+            return 100.0  # Default conservative estimate
 
 
 class AgentManager:
@@ -358,17 +489,172 @@ class MetaController:
             qubo[i, i] = -proposal.estimated_reward * proposal.confidence
 
         # Constraints: resource limits, safety, etc.
-        # TODO: Implement constraint encoding
-
+        constraint_strength = 10.0
+        
+        # Resource constraint: penalize proposals that exceed available resources
+        available_resources = context.available_resources or {}
+        for i, proposal in enumerate(proposals):
+            required_resources = proposal.required_resources or {}
+            
+            # Check each resource type
+            for resource_type, required_amount in required_resources.items():
+                available_amount = available_resources.get(resource_type, 0)
+                
+                # If resource requirement exceeds availability, add penalty
+                if required_amount > available_amount:
+                    resource_penalty = constraint_strength * (required_amount - available_amount)
+                    qubo[i, i] += resource_penalty
+        
+        # Safety constraint: penalize unsafe proposals
+        for i, proposal in enumerate(proposals):
+            if hasattr(proposal, 'safety_score') and proposal.safety_score < 0.5:
+                safety_penalty = constraint_strength * (0.5 - proposal.safety_score)
+                qubo[i, i] += safety_penalty
+        
+        # Mutual exclusion constraint: ensure only one proposal is selected
+        # Add penalty for selecting multiple proposals simultaneously
+        for i in range(n):
+            for j in range(i + 1, n):
+                # Check if proposals are mutually exclusive
+                if self._are_mutually_exclusive(proposals[i], proposals[j]):
+                    qubo[i, j] += constraint_strength * 2
+                    qubo[j, i] += constraint_strength * 2
+        
+        # Priority constraint: boost high-priority proposals
+        for i, proposal in enumerate(proposals):
+            if hasattr(proposal, 'priority') and proposal.priority == 'high':
+                qubo[i, i] -= constraint_strength * 0.5  # Negative penalty = boost
+        
         return qubo
+    
+    def _are_mutually_exclusive(self, proposal1: ActionProposal, proposal2: ActionProposal) -> bool:
+        """Check if two proposals are mutually exclusive"""
+        try:
+            # Check if proposals target the same resource or action type
+            if proposal1.action_id == proposal2.action_id:
+                return True
+            
+            # Check if proposals require conflicting resources
+            resources1 = proposal1.required_resources or {}
+            resources2 = proposal2.required_resources or {}
+            
+            for resource_type in resources1:
+                if resource_type in resources2:
+                    # If both require the same exclusive resource
+                    if resource_type in ['hmi_display', 'audio_channel', 'driver_attention']:
+                        return True
+            
+            # Check if proposals have conflicting action types
+            conflicting_types = [
+                ('offer_charging', 'offer_maintenance'),
+                ('urgent_notification', 'background_notification'),
+                ('voice_interaction', 'silent_mode')
+            ]
+            
+            for type1, type2 in conflicting_types:
+                if (type1 in proposal1.action_id and type2 in proposal2.action_id) or \
+                   (type2 in proposal1.action_id and type1 in proposal2.action_id):
+                    return True
+            
+            return False
+            
+        except Exception as e:
+            logger.warning(f"Error checking mutual exclusion: {e}")
+            return False
 
     def _parse_qubo_result(
         self, qubo_result: Dict[str, Any], num_proposals: int
     ) -> List[int]:
         """Parse quantum result to get selected action indices"""
-        # TODO: Implement proper QUBO result parsing
-        # For now, return top proposal
-        return [0]
+        try:
+            selected_indices = []
+            
+            # Handle different QUBO result formats from Dynex
+            if "solution" in qubo_result:
+                solution = qubo_result["solution"]
+                
+                # Handle binary solution vector format
+                if isinstance(solution, list):
+                    if len(solution) >= num_proposals:
+                        # Find indices where solution value is 1 (selected)
+                        for i, value in enumerate(solution[:num_proposals]):
+                            if value == 1:
+                                selected_indices.append(i)
+                        
+                        # If no clear selection, find the highest value
+                        if not selected_indices:
+                            max_value = max(solution[:num_proposals])
+                            for i, value in enumerate(solution[:num_proposals]):
+                                if value == max_value:
+                                    selected_indices.append(i)
+                                    break
+                    
+                # Handle dictionary format with variable names
+                elif isinstance(solution, dict):
+                    # Look for variables that are set to 1
+                    for var_name, value in solution.items():
+                        if value == 1:
+                            # Extract index from variable name (e.g., "x_0", "proposal_1")
+                            try:
+                                if "_" in var_name:
+                                    index = int(var_name.split("_")[-1])
+                                    if 0 <= index < num_proposals:
+                                        selected_indices.append(index)
+                            except (ValueError, IndexError):
+                                continue
+            
+            # Handle energy-based selection if available
+            elif "energy" in qubo_result:
+                energy = qubo_result.get("energy", 0)
+                num_occurrences = qubo_result.get("num_occurrences", 1)
+                
+                # Use energy to determine selection (lower energy = better)
+                if energy < 0 and num_occurrences > 0:
+                    # Convert energy to index selection
+                    selected_index = abs(int(energy)) % num_proposals
+                    selected_indices.append(selected_index)
+            
+            # Handle samples format (multiple solutions)
+            elif "samples" in qubo_result:
+                samples = qubo_result["samples"]
+                if samples and len(samples) > 0:
+                    # Use the first (best) sample
+                    best_sample = samples[0]
+                    if isinstance(best_sample, list) and len(best_sample) >= num_proposals:
+                        for i, value in enumerate(best_sample[:num_proposals]):
+                            if value == 1:
+                                selected_indices.append(i)
+            
+            # Handle raw binary string format
+            elif "binary_solution" in qubo_result:
+                binary_str = qubo_result["binary_solution"]
+                if len(binary_str) >= num_proposals:
+                    for i, bit in enumerate(binary_str[:num_proposals]):
+                        if bit == '1':
+                            selected_indices.append(i)
+            
+            # Validate and clean up results
+            if selected_indices:
+                # Remove duplicates and sort
+                selected_indices = sorted(list(set(selected_indices)))
+                
+                # Ensure indices are within valid range
+                selected_indices = [i for i in selected_indices if 0 <= i < num_proposals]
+                
+                # Log successful parsing
+                logger.info(f"QUBO result parsed successfully: selected indices {selected_indices}")
+                return selected_indices
+            
+            # Fallback: if no clear selection, return the first proposal
+            logger.warning("No clear selection from QUBO result, defaulting to first proposal")
+            return [0]
+            
+        except Exception as e:
+            logger.error(f"Failed to parse QUBO result: {e}")
+            logger.debug(f"QUBO result format: {type(qubo_result)}, keys: {list(qubo_result.keys()) if isinstance(qubo_result, dict) else 'not dict'}")
+            
+            # Emergency fallback: return first proposal
+            return [0]
 
     def _create_decision(
         self, proposal: ActionProposal, context: ContextVector

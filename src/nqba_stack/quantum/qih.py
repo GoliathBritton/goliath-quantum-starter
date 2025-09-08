@@ -230,7 +230,15 @@ class QuantumIntegrationHub:
         # Initialize quantum solver if available
         if QUANTUM_AVAILABLE and DynexAdapter:
             try:
-                self.solvers[SolverType.QUANTUM_DYNEX] = DynexAdapter()
+                from .adapters.base_adapter import AdapterConfig
+                # Create default config for Dynex adapter
+                dynex_config = AdapterConfig(
+                    endpoint="https://api.dynex.co",
+                    timeout=300,
+                    max_qubits=1000,
+                    extra_config={"mode": "sdk"}
+                )
+                self.solvers[SolverType.QUANTUM_DYNEX] = DynexAdapter(dynex_config)
                 logger.info("Dynex quantum solver initialized successfully")
             except Exception as e:
                 logger.error(f"Failed to initialize Dynex solver: {e}")

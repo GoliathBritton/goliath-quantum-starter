@@ -1,7 +1,9 @@
 # 🌐 Community Guidelines & Contribution Standards
-# Goliath Quantum Starter Ecosystem
+# FLYFOX AI Platform Ecosystem
 
-Welcome to the Goliath Quantum Starter community! We're building the future of quantum-AI convergence together. This guide outlines how to contribute, collaborate, and grow with our ecosystem.
+![FLYFOX AI Logo](https://flyfox.ai/logo.svg)
+
+Welcome to the FLYFOX AI Platform community! We're building the future of quantum-AI convergence together. This guide outlines how to contribute, collaborate, and grow with our ecosystem.
 
 ## 🎯 Community Mission
 
@@ -53,10 +55,10 @@ Welcome to the Goliath Quantum Starter community! We're building the future of q
 ```
 
 ### GitHub Organization
-- **Main Repository**: `goliath-quantum-starter`
-- **Documentation**: `goliath-quantum-starter-docs`
-- **Examples**: `goliath-quantum-starter-examples`
-- **Community**: `goliath-quantum-starter-community`
+- **Main Repository**: `flyfox-platform`
+- **Documentation**: `flyfox-platform-docs`
+- **Examples**: `flyfox-platform-examples`
+- **Community**: `flyfox-platform-community`
 
 ## 📝 Contribution Guidelines
 

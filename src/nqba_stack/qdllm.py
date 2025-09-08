@@ -21,7 +21,38 @@ logger = logging.getLogger("qdllm")
 class QDLLM:
     def __init__(self, dynex_api_key: Optional[str] = None):
         self.dynex_api_key = dynex_api_key or "demo"
-        # TODO: Initialize DynexSDK client here
+        self.dynex_client = None
+        self.openai_client = None
+        self._initialize_clients()
+    
+    def _initialize_clients(self):
+        """Initialize DynexSDK and OpenAI clients."""
+        # Initialize Dynex client
+        try:
+            from .dynex_client import DynexClient
+            self.dynex_client = DynexClient(self.dynex_api_key)
+            logger.info("QDLLM: DynexSDK client initialized")
+        except Exception as e:
+            logger.warning(f"QDLLM: Failed to initialize DynexSDK client: {e}")
+            self.dynex_client = None
+        
+        # Initialize OpenAI client for classical fallback
+        try:
+            import openai
+            import os
+            api_key = os.getenv("OPENAI_API_KEY")
+            if api_key:
+                self.openai_client = openai.AsyncOpenAI(api_key=api_key)
+                logger.info("QDLLM: OpenAI client initialized")
+            else:
+                logger.warning("QDLLM: OpenAI API key not found")
+                self.openai_client = None
+        except ImportError:
+            logger.warning("QDLLM: OpenAI library not available")
+            self.openai_client = None
+        except Exception as e:
+            logger.warning(f"QDLLM: Failed to initialize OpenAI client: {e}")
+            self.openai_client = None
 
     async def generate(
         self,
@@ -106,9 +137,73 @@ class QDLLM:
                     "pipeline": "qnlp",
                 }
         else:
-            # TODO: Fallback to classical LLM (OpenAI, etc.)
+            # Fallback to classical LLM (OpenAI, etc.)
+            return await self._classical_llm_fallback(
+                prompt, context, temperature, max_tokens, task
+            )
+    
+    async def _classical_llm_fallback(
+        self, 
+        prompt: str, 
+        context: Optional[str] = None, 
+        temperature: float = 1.0, 
+        max_tokens: int = 256,
+        task: str = "text_classification"
+    ) -> Dict[str, Any]:
+        """Fallback to classical LLM when quantum enhancement is disabled."""
+        if self.openai_client:
+            try:
+                # Construct the full prompt
+                full_prompt = prompt
+                if context:
+                    full_prompt = f"Context: {context}\n\nPrompt: {prompt}"
+                
+                # Add task-specific instructions
+                if task == "text_classification":
+                    full_prompt = f"Classify the following text:\n{full_prompt}"
+                elif task == "sentiment":
+                    full_prompt = f"Analyze the sentiment of the following text:\n{full_prompt}"
+                elif task == "ner":
+                    full_prompt = f"Extract named entities from the following text:\n{full_prompt}"
+                elif task == "summarization":
+                    full_prompt = f"Summarize the following text:\n{full_prompt}"
+                
+                # Call OpenAI API
+                response = await self.openai_client.chat.completions.create(
+                    model="gpt-3.5-turbo",
+                    messages=[
+                        {"role": "system", "content": "You are a helpful AI assistant."},
+                        {"role": "user", "content": full_prompt}
+                    ],
+                    temperature=temperature,
+                    max_tokens=max_tokens
+                )
+                
+                result_text = response.choices[0].message.content.strip()
+                logger.info(f"Classical LLM response generated for task: {task}")
+                
+                return {
+                    "text": result_text,
+                    "pipeline": "classical_llm",
+                    "model": "gpt-3.5-turbo",
+                    "task": task
+                }
+                
+            except Exception as e:
+                logger.error(f"Error calling OpenAI API: {e}")
+                return {
+                    "text": f"[Error: Classical LLM failed - {str(e)}]",
+                    "pipeline": "error",
+                    "task": task
+                }
+        else:
+            # Mock response when no LLM is available
             await asyncio.sleep(0.1)
-            return {"text": f"[Classical LLM output for: {prompt}]"}
+            return {
+                "text": f"[Mock Classical LLM output for task '{task}': {prompt}]",
+                "pipeline": "mock_classical",
+                "task": task
+            }
 
 
 # Singleton for handler use
