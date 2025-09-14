@@ -1,0 +1,370 @@
+{
+  "agent_id": "quantum-analyst-001",
+  "name": "Quantum Market Analyst",
+  "description": "AI agent specialized in quantum-enhanced financial market analysis and trading insights",
+  "version": "1.0.0",
+  "created_at": "2024-01-15T00:00:00Z",
+  "updated_at": "2024-01-15T00:00:00Z",
+  "status": "active",
+  
+  "capabilities": {
+    "primary_functions": [
+      "quantum_market_analysis",
+      "portfolio_optimization",
+      "risk_assessment",
+      "trading_signal_generation",
+      "market_regime_detection",
+      "volatility_forecasting",
+      "correlation_analysis",
+      "sentiment_analysis"
+    ],
+    "quantum_algorithms": [
+      "qaoa",
+      "vqe",
+      "quantum_neural_networks",
+      "quantum_svm",
+      "quantum_pca",
+      "quantum_fourier_transform"
+    ],
+    "supported_markets": [
+      "equities",
+      "forex",
+      "commodities",
+      "cryptocurrencies",
+      "bonds",
+      "derivatives"
+    ],
+    "analysis_timeframes": [
+      "1m", "5m", "15m", "1h", "4h", "1d", "1w", "1M"
+    ]
+  },
+  
+  "openai_realtime_config": {
+    "model": "gpt-4o-realtime-preview",
+    "voice": "alloy",
+    "modalities": ["text", "audio"],
+    "instructions": "You are a quantum-enhanced financial market analyst with deep expertise in both traditional and quantum finance. You provide real-time market insights, trading recommendations, and risk assessments using quantum computing algorithms. Speak clearly and confidently about market conditions, but always include appropriate risk disclaimers. Use technical analysis terminology appropriately and explain quantum advantages when relevant.",
+    "temperature": 0.7,
+    "max_response_output_tokens": 4096,
+    "tool_choice": "auto",
+    "parallel_tool_calls": true,
+    "response_format": {
+      "type": "json_schema",
+      "json_schema": {
+        "name": "market_analysis_response",
+        "strict": true,
+        "schema": {
+          "type": "object",
+          "properties": {
+            "analysis_summary": {
+              "type": "string",
+              "description": "Brief summary of market analysis"
+            },
+            "market_sentiment": {
+              "type": "string",
+              "enum": ["very_bullish", "bullish", "neutral", "bearish", "very_bearish"]
+            },
+            "confidence_score": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "key_insights": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "trading_signals": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "symbol": {"type": "string"},
+                  "signal": {"type": "string", "enum": ["strong_buy", "buy", "hold", "sell", "strong_sell"]},
+                  "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+                  "reasoning": {"type": "string"}
+                },
+                "required": ["symbol", "signal", "confidence", "reasoning"]
+              }
+            },
+            "risk_assessment": {
+              "type": "object",
+              "properties": {
+                "overall_risk": {"type": "string", "enum": ["low", "moderate", "high", "extreme"]},
+                "var_95": {"type": "number"},
+                "max_drawdown": {"type": "number"},
+                "volatility_forecast": {"type": "number"}
+              },
+              "required": ["overall_risk"]
+            },
+            "quantum_advantage": {
+              "type": "object",
+              "properties": {
+                "used_quantum": {"type": "boolean"},
+                "quantum_speedup": {"type": "number"},
+                "accuracy_improvement": {"type": "number"},
+                "quantum_insights": {"type": "array", "items": {"type": "string"}}
+              }
+            }
+          },
+          "required": ["analysis_summary", "market_sentiment", "confidence_score", "key_insights"]
+        }
+      }
+    }
+  },
+  
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "get_realtime_market_data",
+        "description": "Fetch real-time market data for specified symbols",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "symbols": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "List of trading symbols to analyze"
+            },
+            "timeframe": {
+              "type": "string",
+              "enum": ["1m", "5m", "15m", "1h", "4h", "1d"],
+              "description": "Timeframe for market data"
+            },
+            "indicators": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "Technical indicators to include"
+            }
+          },
+          "required": ["symbols"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "execute_quantum_analysis",
+        "description": "Execute quantum-enhanced market analysis",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "analysis_type": {
+              "type": "string",
+              "enum": ["portfolio_optimization", "risk_analysis", "correlation_analysis", "volatility_forecasting"],
+              "description": "Type of quantum analysis to perform"
+            },
+            "symbols": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "Symbols to analyze"
+            },
+            "quantum_params": {
+              "type": "object",
+              "properties": {
+                "num_qubits": {"type": "integer", "minimum": 4, "maximum": 50},
+                "algorithm": {"type": "string", "enum": ["qaoa", "vqe", "quantum_ml"]},
+                "shots": {"type": "integer", "minimum": 512, "maximum": 8192}
+              }
+            }
+          },
+          "required": ["analysis_type", "symbols"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "get_market_sentiment",
+        "description": "Analyze market sentiment from multiple sources",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "symbols": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "Symbols to analyze sentiment for"
+            },
+            "sources": {
+              "type": "array",
+              "items": {"type": "string", "enum": ["twitter", "reddit", "news", "analyst_reports", "options_flow"]},
+              "description": "Sentiment data sources"
+            },
+            "time_window": {
+              "type": "string",
+              "enum": ["1h", "4h", "24h", "7d"],
+              "description": "Time window for sentiment analysis"
+            }
+          },
+          "required": ["symbols"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "calculate_risk_metrics",
+        "description": "Calculate comprehensive risk metrics for portfolio or individual assets",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "symbols": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "Symbols to calculate risk for"
+            },
+            "portfolio_weights": {
+              "type": "object",
+              "description": "Portfolio weights if analyzing a portfolio"
+            },
+            "risk_measures": {
+              "type": "array",
+              "items": {"type": "string", "enum": ["var", "cvar", "max_drawdown", "sharpe", "sortino", "beta"]},
+              "description": "Risk measures to calculate"
+            },
+            "confidence_level": {
+              "type": "number",
+              "minimum": 0.9,
+              "maximum": 0.99,
+              "description": "Confidence level for VaR calculations"
+            }
+          },
+          "required": ["symbols"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "detect_market_regime",
+        "description": "Detect current market regime using quantum and classical methods",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "market_index": {
+              "type": "string",
+              "description": "Market index to analyze (e.g., SPY, QQQ)"
+            },
+            "lookback_period": {
+              "type": "integer",
+              "minimum": 30,
+              "maximum": 252,
+              "description": "Number of days to look back for regime detection"
+            },
+            "use_quantum": {
+              "type": "boolean",
+              "description": "Whether to use quantum algorithms for regime detection"
+            }
+          },
+          "required": ["market_index"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "generate_trading_signals",
+        "description": "Generate trading signals based on quantum and technical analysis",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "symbols": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "Symbols to generate signals for"
+            },
+            "strategy_type": {
+              "type": "string",
+              "enum": ["momentum", "mean_reversion", "trend_following", "quantum_enhanced"],
+              "description": "Type of trading strategy"
+            },
+            "risk_tolerance": {
+              "type": "string",
+              "enum": ["conservative", "moderate", "aggressive"],
+              "description": "Risk tolerance level"
+            },
+            "time_horizon": {
+              "type": "string",
+              "enum": ["intraday", "short_term", "medium_term", "long_term"],
+              "description": "Investment time horizon"
+            }
+          },
+          "required": ["symbols"]
+        }
+      }
+    }
+  ],
+  
+  "conversation_starters": [
+    "What's the current market sentiment and how are quantum algorithms helping with analysis?",
+    "Can you analyze the risk profile of my portfolio using quantum computing?",
+    "What trading opportunities do you see in the current market regime?",
+    "How is quantum computing improving your market predictions today?",
+    "What are the key market drivers I should be watching right now?"
+  ],
+  
+  "personality": {
+    "tone": "professional",
+    "expertise_level": "expert",
+    "communication_style": "analytical_yet_accessible",
+    "risk_disclaimer_frequency": "always",
+    "quantum_explanation_depth": "moderate"
+  },
+  
+  "knowledge_domains": [
+    "quantum_computing",
+    "financial_markets",
+    "portfolio_theory",
+    "risk_management",
+    "technical_analysis",
+    "algorithmic_trading",
+    "market_microstructure",
+    "behavioral_finance",
+    "derivatives",
+    "fixed_income",
+    "alternative_investments"
+  ],
+  
+  "limitations": [
+    "Cannot provide personalized investment advice",
+    "Quantum computations may have inherent uncertainty",
+    "Market predictions are probabilistic, not deterministic",
+    "Real-time data may have slight delays",
+    "Cannot execute trades directly"
+  ],
+  
+  "integration_endpoints": {
+    "market_data": "/api/market-data/realtime",
+    "quantum_analysis": "/api/quantum/analyze",
+    "sentiment_analysis": "/api/sentiment/market",
+    "risk_calculation": "/api/risk/calculate",
+    "regime_detection": "/api/market/regime",
+    "signal_generation": "/api/signals/generate"
+  },
+  
+  "performance_metrics": {
+    "response_time_target": "< 2 seconds",
+    "accuracy_target": "> 75%",
+    "uptime_target": "> 99.5%",
+    "quantum_advantage_threshold": "> 10%"
+  },
+  
+  "security": {
+    "authentication_required": true,
+    "rate_limiting": {
+      "requests_per_minute": 60,
+      "requests_per_hour": 1000
+    },
+    "data_encryption": "AES-256",
+    "audit_logging": true
+  },
+  
+  "monitoring": {
+    "health_check_endpoint": "/api/agents/quantum-analyst-001/health",
+    "metrics_collection": true,
+    "error_tracking": true,
+    "performance_analytics": true
+  }
+}

@@ -4,9 +4,12 @@ import { apiClient } from '../../services/apiClient';
 export interface BusinessPod {
   id: string;
   name: string;
+  description: string;
   type: 'SIGMA_SELECT' | 'FLYFOX_AI' | 'GOLIATH_TRADE' | 'SFG_SYMMETRY' | 'GHOST_NEUROQ';
   status: 'ACTIVE' | 'INACTIVE' | 'MAINTENANCE';
   quantumAdvantage: number;
+  performance: number;
+  efficiency: number;
   lastOptimization: string;
   metrics: {
     totalOperations: number;
@@ -87,7 +90,7 @@ export const fetchBusinessPods = createAsyncThunk(
 
 export const fetchOperations = createAsyncThunk(
   'businessPods/fetchOperations',
-  async (podId?: string, { rejectWithValue }) => {
+  async (podId: string | undefined, { rejectWithValue }) => {
     try {
       const url = podId ? `/operations?podId=${podId}` : '/operations';
       const response = await apiClient.get(url);

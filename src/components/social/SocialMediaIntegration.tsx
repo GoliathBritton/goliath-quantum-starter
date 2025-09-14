@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
   Box,
-  Grid,
   Card,
   CardContent,
   Typography,
@@ -67,7 +66,7 @@ import {
   Twitter,
   LinkedIn,
   YouTube,
-  TikTok,
+  VideoLibrary,
   ExpandMore,
   Dashboard,
   ContentCopy,
@@ -95,7 +94,7 @@ import SocialMediaDashboard from './SocialMediaDashboard';
 import ContentScheduler from './ContentScheduler';
 import SocialAnalytics from './SocialAnalytics';
 import CampaignManager from './CampaignManager';
-import socialMediaService, { SocialAccount, Post } from '../../services/socialMediaService';
+import socialMediaService, { SocialAccount, SocialPost } from '../../services/socialMediaService';
 
 interface PlatformConnection {
   id: string;
@@ -271,7 +270,7 @@ const SocialMediaIntegration: React.FC = () => {
     { id: 'twitter', name: 'Twitter', icon: Twitter, color: '#1DA1F2' },
     { id: 'linkedin', name: 'LinkedIn', icon: LinkedIn, color: '#0A66C2' },
     { id: 'youtube', name: 'YouTube', icon: YouTube, color: '#FF0000' },
-    { id: 'tiktok', name: 'TikTok', icon: TikTok, color: '#000000' },
+    { id: 'tiktok', name: 'TikTok', icon: VideoLibrary, color: '#000000' },
   ];
 
   const getPlatformIcon = (platformId: string) => {
@@ -477,8 +476,8 @@ const SocialMediaIntegration: React.FC = () => {
       </Box>
 
       {/* Overview Cards */}
-      <Grid container spacing={3} sx={{ mb: 3 }}>
-        <Grid item xs={12} sm={6} md={3}>
+      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr 1fr' }, gap: 3, mb: 3 }}>
+        <Box>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -491,9 +490,9 @@ const SocialMediaIntegration: React.FC = () => {
               </Typography>
             </CardContent>
           </Card>
-        </Grid>
+        </Box>
         
-        <Grid item xs={12} sm={6} md={3}>
+        <Box>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -509,9 +508,9 @@ const SocialMediaIntegration: React.FC = () => {
               </Box>
             </CardContent>
           </Card>
-        </Grid>
+        </Box>
         
-        <Grid item xs={12} sm={6} md={3}>
+        <Box>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -524,9 +523,9 @@ const SocialMediaIntegration: React.FC = () => {
               </Typography>
             </CardContent>
           </Card>
-        </Grid>
+        </Box>
         
-        <Grid item xs={12} sm={6} md={3}>
+        <Box>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -539,8 +538,8 @@ const SocialMediaIntegration: React.FC = () => {
               </Typography>
             </CardContent>
           </Card>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
 
       {/* Quick Actions */}
       <Card sx={{ mb: 3 }}>
@@ -548,9 +547,9 @@ const SocialMediaIntegration: React.FC = () => {
           <Typography variant="h6" gutterBottom>
             Quick Actions
           </Typography>
-          <Grid container spacing={2}>
+          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr 1fr' }, gap: 2 }}>
             {quickActions.map((action) => (
-              <Grid item xs={12} sm={6} md={3} key={action.id}>
+              <Box key={action.id}>
                 <Paper
                   sx={{
                     p: 2,
@@ -573,9 +572,9 @@ const SocialMediaIntegration: React.FC = () => {
                     {action.description}
                   </Typography>
                 </Paper>
-              </Grid>
+              </Box>
             ))}
-          </Grid>
+          </Box>
         </CardContent>
       </Card>
 
@@ -585,9 +584,9 @@ const SocialMediaIntegration: React.FC = () => {
           <Typography variant="h6" gutterBottom>
             Platform Connections
           </Typography>
-          <Grid container spacing={2}>
+          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr', lg: '1fr 1fr 1fr' }, gap: 2 }}>
             {connections.map((connection) => (
-              <Grid item xs={12} md={6} lg={4} key={connection.id}>
+              <Box key={connection.id}>
                 <Card variant="outlined">
                   <CardContent>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
@@ -614,16 +613,16 @@ const SocialMediaIntegration: React.FC = () => {
                     
                     {connection.isConnected && (
                       <>
-                        <Grid container spacing={1} sx={{ mb: 2 }}>
-                          <Grid item xs={6}>
+                        <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1, mb: 2 }}>
+                          <Box>
                             <Typography variant="body2" color="text.secondary">Followers</Typography>
                             <Typography variant="h6">{formatNumber(connection.metrics.followers)}</Typography>
-                          </Grid>
-                          <Grid item xs={6}>
+                          </Box>
+                          <Box>
                             <Typography variant="body2" color="text.secondary">Engagement</Typography>
                             <Typography variant="h6">{connection.metrics.engagement.toFixed(1)}%</Typography>
-                          </Grid>
-                        </Grid>
+                          </Box>
+                        </Box>
                         
                         <Accordion>
                           <AccordionSummary expandIcon={<ExpandMore />}>
@@ -712,9 +711,9 @@ const SocialMediaIntegration: React.FC = () => {
                     )}
                   </CardContent>
                 </Card>
-              </Grid>
+              </Box>
             ))}
-          </Grid>
+          </Box>
         </CardContent>
       </Card>
 

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
   Box,
-  Grid,
   Card,
   CardContent,
   CardActions,
@@ -220,9 +219,9 @@ const QuantumMarketplaceDashboard: React.FC = () => {
   };
 
   const renderOverviewTab = () => (
-    <Grid container spacing={3}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
       {/* Hero Section */}
-      <Grid item xs={12}>
+      <Box>
         <Card sx={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white', mb: 3 }}>
           <CardContent sx={{ p: 4 }}>
             <Typography variant="h3" gutterBottom>
@@ -250,10 +249,10 @@ const QuantumMarketplaceDashboard: React.FC = () => {
             </Box>
           </CardContent>
         </Card>
-      </Grid>
+      </Box>
 
       {/* Search Bar */}
-      <Grid item xs={12}>
+      <Box>
         <Paper sx={{ p: 2, mb: 3 }}>
           <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
             <TextField
@@ -285,8 +284,8 @@ const QuantumMarketplaceDashboard: React.FC = () => {
           {/* Filters Panel */}
           {showFilters && (
             <Box sx={{ mt: 3, p: 3, bgcolor: 'grey.50', borderRadius: 1 }}>
-              <Grid container spacing={3}>
-                <Grid item xs={12} md={3}>
+              <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(4, 1fr)' }, gap: 3 }}>
+                <Box>
                   <FormControl fullWidth>
                     <InputLabel>Category</InputLabel>
                     <Select
@@ -301,8 +300,8 @@ const QuantumMarketplaceDashboard: React.FC = () => {
                       ))}
                     </Select>
                   </FormControl>
-                </Grid>
-                <Grid item xs={12} md={3}>
+                </Box>
+                <Box>
                   <Typography gutterBottom>Price Range</Typography>
                   <Slider
                     value={[filters.priceRange?.min || 0, filters.priceRange?.max || 1000]}
@@ -314,15 +313,15 @@ const QuantumMarketplaceDashboard: React.FC = () => {
                     min={0}
                     max={1000}
                   />
-                </Grid>
-                <Grid item xs={12} md={3}>
+                </Box>
+                <Box>
                   <Typography gutterBottom>Minimum Rating</Typography>
                   <Rating
                     value={filters.rating || 0}
                     onChange={(_, value) => handleFilterChange({ rating: value || 0 })}
                   />
-                </Grid>
-                <Grid item xs={12} md={3}>
+                </Box>
+                <Box>
                   <FormControlLabel
                     control={
                       <Switch
@@ -332,22 +331,22 @@ const QuantumMarketplaceDashboard: React.FC = () => {
                     }
                     label="Verified Only"
                   />
-                </Grid>
-              </Grid>
+                </Box>
+              </Box>
             </Box>
           )}
         </Paper>
-      </Grid>
+      </Box>
 
       {/* Featured Algorithms */}
-      <Grid item xs={12}>
+      <Box>
         <Typography variant="h5" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <StarIcon color="primary" />
           Featured Algorithms
         </Typography>
-        <Grid container spacing={2}>
+        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' }, gap: 2 }}>
           {featuredAlgorithms.slice(0, 4).map((algorithm) => (
-            <Grid item xs={12} sm={6} md={3} key={algorithm.id}>
+            <Box key={algorithm.id}>
               <Card sx={{ height: '100%', cursor: 'pointer' }} onClick={() => handleAlgorithmClick(algorithm)}>
                 <CardContent>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
@@ -369,21 +368,21 @@ const QuantumMarketplaceDashboard: React.FC = () => {
                   </Box>
                 </CardContent>
               </Card>
-            </Grid>
+            </Box>
           ))}
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
 
       {/* Search Results */}
       {searchResults && (
-        <Grid item xs={12}>
+        <Box>
           <Typography variant="h5" gutterBottom>
             Search Results ({searchResults.total})
           </Typography>
           {loading && <LinearProgress sx={{ mb: 2 }} />}
-          <Grid container spacing={2}>
+          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }, gap: 2 }}>
             {searchResults.algorithms.map((algorithm) => (
-              <Grid item xs={12} sm={6} md={4} key={algorithm.id}>
+              <Box key={algorithm.id}>
                 <Card sx={{ height: '100%' }}>
                   <CardContent>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
@@ -459,20 +458,20 @@ const QuantumMarketplaceDashboard: React.FC = () => {
                     </Button>
                   </CardActions>
                 </Card>
-              </Grid>
+              </Box>
             ))}
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       )}
-    </Grid>
+    </Box>
   );
 
   const renderAnalyticsTab = () => (
-    <Grid container spacing={3}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
       {/* Key Metrics */}
-      <Grid item xs={12}>
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={6} md={3}>
+      <Box>
+        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' }, gap: 3 }}>
+          <Box>
             <Card>
               <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -484,8 +483,8 @@ const QuantumMarketplaceDashboard: React.FC = () => {
                 </Box>
               </CardContent>
             </Card>
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
+          </Box>
+          <Box>
             <Card>
               <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -497,8 +496,8 @@ const QuantumMarketplaceDashboard: React.FC = () => {
                 </Box>
               </CardContent>
             </Card>
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
+          </Box>
+          <Box>
             <Card>
               <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -510,8 +509,8 @@ const QuantumMarketplaceDashboard: React.FC = () => {
                 </Box>
               </CardContent>
             </Card>
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
+          </Box>
+          <Box>
             <Card>
               <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -523,12 +522,13 @@ const QuantumMarketplaceDashboard: React.FC = () => {
                 </Box>
               </CardContent>
             </Card>
-          </Grid>
-        </Grid>
-      </Grid>
+          </Box>
+        </Box>
+      </Box>
 
       {/* Top Categories */}
-      <Grid item xs={12} md={6}>
+      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' }, gap: 3 }}>
+        <Box>
         <Card>
           <CardContent>
             <Typography variant="h6" gutterBottom>
@@ -556,10 +556,10 @@ const QuantumMarketplaceDashboard: React.FC = () => {
             </ResponsiveContainer>
           </CardContent>
         </Card>
-      </Grid>
+        </Box>
 
-      {/* Top Algorithms */}
-      <Grid item xs={12} md={6}>
+        {/* Top Algorithms */}
+        <Box>
         <Card>
           <CardContent>
             <Typography variant="h6" gutterBottom>
@@ -576,10 +576,11 @@ const QuantumMarketplaceDashboard: React.FC = () => {
             </ResponsiveContainer>
           </CardContent>
         </Card>
-      </Grid>
+        </Box>
+      </Box>
 
       {/* Top Developers */}
-      <Grid item xs={12}>
+      <Box>
         <Card>
           <CardContent>
             <Typography variant="h6" gutterBottom>
@@ -608,16 +609,16 @@ const QuantumMarketplaceDashboard: React.FC = () => {
             </List>
           </CardContent>
         </Card>
-      </Grid>
-    </Grid>
+      </Box>
+    </Box>
   );
 
   const renderCategoriesTab = () => (
-    <Grid container spacing={3}>
+    <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }, gap: 3 }}>
       {categories.map((category) => {
         const categoryAlgorithms = marketplaceService.getAlgorithmsByCategory(category.id);
         return (
-          <Grid item xs={12} sm={6} md={4} key={category.id}>
+          <Box key={category.id}>
             <Card sx={{ height: '100%', cursor: 'pointer' }}>
               <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
@@ -644,23 +645,23 @@ const QuantumMarketplaceDashboard: React.FC = () => {
                 </Button>
               </CardActions>
             </Card>
-          </Grid>
+          </Box>
         );
       })}
-    </Grid>
+    </Box>
   );
 
   const renderMyLibraryTab = () => (
-    <Grid container spacing={3}>
-      <Grid item xs={12}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+      <Box>
         <Alert severity="info">
           This section would show purchased algorithms, favorites, and personal algorithm library.
           In a full implementation, this would connect to user authentication and purchase history.
         </Alert>
-      </Grid>
+      </Box>
       
       {/* Favorites */}
-      <Grid item xs={12}>
+      <Box>
         <Typography variant="h6" gutterBottom>
           Favorites ({favorites.length})
         </Typography>
@@ -669,12 +670,12 @@ const QuantumMarketplaceDashboard: React.FC = () => {
             No favorites yet. Start exploring algorithms and add them to your favorites!
           </Typography>
         ) : (
-          <Grid container spacing={2}>
+          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }, gap: 2 }}>
             {favorites.map((algorithmId) => {
               const algorithm = marketplaceService.getAlgorithm(algorithmId);
               if (!algorithm) return null;
               return (
-                <Grid item xs={12} sm={6} md={4} key={algorithmId}>
+                <Box key={algorithmId}>
                   <Card>
                     <CardContent>
                       <Typography variant="h6" gutterBottom>
@@ -697,15 +698,15 @@ const QuantumMarketplaceDashboard: React.FC = () => {
                       </IconButton>
                     </CardActions>
                   </Card>
-                </Grid>
+                </Box>
               );
             })}
-          </Grid>
+          </Box>
         )}
-      </Grid>
+      </Box>
 
       {/* Shopping Cart */}
-      <Grid item xs={12}>
+      <Box>
         <Typography variant="h6" gutterBottom>
           Shopping Cart ({cart.length})
         </Typography>
@@ -714,12 +715,12 @@ const QuantumMarketplaceDashboard: React.FC = () => {
             Your cart is empty. Add algorithms to purchase them.
           </Typography>
         ) : (
-          <Grid container spacing={2}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             {cart.map((algorithmId) => {
               const algorithm = marketplaceService.getAlgorithm(algorithmId);
               if (!algorithm) return null;
               return (
-                <Grid item xs={12} key={algorithmId}>
+                <Box key={algorithmId}>
                   <Card>
                     <CardContent>
                       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -751,13 +752,13 @@ const QuantumMarketplaceDashboard: React.FC = () => {
                       </Box>
                     </CardContent>
                   </Card>
-                </Grid>
+                </Box>
               );
             })}
-          </Grid>
+          </Box>
         )}
-      </Grid>
-    </Grid>
+      </Box>
+    </Box>
   );
 
   return (
@@ -812,8 +813,8 @@ const QuantumMarketplaceDashboard: React.FC = () => {
               </Box>
             </DialogTitle>
             <DialogContent>
-              <Grid container spacing={3}>
-                <Grid item xs={12} md={8}>
+              <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '2fr 1fr' }, gap: 3 }}>
+                <Box>
                   <Typography variant="body1" paragraph>
                     {selectedAlgorithm.description}
                   </Typography>
@@ -830,28 +831,28 @@ const QuantumMarketplaceDashboard: React.FC = () => {
                   <Typography variant="h6" gutterBottom>
                     Performance Metrics
                   </Typography>
-                  <Grid container spacing={2} sx={{ mb: 3 }}>
-                    <Grid item xs={6}>
+                  <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 2, mb: 3 }}>
+                    <Box>
                       <Typography variant="body2" color="text.secondary">
                         Classical Speedup: {selectedAlgorithm.performance.benchmarks.classicalSpeedup}x
                       </Typography>
-                    </Grid>
-                    <Grid item xs={6}>
+                    </Box>
+                    <Box>
                       <Typography variant="body2" color="text.secondary">
                         Quantum Advantage: {selectedAlgorithm.performance.benchmarks.quantumAdvantage}x
                       </Typography>
-                    </Grid>
-                    <Grid item xs={6}>
+                    </Box>
+                    <Box>
                       <Typography variant="body2" color="text.secondary">
                         Accuracy: {(selectedAlgorithm.performance.benchmarks.accuracy * 100).toFixed(1)}%
                       </Typography>
-                    </Grid>
-                    <Grid item xs={6}>
+                    </Box>
+                    <Box>
                       <Typography variant="body2" color="text.secondary">
                         Qubits Required: {selectedAlgorithm.performance.resourceUsage.qubits}
                       </Typography>
-                    </Grid>
-                  </Grid>
+                    </Box>
+                  </Box>
                   
                   <Typography variant="h6" gutterBottom>
                     Compatibility
@@ -862,9 +863,9 @@ const QuantumMarketplaceDashboard: React.FC = () => {
                   <Typography variant="body2" color="text.secondary" paragraph>
                     Languages: {selectedAlgorithm.compatibility.languages.join(', ')}
                   </Typography>
-                </Grid>
+                </Box>
                 
-                <Grid item xs={12} md={4}>
+                <Box>
                   <Card>
                     <CardContent>
                       <Typography variant="h4" color="primary" gutterBottom>
@@ -901,8 +902,8 @@ const QuantumMarketplaceDashboard: React.FC = () => {
                       </Button>
                     </CardContent>
                   </Card>
-                </Grid>
-              </Grid>
+                </Box>
+              </Box>
             </DialogContent>
             <DialogActions>
               <Button onClick={() => setShowAlgorithmDetails(false)}>Close</Button>

@@ -23,7 +23,33 @@ import {
   Globe
 } from 'lucide-react'
 import Link from 'next/link'
-import { useState } from 'react'
+import React, { useState } from 'react'
+
+// Type assertions for components
+const MotionDiv = motion.div as any
+const MotionSection = motion.section as any
+const LinkComponent = Link as any
+
+// Type assertions for Lucide icons
+const Building2Icon = Building2 as any
+const BanknoteIcon = Banknote as any
+const FactoryIcon = Factory as any
+const TruckIcon = Truck as any
+const ShieldIcon = Shield as any
+const ZapIcon = Zap as any
+const HeartIcon = Heart as any
+const GraduationCapIcon = GraduationCap as any
+const ShoppingCartIcon = ShoppingCart as any
+const PlaneIcon = Plane as any
+const ArrowRightIcon = ArrowRight as any
+const TargetIcon = Target as any
+const TrendingUpIcon = TrendingUp as any
+const UsersIcon = Users as any
+const ClockIcon = Clock as any
+const CheckCircleIcon = CheckCircle as any
+const StarIcon = Star as any
+const BarChart3Icon = BarChart3 as any
+const GlobeIcon = Globe as any
 
 export default function IndustriesPage() {
   const [selectedIndustry, setSelectedIndustry] = useState('financial-services')
@@ -46,7 +72,7 @@ export default function IndustriesPage() {
     {
       id: 'financial-services',
       name: 'Financial Services',
-      icon: Banknote,
+      icon: BanknoteIcon,
       description: 'Quantum-powered risk assessment, portfolio optimization, and fraud detection',
       color: 'bg-blue-500',
       stats: {
@@ -77,7 +103,7 @@ export default function IndustriesPage() {
     {
       id: 'manufacturing',
       name: 'Manufacturing',
-      icon: Factory,
+      icon: FactoryIcon,
       description: 'Supply chain optimization, predictive maintenance, and quality control',
       color: 'bg-orange-500',
       stats: {
@@ -108,7 +134,7 @@ export default function IndustriesPage() {
     {
       id: 'healthcare',
       name: 'Healthcare',
-      icon: Heart,
+      icon: HeartIcon,
       description: 'Drug discovery, treatment optimization, and patient outcome prediction',
       color: 'bg-red-500',
       stats: {
@@ -139,7 +165,7 @@ export default function IndustriesPage() {
     {
       id: 'logistics',
       name: 'Logistics & Transportation',
-      icon: Truck,
+      icon: TruckIcon,
       description: 'Route optimization, fleet management, and demand forecasting',
       color: 'bg-green-500',
       stats: {
@@ -170,7 +196,7 @@ export default function IndustriesPage() {
     {
       id: 'energy',
       name: 'Energy & Utilities',
-      icon: Zap,
+      icon: ZapIcon,
       description: 'Grid optimization, renewable energy management, and demand prediction',
       color: 'bg-yellow-500',
       stats: {
@@ -201,7 +227,7 @@ export default function IndustriesPage() {
     {
       id: 'retail',
       name: 'Retail & E-commerce',
-      icon: ShoppingCart,
+      icon: ShoppingCartIcon,
       description: 'Demand forecasting, inventory optimization, and personalized recommendations',
       color: 'bg-purple-500',
       stats: {
@@ -238,7 +264,7 @@ export default function IndustriesPage() {
       {/* Hero Section */}
       <section className="hero-gradient section-padding">
         <div className="container-quantum text-center">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -251,22 +277,22 @@ export default function IndustriesPage() {
               unprecedented optimization and insights.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="#industries" className="btn-primary">
+              <LinkComponent href="#industries" className="btn-primary">
                 Explore Solutions
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-              <Link href="/case-studies" className="btn-secondary">
+                <ArrowRightIcon className="ml-2 h-5 w-5" />
+              </LinkComponent>
+              <LinkComponent href="/case-studies" className="btn-secondary">
                 View Case Studies
-              </Link>
+              </LinkComponent>
             </div>
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* Industry Overview */}
       <section className="section-padding">
         <div className="container-quantum">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -279,9 +305,9 @@ export default function IndustriesPage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Our NQBA platform delivers measurable quantum advantages across diverse industry verticals.
             </p>
-          </motion.div>
+          </MotionDiv>
 
-          <motion.div
+          <MotionDiv
             variants={staggerContainer}
             initial="initial"
             whileInView="animate"
@@ -291,7 +317,7 @@ export default function IndustriesPage() {
             {industries.map((industry) => {
               const Icon = industry.icon
               return (
-                <motion.div
+                <MotionDiv
                   key={industry.id}
                   variants={fadeInUp}
                   className="card group hover:shadow-lg transition-shadow duration-200 cursor-pointer"
@@ -320,17 +346,17 @@ export default function IndustriesPage() {
                       <div className="text-xs text-gray-500">Savings</div>
                     </div>
                   </div>
-                </motion.div>
+                </MotionDiv>
               )
             })}
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* Detailed Industry View */}
       <section id="industries" className="section-padding bg-gray-50">
         <div className="container-quantum">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -361,12 +387,12 @@ export default function IndustriesPage() {
               {/* Use Cases */}
               <div>
                 <h3 className="text-2xl font-bold text-black mb-6 flex items-center">
-                  <Target className="mr-3 h-6 w-6 text-brand-cyan" />
+                  <TargetIcon className="mr-3 h-6 w-6 text-brand-cyan" />
                   Use Cases
                 </h3>
                 <div className="space-y-4">
                   {selectedIndustryData.useCases.map((useCase, index) => (
-                    <motion.div
+                    <MotionDiv
                       key={index}
                       initial={{ opacity: 0, x: -20 }}
                       whileInView={{ opacity: 1, x: 0 }}
@@ -374,9 +400,9 @@ export default function IndustriesPage() {
                       viewport={{ once: true }}
                       className="flex items-start space-x-3"
                     >
-                      <CheckCircle className="h-5 w-5 text-brand-cyan mt-0.5 flex-shrink-0" />
+                      <CheckCircleIcon className="h-5 w-5 text-brand-cyan mt-0.5 flex-shrink-0" />
                       <span className="text-gray-700">{useCase}</span>
-                    </motion.div>
+                    </MotionDiv>
                   ))}
                 </div>
               </div>
@@ -384,12 +410,12 @@ export default function IndustriesPage() {
               {/* Benefits */}
               <div>
                 <h3 className="text-2xl font-bold text-black mb-6 flex items-center">
-                  <TrendingUp className="mr-3 h-6 w-6 text-brand-gold" />
+                  <TrendingUpIcon className="mr-3 h-6 w-6 text-brand-gold" />
                   Key Benefits
                 </h3>
                 <div className="space-y-4">
                   {selectedIndustryData.benefits.map((benefit, index) => (
-                    <motion.div
+                    <MotionDiv
                       key={index}
                       initial={{ opacity: 0, x: 20 }}
                       whileInView={{ opacity: 1, x: 0 }}
@@ -397,17 +423,17 @@ export default function IndustriesPage() {
                       viewport={{ once: true }}
                       className="flex items-start space-x-3"
                     >
-                      <Star className="h-5 w-5 text-brand-gold mt-0.5 flex-shrink-0" />
+                      <StarIcon className="h-5 w-5 text-brand-gold mt-0.5 flex-shrink-0" />
                       <span className="text-gray-700">{benefit}</span>
-                    </motion.div>
+                    </MotionDiv>
                   ))}
                 </div>
               </div>
             </div>
-          </motion.div>
+          </MotionDiv>
 
           {/* Case Study Highlight */}
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -415,7 +441,7 @@ export default function IndustriesPage() {
             className="card bg-white border-l-4 border-brand-cyan"
           >
             <div className="flex items-center space-x-3 mb-6">
-              <BarChart3 className="h-6 w-6 text-brand-cyan" />
+              <BarChart3Icon className="h-6 w-6 text-brand-cyan" />
               <h3 className="text-xl font-bold text-black">Success Story</h3>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -435,20 +461,20 @@ export default function IndustriesPage() {
             <div className="mt-6 pt-6 border-t border-gray-200">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-500">Client: {selectedIndustryData.caseStudy.client}</span>
-                <Link href="/case-studies" className="text-brand-cyan font-medium hover:text-brand-gold transition-colors duration-200">
+                <LinkComponent href="/case-studies" className="text-brand-cyan font-medium hover:text-brand-gold transition-colors duration-200">
                   Read Full Case Study
-                  <ArrowRight className="inline ml-2 h-4 w-4" />
-                </Link>
+                  <ArrowRightIcon className="inline ml-2 h-4 w-4" />
+                </LinkComponent>
               </div>
             </div>
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* Industry Stats */}
       <section className="section-padding">
         <div className="container-quantum">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -461,9 +487,9 @@ export default function IndustriesPage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Delivering quantum advantages to organizations worldwide across all major industries.
             </p>
-          </motion.div>
+          </MotionDiv>
 
-          <motion.div
+          <MotionDiv
             variants={staggerContainer}
             initial="initial"
             whileInView="animate"
@@ -475,50 +501,50 @@ export default function IndustriesPage() {
                 metric: "206+",
                 label: "Enterprise Clients",
                 description: "Across all industries",
-                icon: Building2
+                icon: Building2Icon
               },
               {
                 metric: "$12.0B",
                 label: "Total Savings",
                 description: "Generated for clients",
-                icon: TrendingUp
+                icon: TrendingUpIcon
               },
               {
                 metric: "340%",
                 label: "Avg Improvement",
                 description: "In key metrics",
-                icon: Target
+                icon: TargetIcon
               },
               {
                 metric: "45",
                 label: "Countries",
                 description: "Global presence",
-                icon: Globe
+                icon: GlobeIcon
               }
             ].map((stat) => (
-              <motion.div
+              <MotionDiv
                 key={stat.metric}
                 variants={fadeInUp}
                 className="card text-center group hover:shadow-lg transition-shadow duration-200"
               >
                 <div className="w-16 h-16 bg-brand-cyan rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-200">
-                  <stat.icon className="h-8 w-8 text-white" />
+                  {React.createElement(stat.icon, { className: "h-8 w-8 text-white" }) as JSX.Element}
                 </div>
                 <div className="text-3xl md:text-4xl font-bold text-black mb-2">
                   {stat.metric}
                 </div>
                 <div className="font-medium text-black mb-1">{stat.label}</div>
                 <div className="text-sm text-gray-500">{stat.description}</div>
-              </motion.div>
+              </MotionDiv>
             ))}
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* Call to Action */}
       <section className="section-padding bg-gray-50">
         <div className="container-narrow text-center">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -533,13 +559,13 @@ export default function IndustriesPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a href="https://live.flyfoxai.com/widget/booking/BJV7BainocNCHj2XDtt8" className="btn-primary" target="_blank" rel="noopener noreferrer">
                 Schedule Consultation
-                <ArrowRight className="ml-2 h-5 w-5" />
+                <ArrowRightIcon className="ml-2 h-5 w-5" />
               </a>
-              <Link href="/resources/recipes" className="btn-secondary">
+              <LinkComponent href="/resources/recipes" className="btn-secondary">
                 Try QUBO Builder
-              </Link>
+              </LinkComponent>
             </div>
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
     </div>

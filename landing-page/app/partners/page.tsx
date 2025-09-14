@@ -1,5 +1,6 @@
 'use client'
 
+import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { 
   Crown, 
@@ -19,6 +20,21 @@ import {
 import { brand, partners, pricingTiers } from '../../lib/brand'
 import Link from 'next/link'
 
+// Type assertions for framer-motion components
+const MotionDiv = motion.div as any
+const LinkComponent = Link as any
+
+// Type assertions for icon components
+const ArrowRightIcon = ArrowRight as any
+const CheckCircleIcon = CheckCircle as any
+const CrownIcon = Crown as any
+const StarIcon = Star as any
+const GlobeIcon = Globe as any
+const ShieldIcon = Shield as any
+const TargetIcon = Target as any
+const BrainIcon = Brain as any
+const NetworkIcon = Network as any
+
 export default function PartnersPage() {
   const fadeInUp = {
     initial: { opacity: 0, y: 60 },
@@ -36,10 +52,10 @@ export default function PartnersPage() {
 
   const getTierIcon = (tier: string) => {
     switch (tier) {
-      case 'core': return Crown
-      case 'strategic': return Star
-      case 'ecosystem': return Globe
-      default: return Network
+      case 'core': return CrownIcon
+      case 'strategic': return StarIcon
+      case 'ecosystem': return GlobeIcon
+      default: return NetworkIcon
     }
   }
 
@@ -66,7 +82,7 @@ export default function PartnersPage() {
       {/* Hero Section */}
       <section className="section-padding bg-white">
         <div className="container-quantum text-center">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -81,22 +97,22 @@ export default function PartnersPage() {
               Join our quantum-native ecosystem and unlock new revenue streams through NQBA Core integration.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="#partner-tiers" className="btn-primary">
+              <LinkComponent href="#partner-tiers" className="btn-primary">
                 Explore Partnership
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-              <Link href="#white-label" className="btn-secondary">
+                <ArrowRightIcon className="ml-2 h-5 w-5" />
+              </LinkComponent>
+              <LinkComponent href="#white-label" className="btn-secondary">
                 White-Label Solutions
-              </Link>
+              </LinkComponent>
             </div>
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
-      {/* Partner Ecosystem */}
-      <section className="section-padding bg-white border-t border-gray-200">
+
+      <section id="partner-tiers" className="section-padding bg-white border-t border-gray-200">
         <div className="container-quantum">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -109,16 +125,16 @@ export default function PartnersPage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Our three-tier partnership model ensures optimal integration and mutual success.
             </p>
-          </motion.div>
+          </MotionDiv>
 
-          {/* Partner Tiers */}
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
             {['core', 'strategic', 'ecosystem'].map((tier) => {
               const tierPartners = partners.filter(p => p.tier === tier)
               const TierIcon = getTierIcon(tier)
               
               return (
-                <motion.div
+                <MotionDiv
                   key={tier}
                   variants={fadeInUp}
                   initial="initial"
@@ -149,13 +165,13 @@ export default function PartnersPage() {
                       </div>
                     ))}
                   </div>
-                </motion.div>
+                </MotionDiv>
               )
             })}
           </div>
 
           {/* Partner Details */}
-          <motion.div
+          <MotionDiv
             variants={staggerContainer}
             initial="initial"
             whileInView="animate"
@@ -166,7 +182,7 @@ export default function PartnersPage() {
               const TierIcon = getTierIcon(partner.tier)
               
               return (
-                <motion.div
+                <MotionDiv
                   key={partner.name}
                   variants={fadeInUp}
                   className="card hover:shadow-lg transition-shadow duration-200"
@@ -192,17 +208,17 @@ export default function PartnersPage() {
                     </div>
                     <p className="text-sm text-gray-600">{partner.integration}</p>
                   </div>
-                </motion.div>
+                </MotionDiv>
               )
             })}
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* Partnership Tiers & Pricing */}
       <section id="partner-tiers" className="section-padding bg-white border-t border-gray-200">
         <div className="container-quantum">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -215,9 +231,9 @@ export default function PartnersPage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Choose the partnership level that aligns with your business goals and technical requirements.
             </p>
-          </motion.div>
+          </MotionDiv>
 
-          <motion.div
+          <MotionDiv
             variants={staggerContainer}
             initial="initial"
             whileInView="animate"
@@ -225,7 +241,7 @@ export default function PartnersPage() {
             className="grid grid-cols-1 md:grid-cols-3 gap-8"
           >
             {pricingTiers.map((tier, index) => (
-              <motion.div
+              <MotionDiv
                 key={tier.name}
                 variants={fadeInUp}
                 className={`card border-2 hover:shadow-lg transition-all duration-200 ${
@@ -235,7 +251,7 @@ export default function PartnersPage() {
                 <div className="text-center mb-6">
                   {tier.whiteLabel && (
                     <div className="inline-flex items-center px-3 py-1 bg-brand-gold text-black text-xs font-semibold rounded-full mb-4">
-                      <Crown className="h-3 w-3 mr-1" />
+                      <CrownIcon className="h-3 w-3 mr-1" />
                       White-Label Ready
                     </div>
                   )}
@@ -247,7 +263,7 @@ export default function PartnersPage() {
                 <ul className="space-y-3 mb-8">
                   {tier.features.map((feature) => (
                     <li key={feature} className="flex items-center text-sm text-gray-600">
-                      <CheckCircle className="h-4 w-4 text-green-500 mr-3 flex-shrink-0" />
+                      <CheckCircleIcon className="h-4 w-4 text-green-500 mr-3 flex-shrink-0" />
                       {feature}
                     </li>
                   ))}
@@ -265,23 +281,23 @@ export default function PartnersPage() {
                 </div>
                 
                 <div className="mt-8">
-                  <Link 
+                  <LinkComponent 
                     href={tier.whiteLabel ? "#white-label" : "/contact"}
                     className={tier.whiteLabel ? "btn-gold w-full text-center" : "btn-primary w-full text-center"}
                   >
                     {tier.whiteLabel ? 'Contact Sales' : 'Get Started'}
-                  </Link>
+                  </LinkComponent>
                 </div>
-              </motion.div>
+              </MotionDiv>
             ))}
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* White-Label Capabilities */}
       <section id="white-label" className="section-padding bg-white border-t border-gray-200">
         <div className="container-quantum">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -294,9 +310,9 @@ export default function PartnersPage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Deploy NQBA Core under your brand with full customization and revenue sharing.
             </p>
-          </motion.div>
+          </MotionDiv>
 
-          <motion.div
+          <MotionDiv
             variants={staggerContainer}
             initial="initial"
             whileInView="animate"
@@ -307,56 +323,56 @@ export default function PartnersPage() {
               {
                 title: "Custom Branding",
                 description: "Full UI/UX customization with your brand colors, logos, and messaging",
-                icon: Crown,
+                icon: CrownIcon,
                 features: ["Custom color schemes", "Logo integration", "Brand messaging", "Domain mapping"]
               },
               {
                 title: "Dedicated Resources",
                 description: "Isolated quantum computing resources and dedicated support team",
-                icon: Shield,
+                icon: ShieldIcon,
                 features: ["Private quantum nodes", "Dedicated support", "SLA guarantees", "Priority access"]
               },
               {
                 title: "Revenue Sharing",
                 description: "Transparent revenue sharing model with detailed analytics and reporting",
-                icon: Target,
+                icon: TargetIcon,
                 features: ["Revenue analytics", "Usage tracking", "Billing integration", "Partner dashboard"]
               },
               {
                 title: "Custom Logic",
                 description: "Implement your business rules and workflows within the NQBA framework",
-                icon: Brain,
+                icon: BrainIcon,
                 features: ["Custom algorithms", "Business rules", "Workflow automation", "API extensions"]
               }
             ].map((capability) => (
-              <motion.div
+              <MotionDiv
                 key={capability.title}
                 variants={fadeInUp}
                 className="card hover:shadow-lg transition-shadow duration-200"
               >
                 <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-brand-gold mb-4">
-                  <capability.icon className="h-6 w-6 text-black" />
+                  {React.createElement(capability.icon, { className: "h-6 w-6 text-black" }) as JSX.Element}
                 </div>
                 <h3 className="text-xl font-semibold text-black mb-3">{capability.title}</h3>
                 <p className="text-gray-600 text-sm mb-4">{capability.description}</p>
                 <ul className="space-y-2">
                   {capability.features.map((feature) => (
                     <li key={feature} className="flex items-center text-sm text-gray-600">
-                      <CheckCircle className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
+                      <CheckCircleIcon className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
                       {feature}
                     </li>
                   ))}
                 </ul>
-              </motion.div>
+              </MotionDiv>
             ))}
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* CTA Section */}
       <section className="section-padding bg-white border-t border-gray-200">
         <div className="container-narrow text-center">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -374,13 +390,13 @@ export default function PartnersPage() {
                 className="btn-primary"
               >
                 Contact Partnership Team
-                <ArrowRight className="ml-2 h-5 w-5" />
+                <ArrowRightIcon className="ml-2 h-5 w-5" />
               </a>
-              <Link href="/resources" className="btn-secondary">
+              <LinkComponent href="/resources" className="btn-secondary">
                 Technical Documentation
-              </Link>
+              </LinkComponent>
             </div>
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
     </div>

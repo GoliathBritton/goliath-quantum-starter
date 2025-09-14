@@ -5,6 +5,20 @@ import { motion } from 'framer-motion'
 import { Atom, Zap, ArrowRightLeft, Brain, Network, Layers, Sparkles, ChevronDown, ChevronUp } from 'lucide-react'
 import { brand } from '@/lib/brand'
 
+// Type assertions for motion components
+const MotionDiv = motion.div as any;
+
+// Type assertions for Lucide icons
+const AtomComponent = Atom as any;
+const ZapComponent = Zap as any;
+const ArrowRightLeftComponent = ArrowRightLeft as any;
+const BrainComponent = Brain as any;
+const NetworkComponent = Network as any;
+const LayersComponent = Layers as any;
+const SparklesComponent = Sparkles as any;
+const ChevronDownComponent = ChevronDown as any;
+const ChevronUpComponent = ChevronUp as any;
+
 interface QuantumPrinciple {
   id: string
   name: string
@@ -189,14 +203,14 @@ export default function QuantumIntegration() {
     <div className="space-y-12">
       {/* Header */}
       <div className="text-center">
-        <motion.div
+        <MotionDiv
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-100 to-purple-100 px-4 py-2 rounded-full mb-6"
         >
-          <Atom className="w-5 h-5 text-indigo-600" />
+          <AtomComponent className="w-5 h-5 text-indigo-600" />
           <span className="text-indigo-800 font-medium">Quantum Integration</span>
-        </motion.div>
+        </MotionDiv>
         
         <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
           Quantum Principles Across All Roles
@@ -232,7 +246,7 @@ export default function QuantumIntegration() {
 
       {/* Selected Principle Details */}
       {selectedPrincipleData && (
-        <motion.div
+        <MotionDiv
           key={selectedPrinciple}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -252,7 +266,7 @@ export default function QuantumIntegration() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {selectedPrincipleData.applications.map((app, index) => (
-              <motion.div
+              <MotionDiv
                 key={app.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -269,10 +283,10 @@ export default function QuantumIntegration() {
                     "{app.example}"
                   </div>
                 </div>
-              </motion.div>
+              </MotionDiv>
             ))}
           </div>
-        </motion.div>
+        </MotionDiv>
       )}
 
       {/* Role Quantum Mappings */}
@@ -281,7 +295,7 @@ export default function QuantumIntegration() {
         
         <div className="space-y-4">
           {roleQuantumMappings.map((mapping, index) => (
-            <motion.div
+            <MotionDiv
               key={mapping.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -295,7 +309,7 @@ export default function QuantumIntegration() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
                     <div className="p-3 bg-gradient-to-r from-indigo-100 to-purple-100 rounded-lg">
-                      <Brain className="w-6 h-6 text-indigo-600" />
+                      <BrainComponent className="w-6 h-6 text-indigo-600" />
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">{mapping.role}</h4>
@@ -310,16 +324,16 @@ export default function QuantumIntegration() {
                     </div>
                     
                     {expandedRole === mapping.id ? (
-                      <ChevronUp className="w-5 h-5 text-gray-400" />
+                      <ChevronUpComponent className="w-5 h-5 text-gray-400" />
                     ) : (
-                      <ChevronDown className="w-5 h-5 text-gray-400" />
+                      <ChevronDownComponent className="w-5 h-5 text-gray-400" />
                     )}
                   </div>
                 </div>
               </div>
               
               {expandedRole === mapping.id && (
-                <motion.div
+                <MotionDiv
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
@@ -328,7 +342,7 @@ export default function QuantumIntegration() {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="space-y-2">
                       <div className="flex items-center gap-2">
-                        <Layers className="w-4 h-4 text-blue-600" />
+                        <LayersComponent className="w-4 h-4 text-blue-600" />
                         <span className="font-medium text-blue-800">Superposition</span>
                       </div>
                       <p className="text-sm text-gray-600">{mapping.quantumPrinciples.superposition}</p>
@@ -336,7 +350,7 @@ export default function QuantumIntegration() {
                     
                     <div className="space-y-2">
                       <div className="flex items-center gap-2">
-                        <Network className="w-4 h-4 text-purple-600" />
+                        <NetworkComponent className="w-4 h-4 text-purple-600" />
                         <span className="font-medium text-purple-800">Entanglement</span>
                       </div>
                       <p className="text-sm text-gray-600">{mapping.quantumPrinciples.entanglement}</p>
@@ -344,15 +358,15 @@ export default function QuantumIntegration() {
                     
                     <div className="space-y-2">
                       <div className="flex items-center gap-2">
-                        <Zap className="w-4 h-4 text-orange-600" />
+                        <ZapComponent className="w-4 h-4 text-orange-600" />
                         <span className="font-medium text-orange-800">Tunneling</span>
                       </div>
                       <p className="text-sm text-gray-600">{mapping.quantumPrinciples.tunneling}</p>
                     </div>
                   </div>
-                </motion.div>
+                </MotionDiv>
               )}
-            </motion.div>
+            </MotionDiv>
           ))}
         </div>
       </div>
@@ -360,7 +374,7 @@ export default function QuantumIntegration() {
       {/* Quantum Integration Summary */}
       <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-8 text-center">
         <div className="flex items-center justify-center gap-2 mb-4">
-          <Sparkles className="w-6 h-6 text-indigo-600" />
+          <SparklesComponent className="w-6 h-6 text-indigo-600" />
           <h3 className="text-xl font-bold text-gray-900">Quantum-Enhanced Ecosystem</h3>
         </div>
         

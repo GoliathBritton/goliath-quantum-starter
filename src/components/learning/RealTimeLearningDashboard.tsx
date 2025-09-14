@@ -4,7 +4,6 @@ import {
   Card,
   CardContent,
   Typography,
-  Grid,
   Tabs,
   Tab,
   Button,
@@ -64,7 +63,7 @@ import {
   Area,
   BarChart,
   Bar,
-  ScatterPlot,
+  ScatterChart,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -111,7 +110,7 @@ function TabPanel(props: TabPanelProps) {
   );
 }
 
-const RealTimeLearningDashboard: React.FC = () => {
+const RealTimeLearningDashboard = () => {
   const [tabValue, setTabValue] = useState(0);
   const [models, setModels] = useState<LearningModel[]>([]);
   const [metrics, setMetrics] = useState<LearningMetrics | null>(null);
@@ -293,9 +292,9 @@ const RealTimeLearningDashboard: React.FC = () => {
   };
 
   const renderOverviewTab = () => (
-    <Grid container spacing={3}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
       {/* Control Panel */}
-      <Grid item xs={12}>
+      <Box>
         <Card>
           <CardContent>
             <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
@@ -322,54 +321,47 @@ const RealTimeLearningDashboard: React.FC = () => {
               </Alert>
             )}
             
-            <Grid container spacing={2}>
-              <Grid item xs={3}>
-                <Box textAlign="center">
-                  <Typography variant="h4" color="primary">
-                    {metrics?.activeModels || 0}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    Active Models
-                  </Typography>
-                </Box>
-              </Grid>
-              <Grid item xs={3}>
-                <Box textAlign="center">
-                  <Typography variant="h4" color="success.main">
-                    {((metrics?.averageAccuracy || 0) * 100).toFixed(1)}%
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    Avg Accuracy
-                  </Typography>
-                </Box>
-              </Grid>
-              <Grid item xs={3}>
-                <Box textAlign="center">
-                  <Typography variant="h4" color="warning.main">
-                    {(metrics?.quantumAdvantageGain || 0).toFixed(1)}x
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    Quantum Advantage
-                  </Typography>
-                </Box>
-              </Grid>
-              <Grid item xs={3}>
-                <Box textAlign="center">
-                  <Typography variant="h4" color="info.main">
-                    {metrics?.dataPointsProcessed || 0}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    Data Points
-                  </Typography>
-                </Box>
-              </Grid>
-            </Grid>
+            <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 2 }}>
+              <Box textAlign="center">
+                <Typography variant="h4" color="primary">
+                  {metrics?.activeModels || 0}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  Active Models
+                </Typography>
+              </Box>
+              <Box textAlign="center">
+                <Typography variant="h4" color="success.main">
+                  {((metrics?.averageAccuracy || 0) * 100).toFixed(1)}%
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  Avg Accuracy
+                </Typography>
+              </Box>
+              <Box textAlign="center">
+                <Typography variant="h4" color="warning.main">
+                  {(metrics?.quantumAdvantageGain || 0).toFixed(1)}x
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  Quantum Advantage
+                </Typography>
+              </Box>
+              <Box textAlign="center">
+                <Typography variant="h4" color="info.main">
+                  {metrics?.dataPointsProcessed || 0}
+                </Typography>
+                <Typography variant="body2" color="textSecondary">
+                  Data Points
+                </Typography>
+              </Box>
+            </Box>
           </CardContent>
         </Card>
-      </Grid>
+      </Box>
       
       {/* Real-time Performance Charts */}
-      <Grid item xs={12} md={6}>
+      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' }, gap: 3 }}>
+        <Box>
         <Card>
           <CardContent>
             <Typography variant="h6" gutterBottom>
@@ -388,9 +380,9 @@ const RealTimeLearningDashboard: React.FC = () => {
             </ResponsiveContainer>
           </CardContent>
         </Card>
-      </Grid>
-      
-      <Grid item xs={12} md={6}>
+        </Box>
+        
+        <Box>
         <Card>
           <CardContent>
             <Typography variant="h6" gutterBottom>
@@ -409,10 +401,12 @@ const RealTimeLearningDashboard: React.FC = () => {
             </ResponsiveContainer>
           </CardContent>
         </Card>
-      </Grid>
+        </Box>
+      </Box>
       
       {/* Model Performance Radar */}
-      <Grid item xs={12} md={6}>
+      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' }, gap: 3 }}>
+        <Box>
         <Card>
           <CardContent>
             <Typography variant="h6" gutterBottom>
@@ -459,10 +453,9 @@ const RealTimeLearningDashboard: React.FC = () => {
             </ResponsiveContainer>
           </CardContent>
         </Card>
-      </Grid>
-      
-      {/* Algorithm Distribution */}
-      <Grid item xs={12} md={6}>
+        </Box>
+        
+        <Box>
         <Card>
           <CardContent>
             <Typography variant="h6" gutterBottom>
@@ -481,7 +474,7 @@ const RealTimeLearningDashboard: React.FC = () => {
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                  label={({ name, percent }: any) => `${name} ${(percent * 100).toFixed(0)}%`}
                   outerRadius={80}
                   fill="#8884d8"
                   dataKey="value"
@@ -501,8 +494,9 @@ const RealTimeLearningDashboard: React.FC = () => {
             </ResponsiveContainer>
           </CardContent>
         </Card>
-      </Grid>
-    </Grid>
+        </Box>
+      </Box>
+    </Box>
   );
 
   const renderModelsTab = () => (
@@ -518,9 +512,9 @@ const RealTimeLearningDashboard: React.FC = () => {
         </Button>
       </Box>
       
-      <Grid container spacing={3}>
-        {models.map((model) => (
-          <Grid item xs={12} md={6} lg={4} key={model.id}>
+      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(3, 1fr)' }, gap: 3 }}>
+      {models.map((model) => (
+        <Box key={model.id}>
             <Card>
               <CardContent>
                 <Box display="flex" justifyContent="space-between" alignItems="flex-start" mb={2}>
@@ -553,40 +547,40 @@ const RealTimeLearningDashboard: React.FC = () => {
                   </Box>
                 )}
                 
-                <Grid container spacing={1} sx={{ mb: 2 }}>
-                  <Grid item xs={6}>
+                <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 1, mb: 2 }}>
+                  <Box>
                     <Typography variant="body2" color="textSecondary">
                       Accuracy
                     </Typography>
                     <Typography variant="h6">
                       {(model.performance.accuracy * 100).toFixed(1)}%
                     </Typography>
-                  </Grid>
-                  <Grid item xs={6}>
+                  </Box>
+                  <Box>
                     <Typography variant="body2" color="textSecondary">
                       F1 Score
                     </Typography>
                     <Typography variant="h6">
                       {model.performance.f1Score.toFixed(3)}
                     </Typography>
-                  </Grid>
-                  <Grid item xs={6}>
+                  </Box>
+                  <Box>
                     <Typography variant="body2" color="textSecondary">
                       Quantum Advantage
                     </Typography>
                     <Typography variant="h6" color="primary">
                       {model.performance.quantumAdvantage.toFixed(1)}x
                     </Typography>
-                  </Grid>
-                  <Grid item xs={6}>
+                  </Box>
+                  <Box>
                     <Typography variant="body2" color="textSecondary">
                       Training Data
                     </Typography>
                     <Typography variant="h6">
                       {model.trainingData.length}
                     </Typography>
-                  </Grid>
-                </Grid>
+                  </Box>
+                </Box>
                 
                 <Box display="flex" justifyContent="space-between">
                   <Button
@@ -610,9 +604,9 @@ const RealTimeLearningDashboard: React.FC = () => {
                 </Box>
               </CardContent>
             </Card>
-          </Grid>
-        ))}
-      </Grid>
+          </Box>
+      ))}
+    </Box>
     </Box>
   );
 
@@ -622,9 +616,9 @@ const RealTimeLearningDashboard: React.FC = () => {
         Quantum Circuit Templates
       </Typography>
       
-      <Grid container spacing={3}>
-        {circuitTemplates.map((template) => (
-          <Grid item xs={12} md={6} key={template.id}>
+      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' }, gap: 3 }}>
+      {circuitTemplates.map((template) => (
+        <Box key={template.id}>
             <Card>
               <CardContent>
                 <Box display="flex" justifyContent="space-between" alignItems="flex-start" mb={2}>
@@ -641,40 +635,40 @@ const RealTimeLearningDashboard: React.FC = () => {
                   />
                 </Box>
                 
-                <Grid container spacing={2} sx={{ mb: 2 }}>
-                  <Grid item xs={6}>
+                <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 2, mb: 2 }}>
+                  <Box>
                     <Typography variant="body2" color="textSecondary">
                       Fidelity
                     </Typography>
                     <Typography variant="h6" color="success.main">
                       {(template.fidelity * 100).toFixed(1)}%
                     </Typography>
-                  </Grid>
-                  <Grid item xs={6}>
+                  </Box>
+                  <Box>
                     <Typography variant="body2" color="textSecondary">
                       Error Rate
                     </Typography>
                     <Typography variant="h6" color="error.main">
                       {(template.errorRate * 100).toFixed(2)}%
                     </Typography>
-                  </Grid>
-                  <Grid item xs={6}>
+                  </Box>
+                  <Box>
                     <Typography variant="body2" color="textSecondary">
                       Gates
                     </Typography>
                     <Typography variant="h6">
                       {template.gates.length}
                     </Typography>
-                  </Grid>
-                  <Grid item xs={6}>
+                  </Box>
+                  <Box>
                     <Typography variant="body2" color="textSecondary">
                       Parameters
                     </Typography>
                     <Typography variant="h6">
                       {template.parameters.length}
                     </Typography>
-                  </Grid>
-                </Grid>
+                  </Box>
+                </Box>
                 
                 <Accordion>
                   <AccordionSummary expandIcon={<ExpandMore />}>
@@ -714,23 +708,23 @@ const RealTimeLearningDashboard: React.FC = () => {
                 </Box>
               </CardContent>
             </Card>
-          </Grid>
-        ))}
-      </Grid>
+          </Box>
+      ))}
+    </Box>
     </Box>
   );
 
   const renderAnalyticsTab = () => (
-    <Grid container spacing={3}>
-      <Grid item xs={12}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+      <Box>
         <Card>
           <CardContent>
             <Typography variant="h6" gutterBottom>
               Learning Analytics
             </Typography>
             
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={6}>
+            <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' }, gap: 3 }}>
+              <Box>
                 <Typography variant="subtitle1" gutterBottom>
                   Training Performance Over Time
                 </Typography>
@@ -745,9 +739,9 @@ const RealTimeLearningDashboard: React.FC = () => {
                     <Line type="monotone" dataKey="loss" stroke="#f44336" name="Loss" />
                   </LineChart>
                 </ResponsiveContainer>
-              </Grid>
+              </Box>
               
-              <Grid item xs={12} md={6}>
+              <Box>
                 <Typography variant="subtitle1" gutterBottom>
                   Resource Utilization
                 </Typography>
@@ -766,13 +760,14 @@ const RealTimeLearningDashboard: React.FC = () => {
                     <Bar dataKey="limit" fill="#e0e0e0" />
                   </BarChart>
                 </ResponsiveContainer>
-              </Grid>
-            </Grid>
+              </Box>
+            </Box>
           </CardContent>
         </Card>
-      </Grid>
+      </Box>
       
-      <Grid item xs={12} md={6}>
+      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' }, gap: 3 }}>
+        <Box>
         <Card>
           <CardContent>
             <Typography variant="h6" gutterBottom>
@@ -808,9 +803,9 @@ const RealTimeLearningDashboard: React.FC = () => {
             </TableContainer>
           </CardContent>
         </Card>
-      </Grid>
-      
-      <Grid item xs={12} md={6}>
+        </Box>
+        
+        <Box>
         <Card>
           <CardContent>
             <Typography variant="h6" gutterBottom>
@@ -846,8 +841,9 @@ const RealTimeLearningDashboard: React.FC = () => {
             </Box>
           </CardContent>
         </Card>
-      </Grid>
-    </Grid>
+        </Box>
+      </Box>
+    </Box>
   );
 
   return (
@@ -878,16 +874,17 @@ const RealTimeLearningDashboard: React.FC = () => {
       <Dialog open={createModelDialog} onClose={() => setCreateModelDialog(false)} maxWidth="md" fullWidth>
         <DialogTitle>Create New Learning Model</DialogTitle>
         <DialogContent>
-          <Grid container spacing={2} sx={{ mt: 1 }}>
-            <Grid item xs={12}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 1 }}>
+            <Box>
               <TextField
                 fullWidth
                 label="Model Name"
                 value={newModelForm.name}
                 onChange={(e) => setNewModelForm(prev => ({ ...prev, name: e.target.value }))}
               />
-            </Grid>
-            <Grid item xs={6}>
+            </Box>
+            <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 2 }}>
+              <Box>
               <FormControl fullWidth>
                 <InputLabel>Algorithm</InputLabel>
                 <Select
@@ -901,8 +898,8 @@ const RealTimeLearningDashboard: React.FC = () => {
                   <MenuItem value="VQE">Variational Quantum Eigensolver</MenuItem>
                 </Select>
               </FormControl>
-            </Grid>
-            <Grid item xs={6}>
+              </Box>
+              <Box>
               <FormControl fullWidth>
                 <InputLabel>Type</InputLabel>
                 <Select
@@ -915,8 +912,10 @@ const RealTimeLearningDashboard: React.FC = () => {
                   <MenuItem value="unsupervised">Unsupervised Learning</MenuItem>
                 </Select>
               </FormControl>
-            </Grid>
-            <Grid item xs={4}>
+              </Box>
+            </Box>
+            <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 2 }}>
+              <Box>
               <Typography gutterBottom>Qubits: {newModelForm.qubits}</Typography>
               <Slider
                 value={newModelForm.qubits}
@@ -926,8 +925,8 @@ const RealTimeLearningDashboard: React.FC = () => {
                 marks
                 valueLabelDisplay="auto"
               />
-            </Grid>
-            <Grid item xs={4}>
+              </Box>
+              <Box>
               <Typography gutterBottom>Layers: {newModelForm.layers}</Typography>
               <Slider
                 value={newModelForm.layers}
@@ -937,8 +936,8 @@ const RealTimeLearningDashboard: React.FC = () => {
                 marks
                 valueLabelDisplay="auto"
               />
-            </Grid>
-            <Grid item xs={4}>
+              </Box>
+              <Box>
               <Typography gutterBottom>Learning Rate: {newModelForm.learningRate}</Typography>
               <Slider
                 value={newModelForm.learningRate}
@@ -948,8 +947,9 @@ const RealTimeLearningDashboard: React.FC = () => {
                 step={0.001}
                 valueLabelDisplay="auto"
               />
-            </Grid>
-          </Grid>
+              </Box>
+            </Box>
+          </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setCreateModelDialog(false)}>Cancel</Button>
@@ -964,8 +964,8 @@ const RealTimeLearningDashboard: React.FC = () => {
         </DialogTitle>
         <DialogContent>
           {selectedModel && (
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={6}>
+            <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' }, gap: 3 }}>
+              <Box>
                 <Typography variant="h6" gutterBottom>Performance Metrics</Typography>
                 <TableContainer component={Paper}>
                   <Table>
@@ -997,8 +997,8 @@ const RealTimeLearningDashboard: React.FC = () => {
                     </TableBody>
                   </Table>
                 </TableContainer>
-              </Grid>
-              <Grid item xs={12} md={6}>
+              </Box>
+              <Box>
                 <Typography variant="h6" gutterBottom>Model Information</Typography>
                 <TableContainer component={Paper}>
                   <Table>
@@ -1032,8 +1032,8 @@ const RealTimeLearningDashboard: React.FC = () => {
                     </TableBody>
                   </Table>
                 </TableContainer>
-              </Grid>
-            </Grid>
+              </Box>
+            </Box>
           )}
         </DialogContent>
         <DialogActions>

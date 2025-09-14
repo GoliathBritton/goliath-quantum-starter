@@ -1,0 +1,108 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run TypeScript check
+        run: npm run type-check
+
+      - name: Run tests
+        run: npm test
+
+      - name: Run build
+        run: npm run build
+
+  build-and-push:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to ECR
+        run: |
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT }}.dkr.ecr.us-east-1.amazonaws.com
+
+      - name: Build and push API image
+        run: |
+          docker build -t partner-api:latest ./api
+          docker tag partner-api:latest ${{ secrets.AWS_ACCOUNT }}.dkr.ecr.us-east-1.amazonaws.com/flyfox-partner-api:latest
+          docker push ${{ secrets.AWS_ACCOUNT }}.dkr.ecr.us-east-1.amazonaws.com/flyfox-partner-api:latest
+
+      - name: Build and push Portal image
+        run: |
+          docker build -t partner-portal:latest ./
+          docker tag partner-portal:latest ${{ secrets.AWS_ACCOUNT }}.dkr.ecr.us-east-1.amazonaws.com/flyfox-portal:latest
+          docker push ${{ secrets.AWS_ACCOUNT }}.dkr.ecr.us-east-1.amazonaws.com/flyfox-portal:latest
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Configure kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: '1.28.0'
+
+      - name: Update kubeconfig
+        run: aws eks update-kubeconfig --region us-east-1 --name flyfox-eks
+
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl apply -f deploy/aws/kubernetes/namespace.yaml
+          kubectl apply -f deploy/aws/kubernetes/secrets-template.yaml
+          kubectl apply -f deploy/aws/kubernetes/deployments/api-deployment.yaml
+          kubectl apply -f deploy/aws/kubernetes/services/api-service.yaml
+          kubectl apply -f deploy/aws/kubernetes/deployments/portal-deployment.yaml
+          kubectl apply -f deploy/aws/kubernetes/services/portal-service.yaml
+          kubectl apply -f deploy/aws/kubernetes/ingress.yaml
+
+      - name: Verify deployment
+        run: |
+          kubectl rollout status deployment/partner-api -n partner-system
+          kubectl rollout status deployment/partner-portal -n partner-system
+          kubectl get pods -n partner-system
+          kubectl get services -n partner-system
+          kubectl get ingress -n partner-system

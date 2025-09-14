@@ -1,0 +1,552 @@
+{
+  "agent_id": "customer-support-004",
+  "name": "Quantum Support Specialist",
+  "description": "AI agent specialized in providing intelligent customer support for quantum computing platforms, troubleshooting, and user guidance",
+  "version": "1.0.0",
+  "created_at": "2024-01-15T00:00:00Z",
+  "updated_at": "2024-01-15T00:00:00Z",
+  "status": "active",
+  
+  "capabilities": {
+    "primary_functions": [
+      "technical_support",
+      "quantum_education",
+      "troubleshooting",
+      "api_guidance",
+      "best_practices",
+      "error_resolution",
+      "feature_explanation",
+      "onboarding_assistance",
+      "documentation_search"
+    ],
+    "support_categories": [
+      "quantum_algorithms",
+      "api_integration",
+      "platform_navigation",
+      "billing_inquiries",
+      "performance_optimization",
+      "security_questions",
+      "feature_requests",
+      "bug_reports",
+      "account_management"
+    ],
+    "quantum_expertise": [
+      "quantum_circuits",
+      "qubo_problems",
+      "quantum_annealing",
+      "variational_algorithms",
+      "quantum_machine_learning",
+      "error_mitigation",
+      "quantum_advantage",
+      "hybrid_algorithms"
+    ],
+    "languages": [
+      "english",
+      "spanish",
+      "french",
+      "german",
+      "chinese",
+      "japanese"
+    ]
+  },
+  
+  "openai_realtime_config": {
+    "model": "gpt-4o-realtime-preview",
+    "voice": "echo",
+    "modalities": ["text", "audio"],
+    "instructions": "You are a friendly and knowledgeable customer support specialist for a quantum computing platform. You have deep expertise in quantum algorithms, the platform's APIs, and common user challenges. Always be patient, helpful, and educational. Break down complex quantum concepts into understandable terms. Provide step-by-step guidance and always offer to escalate to human support when needed. Focus on solving problems efficiently while educating users about quantum computing concepts.",
+    "temperature": 0.3,
+    "max_response_output_tokens": 4096,
+    "tool_choice": "auto",
+    "parallel_tool_calls": true,
+    "response_format": {
+      "type": "json_schema",
+      "json_schema": {
+        "name": "support_response",
+        "strict": true,
+        "schema": {
+          "type": "object",
+          "properties": {
+            "response_summary": {
+              "type": "string",
+              "description": "Brief summary of the support response"
+            },
+            "solution_provided": {
+              "type": "boolean",
+              "description": "Whether a complete solution was provided"
+            },
+            "support_category": {
+              "type": "string",
+              "enum": ["technical", "billing", "account", "educational", "bug_report", "feature_request", "general"],
+              "description": "Category of support request"
+            },
+            "urgency_level": {
+              "type": "string",
+              "enum": ["low", "medium", "high", "critical"],
+              "description": "Assessed urgency level"
+            },
+            "detailed_response": {
+              "type": "string",
+              "description": "Detailed response to the user's query"
+            },
+            "step_by_step_guide": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "step_number": {"type": "integer"},
+                  "instruction": {"type": "string"},
+                  "code_example": {"type": "string"},
+                  "expected_result": {"type": "string"}
+                },
+                "required": ["step_number", "instruction"]
+              },
+              "description": "Step-by-step instructions when applicable"
+            },
+            "related_resources": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {"type": "string"},
+                  "url": {"type": "string"},
+                  "type": {"type": "string", "enum": ["documentation", "tutorial", "example", "video", "blog_post"]}
+                },
+                "required": ["title", "type"]
+              },
+              "description": "Related resources and documentation"
+            },
+            "quantum_concepts_explained": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "concept": {"type": "string"},
+                  "simple_explanation": {"type": "string"},
+                  "technical_details": {"type": "string"},
+                  "practical_application": {"type": "string"}
+                },
+                "required": ["concept", "simple_explanation"]
+              },
+              "description": "Quantum concepts explained in the response"
+            },
+            "follow_up_actions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "action": {"type": "string"},
+                  "timeline": {"type": "string"},
+                  "responsible_party": {"type": "string", "enum": ["user", "support_team", "engineering_team"]}
+                },
+                "required": ["action", "responsible_party"]
+              },
+              "description": "Required follow-up actions"
+            },
+            "escalation_needed": {
+              "type": "boolean",
+              "description": "Whether escalation to human support is needed"
+            },
+            "escalation_reason": {
+              "type": "string",
+              "description": "Reason for escalation if needed"
+            },
+            "satisfaction_prediction": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 5,
+              "description": "Predicted customer satisfaction score (1-5)"
+            }
+          },
+          "required": ["response_summary", "solution_provided", "support_category", "urgency_level", "detailed_response", "escalation_needed"]
+        }
+      }
+    }
+  },
+  
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "search_documentation",
+        "description": "Search platform documentation for relevant information",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Search query for documentation"
+            },
+            "doc_categories": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["api_reference", "tutorials", "examples", "troubleshooting", "best_practices", "quantum_concepts"]
+              },
+              "description": "Categories of documentation to search"
+            },
+            "max_results": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 20,
+              "default": 5,
+              "description": "Maximum number of results to return"
+            }
+          },
+          "required": ["query"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "analyze_error_message",
+        "description": "Analyze error messages and provide solutions",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "error_message": {
+              "type": "string",
+              "description": "The error message to analyze"
+            },
+            "error_context": {
+              "type": "object",
+              "properties": {
+                "api_endpoint": {"type": "string"},
+                "request_payload": {"type": "string"},
+                "user_code": {"type": "string"},
+                "environment": {"type": "string"},
+                "timestamp": {"type": "string"}
+              },
+              "description": "Context surrounding the error"
+            },
+            "user_experience_level": {
+              "type": "string",
+              "enum": ["beginner", "intermediate", "advanced", "expert"],
+              "description": "User's experience level with quantum computing"
+            }
+          },
+          "required": ["error_message"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "check_system_status",
+        "description": "Check current system status and known issues",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "services": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["quantum_api", "classical_api", "job_queue", "authentication", "billing", "dashboard", "documentation"]
+              },
+              "description": "Specific services to check"
+            },
+            "time_range": {
+              "type": "string",
+              "enum": ["current", "1h", "24h", "7d"],
+              "description": "Time range for status check"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "validate_quantum_circuit",
+        "description": "Validate quantum circuit syntax and structure",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "circuit_code": {
+              "type": "string",
+              "description": "Quantum circuit code to validate"
+            },
+            "circuit_format": {
+              "type": "string",
+              "enum": ["qiskit", "cirq", "pennylane", "braket", "platform_native"],
+              "description": "Format of the quantum circuit"
+            },
+            "validation_level": {
+              "type": "string",
+              "enum": ["syntax", "logical", "optimization", "full"],
+              "description": "Level of validation to perform"
+            }
+          },
+          "required": ["circuit_code"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "explain_quantum_concept",
+        "description": "Provide detailed explanation of quantum computing concepts",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "concept": {
+              "type": "string",
+              "description": "Quantum concept to explain"
+            },
+            "explanation_level": {
+              "type": "string",
+              "enum": ["beginner", "intermediate", "advanced", "expert"],
+              "description": "Level of explanation detail"
+            },
+            "include_examples": {
+              "type": "boolean",
+              "default": true,
+              "description": "Whether to include practical examples"
+            },
+            "include_code": {
+              "type": "boolean",
+              "default": false,
+              "description": "Whether to include code examples"
+            },
+            "context": {
+              "type": "string",
+              "description": "Specific context or application area"
+            }
+          },
+          "required": ["concept"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "generate_code_example",
+        "description": "Generate code examples for specific quantum computing tasks",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "task_description": {
+              "type": "string",
+              "description": "Description of the quantum computing task"
+            },
+            "programming_language": {
+              "type": "string",
+              "enum": ["python", "javascript", "java", "csharp", "cpp"],
+              "description": "Programming language for the example"
+            },
+            "quantum_framework": {
+              "type": "string",
+              "enum": ["qiskit", "cirq", "pennylane", "braket", "platform_api"],
+              "description": "Quantum computing framework to use"
+            },
+            "complexity_level": {
+              "type": "string",
+              "enum": ["basic", "intermediate", "advanced"],
+              "description": "Complexity level of the example"
+            },
+            "include_comments": {
+              "type": "boolean",
+              "default": true,
+              "description": "Whether to include detailed comments"
+            }
+          },
+          "required": ["task_description"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "check_account_status",
+        "description": "Check user account status and usage information",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "user_id": {
+              "type": "string",
+              "description": "User identifier"
+            },
+            "check_types": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["subscription", "usage_limits", "billing", "permissions", "api_keys", "job_history"]
+              },
+              "description": "Types of account information to check"
+            }
+          },
+          "required": ["user_id"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "create_support_ticket",
+        "description": "Create a support ticket for complex issues requiring human intervention",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "ticket_title": {
+              "type": "string",
+              "description": "Brief title for the support ticket"
+            },
+            "ticket_description": {
+              "type": "string",
+              "description": "Detailed description of the issue"
+            },
+            "priority": {
+              "type": "string",
+              "enum": ["low", "medium", "high", "critical"],
+              "description": "Priority level of the ticket"
+            },
+            "category": {
+              "type": "string",
+              "enum": ["technical", "billing", "account", "feature_request", "bug_report"],
+              "description": "Category of the support request"
+            },
+            "user_info": {
+              "type": "object",
+              "properties": {
+                "user_id": {"type": "string"},
+                "email": {"type": "string"},
+                "subscription_tier": {"type": "string"}
+              },
+              "description": "User information for the ticket"
+            },
+            "technical_details": {
+              "type": "object",
+              "properties": {
+                "error_logs": {"type": "string"},
+                "reproduction_steps": {"type": "string"},
+                "environment_info": {"type": "string"}
+              },
+              "description": "Technical details related to the issue"
+            }
+          },
+          "required": ["ticket_title", "ticket_description", "priority", "category"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "suggest_optimization",
+        "description": "Suggest optimizations for quantum algorithms or API usage",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "current_approach": {
+              "type": "string",
+              "description": "Description of current approach or code"
+            },
+            "performance_goals": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["speed", "accuracy", "cost", "scalability", "reliability"]
+              },
+              "description": "Performance goals for optimization"
+            },
+            "constraints": {
+              "type": "object",
+              "properties": {
+                "budget_limit": {"type": "number"},
+                "time_limit": {"type": "string"},
+                "hardware_constraints": {"type": "string"},
+                "accuracy_requirements": {"type": "number"}
+              },
+              "description": "Constraints for the optimization"
+            },
+            "problem_domain": {
+              "type": "string",
+              "enum": ["optimization", "machine_learning", "simulation", "cryptography", "finance", "chemistry"],
+              "description": "Problem domain for context"
+            }
+          },
+          "required": ["current_approach"]
+        }
+      }
+    }
+  ],
+  
+  "conversation_starters": [
+    "I'm getting an error with my quantum circuit. Can you help?",
+    "How do I optimize my QUBO problem for better performance?",
+    "What's the difference between quantum annealing and gate-based quantum computing?",
+    "Can you explain how to use the API for portfolio optimization?",
+    "I'm new to quantum computing. Where should I start?",
+    "My quantum job is taking too long. How can I speed it up?"
+  ],
+  
+  "personality": {
+    "tone": "friendly_and_helpful",
+    "expertise_level": "expert",
+    "communication_style": "patient_and_educational",
+    "response_length": "comprehensive_but_concise",
+    "technical_depth": "adaptive_to_user_level"
+  },
+  
+  "knowledge_domains": [
+    "quantum_computing_fundamentals",
+    "quantum_algorithms",
+    "api_integration",
+    "troubleshooting",
+    "performance_optimization",
+    "quantum_machine_learning",
+    "quantum_annealing",
+    "hybrid_algorithms",
+    "error_mitigation",
+    "quantum_advantage",
+    "platform_features",
+    "best_practices"
+  ],
+  
+  "limitations": [
+    "Cannot access user accounts without proper authentication",
+    "Cannot modify billing or subscription settings",
+    "Cannot execute code on user's behalf",
+    "May need to escalate complex technical issues to human experts",
+    "Cannot provide investment or financial advice"
+  ],
+  
+  "integration_endpoints": {
+    "documentation_search": "/api/support/docs/search",
+    "error_analysis": "/api/support/error-analysis",
+    "system_status": "/api/support/system-status",
+    "circuit_validation": "/api/support/validate-circuit",
+    "account_check": "/api/support/account-status",
+    "ticket_creation": "/api/support/tickets",
+    "optimization_suggestions": "/api/support/optimize"
+  },
+  
+  "performance_metrics": {
+    "response_time_target": "< 3 seconds",
+    "resolution_rate_target": "> 80%",
+    "escalation_rate_target": "< 15%",
+    "satisfaction_score_target": "> 4.5/5",
+    "uptime_target": "> 99.9%"
+  },
+  
+  "security": {
+    "authentication_required": true,
+    "rate_limiting": {
+      "requests_per_minute": 30,
+      "requests_per_hour": 200
+    },
+    "data_encryption": "AES-256",
+    "audit_logging": true,
+    "pii_handling": "strict",
+    "session_management": "secure"
+  },
+  
+  "monitoring": {
+    "health_check_endpoint": "/api/agents/customer-support-004/health",
+    "metrics_collection": true,
+    "error_tracking": true,
+    "performance_analytics": true,
+    "conversation_analytics": true,
+    "satisfaction_tracking": true
+  }
+}

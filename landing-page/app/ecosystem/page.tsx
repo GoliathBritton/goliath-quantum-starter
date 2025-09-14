@@ -1,7 +1,17 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { businessUnits, strategicPartners, nqbaLayers } from '@/lib/brand'
+import { businessUnits, partners as strategicPartners, nqbaLayers } from '@/lib/brand'
+
+// Type assertions for Framer Motion components
+const MotionDiv = motion.div as any
+const MotionH1 = motion.h1 as any
+const MotionP = motion.p as any
+const MotionSection = motion.section as any
+const MotionLine = motion.line as any
+const MotionCircle = motion.circle as any
+const MotionG = motion.g as any
+const MotionText = motion.text as any
 
 interface EcosystemNode {
   id: string
@@ -121,15 +131,15 @@ export default function EcosystemPage() {
       {/* Hero Section */}
       <section className="py-20 px-4">
         <div className="max-w-7xl mx-auto text-center">
-          <motion.h1 
+          <MotionH1 
             className="text-5xl font-bold text-black mb-6"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
             The Intelligence Economy
-          </motion.h1>
-          <motion.p 
+          </MotionH1>
+          <MotionP 
             className="text-xl text-gray-700 mb-12 max-w-3xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -137,7 +147,7 @@ export default function EcosystemPage() {
           >
             A quantum-powered ecosystem where artificial intelligence, strategic partnerships, 
             and business innovation converge to create unprecedented value across industries.
-          </motion.p>
+          </MotionP>
         </div>
       </section>
 
@@ -162,7 +172,7 @@ export default function EcosystemPage() {
                   if (!connectedNode) return null
                   
                   return (
-                    <motion.line
+                    <MotionLine
                       key={`${node.id}-${connectionId}`}
                       x1={node.position.x}
                       y1={node.position.y}
@@ -180,8 +190,8 @@ export default function EcosystemPage() {
               
               {/* Ecosystem Nodes */}
               {ecosystemNodes.map((node, index) => (
-                <motion.g key={node.id}>
-                  <motion.circle
+                <MotionG key={node.id}>
+                  <MotionCircle
                     cx={node.position.x}
                     cy={node.position.y}
                     r={node.type === 'platform' ? "4" : node.type === 'business_unit' ? "3" : "2"}
@@ -191,7 +201,7 @@ export default function EcosystemPage() {
                     transition={{ duration: 0.5, delay: index * 0.1 }}
                     className="cursor-pointer hover:opacity-80"
                   />
-                  <motion.text
+                  <MotionText
                     x={node.position.x}
                     y={node.position.y - (node.type === 'platform' ? 6 : node.type === 'business_unit' ? 5 : 4)}
                     textAnchor="middle"
@@ -201,19 +211,19 @@ export default function EcosystemPage() {
                     transition={{ duration: 0.5, delay: index * 0.1 + 0.3 }}
                   >
                     {node.name}
-                  </motion.text>
-                  <motion.text
-                    x={node.position.x}
-                    y={node.position.y + (node.type === 'platform' ? 8 : node.type === 'business_unit' ? 7 : 6)}
-                    textAnchor="middle"
-                    className="text-xs fill-gray-600"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.5, delay: index * 0.1 + 0.5 }}
-                  >
-                    {node.description}
-                  </motion.text>
-                </motion.g>
+                  </MotionText>
+                  <MotionText
+                     x={node.position.x}
+                     y={node.position.y + (node.type === 'platform' ? 8 : node.type === 'business_unit' ? 7 : 6)}
+                     textAnchor="middle"
+                     className="text-xs fill-gray-600"
+                     initial={{ opacity: 0 }}
+                     animate={{ opacity: 1 }}
+                     transition={{ duration: 0.5, delay: index * 0.1 + 0.3 }}
+                   >
+                     {node.description}
+                   </MotionText>
+                </MotionG>
               ))}
             </svg>
           </div>
@@ -232,8 +242,8 @@ export default function EcosystemPage() {
           
           <div className="grid md:grid-cols-2 gap-8">
             {businessUnits.map((unit, index) => (
-              <motion.div
-                key={unit.id}
+              <MotionDiv
+                key={unit.name}
                 className="bg-white p-8 rounded-lg border border-gray-200 hover:border-cyan-300 transition-colors"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -245,17 +255,15 @@ export default function EcosystemPage() {
                 </div>
                 <p className="text-gray-700 mb-6">{unit.description}</p>
                 <div className="space-y-2">
-                  <h4 className="font-semibold text-black">Focus Areas:</h4>
-                  <ul className="text-gray-700 space-y-1">
-                    {unit.focus_areas.map((area, areaIndex) => (
-                      <li key={areaIndex} className="flex items-center">
-                        <div className="w-1.5 h-1.5 bg-cyan rounded-full mr-2"></div>
-                        {area}
-                      </li>
-                    ))}
-                  </ul>
+                  <h4 className="font-semibold text-black">Focus:</h4>
+                  <div className="text-gray-700">
+                    <div className="flex items-center">
+                      <div className="w-1.5 h-1.5 bg-cyan rounded-full mr-2"></div>
+                      {unit.focus}
+                    </div>
+                  </div>
                 </div>
-              </motion.div>
+              </MotionDiv>
             ))}
           </div>
         </div>
@@ -273,8 +281,8 @@ export default function EcosystemPage() {
           
           <div className="space-y-6">
             {nqbaLayers.map((layer, index) => (
-              <motion.div
-                key={layer.id}
+              <MotionDiv
+                key={layer.name}
                 className="bg-white p-6 rounded-lg border border-gray-200 hover:border-navy-300 transition-colors"
                 initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -283,7 +291,7 @@ export default function EcosystemPage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
                     <div className="w-8 h-8 bg-navy text-white rounded-full flex items-center justify-center font-bold mr-4">
-                      {layer.level}
+                      {index + 1}
                     </div>
                     <div>
                       <h3 className="text-xl font-bold text-black">{layer.name}</h3>
@@ -291,13 +299,13 @@ export default function EcosystemPage() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-sm text-gray-500">Capabilities</div>
+                    <div className="text-sm text-gray-500">Advanced Roles</div>
                     <div className="text-sm text-navy font-semibold">
-                      {layer.capabilities.length} functions
+                      {layer.advancedRoles.length} roles
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </MotionDiv>
             ))}
           </div>
         </div>
@@ -315,8 +323,8 @@ export default function EcosystemPage() {
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {strategicPartners.map((partner, index) => (
-              <motion.div
-                key={partner.id}
+              <MotionDiv
+                key={partner.name}
                 className="bg-white p-6 rounded-lg border border-gray-200 hover:border-green-300 transition-colors text-center"
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -328,9 +336,9 @@ export default function EcosystemPage() {
                 <h3 className="text-xl font-bold text-black mb-2">{partner.name}</h3>
                 <p className="text-gray-700 mb-4">{partner.description}</p>
                 <div className="text-sm text-green-600 font-semibold">
-                  {partner.integration_type}
+                  {partner.integration}
                 </div>
-              </motion.div>
+              </MotionDiv>
             ))}
           </div>
         </div>
@@ -339,23 +347,23 @@ export default function EcosystemPage() {
       {/* Call to Action */}
       <section className="py-20 px-4 bg-navy text-white">
         <div className="max-w-4xl mx-auto text-center">
-          <motion.h2 
+          <MotionH1 
             className="text-4xl font-bold mb-6"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
             Join the Intelligence Economy
-          </motion.h2>
-          <motion.p 
+          </MotionH1>
+          <MotionP 
             className="text-xl mb-8 opacity-90"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             Partner with us to harness quantum-powered intelligence for your business transformation.
-          </motion.p>
-          <motion.div 
+          </MotionP>
+          <MotionDiv 
             className="flex flex-col sm:flex-row gap-4 justify-center"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -367,7 +375,7 @@ export default function EcosystemPage() {
             <a href="/products" className="btn-secondary border-white text-white hover:bg-white hover:text-navy">
               Explore Solutions
             </a>
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
     </div>

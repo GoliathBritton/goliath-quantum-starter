@@ -21,6 +21,9 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Type assertions for React components
+const AuthContextProvider = AuthContext.Provider as any;
+
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
@@ -99,9 +102,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={value}>
+    <AuthContextProvider value={value}>
       {children}
-    </AuthContext.Provider>
+    </AuthContextProvider>
   );
 };
 

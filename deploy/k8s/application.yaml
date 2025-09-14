@@ -1,0 +1,617 @@
+# Goliath Quantum Application Deployments
+# Main application services: API and Portal
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: goliath-quantum
+  labels:
+    name: goliath-quantum
+    app.kubernetes.io/name: goliath-quantum
+    environment: production
+---
+# ConfigMap for Application Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: goliath-quantum-config
+  namespace: goliath-quantum
+  labels:
+    app.kubernetes.io/name: goliath-quantum
+    app.kubernetes.io/component: config
+data:
+  # Application Settings
+  ENVIRONMENT: "production"
+  LOG_FORMAT: "json"
+  CORS_ENABLED: "true"
+  API_VERSION: "v1"
+  
+  # Feature Flags
+  ENABLE_QUANTUM_ORACLE: "true"
+  ENABLE_LEAD_SCORING: "true"
+  ENABLE_PARTNER_DASHBOARD: "true"
+  ENABLE_METRICS_COLLECTION: "true"
+  
+  # Performance Settings
+  WORKER_PROCESSES: "4"
+  MAX_CONNECTIONS: "1000"
+  KEEPALIVE_TIMEOUT: "65"
+  REQUEST_TIMEOUT: "30"
+  
+  # Cache Settings
+  CACHE_ENABLED: "true"
+  CACHE_DEFAULT_TTL: "300"
+  
+  # Security Settings
+  SECURE_HEADERS: "true"
+  CSRF_PROTECTION: "true"
+  
+  # Monitoring
+  METRICS_ENABLED: "true"
+  TRACING_ENABLED: "true"
+  HEALTH_CHECK_INTERVAL: "30"
+---
+# ServiceAccount for Goliath Quantum API
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: goliath-quantum-api
+  namespace: goliath-quantum
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::ACCOUNT_ID:role/goliath-quantum-api
+  labels:
+    app.kubernetes.io/name: goliath-quantum
+    app.kubernetes.io/component: api
+---
+# ServiceAccount for Goliath Quantum Portal
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: goliath-quantum-portal
+  namespace: goliath-quantum
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::ACCOUNT_ID:role/goliath-quantum-portal
+  labels:
+    app.kubernetes.io/name: goliath-quantum
+    app.kubernetes.io/component: portal
+---
+# Deployment for Goliath Quantum API
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: goliath-quantum-api
+  namespace: goliath-quantum
+  labels:
+    app.kubernetes.io/name: goliath-quantum
+    app.kubernetes.io/component: api
+    app.kubernetes.io/version: "1.0.0"
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: goliath-quantum
+      app.kubernetes.io/component: api
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: goliath-quantum
+        app.kubernetes.io/component: api
+        app.kubernetes.io/version: "1.0.0"
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: goliath-quantum-api
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+      - name: api
+        image: ACCOUNT_ID.dkr.ecr.us-west-2.amazonaws.com/goliath-quantum-api:latest
+        imagePullPolicy: Always
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        - name: metrics
+          containerPort: 9090
+          protocol: TCP
+        env:
+        - name: PORT
+          value: "8080"
+        - name: HOST
+          value: "0.0.0.0"
+        - name: ENVIRONMENT
+          valueFrom:
+            configMapKeyRef:
+              name: goliath-quantum-config
+              key: ENVIRONMENT
+        - name: LOG_FORMAT
+          valueFrom:
+            configMapKeyRef:
+              name: goliath-quantum-config
+              key: LOG_FORMAT
+        - name: WORKER_PROCESSES
+          valueFrom:
+            configMapKeyRef:
+              name: goliath-quantum-config
+              key: WORKER_PROCESSES
+        # Database Configuration
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: database-credentials
+              key: DATABASE_URL
+        # Redis Configuration
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: redis-credentials
+              key: REDIS_URL
+        # Dynex Configuration
+        - name: DYNEX_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: dynex-credentials
+              key: DYNEX_API_KEY
+        - name: DYNEX_API_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: dynex-credentials
+              key: DYNEX_API_SECRET
+        # JWT Configuration
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: auth-secrets
+              key: JWT_SECRET
+        # Stripe Configuration
+        - name: STRIPE_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: stripe-credentials
+              key: STRIPE_SECRET_KEY
+        # Monitoring Configuration
+        - name: SENTRY_DSN
+          valueFrom:
+            secretKeyRef:
+              name: monitoring-credentials
+              key: SENTRY_DSN
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        startupProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 30
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: cache
+          mountPath: /app/cache
+      volumes:
+      - name: tmp
+        emptyDir: {}
+      - name: cache
+        emptyDir:
+          sizeLimit: 1Gi
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                  - api
+              topologyKey: kubernetes.io/hostname
+      tolerations:
+      - key: "node.kubernetes.io/not-ready"
+        operator: "Exists"
+        effect: "NoExecute"
+        tolerationSeconds: 300
+      - key: "node.kubernetes.io/unreachable"
+        operator: "Exists"
+        effect: "NoExecute"
+        tolerationSeconds: 300
+---
+# Service for Goliath Quantum API
+apiVersion: v1
+kind: Service
+metadata:
+  name: goliath-quantum-api
+  namespace: goliath-quantum
+  labels:
+    app.kubernetes.io/name: goliath-quantum
+    app.kubernetes.io/component: api
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 8080
+    targetPort: http
+    protocol: TCP
+  - name: metrics
+    port: 9090
+    targetPort: metrics
+    protocol: TCP
+  selector:
+    app.kubernetes.io/name: goliath-quantum
+    app.kubernetes.io/component: api
+---
+# Deployment for Goliath Quantum Portal
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: goliath-quantum-portal
+  namespace: goliath-quantum
+  labels:
+    app.kubernetes.io/name: goliath-quantum
+    app.kubernetes.io/component: portal
+    app.kubernetes.io/version: "1.0.0"
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: goliath-quantum
+      app.kubernetes.io/component: portal
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: goliath-quantum
+        app.kubernetes.io/component: portal
+        app.kubernetes.io/version: "1.0.0"
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "3000"
+        prometheus.io/path: "/api/metrics"
+    spec:
+      serviceAccountName: goliath-quantum-portal
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+      containers:
+      - name: portal
+        image: ACCOUNT_ID.dkr.ecr.us-west-2.amazonaws.com/goliath-quantum-portal:latest
+        imagePullPolicy: Always
+        ports:
+        - name: http
+          containerPort: 3000
+          protocol: TCP
+        env:
+        - name: PORT
+          value: "3000"
+        - name: NODE_ENV
+          value: "production"
+        - name: NEXT_PUBLIC_API_BASE
+          value: "https://api.goliath-quantum.com"
+        - name: ENVIRONMENT
+          valueFrom:
+            configMapKeyRef:
+              name: goliath-quantum-config
+              key: ENVIRONMENT
+        # NextAuth Configuration
+        - name: NEXTAUTH_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: auth-secrets
+              key: NEXTAUTH_SECRET
+        - name: NEXTAUTH_URL
+          valueFrom:
+            secretKeyRef:
+              name: auth-secrets
+              key: NEXTAUTH_URL
+        # OAuth Configuration
+        - name: OAUTH_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: auth-secrets
+              key: OAUTH_CLIENT_ID
+        - name: OAUTH_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: auth-secrets
+              key: OAUTH_CLIENT_SECRET
+        # Stripe Configuration
+        - name: NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+          valueFrom:
+            secretKeyRef:
+              name: stripe-credentials
+              key: STRIPE_PUBLISHABLE_KEY
+        # Monitoring Configuration
+        - name: SENTRY_DSN
+          valueFrom:
+            secretKeyRef:
+              name: monitoring-credentials
+              key: SENTRY_DSN
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: http
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        startupProbe:
+          httpGet:
+            path: /api/health
+            port: http
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 30
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: nextjs-cache
+          mountPath: /app/.next/cache
+      volumes:
+      - name: tmp
+        emptyDir: {}
+      - name: nextjs-cache
+        emptyDir:
+          sizeLimit: 2Gi
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                  - portal
+              topologyKey: kubernetes.io/hostname
+---
+# Service for Goliath Quantum Portal
+apiVersion: v1
+kind: Service
+metadata:
+  name: goliath-quantum-portal
+  namespace: goliath-quantum
+  labels:
+    app.kubernetes.io/name: goliath-quantum
+    app.kubernetes.io/component: portal
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 3000
+    targetPort: http
+    protocol: TCP
+  selector:
+    app.kubernetes.io/name: goliath-quantum
+    app.kubernetes.io/component: portal
+---
+# HorizontalPodAutoscaler for API
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: goliath-quantum-api-hpa
+  namespace: goliath-quantum
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: goliath-quantum-api
+  minReplicas: 3
+  maxReplicas: 20
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 10
+        periodSeconds: 60
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+      - type: Percent
+        value: 50
+        periodSeconds: 60
+      - type: Pods
+        value: 4
+        periodSeconds: 60
+      selectPolicy: Max
+---
+# HorizontalPodAutoscaler for Portal
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: goliath-quantum-portal-hpa
+  namespace: goliath-quantum
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: goliath-quantum-portal
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 20
+        periodSeconds: 60
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+      - type: Percent
+        value: 100
+        periodSeconds: 60
+      - type: Pods
+        value: 2
+        periodSeconds: 60
+      selectPolicy: Max
+---
+# PodDisruptionBudget for API
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: goliath-quantum-api-pdb
+  namespace: goliath-quantum
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: goliath-quantum
+      app.kubernetes.io/component: api
+---
+# PodDisruptionBudget for Portal
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: goliath-quantum-portal-pdb
+  namespace: goliath-quantum
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: goliath-quantum
+      app.kubernetes.io/component: portal
+---
+# NetworkPolicy for Application
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: goliath-quantum-network-policy
+  namespace: goliath-quantum
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: goliath-quantum
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: aws-load-balancer-controller
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: goliath-quantum
+  egress:
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443  # HTTPS
+    - protocol: TCP
+      port: 5432 # PostgreSQL
+    - protocol: TCP
+      port: 6379 # Redis
+    - protocol: TCP
+      port: 53   # DNS
+    - protocol: UDP
+      port: 53   # DNS
+  - to:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/name: goliath-quantum
+    ports:
+    - protocol: TCP
+      port: 8080
+    - protocol: TCP
+      port: 3000

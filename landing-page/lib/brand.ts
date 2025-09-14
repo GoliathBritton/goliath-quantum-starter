@@ -20,6 +20,7 @@ export interface Partner {
   integration: string
   tier: 'core' | 'strategic' | 'ecosystem'
   logo?: string
+  icon: string
 }
 
 export interface PricingTier {
@@ -29,6 +30,11 @@ export interface PricingTier {
   quantumAccess: boolean
   whiteLabel: boolean
   price?: string
+  popular?: boolean
+  cta: {
+    text: string
+    link: string
+  }
 }
 
 export interface AdvancedRole {
@@ -70,6 +76,22 @@ export const brandColors = {
     blue: '#3B82F6',
     purple: '#8B5CF6',
     emerald: '#10B981'
+  },
+  // Business Unit Color Schemes
+  flyfox: {
+    primary: '#14B8A6', // Teal
+    secondary: '#0F172A', // Black
+    accent: '#06B6D4' // Cyan
+  },
+  goliath: {
+    primary: '#F5C14C', // Gold
+    secondary: '#1C1917', // Obsidian
+    accent: '#D97706' // Amber
+  },
+  sigma: {
+    primary: '#DC2626', // Crimson
+    secondary: '#E5E7EB', // Platinum
+    accent: '#EF4444' // Red
   }
 } as const
 
@@ -96,7 +118,7 @@ export const businessUnits: BusinessUnit[] = [
     description: 'Elite training and lead optimization with quantum-powered insights',
     focus: 'Training & Lead Conversion',
     quantumAdvantage: '2.8x lead conversion improvement',
-    color: brandColors.primary.navy,
+    color: brandColors.sigma.primary,
     icon: '🎯'
   }
 ]
@@ -108,49 +130,56 @@ export const partners: Partner[] = [
     type: 'quantum',
     description: 'Primary quantum computing platform for NQBA Core execution',
     integration: 'Native QUBO optimization and neuromorphic computing',
-    tier: 'core'
+    tier: 'core',
+    icon: '⚛️'
   },
   {
     name: 'NVIDIA',
     type: 'quantum',
     description: 'GPU acceleration and quantum simulation capabilities',
     integration: 'CUDA-accelerated quantum algorithms and AI model training',
-    tier: 'strategic'
+    tier: 'strategic',
+    icon: '🖥️'
   },
   {
     name: 'OpenAI',
     type: 'ai',
     description: 'Large language model integration for AI agents',
     integration: 'GPT models with NQBA governance and audit trails',
-    tier: 'strategic'
+    tier: 'strategic',
+    icon: '🤖'
   },
   {
     name: 'UiPath',
     type: 'workflow',
     description: 'Robotic process automation and workflow orchestration',
     integration: 'RPA bots governed by NQBA decision engine',
-    tier: 'ecosystem'
+    tier: 'ecosystem',
+    icon: '🔄'
   },
   {
     name: 'n8n',
     type: 'workflow',
     description: 'Lightweight workflow automation and integration platform',
     integration: 'Visual workflow builder with quantum-enhanced decision nodes',
-    tier: 'ecosystem'
+    tier: 'ecosystem',
+    icon: '🔗'
   },
   {
     name: 'Mendix',
     type: 'workflow',
     description: 'Low-code application development platform',
     integration: 'Rapid app development with NQBA-powered business logic',
-    tier: 'ecosystem'
+    tier: 'ecosystem',
+    icon: '⚡'
   },
   {
     name: 'Prismatic',
     type: 'workflow',
     description: 'SaaS integration hub for enterprise connectivity',
     integration: 'Pre-built connectors with quantum-optimized data flows',
-    tier: 'ecosystem'
+    tier: 'ecosystem',
+    icon: '🌐'
   }
 ]
 
@@ -167,7 +196,12 @@ export const pricingTiers: PricingTier[] = [
     ],
     quantumAccess: true,
     whiteLabel: false,
-    price: '$99/month'
+    price: '$99',
+    popular: false,
+    cta: {
+      text: 'Get Started',
+      link: '#demo'
+    }
   },
   {
     name: 'Pro',
@@ -181,7 +215,12 @@ export const pricingTiers: PricingTier[] = [
     ],
     quantumAccess: true,
     whiteLabel: false,
-    price: '$499/month'
+    price: '$499',
+    popular: true,
+    cta: {
+      text: 'Start Free Trial',
+      link: '#demo'
+    }
   },
   {
     name: 'Partner',
@@ -196,7 +235,12 @@ export const pricingTiers: PricingTier[] = [
     ],
     quantumAccess: true,
     whiteLabel: true,
-    price: 'Custom'
+    price: 'Custom',
+    popular: false,
+    cta: {
+      text: 'Contact Sales',
+      link: '#demo'
+    }
   }
 ]
 

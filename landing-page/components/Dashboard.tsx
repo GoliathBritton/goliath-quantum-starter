@@ -3,6 +3,25 @@ import { useAuth } from './auth/AuthContext';
 import { Card, Button, Badge, Spinner, Alert, Modal, Table } from 'react-bootstrap';
 import { Play, Save, Trash2, Eye, Clock, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 
+// Type assertions for Lucide icons
+const PlayIcon = Play as any;
+const SaveIcon = Save as any;
+const Trash2Icon = Trash2 as any;
+const EyeIcon = Eye as any;
+const ClockIcon = Clock as any;
+const CheckCircleIcon = CheckCircle as any;
+const XCircleIcon = XCircle as any;
+const AlertCircleIcon = AlertCircle as any;
+
+// Type assertions for react-bootstrap components
+const CardComponent = Card as any;
+const ButtonComponent = Button as any;
+const BadgeComponent = Badge as any;
+const SpinnerComponent = Spinner as any;
+const AlertComponent = Alert as any;
+const ModalComponent = Modal as any;
+const TableComponent = Table as any;
+
 interface Pipeline {
   id: string;
   name: string;
@@ -108,15 +127,15 @@ const Dashboard: React.FC = () => {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'completed':
-        return <CheckCircle className="text-success" size={16} />;
+        return <CheckCircleIcon className="text-success" size={16} />;
       case 'failed':
-        return <XCircle className="text-danger" size={16} />;
+        return <XCircleIcon className="text-danger" size={16} />;
       case 'running':
-        return <Spinner animation="border" size="sm" />;
+        return <SpinnerComponent animation="border" size="sm" />;
       case 'cancelled':
-        return <AlertCircle className="text-warning" size={16} />;
+        return <AlertCircleIcon className="text-warning" size={16} />;
       default:
-        return <Clock className="text-muted" size={16} />;
+        return <ClockIcon className="text-muted" size={16} />;
     }
   };
 
@@ -130,7 +149,7 @@ const Dashboard: React.FC = () => {
       'saved': 'info',
       'compiled': 'success'
     };
-    return <Badge bg={variants[status] || 'secondary'}>{status}</Badge>;
+    return <BadgeComponent bg={variants[status] || 'secondary'}>{status}</BadgeComponent>;
   };
 
   const formatDuration = (duration?: number) => {
@@ -147,10 +166,10 @@ const Dashboard: React.FC = () => {
   if (!isAuthenticated) {
     return (
       <div className="container mt-5">
-        <Alert variant="info">
+        <AlertComponent variant="info">
           <h4>Authentication Required</h4>
           <p>Please log in to access your dashboard.</p>
-        </Alert>
+        </AlertComponent>
       </div>
     );
   }
@@ -158,9 +177,9 @@ const Dashboard: React.FC = () => {
   if (loading) {
     return (
       <div className="container mt-5 text-center">
-        <Spinner animation="border" role="status">
+        <SpinnerComponent animation="border" role="status">
           <span className="visually-hidden">Loading...</span>
-        </Spinner>
+        </SpinnerComponent>
         <p className="mt-3">Loading your dashboard...</p>
       </div>
     );
@@ -174,26 +193,26 @@ const Dashboard: React.FC = () => {
           <p className="text-muted">Manage your quantum pipelines and view execution history.</p>
           
           {error && (
-            <Alert variant="danger" dismissible onClose={() => setError(null)}>
+            <AlertComponent variant="danger" dismissible onClose={() => setError(null)}>
               {error}
-            </Alert>
+            </AlertComponent>
           )}
 
           {/* Tab Navigation */}
           <div className="mb-4">
-            <Button 
+            <ButtonComponent 
               variant={activeTab === 'pipelines' ? 'primary' : 'outline-primary'}
               className="me-2"
               onClick={() => setActiveTab('pipelines')}
             >
               Saved Pipelines ({pipelines.length})
-            </Button>
-            <Button 
+            </ButtonComponent>
+            <ButtonComponent 
               variant={activeTab === 'history' ? 'primary' : 'outline-primary'}
               onClick={() => setActiveTab('history')}
             >
               Execution History ({executionHistory.length})
-            </Button>
+            </ButtonComponent>
           </div>
 
           {/* Pipelines Tab */}
@@ -201,28 +220,28 @@ const Dashboard: React.FC = () => {
             <div>
               <div className="d-flex justify-content-between align-items-center mb-3">
                 <h4>Your Pipelines</h4>
-                <Button variant="success" href="/pipeline-builder">
-                  <Save size={16} className="me-2" />
+                <ButtonComponent variant="success" href="/pipeline-builder">
+                  <SaveIcon size={16} className="me-2" />
                   Create New Pipeline
-                </Button>
+                </ButtonComponent>
               </div>
 
               {pipelines.length === 0 ? (
-                <Card>
-                  <Card.Body className="text-center py-5">
+                <CardComponent>
+                  <CardComponent.Body className="text-center py-5">
                     <h5>No pipelines yet</h5>
                     <p className="text-muted">Create your first quantum pipeline to get started.</p>
-                    <Button variant="primary" href="/pipeline-builder">
+                    <ButtonComponent variant="primary" href="/pipeline-builder">
                       Create Pipeline
-                    </Button>
-                  </Card.Body>
-                </Card>
+                    </ButtonComponent>
+                  </CardComponent.Body>
+                </CardComponent>
               ) : (
                 <div className="row">
                   {pipelines.map((pipeline) => (
                     <div key={pipeline.id} className="col-md-6 col-lg-4 mb-3">
-                      <Card>
-                        <Card.Body>
+                      <CardComponent>
+                        <CardComponent.Body>
                           <div className="d-flex justify-content-between align-items-start mb-2">
                             <h6 className="card-title">{pipeline.name}</h6>
                             {getStatusBadge(pipeline.status)}
@@ -234,7 +253,7 @@ const Dashboard: React.FC = () => {
                             <div>Updated: {formatDate(pipeline.updated_at)}</div>
                           </div>
                           <div className="d-flex gap-2">
-                            <Button 
+                            <ButtonComponent 
                               size="sm" 
                               variant="outline-primary"
                               onClick={() => {
@@ -242,27 +261,27 @@ const Dashboard: React.FC = () => {
                                 setShowPipelineModal(true);
                               }}
                             >
-                              <Eye size={14} className="me-1" />
+                              <EyeIcon size={14} className="me-1" />
                               View
-                            </Button>
-                            <Button 
+                            </ButtonComponent>
+                            <ButtonComponent 
                               size="sm" 
                               variant="outline-success"
                               href={`/pipeline-builder?load=${pipeline.id}`}
                             >
-                              <Play size={14} className="me-1" />
+                              <PlayIcon size={14} className="me-1" />
                               Edit
-                            </Button>
-                            <Button 
+                            </ButtonComponent>
+                            <ButtonComponent 
                               size="sm" 
                               variant="outline-danger"
                               onClick={() => deletePipeline(pipeline.id)}
                             >
-                              <Trash2 size={14} />
-                            </Button>
+                              <Trash2Icon size={14} />
+                            </ButtonComponent>
                           </div>
-                        </Card.Body>
-                      </Card>
+                        </CardComponent.Body>
+                      </CardComponent>
                     </div>
                   ))}
                 </div>
@@ -276,15 +295,15 @@ const Dashboard: React.FC = () => {
               <h4 className="mb-3">Execution History</h4>
               
               {executionHistory.length === 0 ? (
-                <Card>
-                  <Card.Body className="text-center py-5">
+                <CardComponent>
+                  <CardComponent.Body className="text-center py-5">
                     <h5>No executions yet</h5>
                     <p className="text-muted">Execute a pipeline to see its history here.</p>
-                  </Card.Body>
-                </Card>
+                  </CardComponent.Body>
+                </CardComponent>
               ) : (
-                <Card>
-                  <Table responsive hover>
+                <CardComponent>
+                  <TableComponent responsive hover>
                     <thead>
                       <tr>
                         <th>Pipeline</th>
@@ -306,12 +325,12 @@ const Dashboard: React.FC = () => {
                             </div>
                           </td>
                           <td>
-                            <Badge bg="secondary">{execution.target_runtime}</Badge>
+                            <BadgeComponent bg="secondary">{execution.target_runtime}</BadgeComponent>
                           </td>
                           <td>{formatDate(execution.started_at)}</td>
                           <td>{formatDuration(execution.duration)}</td>
                           <td>
-                            <Button 
+                            <ButtonComponent 
                               size="sm" 
                               variant="outline-primary"
                               onClick={() => {
@@ -319,15 +338,15 @@ const Dashboard: React.FC = () => {
                                 setShowExecutionModal(true);
                               }}
                             >
-                              <Eye size={14} className="me-1" />
+                              <EyeIcon size={14} className="me-1" />
                               Details
-                            </Button>
+                            </ButtonComponent>
                           </td>
                         </tr>
                       ))}
                     </tbody>
-                  </Table>
-                </Card>
+                  </TableComponent>
+                </CardComponent>
               )}
             </div>
           )}
@@ -335,11 +354,11 @@ const Dashboard: React.FC = () => {
       </div>
 
       {/* Pipeline Details Modal */}
-      <Modal show={showPipelineModal} onHide={() => setShowPipelineModal(false)} size="lg">
-        <Modal.Header closeButton>
-          <Modal.Title>Pipeline Details</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
+      <ModalComponent show={showPipelineModal} onHide={() => setShowPipelineModal(false)} size="lg">
+        <ModalComponent.Header closeButton>
+          <ModalComponent.Title>Pipeline Details</ModalComponent.Title>
+        </ModalComponent.Header>
+        <ModalComponent.Body>
           {selectedPipeline && (
             <div>
               <h5>{selectedPipeline.name}</h5>
@@ -366,26 +385,26 @@ const Dashboard: React.FC = () => {
               </div>
             </div>
           )}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowPipelineModal(false)}>
+        </ModalComponent.Body>
+        <ModalComponent.Footer>
+          <ButtonComponent variant="secondary" onClick={() => setShowPipelineModal(false)}>
             Close
-          </Button>
-          <Button 
+          </ButtonComponent>
+          <ButtonComponent 
             variant="primary" 
             href={`/pipeline-builder?load=${selectedPipeline?.id}`}
           >
             Edit Pipeline
-          </Button>
-        </Modal.Footer>
-      </Modal>
+          </ButtonComponent>
+        </ModalComponent.Footer>
+      </ModalComponent>
 
       {/* Execution Details Modal */}
-      <Modal show={showExecutionModal} onHide={() => setShowExecutionModal(false)} size="lg">
-        <Modal.Header closeButton>
-          <Modal.Title>Execution Details</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
+      <ModalComponent show={showExecutionModal} onHide={() => setShowExecutionModal(false)} size="lg">
+        <ModalComponent.Header closeButton>
+          <ModalComponent.Title>Execution Details</ModalComponent.Title>
+        </ModalComponent.Header>
+        <ModalComponent.Body>
           {selectedExecution && (
             <div>
               <h5>{selectedExecution.pipeline_name}</h5>
@@ -407,9 +426,9 @@ const Dashboard: React.FC = () => {
               {selectedExecution.error_message && (
                 <div className="mt-3">
                   <strong>Error:</strong>
-                  <Alert variant="danger" className="mt-2">
+                  <AlertComponent variant="danger" className="mt-2">
                     {selectedExecution.error_message}
-                  </Alert>
+                  </AlertComponent>
                 </div>
               )}
               
@@ -423,13 +442,13 @@ const Dashboard: React.FC = () => {
               )}
             </div>
           )}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowExecutionModal(false)}>
+        </ModalComponent.Body>
+        <ModalComponent.Footer>
+          <ButtonComponent variant="secondary" onClick={() => setShowExecutionModal(false)}>
             Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
+          </ButtonComponent>
+        </ModalComponent.Footer>
+      </ModalComponent>
     </div>
   );
 };

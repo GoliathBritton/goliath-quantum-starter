@@ -21,6 +21,22 @@
   --color-quantum-purple: #8B5CF6;
   --color-quantum-emerald: #10B981;
   
+  /* Business Unit Colors */
+  /* FLYFOX AI - Teal/Black */
+  --color-flyfox-primary: #14B8A6;
+  --color-flyfox-secondary: #0F172A;
+  --color-flyfox-accent: #06B6D4;
+  
+  /* Goliath - Gold/Obsidian */
+  --color-goliath-primary: #F5C14C;
+  --color-goliath-secondary: #1C1917;
+  --color-goliath-accent: #D97706;
+  
+  /* Sigma Select - Crimson/Platinum */
+  --color-sigma-primary: #DC2626;
+  --color-sigma-secondary: #E5E7EB;
+  --color-sigma-accent: #EF4444;
+  
   /* Typography */
   --font-family-sans: 'Inter', system-ui, -apple-system, sans-serif;
 }

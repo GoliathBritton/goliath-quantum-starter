@@ -1,6 +1,9 @@
 import React from 'react';
 import { Handle, Position, NodeProps } from 'reactflow';
 
+// Type assertion for component
+const HandleComponent = Handle as any;
+
 interface QuantumNodeData {
   label: string;
   icon?: string;
@@ -28,12 +31,12 @@ const QuantumNode: React.FC<NodeProps<QuantumNodeData>> = ({ data, selected }) =
         </div>
       </div>
       
-      <Handle
+      <HandleComponent
         type="target"
         position={Position.Left}
         className="w-16 !bg-indigo-500"
       />
-      <Handle
+      <HandleComponent
         type="source"
         position={Position.Right}
         className="w-16 !bg-indigo-500"

@@ -780,7 +780,7 @@ class PerformanceMonitoringService extends EventEmitter {
   }
 
   private async checkThresholds(metrics: PerformanceMetrics): Promise<void> {
-    for (const [thresholdId, threshold] of this.thresholds) {
+    for (const [thresholdId, threshold] of Array.from(this.thresholds.entries())) {
       if (!threshold.enabled) continue;
 
       const value = this.getMetricValue(metrics, threshold.metric);
@@ -839,10 +839,11 @@ class PerformanceMonitoringService extends EventEmitter {
       return;
     }
 
+    const severity = this.getSeverity(currentValue, threshold);
     const alert: Alert = {
       id: alertId,
       timestamp,
-      severity: this.getSeverity(currentValue, threshold),
+      severity,
       category: this.getCategory(threshold.metric),
       title: `${threshold.metric} threshold exceeded`,
       description: `${threshold.metric} is ${currentValue}, exceeding threshold of ${threshold.critical}`,
@@ -851,7 +852,7 @@ class PerformanceMonitoringService extends EventEmitter {
       currentValue,
       acknowledged: false,
       resolved: false,
-      actions: this.getAlertActions(threshold.metric, alert.severity),
+      actions: this.getAlertActions(threshold.metric, severity),
     };
 
     this.alerts.set(alertId, alert);
@@ -995,7 +996,7 @@ class PerformanceMonitoringService extends EventEmitter {
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
     const cutoffKey = thirtyDaysAgo.toISOString().substring(0, 10);
 
-    for (const [key] of this.metrics) {
+    for (const key of Array.from(this.metrics.keys())) {
       if (key < cutoffKey) {
         this.metrics.delete(key);
       }
@@ -1009,7 +1010,7 @@ class PerformanceMonitoringService extends EventEmitter {
     
     const result: PerformanceMetrics[] = [];
     
-    for (const [key, dayMetrics] of this.metrics) {
+    for (const [key, dayMetrics] of Array.from(this.metrics.entries())) {
       const keyDate = new Date(key);
       if (keyDate >= start && keyDate <= end) {
         result.push(...dayMetrics.filter(m => m.timestamp >= start && m.timestamp <= end));

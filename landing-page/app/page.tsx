@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { 
   Brain, 
@@ -22,6 +22,30 @@ import {
 } from 'lucide-react'
 import { brand, businessUnits, nqbaLayers, trustMetrics } from '../lib/brand'
 import Link from 'next/link'
+
+// Type assertions for motion components
+const MotionDiv = motion.div as any
+const MotionSection = motion.section as any
+const MotionLi = motion.li as any
+const LinkComponent = Link as any
+
+// Type assertions for Lucide icons
+const BrainIcon = Brain as any
+const ZapIcon = Zap as any
+const ShieldIcon = Shield as any
+const TrendingUpIcon = TrendingUp as any
+const UsersIcon = Users as any
+const MessageSquareIcon = MessageSquare as any
+const PhoneIcon = Phone as any
+const UserIcon = User as any
+const ArrowRightIcon = ArrowRight as any
+const CheckCircleIcon = CheckCircle as any
+const StarIcon = Star as any
+const BarChart3Icon = BarChart3 as any
+const GlobeIcon = Globe as any
+const LockIcon = Lock as any
+const CpuIcon = Cpu as any
+const CrownIcon = Crown as any
 
 export default function HomePage() {
   const [activeTab, setActiveTab] = useState('council')
@@ -62,12 +86,18 @@ export default function HomePage() {
     'Sigma Select': '/logos/sigma-logo.png'
   }
 
+  const iconMap = {
+    'FLYFOX AI': BrainIcon,
+    'Goliath of All Trade': ZapIcon,
+    'Sigma Select': StarIcon
+  }
+
   return (
     <div className="bg-white">
       {/* Hero Section */}
       <section className="hero-gradient section-padding">
         <div className="container-quantum text-center">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -81,37 +111,37 @@ export default function HomePage() {
             <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-4xl mx-auto">
               {brand.description}
             </p>
-            <motion.div 
+            <MotionDiv 
               className="flex flex-col sm:flex-row gap-4 justify-center"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
             >
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link href="#demo" className="btn-primary">
+              <MotionDiv whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <LinkComponent href="#demo" className="btn-primary">
                   Book a Demo
-                  <motion.div
+                  <MotionDiv
                     animate={{ x: [0, 5, 0] }}
                     transition={{ duration: 1.5, repeat: Infinity }}
                   >
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </motion.div>
-                </Link>
-              </motion.div>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link href="#how-it-works" className="btn-secondary">
+                    <ArrowRightIcon className="ml-2 h-5 w-5" />
+                  </MotionDiv>
+                </LinkComponent>
+              </MotionDiv>
+              <MotionDiv whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <LinkComponent href="#how-it-works" className="btn-secondary">
                   Learn More
-                </Link>
-              </motion.div>
-            </motion.div>
-          </motion.div>
+                </LinkComponent>
+              </MotionDiv>
+            </MotionDiv>
+          </MotionDiv>
         </div>
       </section>
 
       {/* Intelligence Economy Business Units */}
       <section className="section-padding bg-white border-t border-gray-200">
         <div className="container-quantum">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -124,9 +154,9 @@ export default function HomePage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Three quantum-powered business units working in harmony to optimize every aspect of modern business.
             </p>
-          </motion.div>
+          </MotionDiv>
 
-          <motion.div
+          <MotionDiv
             variants={staggerContainer}
             initial="initial"
             whileInView="animate"
@@ -134,17 +164,17 @@ export default function HomePage() {
             className="grid grid-cols-1 md:grid-cols-3 gap-8"
           >
             {businessUnits.map((unit, index) => (
-              <motion.div
+              <MotionDiv
                 key={unit.name}
                 variants={fadeInUp}
                 whileHover={{ scale: 1.02, y: -8 }}
                 className="card-quantum group cursor-pointer relative overflow-hidden"
               >
-                <motion.div 
+                <MotionDiv 
                   className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-5 transition-opacity duration-300"
                   style={{ background: `linear-gradient(135deg, ${unit.color}, transparent)` }}
                 />
-                <motion.div 
+                <MotionDiv 
                   className="flex items-center justify-center w-24 h-24 rounded-xl mb-6 overflow-hidden"
                   whileHover={{ rotate: 5, scale: 1.1 }}
                   transition={{ type: "spring", stiffness: 300 }}
@@ -157,10 +187,12 @@ export default function HomePage() {
                     />
                   ) : (
                     <div className="w-16 h-16 rounded-full bg-gradient-to-br from-brand-cyan to-brand-gold flex items-center justify-center">
-                      <unit.icon className="h-8 w-8 text-white" />
+                      {unit.name === 'FLYFOX AI' && <BrainIcon className="h-8 w-8 text-white" />}
+                      {unit.name === 'Goliath of All Trade' && <ZapIcon className="h-8 w-8 text-white" />}
+                      {unit.name === 'Sigma Select' && <StarIcon className="h-8 w-8 text-white" />}
                     </div>
                   )}
-                </motion.div>
+                </MotionDiv>
                 <h3 className="text-2xl font-bold text-black mb-3 group-hover:text-brand-cyan transition-colors duration-200">{unit.name}</h3>
                 <p className="text-gray-600 mb-4">{unit.description}</p>
                 <div className="text-sm font-semibold mb-2" style={{ color: unit.color }}>
@@ -169,16 +201,16 @@ export default function HomePage() {
                 <div className="text-sm text-gray-500">
                   {unit.quantumAdvantage}
                 </div>
-              </motion.div>
+              </MotionDiv>
             ))}
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* NQBA 5-Layer Architecture */}
       <section id="how-it-works" className="section-padding">
         <div className="container-quantum">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -191,9 +223,9 @@ export default function HomePage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Our 5-layer architecture ensures every decision is governed, traceable, and optimized for business outcomes.
             </p>
-          </motion.div>
+          </MotionDiv>
 
-          <motion.div
+          <MotionDiv
             variants={staggerContainer}
             initial="initial"
             whileInView="animate"
@@ -201,13 +233,13 @@ export default function HomePage() {
             className="grid grid-cols-1 md:grid-cols-5 gap-6"
           >
             {nqbaLayers.map((layer, index) => (
-              <motion.div
+              <MotionDiv
                 key={layer.name}
                 variants={fadeInUp}
                 whileHover={{ y: -5 }}
                 className="text-center group relative"
               >
-                <motion.div 
+                <MotionDiv 
                   className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 shadow-lg"
                   style={{ backgroundColor: layer.color }}
                   whileHover={{ 
@@ -218,28 +250,28 @@ export default function HomePage() {
                   transition={{ type: "spring", stiffness: 300 }}
                 >
                   <span className="text-2xl">{layer.icon}</span>
-                </motion.div>
+                </MotionDiv>
                 <h3 className="text-xl font-semibold text-black mb-2 group-hover:text-brand-cyan transition-colors duration-200">{layer.name}</h3>
                 <p className="text-gray-600 text-sm">{layer.description}</p>
                 {index < nqbaLayers.length - 1 && (
-                  <motion.div 
+                  <MotionDiv 
                     className="hidden md:block absolute top-8 -right-3 transform"
                     animate={{ x: [0, 5, 0] }}
                     transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                   >
-                    <ArrowRight className="h-6 w-6 text-brand-cyan" />
-                  </motion.div>
+                    <ArrowRightIcon className="h-6 w-6 text-brand-cyan" />
+                  </MotionDiv>
                 )}
-              </motion.div>
+              </MotionDiv>
             ))}
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* AI Agents & Business Intelligence */}
       <section id="agents" className="section-padding bg-white border-t border-gray-200">
         <div className="container-quantum">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -252,9 +284,9 @@ export default function HomePage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               From chatbots to digital humans, every agent is powered by NQBA's quantum-native decision engine.
             </p>
-          </motion.div>
+          </MotionDiv>
 
-          <motion.div
+          <MotionDiv
             variants={staggerContainer}
             initial="initial"
             whileInView="animate"
@@ -287,45 +319,48 @@ export default function HomePage() {
                 features: ["Business rule compliance", "Audit trail", "Performance metrics"]
               }
             ].map((agent) => (
-              <motion.div
+              <MotionDiv
                 key={agent.title}
                 variants={fadeInUp}
                 whileHover={{ scale: 1.03, y: -5 }}
                 className="bg-white rounded-xl p-6 border border-gray-200 hover:border-brand-cyan transition-all duration-300 shadow-sm hover:shadow-xl group"
               >
-                <motion.div 
+                <MotionDiv 
                   className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-brand-cyan mb-4"
                   whileHover={{ rotate: 360, scale: 1.1 }}
                   transition={{ duration: 0.6 }}
                 >
-                  <agent.icon className="h-6 w-6 text-white" />
-                </motion.div>
+                  {agent.title === "Digital Humans" && <UserIcon className="h-6 w-6 text-white" />}
+                  {agent.title === "Voice Agents" && <PhoneIcon className="h-6 w-6 text-white" />}
+                  {agent.title === "Chatbots" && <MessageSquareIcon className="h-6 w-6 text-white" />}
+                  {agent.title === "Business Agents" && <BarChart3Icon className="h-6 w-6 text-white" />}
+                </MotionDiv>
                 <h3 className="text-xl font-semibold text-black mb-3 group-hover:text-brand-cyan transition-colors duration-200">{agent.title}</h3>
                 <p className="text-gray-600 text-sm mb-4">{agent.description}</p>
                 <ul className="space-y-2">
                   {agent.features.map((feature, idx) => (
-                    <motion.li 
+                    <MotionLi 
                       key={feature} 
                       className="flex items-center text-sm text-gray-600"
                       initial={{ opacity: 0, x: -10 }}
                       whileInView={{ opacity: 1, x: 0 }}
                       transition={{ delay: idx * 0.1 }}
                     >
-                      <CheckCircle className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
+                      <CheckCircleIcon className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
                       {feature}
-                    </motion.li>
+                    </MotionLi>
                   ))}
                 </ul>
-              </motion.div>
+              </MotionDiv>
             ))}
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* Trust & Compliance */}
       <section id="trust" className="section-padding">
         <div className="container-quantum">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -338,9 +373,9 @@ export default function HomePage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Built for enterprise with immutable audit trails and quantum-grade security.
             </p>
-          </motion.div>
+          </MotionDiv>
 
-          <motion.div
+          <MotionDiv
             variants={staggerContainer}
             initial="initial"
             whileInView="animate"
@@ -367,22 +402,24 @@ export default function HomePage() {
                 color: "bg-quantum-purple"
               }
             ].map((trust) => (
-              <motion.div
+              <MotionDiv
                 key={trust.title}
                 variants={fadeInUp}
                 className="text-center"
               >
                 <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full ${trust.color} mb-4`}>
-                  <trust.icon className="h-8 w-8 text-white" />
+                  {trust.title === "Quantum Security" && <LockIcon className="h-8 w-8 text-white" />}
+                  {trust.title === "Global Compliance" && <GlobeIcon className="h-8 w-8 text-white" />}
+                  {trust.title === "Regulatory Adherence" && <CheckCircleIcon className="h-8 w-8 text-white" />}
                 </div>
                 <h3 className="text-xl font-semibold text-black mb-3">{trust.title}</h3>
                 <p className="text-gray-600">{trust.description}</p>
-              </motion.div>
+              </MotionDiv>
             ))}
-          </motion.div>
+          </MotionDiv>
 
           {/* Trust Metrics */}
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -390,7 +427,7 @@ export default function HomePage() {
             className="grid grid-cols-2 md:grid-cols-4 gap-8"
           >
             {trustMetrics.map((metric, index) => (
-              <motion.div 
+              <MotionDiv 
                 key={metric.label} 
                 className="text-center group cursor-pointer"
                 whileHover={{ scale: 1.05, y: -5 }}
@@ -403,25 +440,25 @@ export default function HomePage() {
                   }
                 }}
               >
-                <motion.div 
+                <MotionDiv 
                   className="text-4xl mb-2 group-hover:scale-110 transition-transform duration-200"
                   whileHover={{ rotate: [0, -10, 10, 0] }}
                   transition={{ duration: 0.5 }}
                 >
                   {metric.icon}
-                </motion.div>
+                </MotionDiv>
                 <div className="text-2xl font-bold text-black mb-1 group-hover:text-brand-cyan transition-colors duration-200">{metric.value}</div>
                 <div className="text-sm text-gray-600">{metric.label}</div>
-              </motion.div>
+              </MotionDiv>
             ))}
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* Call to Action */}
       <section id="demo" className="section-padding bg-white border-t border-gray-200">
         <div className="container-narrow text-center">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -440,13 +477,13 @@ export default function HomePage() {
                 className="btn-primary"
               >
                 Book Your Demo
-                <ArrowRight className="ml-2 h-5 w-5" />
+                <ArrowRightIcon className="ml-2 h-5 w-5" />
               </a>
-              <Link href="/resources" className="btn-secondary">
+              <LinkComponent href="/resources" className="btn-secondary">
                 Explore Resources
-              </Link>
+              </LinkComponent>
             </div>
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
     </div>

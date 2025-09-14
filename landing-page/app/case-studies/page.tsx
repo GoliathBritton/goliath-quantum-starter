@@ -1,6 +1,11 @@
 'use client'
 
 import { motion } from 'framer-motion'
+
+// Type assertions for Framer Motion components
+const MotionDiv = motion.div as any
+const MotionH1 = motion.h1 as any
+const MotionP = motion.p as any
 import { 
   Building2, 
   Banknote, 
@@ -25,7 +30,18 @@ import {
   MapPin
 } from 'lucide-react'
 import Link from 'next/link'
-import { useState } from 'react'
+import React, { useState } from 'react'
+
+// Type assertion for Link component
+const LinkComponent = Link as any
+
+// Type assertion for icon components
+const ArrowRightIcon = ArrowRight as any
+const AwardIcon = Award as any
+const StarIcon = Star as any
+const CheckCircleIcon = CheckCircle as any
+const ClockIcon = Clock as any
+const UsersIcon = Users as any
 
 export default function CaseStudiesPage() {
   const [selectedCategory, setSelectedCategory] = useState('all')
@@ -260,7 +276,7 @@ export default function CaseStudiesPage() {
       {/* Hero Section */}
       <section className="hero-gradient section-padding">
         <div className="container-quantum text-center">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -273,22 +289,22 @@ export default function CaseStudiesPage() {
               across industries worldwide.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="#case-studies" className="btn-primary">
+              <LinkComponent href="#case-studies" className="btn-primary">
                 Explore Case Studies
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-              <Link href="/contact" className="btn-secondary">
+                <ArrowRightIcon className="ml-2 h-5 w-5" />
+              </LinkComponent>
+              <LinkComponent href="/contact" className="btn-secondary">
                 Discuss Your Project
-              </Link>
+              </LinkComponent>
             </div>
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* Impact Overview */}
       <section className="section-padding">
         <div className="container-quantum">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -301,9 +317,9 @@ export default function CaseStudiesPage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Our clients achieve transformational results through quantum-powered business intelligence.
             </p>
-          </motion.div>
+          </MotionDiv>
 
-          <motion.div
+          <MotionDiv
             variants={staggerContainer}
             initial="initial"
             whileInView="animate"
@@ -327,38 +343,38 @@ export default function CaseStudiesPage() {
                 metric: "206+",
                 label: "Successful Projects",
                 description: "Delivered globally",
-                icon: Award
+                icon: AwardIcon
               },
               {
                 metric: "98%",
                 label: "Client Satisfaction",
                 description: "Would recommend NQBA",
-                icon: Star
+                icon: StarIcon
               }
             ].map((stat) => (
-              <motion.div
+              <MotionDiv
                 key={stat.metric}
                 variants={fadeInUp}
                 className="card text-center group hover:shadow-lg transition-shadow duration-200"
               >
                 <div className="w-16 h-16 bg-brand-cyan rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-200">
-                  <stat.icon className="h-8 w-8 text-white" />
+                  {React.createElement(stat.icon, { className: "h-8 w-8 text-white" }) as JSX.Element}
                 </div>
                 <div className="text-3xl md:text-4xl font-bold text-black mb-2">
                   {stat.metric}
                 </div>
                 <div className="font-medium text-black mb-1">{stat.label}</div>
                 <div className="text-sm text-gray-500">{stat.description}</div>
-              </motion.div>
+              </MotionDiv>
             ))}
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* Featured Case Studies */}
       <section className="section-padding bg-gray-50">
         <div className="container-quantum">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -371,9 +387,9 @@ export default function CaseStudiesPage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Dive deep into our most impactful quantum transformations.
             </p>
-          </motion.div>
+          </MotionDiv>
 
-          <motion.div
+          <MotionDiv
             variants={staggerContainer}
             initial="initial"
             whileInView="animate"
@@ -381,9 +397,9 @@ export default function CaseStudiesPage() {
             className="space-y-12"
           >
             {featuredCaseStudies.map((study, index) => {
-              const Icon = study.icon
+              const Icon = study.icon as any
               return (
-                <motion.div
+                <MotionDiv
                   key={study.id}
                   variants={fadeInUp}
                   className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-center ${
@@ -417,13 +433,13 @@ export default function CaseStudiesPage() {
                         </div>
                       ))}
                     </div>
-                    <Link
+                    <LinkComponent
                       href={`#${study.id}`}
                       className="inline-flex items-center text-brand-cyan font-medium hover:text-brand-gold transition-colors duration-200"
                     >
                       Read Full Case Study
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
+                      <ArrowRightIcon className="ml-2 h-4 w-4" />
+                    </LinkComponent>
                   </div>
 
                   {/* Visual/Stats */}
@@ -438,7 +454,7 @@ export default function CaseStudiesPage() {
                       <div className="space-y-4">
                         {study.results.slice(0, 3).map((result, idx) => (
                           <div key={idx} className="flex items-start space-x-3">
-                            <CheckCircle className="h-5 w-5 text-brand-cyan mt-0.5 flex-shrink-0" />
+                            <CheckCircleIcon className="h-5 w-5 text-brand-cyan mt-0.5 flex-shrink-0" />
                             <span className="text-sm text-gray-700">{result}</span>
                           </div>
                         ))}
@@ -446,28 +462,28 @@ export default function CaseStudiesPage() {
                       <div className="mt-6 pt-6 border-t border-gray-200">
                         <div className="flex items-center justify-between text-sm text-gray-500">
                           <div className="flex items-center space-x-2">
-                            <Clock className="h-4 w-4" />
+                            <ClockIcon className="h-4 w-4" />
                             <span>{study.duration}</span>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <Users className="h-4 w-4" />
+                            <UsersIcon className="h-4 w-4" />
                             <span>{study.teamSize}</span>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </motion.div>
+                </MotionDiv>
               )
             })}
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* All Case Studies */}
       <section id="case-studies" className="section-padding">
         <div className="container-quantum">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -480,7 +496,7 @@ export default function CaseStudiesPage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Explore our complete portfolio of quantum transformation success stories.
             </p>
-          </motion.div>
+          </MotionDiv>
 
           {/* Category Filter */}
           <div className="flex flex-wrap gap-2 justify-center mb-12">
@@ -500,7 +516,7 @@ export default function CaseStudiesPage() {
           </div>
 
           {/* Case Studies Grid */}
-          <motion.div
+          <MotionDiv
             variants={staggerContainer}
             initial="initial"
             whileInView="animate"
@@ -508,16 +524,16 @@ export default function CaseStudiesPage() {
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
             {filteredCaseStudies.map((study) => {
-              const Icon = study.icon
+              const Icon = study.icon as any
               return (
-                <motion.div
+                <MotionDiv
                   key={study.id}
                   variants={fadeInUp}
                   className="card group hover:shadow-lg transition-shadow duration-200"
                 >
                   {study.featured && (
                     <div className="absolute top-4 right-4">
-                      <Star className="h-5 w-5 text-brand-gold fill-current" />
+                      <StarIcon className="h-5 w-5 text-brand-gold fill-current" />
                     </div>
                   )}
                   <div className="flex items-center space-x-3 mb-4">
@@ -547,29 +563,29 @@ export default function CaseStudiesPage() {
                   </div>
                   <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
                     <div className="flex items-center space-x-2">
-                      <Clock className="h-3 w-3" />
+                      <ClockIcon className="h-3 w-3" />
                       <span>{study.duration}</span>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <Users className="h-3 w-3" />
+                      <UsersIcon className="h-3 w-3" />
                       <span>{study.teamSize}</span>
                     </div>
                   </div>
                   <button className="w-full text-left text-brand-cyan font-medium hover:text-brand-gold transition-colors duration-200">
                     Read Case Study
-                    <ArrowRight className="inline ml-2 h-4 w-4" />
+                    <ArrowRightIcon className="inline ml-2 h-4 w-4" />
                   </button>
-                </motion.div>
+                </MotionDiv>
               )
             })}
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* Testimonials */}
       <section className="section-padding bg-gray-50">
         <div className="container-quantum">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -582,9 +598,9 @@ export default function CaseStudiesPage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Hear directly from leaders who have transformed their organizations with quantum intelligence.
             </p>
-          </motion.div>
+          </MotionDiv>
 
-          <motion.div
+          <MotionDiv
             variants={staggerContainer}
             initial="initial"
             whileInView="animate"
@@ -592,14 +608,14 @@ export default function CaseStudiesPage() {
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
             {featuredCaseStudies.map((study) => (
-              <motion.div
+              <MotionDiv
                 key={study.id}
                 variants={fadeInUp}
                 className="card bg-white border-l-4 border-brand-cyan"
               >
                 <div className="flex items-center space-x-1 mb-4">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 text-brand-gold fill-current" />
+                    <StarIcon key={i} className="h-4 w-4 text-brand-gold fill-current" />
                   ))}
                 </div>
                 <blockquote className="text-gray-700 mb-6 leading-relaxed italic">
@@ -609,16 +625,16 @@ export default function CaseStudiesPage() {
                   <div className="font-semibold text-black">{study.testimonial.author}</div>
                   <div className="text-sm text-gray-500">{study.testimonial.company}</div>
                 </div>
-              </motion.div>
+              </MotionDiv>
             ))}
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* Call to Action */}
       <section className="section-padding">
         <div className="container-narrow text-center">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -631,15 +647,15 @@ export default function CaseStudiesPage() {
               Join the quantum revolution and transform your business with measurable results.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/contact" className="btn-primary">
+              <LinkComponent href="/contact" className="btn-primary">
                 Start Your Transformation
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-              <Link href="/resources/recipes" className="btn-secondary">
+                <ArrowRightIcon className="ml-2 h-5 w-5" />
+              </LinkComponent>
+              <LinkComponent href="/resources/recipes" className="btn-secondary">
                 Try QUBO Builder
-              </Link>
+              </LinkComponent>
             </div>
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
     </div>

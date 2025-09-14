@@ -1,0 +1,289 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15
+    container_name: goliath_postgres
+    environment:
+      POSTGRES_DB: goliath_quantum
+      POSTGRES_USER: goliath_user
+      POSTGRES_PASSWORD: quantum_secure_2024
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db:/docker-entrypoint-initdb.d
+    networks:
+      - goliath_network
+    restart: unless-stopped
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: goliath_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - goliath_network
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+
+  # NQBA Engine - Core Quantum Business Architecture
+  nqba_engine:
+    build:
+      context: .
+      dockerfile: deploy/dockerfiles/Dockerfile.nqba
+    container_name: goliath_nqba_engine
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://goliath_user:quantum_secure_2024@postgres:5432/goliath_quantum
+      - REDIS_URL=redis://redis:6379/0
+      - DYNEX_API_KEY=${DYNEX_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - SECRET_KEY=${SECRET_KEY}
+      - ENVIRONMENT=production
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - goliath_network
+    restart: unless-stopped
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Quantum High Council
+  high_council:
+    build:
+      context: .
+      dockerfile: deploy/dockerfiles/Dockerfile.quantum
+    container_name: goliath_high_council
+    ports:
+      - "8001:8001"
+    environment:
+      - DATABASE_URL=postgresql://goliath_user:quantum_secure_2024@postgres:5432/goliath_quantum
+      - REDIS_URL=redis://redis:6379/0
+      - DYNEX_API_KEY=${DYNEX_API_KEY}
+      - SERVICE_NAME=high_council
+    depends_on:
+      - postgres
+      - redis
+      - nqba_engine
+    networks:
+      - goliath_network
+    restart: unless-stopped
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+
+  # Quantum Digital Agents
+  quantum_architect:
+    build:
+      context: .
+      dockerfile: deploy/dockerfiles/Dockerfile.quantum
+    container_name: goliath_quantum_architect
+    ports:
+      - "8002:8002"
+    environment:
+      - DATABASE_URL=postgresql://goliath_user:quantum_secure_2024@postgres:5432/goliath_quantum
+      - REDIS_URL=redis://redis:6379/0
+      - DYNEX_API_KEY=${DYNEX_API_KEY}
+      - SERVICE_NAME=quantum_architect
+    depends_on:
+      - postgres
+      - redis
+      - nqba_engine
+    networks:
+      - goliath_network
+    restart: unless-stopped
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+
+  # Lead Processing Engine
+  lead_processor:
+    build:
+      context: .
+      dockerfile: deploy/dockerfiles/Dockerfile.leads
+    container_name: goliath_lead_processor
+    ports:
+      - "8003:8003"
+    environment:
+      - DATABASE_URL=postgresql://goliath_user:quantum_secure_2024@postgres:5432/goliath_quantum
+      - REDIS_URL=redis://redis:6379/0
+      - DYNEX_API_KEY=${DYNEX_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - BATCH_SIZE=1000
+      - MAX_WORKERS=6
+    depends_on:
+      - postgres
+      - redis
+      - nqba_engine
+    networks:
+      - goliath_network
+    restart: unless-stopped
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+        reservations:
+          memory: 2G
+
+  # AI Calling Agents
+  ai_calling:
+    build:
+      context: .
+      dockerfile: deploy/dockerfiles/Dockerfile.ai
+    container_name: goliath_ai_calling
+    ports:
+      - "8004:8004"
+    environment:
+      - DATABASE_URL=postgresql://goliath_user:quantum_secure_2024@postgres:5432/goliath_quantum
+      - REDIS_URL=redis://redis:6379/0
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID}
+      - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}
+    depends_on:
+      - postgres
+      - redis
+      - nqba_engine
+    networks:
+      - goliath_network
+    restart: unless-stopped
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+
+  # Main API Gateway
+  main_api:
+    build:
+      context: .
+      dockerfile: deploy/dockerfiles/Dockerfile.api
+    container_name: goliath_main_api
+    ports:
+      - "8080:8080"
+    environment:
+      - DATABASE_URL=postgresql://goliath_user:quantum_secure_2024@postgres:5432/goliath_quantum
+      - REDIS_URL=redis://redis:6379/0
+      - SECRET_KEY=${SECRET_KEY}
+      - NQBA_ENGINE_URL=http://nqba_engine:8000
+      - HIGH_COUNCIL_URL=http://high_council:8001
+      - QUANTUM_ARCHITECT_URL=http://quantum_architect:8002
+      - LEAD_PROCESSOR_URL=http://lead_processor:8003
+      - AI_CALLING_URL=http://ai_calling:8004
+    depends_on:
+      - postgres
+      - redis
+      - nqba_engine
+      - high_council
+      - quantum_architect
+      - lead_processor
+      - ai_calling
+    networks:
+      - goliath_network
+    restart: unless-stopped
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    deploy:
+      resources:
+        limits:
+          memory: 3G
+        reservations:
+          memory: 1G
+
+  # Web Frontend
+  web_frontend:
+    build:
+      context: ./web
+      dockerfile: ../deploy/dockerfiles/Dockerfile.web
+    container_name: goliath_web_frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:8080
+      - REACT_APP_ENVIRONMENT=production
+    depends_on:
+      - main_api
+    networks:
+      - goliath_network
+    restart: unless-stopped
+
+  # Prometheus Monitoring
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: goliath_prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./deploy/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    networks:
+      - goliath_network
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+
+  # Grafana Dashboard
+  grafana:
+    image: grafana/grafana:latest
+    container_name: goliath_grafana
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=quantum_admin_2024
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./deploy/monitoring/grafana:/etc/grafana/provisioning
+    networks:
+      - goliath_network
+    restart: unless-stopped
+    depends_on:
+      - prometheus
+
+  # Nginx Load Balancer
+  nginx:
+    image: nginx:alpine
+    container_name: goliath_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deploy/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./deploy/nginx/ssl:/etc/nginx/ssl
+    depends_on:
+      - main_api
+      - web_frontend
+    networks:
+      - goliath_network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  goliath_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

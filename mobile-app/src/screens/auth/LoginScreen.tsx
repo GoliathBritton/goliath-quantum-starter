@@ -19,10 +19,10 @@ import {
 } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { LinearGradient } from 'expo-linear-gradient';
+// import { LinearGradient } from 'expo-linear-gradient'; // Removed for compatibility
 
 import { RootState, AppDispatch } from '../../store';
-import { login } from '../../store/slices/authSlice';
+import { loginUser } from '../../store/slices/authSlice';
 import { theme } from '../../theme';
 import LoadingSpinner from '../../components/LoadingSpinner';
 
@@ -77,7 +77,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
     }
     
     try {
-      await dispatch(login({ email, password })).unwrap();
+      await dispatch(loginUser({ email, password })).unwrap();
       // Navigation will be handled by the auth state change
     } catch (error: any) {
       Alert.alert(
@@ -100,10 +100,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <LinearGradient
-        colors={[theme.colors.primary, theme.colors.secondary]}
-        style={styles.gradient}
-      >
+      <View style={styles.gradient}>
         <ScrollView 
           contentContainerStyle={styles.scrollContent}
           keyboardShouldPersistTaps="handled"
@@ -247,7 +244,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
             </Card.Content>
           </Card>
         </ScrollView>
-      </LinearGradient>
+      </View>
     </KeyboardAvoidingView>
   );
 };
@@ -258,6 +255,7 @@ const styles = StyleSheet.create({
   },
   gradient: {
     flex: 1,
+    backgroundColor: theme.colors.primary,
   },
   scrollContent: {
     flexGrow: 1,

@@ -25,6 +25,15 @@ export interface TenantPlan {
   sla: SLAConfig;
 }
 
+export interface ComplianceConfig {
+  gdprEnabled: boolean;
+  dataLocalization: string[];
+  auditLogging: boolean;
+  encryptionRequired: boolean;
+  retentionPolicies: Record<string, number>;
+  certifications: string[];
+}
+
 export interface TenantSettings {
   branding: BrandingConfig;
   notifications: NotificationConfig;
@@ -839,6 +848,32 @@ class MultiTenantService extends EventEmitter {
     this.emit('planChanged', { tenantId, oldPlan, newPlan });
   }
 
+  async updateResourceAllocation(tenantId: string, resources: Partial<TenantResources>): Promise<void> {
+    const tenant = this.tenants.get(tenantId);
+    if (!tenant) {
+      throw new Error(`Tenant ${tenantId} not found`);
+    }
+
+    // Update resource allocation
+    if (resources.quantumCompute) {
+      tenant.resources.quantumCompute = { ...tenant.resources.quantumCompute, ...resources.quantumCompute };
+    }
+    if (resources.storage) {
+      tenant.resources.storage = { ...tenant.resources.storage, ...resources.storage };
+    }
+    if (resources.bandwidth) {
+      tenant.resources.bandwidth = { ...tenant.resources.bandwidth, ...resources.bandwidth };
+    }
+    if (resources.apiLimits) {
+      tenant.resources.apiLimits = { ...tenant.resources.apiLimits, ...resources.apiLimits };
+    }
+    if (resources.userLimits) {
+      tenant.resources.userLimits = { ...tenant.resources.userLimits, ...resources.userLimits };
+    }
+
+    this.emit('resourcesUpdated', { tenantId, resources });
+  }
+
   private calculateResourceChanges(oldPlan: TenantPlan, newPlan: TenantPlan) {
     return {
       qubits: newPlan.limits.maxQubits - oldPlan.limits.maxQubits,
@@ -988,7 +1023,7 @@ class MultiTenantService extends EventEmitter {
   async getAllTenantsMetrics(): Promise<Map<string, TenantMetrics>> {
     const metrics = new Map<string, TenantMetrics>();
     
-    for (const [tenantId, tenant] of this.tenants) {
+    for (const [tenantId, tenant] of Array.from(this.tenants.entries())) {
       metrics.set(tenantId, await this.metricsCollector.collectMetrics(tenant));
     }
     
@@ -1134,10 +1169,12 @@ class MultiTenantService extends EventEmitter {
         },
       },
       compliance: {
-        auditFrequency: 'quarterly',
-        certificationRequired: false,
-        level: 'basic',
-        standard: 'SOC2',
+        gdprEnabled: false,
+        dataLocalization: ['us-east-1'],
+        auditLogging: true,
+        encryptionRequired: false,
+        retentionPolicies: { logs: 90, data: 365 },
+        certifications: ['SOC2'],
       },
     };
   }

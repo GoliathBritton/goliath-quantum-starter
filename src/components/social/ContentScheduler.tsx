@@ -50,7 +50,7 @@ import {
   Twitter,
   LinkedIn,
   YouTube,
-  TikTok,
+  VideoLibrary,
   Image,
   VideoFile,
   Analytics,
@@ -159,7 +159,7 @@ const ContentScheduler: React.FC = () => {
     { id: 'twitter', name: 'Twitter', icon: Twitter, color: '#1DA1F2' },
     { id: 'linkedin', name: 'LinkedIn', icon: LinkedIn, color: '#0A66C2' },
     { id: 'youtube', name: 'YouTube', icon: YouTube, color: '#FF0000' },
-    { id: 'tiktok', name: 'TikTok', icon: TikTok, color: '#000000' },
+    { id: 'tiktok', name: 'TikTok', icon: VideoLibrary, color: '#000000' },
   ];
 
   const getPlatformIcon = (platformId: string) => {
@@ -300,9 +300,9 @@ const ContentScheduler: React.FC = () => {
           </Box>
         </Box>
 
-        <Grid container spacing={3}>
+        <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
           {/* Active Campaigns */}
-          <Grid item xs={12} lg={8}>
+          <Box sx={{ flex: '2 1 600px', minWidth: '600px' }}>
             <Card>
               <CardContent>
                 <Typography variant="h6" gutterBottom>
@@ -341,8 +341,8 @@ const ContentScheduler: React.FC = () => {
                       </Box>
                     </AccordionSummary>
                     <AccordionDetails>
-                      <Grid container spacing={2}>
-                        <Grid item xs={12} md={6}>
+                      <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+                        <Box sx={{ flex: '1 1 300px', minWidth: '300px' }}>
                           <Typography variant="body2" gutterBottom>
                             <strong>Duration:</strong> {campaign.startDate.toLocaleDateString()} - {campaign.endDate.toLocaleDateString()}
                           </Typography>
@@ -359,8 +359,8 @@ const ContentScheduler: React.FC = () => {
                               </Avatar>
                             ))}
                           </Box>
-                        </Grid>
-                        <Grid item xs={12} md={6}>
+                        </Box>
+                        <Box sx={{ flex: '1 1 300px', minWidth: '300px' }}>
                           <Typography variant="body2" gutterBottom>
                             <strong>Scheduled Posts:</strong> {campaign.posts.length}
                           </Typography>
@@ -377,17 +377,17 @@ const ContentScheduler: React.FC = () => {
                               Analytics
                             </Button>
                           </Box>
-                        </Grid>
-                      </Grid>
+                        </Box>
+                      </Box>
                     </AccordionDetails>
                   </Accordion>
                 ))}
               </CardContent>
             </Card>
-          </Grid>
+          </Box>
 
           {/* Quick Actions & Templates */}
-          <Grid item xs={12} lg={4}>
+          <Box sx={{ flex: '1 1 300px', minWidth: '300px' }}>
             <Card sx={{ mb: 3 }}>
               <CardContent>
                 <Typography variant="h6" gutterBottom>
@@ -455,15 +455,15 @@ const ContentScheduler: React.FC = () => {
                 </Button>
               </CardContent>
             </Card>
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
 
         {/* Schedule Post Dialog */}
         <Dialog open={schedulerDialog} onClose={() => setSchedulerDialog(false)} maxWidth="md" fullWidth>
           <DialogTitle>Schedule New Post</DialogTitle>
           <DialogContent>
-            <Grid container spacing={2} sx={{ mt: 1 }}>
-              <Grid item xs={12}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 1 }}>
+              <Box>
                 <TextField
                   fullWidth
                   multiline
@@ -472,9 +472,9 @@ const ContentScheduler: React.FC = () => {
                   value={newPost.content}
                   onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
                 />
-              </Grid>
+              </Box>
               
-              <Grid item xs={12} md={6}>
+              <Box>
                 <FormControl fullWidth>
                   <InputLabel>Platforms</InputLabel>
                   <Select
@@ -499,18 +499,18 @@ const ContentScheduler: React.FC = () => {
                     ))}
                   </Select>
                 </FormControl>
-              </Grid>
+              </Box>
               
-              <Grid item xs={12} md={6}>
+              <Box>
                 <DateTimePicker
                   label="Schedule Time"
                   value={newPost.scheduledTime}
                   onChange={(newValue) => setNewPost({ ...newPost, scheduledTime: newValue || new Date() })}
                   slotProps={{ textField: { fullWidth: true } }}
                 />
-              </Grid>
+              </Box>
               
-              <Grid item xs={12}>
+              <Box>
                 <TextField
                   fullWidth
                   label="Hashtags (comma separated)"
@@ -520,11 +520,11 @@ const ContentScheduler: React.FC = () => {
                     hashtags: e.target.value.split(',').map(tag => tag.trim()).filter(tag => tag)
                   })}
                 />
-              </Grid>
+              </Box>
 
               {/* Quantum Optimization Results */}
               {optimizedTimes.length > 0 && (
-                <Grid item xs={12}>
+                <Box>
                   <Alert severity="info" icon={<Psychology />}>
                     <Typography variant="subtitle2" gutterBottom>
                       Quantum-Optimized Posting Times:
@@ -539,11 +539,11 @@ const ContentScheduler: React.FC = () => {
                       />
                     ))}
                   </Alert>
-                </Grid>
+                </Box>
               )}
 
               {engagementPrediction && (
-                <Grid item xs={12}>
+                <Box>
                   <Alert severity="success" icon={<TrendingUp />}>
                     <Typography variant="subtitle2" gutterBottom>
                       Predicted Engagement (Confidence: {(engagementPrediction.confidence * 100).toFixed(1)}%):
@@ -555,9 +555,9 @@ const ContentScheduler: React.FC = () => {
                       Reach: {engagementPrediction.expectedReach}
                     </Typography>
                   </Alert>
-                </Grid>
+                </Box>
               )}
-            </Grid>
+            </Box>
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setSchedulerDialog(false)}>Cancel</Button>
@@ -574,16 +574,16 @@ const ContentScheduler: React.FC = () => {
         <Dialog open={campaignDialog} onClose={() => setCampaignDialog(false)} maxWidth="sm" fullWidth>
           <DialogTitle>Create New Campaign</DialogTitle>
           <DialogContent>
-            <Grid container spacing={2} sx={{ mt: 1 }}>
-              <Grid item xs={12}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 1 }}>
+              <Box>
                 <TextField
                   fullWidth
                   label="Campaign Name"
                   value={newCampaign.name}
                   onChange={(e) => setNewCampaign({ ...newCampaign, name: e.target.value })}
                 />
-              </Grid>
-              <Grid item xs={12}>
+              </Box>
+              <Box>
                 <TextField
                   fullWidth
                   multiline
@@ -592,24 +592,27 @@ const ContentScheduler: React.FC = () => {
                   value={newCampaign.description}
                   onChange={(e) => setNewCampaign({ ...newCampaign, description: e.target.value })}
                 />
-              </Grid>
-              <Grid item xs={12} md={6}>
+              </Box>
+              <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+                <Box sx={{ flex: '1 1 250px', minWidth: '250px' }}>
                 <DateTimePicker
                   label="Start Date"
                   value={newCampaign.startDate}
                   onChange={(newValue) => setNewCampaign({ ...newCampaign, startDate: newValue || new Date() })}
                   slotProps={{ textField: { fullWidth: true } }}
                 />
-              </Grid>
-              <Grid item xs={12} md={6}>
+                </Box>
+                <Box sx={{ flex: '1 1 250px', minWidth: '250px' }}>
                 <DateTimePicker
                   label="End Date"
                   value={newCampaign.endDate}
                   onChange={(newValue) => setNewCampaign({ ...newCampaign, endDate: newValue || new Date() })}
                   slotProps={{ textField: { fullWidth: true } }}
                 />
-              </Grid>
-              <Grid item xs={12} md={6}>
+                </Box>
+              </Box>
+              <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+                <Box sx={{ flex: '1 1 250px', minWidth: '250px' }}>
                 <FormControl fullWidth>
                   <InputLabel>Frequency</InputLabel>
                   <Select
@@ -621,8 +624,8 @@ const ContentScheduler: React.FC = () => {
                     <MenuItem value="monthly">Monthly</MenuItem>
                   </Select>
                 </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6}>
+                </Box>
+                <Box sx={{ flex: '1 1 250px', minWidth: '250px' }}>
                 <FormControlLabel
                   control={
                     <Switch
@@ -632,8 +635,9 @@ const ContentScheduler: React.FC = () => {
                   }
                   label="Quantum Optimization"
                 />
-              </Grid>
-              <Grid item xs={12}>
+                </Box>
+              </Box>
+              <Box>
                 <FormControl fullWidth>
                   <InputLabel>Platforms</InputLabel>
                   <Select
@@ -658,8 +662,8 @@ const ContentScheduler: React.FC = () => {
                     ))}
                   </Select>
                 </FormControl>
-              </Grid>
-            </Grid>
+              </Box>
+            </Box>
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setCampaignDialog(false)}>Cancel</Button>
@@ -673,9 +677,9 @@ const ContentScheduler: React.FC = () => {
         <Dialog open={templateDialog} onClose={() => setTemplateDialog(false)} maxWidth="md" fullWidth>
           <DialogTitle>Content Templates</DialogTitle>
           <DialogContent>
-            <Grid container spacing={2}>
+            <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
               {templates.map((template) => (
-                <Grid item xs={12} md={6} key={template.id}>
+                <Box key={template.id} sx={{ flex: '1 1 400px', minWidth: '400px' }}>
                   <Card variant="outlined">
                     <CardContent>
                       <Typography variant="h6" gutterBottom>{template.name}</Typography>
@@ -701,9 +705,9 @@ const ContentScheduler: React.FC = () => {
                       </Button>
                     </CardContent>
                   </Card>
-                </Grid>
+                </Box>
               ))}
-            </Grid>
+            </Box>
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setTemplateDialog(false)}>Close</Button>

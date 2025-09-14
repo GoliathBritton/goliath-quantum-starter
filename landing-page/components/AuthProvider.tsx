@@ -20,6 +20,7 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
+const AuthContextProvider = AuthContext.Provider as any
 
 export function useAuth() {
   const context = useContext(AuthContext)
@@ -123,9 +124,9 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   }
 
   return (
-    <AuthContext.Provider value={value}>
+    <AuthContextProvider value={value}>
       {children}
-    </AuthContext.Provider>
+    </AuthContextProvider>
   )
 }
 

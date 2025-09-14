@@ -20,6 +20,7 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContextProvider = AuthContext.Provider as any;
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -135,5 +136,5 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     isAuthenticated,
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return <AuthContextProvider value={value}>{children}</AuthContextProvider>;
 };

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
   Box,
-  Grid,
   Card,
   CardContent,
   Typography,
@@ -45,7 +44,9 @@ import {
   TableRow,
   Slider,
   Stack,
+  Grid,
 } from '@mui/material';
+
 import {
   Psychology,
   TrendingUp,
@@ -80,7 +81,7 @@ import {
   Info,
   Lightbulb,
   Bolt,
-  Eco,
+  Nature,
   AttachMoney,
   Schedule,
   Security,
@@ -448,7 +449,7 @@ const QuantumOptimizationDashboard: React.FC = () => {
 
       {/* Quantum Metrics Overview */}
       <Grid container spacing={3} sx={{ mb: 3 }}>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -468,7 +469,7 @@ const QuantumOptimizationDashboard: React.FC = () => {
           </Card>
         </Grid>
         
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -483,7 +484,7 @@ const QuantumOptimizationDashboard: React.FC = () => {
           </Card>
         </Grid>
         
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -500,7 +501,7 @@ const QuantumOptimizationDashboard: React.FC = () => {
           </Card>
         </Grid>
         
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -518,7 +519,7 @@ const QuantumOptimizationDashboard: React.FC = () => {
 
       {/* Charts Section */}
       <Grid container spacing={3} sx={{ mb: 3 }}>
-        <Grid item xs={12} md={8}>
+        <Grid size={{ xs: 12, md: 8 }}>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
@@ -551,7 +552,7 @@ const QuantumOptimizationDashboard: React.FC = () => {
           </Card>
         </Grid>
         
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
@@ -565,7 +566,7 @@ const QuantumOptimizationDashboard: React.FC = () => {
                     cy="50%"
                     outerRadius={80}
                     dataKey="value"
-                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                    label={({ name, percent }: any) => `${name} ${(percent * 100).toFixed(0)}%`}
                   >
                     {optimizationTypeData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.color} />
@@ -587,7 +588,7 @@ const QuantumOptimizationDashboard: React.FC = () => {
           </Typography>
           <Grid container spacing={3}>
             {performanceData.map((metric) => (
-              <Grid item xs={12} sm={6} md={3} key={metric.name}>
+              <Grid size={{ xs: 12, sm: 6, md: 3 }} key={metric.name}>
                 <Box sx={{ textAlign: 'center' }}>
                   <Typography variant="subtitle1" gutterBottom>
                     {metric.name}
@@ -641,7 +642,7 @@ const QuantumOptimizationDashboard: React.FC = () => {
           {optimizationJobs
             .filter(job => job.status === 'running' || job.status === 'pending')
             .map((job) => (
-              <Grid item xs={12} md={6} lg={4} key={job.id}>
+              <Grid size={{ xs: 12, md: 6, lg: 4 }} key={job.id}>
                 <Card>
                   <CardContent>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
@@ -709,7 +710,7 @@ const QuantumOptimizationDashboard: React.FC = () => {
           }
           
           {optimizationJobs.filter(job => job.status === 'running' || job.status === 'pending').length === 0 && (
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <Paper sx={{ p: 4, textAlign: 'center' }}>
                 <Psychology sx={{ fontSize: 64, color: 'text.secondary', mb: 2 }} />
                 <Typography variant="h6" color="text.secondary" gutterBottom>
@@ -727,8 +728,8 @@ const QuantumOptimizationDashboard: React.FC = () => {
                 </Button>
               </Paper>
             </Grid>
-          )}
-        </Grid>
+           )}
+         </Grid>
       </TabPanel>
 
       <TabPanel value={activeTab} index={1}>
@@ -805,7 +806,7 @@ const QuantumOptimizationDashboard: React.FC = () => {
 
       <TabPanel value={activeTab} index={2}>
         <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <Card>
               <CardContent>
                 <Typography variant="h6" gutterBottom>
@@ -824,7 +825,7 @@ const QuantumOptimizationDashboard: React.FC = () => {
             </Card>
           </Grid>
           
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <Card>
               <CardContent>
                 <Typography variant="h6" gutterBottom>
@@ -849,12 +850,12 @@ const QuantumOptimizationDashboard: React.FC = () => {
               </CardContent>
             </Card>
           </Grid>
-        </Grid>
+    </Grid>
       </TabPanel>
 
       <TabPanel value={activeTab} index={3}>
         <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <Card>
               <CardContent>
                 <Typography variant="h6" gutterBottom>
@@ -910,7 +911,7 @@ const QuantumOptimizationDashboard: React.FC = () => {
             </Card>
           </Grid>
           
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <Card>
               <CardContent>
                 <Typography variant="h6" gutterBottom>
@@ -937,7 +938,7 @@ const QuantumOptimizationDashboard: React.FC = () => {
                     label="Convergence Threshold"
                     type="number"
                     value={0.001}
-                    step={0.001}
+                    inputProps={{ step: 0.001 }}
                     fullWidth
                   />
                   
@@ -955,7 +956,7 @@ const QuantumOptimizationDashboard: React.FC = () => {
               </CardContent>
             </Card>
           </Grid>
-        </Grid>
+         </Grid>
       </TabPanel>
 
       {/* New Job Dialog */}
@@ -968,7 +969,7 @@ const QuantumOptimizationDashboard: React.FC = () => {
         <DialogTitle>Start New Quantum Optimization</DialogTitle>
         <DialogContent>
           <Grid container spacing={3} sx={{ mt: 1 }}>
-            <Grid item xs={12}>
+            <Grid size={{ xs: 12 }}>
               <FormControl fullWidth>
                 <InputLabel>Optimization Type</InputLabel>
                 <Select
@@ -999,7 +1000,7 @@ const QuantumOptimizationDashboard: React.FC = () => {
             
             {jobType === 'portfolio' && (
               <>
-                <Grid item xs={12} sm={6}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                   <TextField
                     label="Number of Assets"
                     type="number"
@@ -1007,7 +1008,7 @@ const QuantumOptimizationDashboard: React.FC = () => {
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                   <TextField
                     label="Budget ($)"
                     type="number"
@@ -1015,21 +1016,21 @@ const QuantumOptimizationDashboard: React.FC = () => {
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                   <TextField
                     label="Risk Tolerance"
                     type="number"
                     defaultValue={0.15}
-                    step={0.01}
+                    inputProps={{ step: 0.01 }}
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                   <TextField
                     label="Target Return"
                     type="number"
                     defaultValue={0.12}
-                    step={0.01}
+                    inputProps={{ step: 0.01 }}
                     fullWidth
                   />
                 </Grid>
@@ -1038,7 +1039,7 @@ const QuantumOptimizationDashboard: React.FC = () => {
             
             {jobType === 'supply_chain' && (
               <>
-                <Grid item xs={12} sm={6}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                   <TextField
                     label="Number of Nodes"
                     type="number"
@@ -1046,7 +1047,7 @@ const QuantumOptimizationDashboard: React.FC = () => {
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                   <TextField
                     label="Number of Edges"
                     type="number"
@@ -1054,7 +1055,7 @@ const QuantumOptimizationDashboard: React.FC = () => {
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                   <TextField
                     label="Budget Limit ($)"
                     type="number"
@@ -1062,12 +1063,12 @@ const QuantumOptimizationDashboard: React.FC = () => {
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                   <TextField
                     label="Sustainability Target"
                     type="number"
                     defaultValue={0.8}
-                    step={0.1}
+                    inputProps={{ step: 0.1 }}
                     fullWidth
                   />
                 </Grid>
@@ -1076,7 +1077,7 @@ const QuantumOptimizationDashboard: React.FC = () => {
             
             {jobType === 'energy' && (
               <>
-                <Grid item xs={12} sm={6}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                   <TextField
                     label="Number of Sources"
                     type="number"
@@ -1084,7 +1085,7 @@ const QuantumOptimizationDashboard: React.FC = () => {
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                   <TextField
                     label="Total Demand (MW)"
                     type="number"
@@ -1092,16 +1093,16 @@ const QuantumOptimizationDashboard: React.FC = () => {
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                   <TextField
                     label="Renewable Target"
                     type="number"
                     defaultValue={0.6}
-                    step={0.1}
+                    inputProps={{ step: 0.1 }}
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid size={{ xs: 12, sm: 6 }}>
                   <TextField
                     label="Max Cost ($/MWh)"
                     type="number"
@@ -1145,7 +1146,7 @@ const QuantumOptimizationDashboard: React.FC = () => {
             </DialogTitle>
             <DialogContent>
               <Grid container spacing={3}>
-                <Grid item xs={12} md={6}>
+                <Grid size={{ xs: 12, md: 6 }}>
                   <Typography variant="h6" gutterBottom>Job Information</Typography>
                   <List>
                     <ListItem>
@@ -1171,7 +1172,7 @@ const QuantumOptimizationDashboard: React.FC = () => {
                 </Grid>
                 
                 {selectedJob.result && (
-                  <Grid item xs={12} md={6}>
+                  <Grid size={{ xs: 12, md: 6 }}>
                     <Typography variant="h6" gutterBottom>Results</Typography>
                     <List>
                       <ListItem>
@@ -1196,7 +1197,7 @@ const QuantumOptimizationDashboard: React.FC = () => {
                   </Grid>
                 )}
                 
-                <Grid item xs={12}>
+                <Grid size={{ xs: 12 }}>
                   <Typography variant="h6" gutterBottom>Parameters</Typography>
                   <Paper sx={{ p: 2, bgcolor: 'grey.50' }}>
                     <pre style={{ margin: 0, fontSize: '12px' }}>

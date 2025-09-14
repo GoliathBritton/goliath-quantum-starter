@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { 
   Cpu, 
@@ -23,8 +23,33 @@ import {
   Phone,
   User
 } from 'lucide-react'
-import { nqbaLayers, strategicPartners, pricingTiers } from '../../lib/brand'
+import { nqbaLayers, partners, pricingTiers } from '../../lib/brand'
 import Link from 'next/link'
+
+// Type assertions for motion components
+const MotionDiv = motion.div as any
+const LinkComponent = Link as any
+
+// Type assertions for icons
+const CpuIcon = Cpu as any
+const ShieldIcon = Shield as any
+const ZapIcon = Zap as any
+const BrainIcon = Brain as any
+const CrownIcon = Crown as any
+const GlobeIcon = Globe as any
+const LockIcon = Lock as any
+const BarChart3Icon = BarChart3 as any
+const ArrowRightIcon = ArrowRight as any
+const CheckCircleIcon = CheckCircle as any
+const StarIcon = Star as any
+const UsersIcon = Users as any
+const ClockIcon = Clock as any
+const DatabaseIcon = Database as any
+const CodeIcon = Code as any
+const WorkflowIcon = Workflow as any
+const MessageSquareIcon = MessageSquare as any
+const PhoneIcon = Phone as any
+const UserIcon = User as any
 
 export default function ProductsPage() {
   const [activeTab, setActiveTab] = useState('core')
@@ -224,7 +249,7 @@ export default function ProductsPage() {
       {/* Hero Section */}
       <section className="hero-gradient section-padding">
         <div className="container-quantum text-center">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -238,22 +263,22 @@ export default function ProductsPage() {
               business architecture with immutable audit trails.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="#pricing" className="btn-primary">
+              <LinkComponent href="#pricing" className="btn-primary">
                 Start Free Trial
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-              <Link href="#demo" className="btn-secondary">
+                <ArrowRightIcon className="ml-2 h-5 w-5" />
+              </LinkComponent>
+              <LinkComponent href="#demo" className="btn-secondary">
                 Book a Demo
-              </Link>
+              </LinkComponent>
             </div>
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* Product Tabs */}
       <section className="section-padding">
         <div className="container-quantum">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -266,7 +291,7 @@ export default function ProductsPage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Everything you need to build, deploy, and scale quantum-powered business intelligence.
             </p>
-          </motion.div>
+          </MotionDiv>
 
           {/* Tab Navigation */}
           <div className="flex flex-col sm:flex-row justify-center mb-12">
@@ -288,7 +313,7 @@ export default function ProductsPage() {
           </div>
 
           {/* Tab Content */}
-          <motion.div
+          <MotionDiv
             key={activeTab}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -308,15 +333,15 @@ export default function ProductsPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
                 {products[activeTab].features.map((feature) => (
                   <div key={feature} className="flex items-center space-x-2">
-                    <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
+                    <CheckCircleIcon className="h-4 w-4 text-green-500 flex-shrink-0" />
                     <span className="text-sm text-gray-700">{feature}</span>
                   </div>
                 ))}
               </div>
-              <Link href="#pricing" className="btn-primary">
+              <LinkComponent href="#pricing" className="btn-primary">
                 Get Started
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
+                <ArrowRightIcon className="ml-2 h-5 w-5" />
+              </LinkComponent>
             </div>
 
             <div className="space-y-4">
@@ -324,7 +349,7 @@ export default function ProductsPage() {
                 <div key={capability.title} className="card group hover:shadow-lg transition-shadow duration-200">
                   <div className="flex items-start space-x-4">
                     <div className="w-12 h-12 bg-brand-cyan rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
-                      <capability.icon className="h-6 w-6 text-white" />
+                      {React.createElement(capability.icon, { className: "h-6 w-6 text-white" }) as JSX.Element}
                     </div>
                     <div className="flex-1">
                       <h4 className="text-lg font-semibold text-black mb-2">
@@ -338,14 +363,14 @@ export default function ProductsPage() {
                 </div>
               ))}
             </div>
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* NQBA Architecture */}
       <section className="section-padding bg-gray-50">
         <div className="container-quantum">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -359,9 +384,9 @@ export default function ProductsPage() {
               Every layer designed for quantum-native business intelligence with 
               immutable audit trails and ethical AI governance.
             </p>
-          </motion.div>
+          </MotionDiv>
 
-          <motion.div
+          <MotionDiv
             variants={staggerContainer}
             initial="initial"
             whileInView="animate"
@@ -369,7 +394,7 @@ export default function ProductsPage() {
             className="grid grid-cols-1 md:grid-cols-5 gap-6"
           >
             {nqbaLayers.map((layer, index) => (
-              <motion.div
+              <MotionDiv
                 key={layer.name}
                 variants={fadeInUp}
                 className="text-center group relative"
@@ -384,19 +409,19 @@ export default function ProductsPage() {
                 <p className="text-gray-600 text-sm leading-relaxed">{layer.description}</p>
                 {index < nqbaLayers.length - 1 && (
                   <div className="hidden md:block absolute top-10 -right-3 transform">
-                    <ArrowRight className="h-6 w-6 text-gray-400" />
+                    <ArrowRightIcon className="h-6 w-6 text-gray-400" />
                   </div>
                 )}
-              </motion.div>
+              </MotionDiv>
             ))}
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* Integrations */}
       <section className="section-padding">
         <div className="container-quantum">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -409,9 +434,9 @@ export default function ProductsPage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Built-in connections to leading quantum, AI, and workflow platforms.
             </p>
-          </motion.div>
+          </MotionDiv>
 
-          <motion.div
+          <MotionDiv
             variants={staggerContainer}
             initial="initial"
             whileInView="animate"
@@ -419,7 +444,7 @@ export default function ProductsPage() {
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
           >
             {integrations.map((integration) => (
-              <motion.div
+              <MotionDiv
                 key={integration.name}
                 variants={fadeInUp}
                 className="card group hover:shadow-lg transition-shadow duration-200"
@@ -446,16 +471,16 @@ export default function ProductsPage() {
                     </p>
                   </div>
                 </div>
-              </motion.div>
+              </MotionDiv>
             ))}
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* Pricing */}
       <section id="pricing" className="section-padding bg-gray-50">
         <div className="container-quantum">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -468,9 +493,9 @@ export default function ProductsPage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               From startups to enterprise, we have a plan that scales with your quantum ambitions.
             </p>
-          </motion.div>
+          </MotionDiv>
 
-          <motion.div
+          <MotionDiv
             variants={staggerContainer}
             initial="initial"
             whileInView="animate"
@@ -478,7 +503,7 @@ export default function ProductsPage() {
             className="grid grid-cols-1 md:grid-cols-3 gap-8"
           >
             {pricingTiers.map((tier) => (
-              <motion.div
+              <MotionDiv
                 key={tier.name}
                 variants={fadeInUp}
                 className={`card relative overflow-hidden ${
@@ -502,30 +527,30 @@ export default function ProductsPage() {
                 <ul className="space-y-3 mb-8">
                   {tier.features.map((feature) => (
                     <li key={feature} className="flex items-center space-x-2">
-                      <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
+                      <CheckCircleIcon className="h-4 w-4 text-green-500 flex-shrink-0" />
                       <span className="text-sm text-gray-700">{feature}</span>
                     </li>
                   ))}
                 </ul>
                 
-                <Link
+                <LinkComponent
                   href={tier.cta.link}
                   className={`w-full text-center ${
                     tier.popular ? 'btn-primary' : 'btn-secondary'
                   }`}
                 >
                   {tier.cta.text}
-                </Link>
-              </motion.div>
+                </LinkComponent>
+              </MotionDiv>
             ))}
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* Call to Action */}
       <section id="demo" className="section-padding">
         <div className="container-narrow text-center">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -544,13 +569,13 @@ export default function ProductsPage() {
                 className="btn-primary"
               >
                 Book Your Demo
-                <ArrowRight className="ml-2 h-5 w-5" />
+                <ArrowRightIcon className="ml-2 h-5 w-5" />
               </a>
-              <Link href="/resources/recipes" className="btn-secondary">
+              <LinkComponent href="/resources/recipes" className="btn-secondary">
                 Try QUBO Builder
-              </Link>
+              </LinkComponent>
             </div>
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
     </div>

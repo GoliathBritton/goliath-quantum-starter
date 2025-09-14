@@ -1,5 +1,6 @@
 'use client'
 
+import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { 
   TrendingUp, 
@@ -18,7 +19,28 @@ import {
   Briefcase
 } from 'lucide-react'
 import Link from 'next/link'
-import { BUSINESS_UNITS, STRATEGIC_PARTNERS } from '@/lib/brand'
+import { businessUnits, partners } from '@/lib/brand'
+
+// Type assertions for components
+const MotionDiv = motion.div as any
+const MotionSection = motion.section as any
+const LinkComponent = Link as any
+
+// Type assertions for Lucide icons
+const TrendingUpIcon = TrendingUp as any
+const DollarSignIcon = DollarSign as any
+const UsersIcon = Users as any
+const GlobeIcon = Globe as any
+const CalendarIcon = Calendar as any
+const DownloadIcon = Download as any
+const ExternalLinkIcon = ExternalLink as any
+const ArrowRightIcon = ArrowRight as any
+const BarChart3Icon = BarChart3 as any
+const PieChartIcon = PieChart as any
+const TargetIcon = Target as any
+const AwardIcon = Award as any
+const BuildingIcon = Building as any
+const BriefcaseIcon = Briefcase as any
 
 export default function InvestorRelationsPage() {
   const fadeInUp = {
@@ -41,28 +63,28 @@ export default function InvestorRelationsPage() {
       value: "340%",
       period: "YoY 2024",
       trend: "up",
-      icon: TrendingUp
+      icon: TrendingUpIcon
     },
     {
       metric: "Enterprise Clients",
       value: "150+",
       period: "Active",
       trend: "up",
-      icon: Building
+      icon: BuildingIcon
     },
     {
       metric: "Quantum Transactions",
       value: "2.4M",
       period: "Monthly",
       trend: "up",
-      icon: Target
+      icon: TargetIcon
     },
     {
       metric: "Market Valuation",
       value: "$1.2B",
       period: "Series C",
       trend: "up",
-      icon: DollarSign
+      icon: DollarSignIcon
     }
   ]
 
@@ -189,7 +211,7 @@ export default function InvestorRelationsPage() {
       {/* Hero Section */}
       <section className="hero-gradient section-padding">
         <div className="container-quantum text-center">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -202,28 +224,28 @@ export default function InvestorRelationsPage() {
               governance and exceptional growth.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="#financials" className="btn-primary">
+              <LinkComponent href="#financials" className="btn-primary">
                 View Financials
-                <BarChart3 className="ml-2 h-5 w-5" />
-              </Link>
-              <Link href="#reports" className="btn-secondary">
+                <BarChart3Icon className="ml-2 h-5 w-5" />
+              </LinkComponent>
+              <LinkComponent href="#reports" className="btn-secondary">
                 Download Reports
-                <Download className="ml-2 h-5 w-5" />
-              </Link>
+                <DownloadIcon className="ml-2 h-5 w-5" />
+              </LinkComponent>
             </div>
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* Financial Highlights */}
       <section id="financials" className="section-padding">
         <div className="container-quantum">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
+          <MotionDiv
+             initial={{ opacity: 0, y: 20 }}
+             whileInView={{ opacity: 1, y: 0 }}
+             transition={{ duration: 0.8 }}
+             viewport={{ once: true }}
+             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-bold text-black mb-6">
               Financial Highlights
@@ -231,9 +253,9 @@ export default function InvestorRelationsPage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Strong financial performance driven by quantum innovation and market leadership.
             </p>
-          </motion.div>
+          </MotionDiv>
 
-          <motion.div
+          <MotionDiv
             variants={staggerContainer}
             initial="initial"
             whileInView="animate"
@@ -241,34 +263,34 @@ export default function InvestorRelationsPage() {
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16"
           >
             {financialHighlights.map((highlight) => (
-              <motion.div
+              <MotionDiv
                 key={highlight.metric}
                 variants={fadeInUp}
                 className="card text-center group hover:shadow-lg transition-shadow duration-200"
               >
                 <div className="w-16 h-16 bg-brand-cyan rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-200">
-                  <highlight.icon className="h-8 w-8 text-white" />
+                  {React.createElement(highlight.icon, { className: "h-8 w-8 text-white" }) as JSX.Element}
                 </div>
                 <div className="text-3xl md:text-4xl font-bold text-black mb-2">
                   {highlight.value}
                 </div>
                 <div className="text-sm text-gray-500 mb-1">{highlight.period}</div>
                 <div className="font-medium text-black">{highlight.metric}</div>
-              </motion.div>
+              </MotionDiv>
             ))}
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* Business Units Performance */}
       <section className="section-padding bg-gray-50">
         <div className="container-quantum">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
+          <MotionDiv
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-bold text-black mb-6">
               Business Unit Performance
@@ -276,20 +298,20 @@ export default function InvestorRelationsPage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Our diversified portfolio of quantum business intelligence solutions.
             </p>
-          </motion.div>
+          </MotionDiv>
 
-          <motion.div
-            variants={staggerContainer}
-            initial="initial"
-            whileInView="animate"
-            viewport={{ once: true }}
-            className="grid grid-cols-1 lg:grid-cols-3 gap-8"
+          <MotionDiv
+             variants={staggerContainer}
+             initial="initial"
+             whileInView="animate"
+             viewport={{ once: true }}
+             className="grid grid-cols-1 lg:grid-cols-3 gap-8"
           >
             {businessUnits.map((unit) => (
-              <motion.div
-                key={unit.name}
-                variants={fadeInUp}
-                className="card group hover:shadow-lg transition-shadow duration-200"
+              <MotionDiv
+                 key={unit.name}
+                 variants={fadeInUp}
+                 className="card text-center group hover:shadow-lg transition-shadow duration-200"
               >
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-xl font-bold text-black group-hover:text-brand-cyan transition-colors duration-200">
@@ -310,16 +332,16 @@ export default function InvestorRelationsPage() {
                     <span className="font-semibold text-black">{unit.marketShare}</span>
                   </div>
                 </div>
-              </motion.div>
+              </MotionDiv>
             ))}
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* Company Milestones */}
       <section className="section-padding">
         <div className="container-quantum">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -332,14 +354,14 @@ export default function InvestorRelationsPage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Key achievements in our journey to quantum business intelligence leadership.
             </p>
-          </motion.div>
+          </MotionDiv>
 
           <div className="max-w-4xl mx-auto">
             <div className="relative">
               {/* Timeline line */}
               <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-brand-cyan"></div>
               
-              <motion.div
+              <MotionDiv
                 variants={staggerContainer}
                 initial="initial"
                 whileInView="animate"
@@ -347,7 +369,7 @@ export default function InvestorRelationsPage() {
                 className="space-y-8"
               >
                 {milestones.map((milestone, index) => (
-                  <motion.div
+                  <MotionDiv
                     key={index}
                     variants={fadeInUp}
                     className="relative flex items-start space-x-6"
@@ -362,9 +384,9 @@ export default function InvestorRelationsPage() {
                       </div>
                       <p className="text-gray-600 leading-relaxed">{milestone.description}</p>
                     </div>
-                  </motion.div>
+                  </MotionDiv>
                 ))}
-              </motion.div>
+              </MotionDiv>
             </div>
           </div>
         </div>
@@ -373,7 +395,7 @@ export default function InvestorRelationsPage() {
       {/* Reports & Documents */}
       <section id="reports" className="section-padding bg-gray-50">
         <div className="container-quantum">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -386,9 +408,9 @@ export default function InvestorRelationsPage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Access our latest financial reports, market analysis, and corporate documents.
             </p>
-          </motion.div>
+          </MotionDiv>
 
-          <motion.div
+          <MotionDiv
             variants={staggerContainer}
             initial="initial"
             whileInView="animate"
@@ -396,7 +418,7 @@ export default function InvestorRelationsPage() {
             className="grid grid-cols-1 md:grid-cols-2 gap-6"
           >
             {reports.map((report) => (
-              <motion.div
+              <MotionDiv
                 key={report.title}
                 variants={fadeInUp}
                 className="card group hover:shadow-lg transition-shadow duration-200"
@@ -404,7 +426,7 @@ export default function InvestorRelationsPage() {
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center space-x-3">
                     <div className="w-12 h-12 bg-brand-cyan rounded-lg flex items-center justify-center">
-                      <Download className="h-6 w-6 text-white" />
+                      <DownloadIcon className="h-6 w-6 text-white" />
                     </div>
                     <div>
                       <h3 className="font-semibold text-black group-hover:text-brand-cyan transition-colors duration-200">
@@ -420,18 +442,18 @@ export default function InvestorRelationsPage() {
                 </div>
                 <button className="w-full btn-secondary text-sm">
                   Download Report
-                  <Download className="ml-2 h-4 w-4" />
+                  <DownloadIcon className="ml-2 h-4 w-4" />
                 </button>
-              </motion.div>
+              </MotionDiv>
             ))}
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* Upcoming Events */}
       <section className="section-padding">
         <div className="container-quantum">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -444,9 +466,9 @@ export default function InvestorRelationsPage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Join us for earnings calls, investor meetings, and industry conferences.
             </p>
-          </motion.div>
+          </MotionDiv>
 
-          <motion.div
+          <MotionDiv
             variants={staggerContainer}
             initial="initial"
             whileInView="animate"
@@ -454,7 +476,7 @@ export default function InvestorRelationsPage() {
             className="max-w-4xl mx-auto space-y-6"
           >
             {upcomingEvents.map((event, index) => (
-              <motion.div
+              <MotionDiv
                 key={index}
                 variants={fadeInUp}
                 className="card group hover:shadow-lg transition-shadow duration-200"
@@ -462,7 +484,7 @@ export default function InvestorRelationsPage() {
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between">
                   <div className="flex-1">
                     <div className="flex items-center space-x-3 mb-2">
-                      <Calendar className="h-5 w-5 text-brand-cyan" />
+                      <CalendarIcon className="h-5 w-5 text-brand-cyan" />
                       <span className="text-sm font-medium text-brand-cyan">{event.type}</span>
                     </div>
                     <h3 className="text-lg font-bold text-black mb-2 group-hover:text-brand-cyan transition-colors duration-200">
@@ -470,11 +492,11 @@ export default function InvestorRelationsPage() {
                     </h3>
                     <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-6 text-sm text-gray-600">
                       <div className="flex items-center space-x-2">
-                        <Calendar className="h-4 w-4" />
+                        <CalendarIcon className="h-4 w-4" />
                         <span>{event.date} at {event.time}</span>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <Globe className="h-4 w-4" />
+                        <GlobeIcon className="h-4 w-4" />
                         <span>{event.location}</span>
                       </div>
                     </div>
@@ -482,20 +504,20 @@ export default function InvestorRelationsPage() {
                   <div className="mt-4 md:mt-0">
                     <button className="btn-primary">
                       Register
-                      <ArrowRight className="ml-2 h-4 w-4" />
+                      <ArrowRightIcon className="ml-2 h-4 w-4" />
                     </button>
                   </div>
                 </div>
-              </motion.div>
+              </MotionDiv>
             ))}
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* Contact Investor Relations */}
       <section className="section-padding bg-gray-50">
         <div className="container-narrow text-center">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -508,15 +530,15 @@ export default function InvestorRelationsPage() {
               Have questions about our financial performance or investment opportunities?
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="mailto:investors@flyfox.ai" className="btn-primary">
+              <LinkComponent href="mailto:investors@flyfox.ai" className="btn-primary">
                 Contact IR Team
-                <ExternalLink className="ml-2 h-5 w-5" />
-              </Link>
+                <ExternalLinkIcon className="ml-2 h-5 w-5" />
+              </LinkComponent>
               <a href="https://live.flyfoxai.com/widget/booking/BJV7BainocNCHj2XDtt8" className="btn-secondary" target="_blank" rel="noopener noreferrer">
                 Schedule Meeting
               </a>
             </div>
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
     </div>

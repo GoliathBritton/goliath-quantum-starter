@@ -164,7 +164,7 @@ class QuantumOptimizationService {
   }
 
   // Core QUBO Solver
-  private async solveQUBO(qubo: QUBOMatrix): Promise<OptimizationResult> {
+  async solveQUBO(qubo: QUBOMatrix): Promise<OptimizationResult> {
     const startTime = Date.now();
     
     // Quantum Approximate Optimization Algorithm (QAOA) implementation
@@ -335,9 +335,13 @@ class QuantumOptimizationService {
   // Quantum Circuit Building Methods
   private buildQAOACircuit(qubo: QUBOMatrix): QuantumCircuit {
     const circuit: QuantumCircuit = {
+      id: `qaoa-circuit-${Date.now()}`,
+      name: 'QAOA Circuit',
       qubits: qubo.size,
       depth: 0,
       gates: [],
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
     
     const p = 3; // QAOA depth parameter
@@ -345,6 +349,7 @@ class QuantumOptimizationService {
     // Initialize superposition
     for (let i = 0; i < qubo.size; i++) {
       circuit.gates.push({
+        id: `h-gate-${i}-${Date.now()}`,
         type: 'H',
         qubits: [i],
         parameters: [],
@@ -360,6 +365,7 @@ class QuantumOptimizationService {
             if (i === j) {
               // Single qubit rotation
               circuit.gates.push({
+                id: `rz-gate-${i}-${layer}-${Date.now()}`,
                 type: 'RZ',
                 qubits: [i],
                 parameters: [2 * qubo.matrix[i][j] * (layer + 1) * 0.1],
@@ -367,16 +373,19 @@ class QuantumOptimizationService {
             } else {
               // Two qubit interaction
               circuit.gates.push({
+                id: `cnot-gate-${i}-${j}-${layer}-${Date.now()}`,
                 type: 'CNOT',
                 qubits: [i, j],
                 parameters: [],
               });
               circuit.gates.push({
+                id: `rz-gate-${j}-${i}-${layer}-${Date.now()}`,
                 type: 'RZ',
                 qubits: [j],
                 parameters: [2 * qubo.matrix[i][j] * (layer + 1) * 0.1],
               });
               circuit.gates.push({
+                id: `cnot-gate-${i}-${j}-${layer}-b-${Date.now()}`,
                 type: 'CNOT',
                 qubits: [i, j],
                 parameters: [],
@@ -389,6 +398,7 @@ class QuantumOptimizationService {
       // Mixer Hamiltonian
       for (let i = 0; i < qubo.size; i++) {
         circuit.gates.push({
+          id: `rx-gate-${i}-${layer}-${Date.now()}`,
           type: 'RX',
           qubits: [i],
           parameters: [(layer + 1) * 0.2],
@@ -816,7 +826,7 @@ class QuantumOptimizationService {
 }
 
 export default new QuantumOptimizationService();
-export {
+export type {
   QUBOMatrix,
   OptimizationResult,
   PortfolioOptimizationResult,

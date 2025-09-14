@@ -1,6 +1,28 @@
 'use client'
 
 import { motion } from 'framer-motion'
+
+// Type assertion for motion components
+const MotionDiv = motion.div as any
+
+// Type assertions for Lucide icons
+const CheckCircleIcon = CheckCircle as any
+const StarIcon = Star as any
+const AwardIcon = Award as any
+const TrendingUpIcon = TrendingUp as any
+const BrainIcon = Brain as any
+const ZapIcon = Zap as any
+const ShieldIcon = Shield as any
+const UsersIcon = Users as any
+const TargetIcon = Target as any
+const GlobeIcon = Globe as any
+const CrownIcon = Crown as any
+const CpuIcon = Cpu as any
+const ArrowRightIcon = ArrowRight as any
+const UserIcon = Users as any
+
+// Type assertion for Next.js Link
+const LinkComponent = Link as any
 import { 
   Brain, 
   Zap, 
@@ -16,7 +38,7 @@ import {
   Award,
   TrendingUp
 } from 'lucide-react'
-import { businessUnits, nqbaLayers, strategicPartners } from '../../lib/brand'
+import { businessUnits, nqbaLayers, partners } from '../../lib/brand'
 import Link from 'next/link'
 
 export default function AboutPage() {
@@ -83,7 +105,7 @@ export default function AboutPage() {
       {/* Hero Section */}
       <section className="hero-gradient section-padding">
         <div className="container-quantum text-center">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -95,7 +117,7 @@ export default function AboutPage() {
               We're building the future of business intelligence with quantum-native architecture 
               and immutable decision provenance.
             </p>
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
@@ -103,7 +125,7 @@ export default function AboutPage() {
       <section className="section-padding">
         <div className="container-quantum">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <motion.div
+            <MotionDiv
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
@@ -123,14 +145,14 @@ export default function AboutPage() {
                   "Democratized access to quantum computing"
                 ].map((item) => (
                   <div key={item} className="flex items-center space-x-3">
-                    <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
+                    <CheckCircleIcon className="h-5 w-5 text-green-500 flex-shrink-0" />
                     <span className="text-gray-700">{item}</span>
                   </div>
                 ))}
               </div>
-            </motion.div>
+            </MotionDiv>
 
-            <motion.div
+            <MotionDiv
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
@@ -160,7 +182,7 @@ export default function AboutPage() {
                   <div className="text-sm text-gray-600">Quantum Monitoring</div>
                 </div>
               </div>
-            </motion.div>
+            </MotionDiv>
           </div>
         </div>
       </section>
@@ -168,7 +190,7 @@ export default function AboutPage() {
       {/* Intelligence Economy Structure */}
       <section className="section-padding bg-gray-50">
         <div className="container-quantum">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -181,9 +203,9 @@ export default function AboutPage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Our three-pillar approach to quantum-powered business transformation.
             </p>
-          </motion.div>
+          </MotionDiv>
 
-          <motion.div
+          <MotionDiv
             variants={staggerContainer}
             initial="initial"
             whileInView="animate"
@@ -191,7 +213,7 @@ export default function AboutPage() {
             className="grid grid-cols-1 lg:grid-cols-3 gap-8"
           >
             {businessUnits.map((unit, index) => (
-              <motion.div
+              <MotionDiv
                 key={unit.name}
                 variants={fadeInUp}
                 className="card-quantum group relative overflow-hidden"
@@ -211,25 +233,25 @@ export default function AboutPage() {
                   <div className="text-sm text-gray-500 mb-6">
                     {unit.quantumAdvantage}
                   </div>
-                  <Link 
+                  <LinkComponent
                     href={`/industries#${unit.name.toLowerCase().replace(/\s+/g, '-')}`}
                     className="inline-flex items-center text-sm font-medium hover:text-brand-cyan transition-colors duration-200"
                     style={{ color: unit.color }}
                   >
                     Learn More
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
+                    <ArrowRightIcon className="ml-2 h-4 w-4" />
+                  </LinkComponent>
                 </div>
-              </motion.div>
+              </MotionDiv>
             ))}
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* NQBA Architecture Deep Dive */}
       <section className="section-padding">
         <div className="container-quantum">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -243,9 +265,9 @@ export default function AboutPage() {
               Our 5-layer quantum-native business architecture ensures every decision 
               is governed, traceable, and optimized.
             </p>
-          </motion.div>
+          </MotionDiv>
 
-          <motion.div
+          <MotionDiv
             variants={staggerContainer}
             initial="initial"
             whileInView="animate"
@@ -253,7 +275,7 @@ export default function AboutPage() {
             className="space-y-8"
           >
             {nqbaLayers.map((layer, index) => (
-              <motion.div
+              <MotionDiv
                 key={layer.name}
                 variants={fadeInUp}
                 className={`flex flex-col lg:flex-row items-center gap-8 ${index % 2 === 1 ? 'lg:flex-row-reverse' : ''}`}
@@ -275,10 +297,10 @@ export default function AboutPage() {
                     {layer.description}
                   </p>
                   <div className="space-y-2">
-                    {layer.capabilities?.map((capability) => (
-                      <div key={capability} className="flex items-center space-x-2">
-                        <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
-                        <span className="text-sm text-gray-700">{capability}</span>
+                    {layer.advancedRoles?.map((role) => (
+                      <div key={role} className="flex items-center space-x-2">
+                        <CheckCircleIcon className="h-4 w-4 text-green-500 flex-shrink-0" />
+                        <span className="text-sm text-gray-700">{role}</span>
                       </div>
                     ))}
                   </div>
@@ -293,16 +315,16 @@ export default function AboutPage() {
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </MotionDiv>
             ))}
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* Team Section */}
       <section className="section-padding bg-gray-50">
         <div className="container-quantum">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -315,9 +337,9 @@ export default function AboutPage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               World-class experts in quantum computing, AI ethics, and business intelligence.
             </p>
-          </motion.div>
+          </MotionDiv>
 
-          <motion.div
+          <MotionDiv
             variants={staggerContainer}
             initial="initial"
             whileInView="animate"
@@ -325,13 +347,13 @@ export default function AboutPage() {
             className="grid grid-cols-1 md:grid-cols-3 gap-8"
           >
             {teamMembers.map((member) => (
-              <motion.div
+              <MotionDiv
                 key={member.name}
                 variants={fadeInUp}
                 className="card text-center"
               >
                 <div className="w-24 h-24 bg-gradient-to-br from-brand-cyan to-brand-gold rounded-full mx-auto mb-6 flex items-center justify-center">
-                  <User className="h-12 w-12 text-white" />
+                  <UserIcon className="h-12 w-12 text-white" />
                 </div>
                 <h3 className="text-xl font-bold text-black mb-2">{member.name}</h3>
                 <div className="text-brand-cyan font-semibold mb-3">{member.role}</div>
@@ -339,16 +361,16 @@ export default function AboutPage() {
                 <div className="text-xs text-gray-500 font-medium">
                   Expertise: {member.expertise}
                 </div>
-              </motion.div>
+              </MotionDiv>
             ))}
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* Company Timeline */}
       <section className="section-padding">
         <div className="container-quantum">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -361,9 +383,9 @@ export default function AboutPage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               From quantum research to enterprise-ready business intelligence platform.
             </p>
-          </motion.div>
+          </MotionDiv>
 
-          <motion.div
+          <MotionDiv
             variants={staggerContainer}
             initial="initial"
             whileInView="animate"
@@ -374,7 +396,7 @@ export default function AboutPage() {
             <div className="absolute left-1/2 transform -translate-x-px h-full w-0.5 bg-gray-300"></div>
             
             {milestones.map((milestone, index) => (
-              <motion.div
+              <MotionDiv
                 key={milestone.year}
                 variants={fadeInUp}
                 className={`relative flex items-center mb-12 ${index % 2 === 0 ? 'justify-start' : 'justify-end'}`}
@@ -389,16 +411,16 @@ export default function AboutPage() {
                 
                 {/* Timeline dot */}
                 <div className="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-brand-cyan rounded-full border-4 border-white shadow-lg"></div>
-              </motion.div>
+              </MotionDiv>
             ))}
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* Call to Action */}
       <section className="section-padding bg-gray-50">
         <div className="container-narrow text-center">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -412,15 +434,15 @@ export default function AboutPage() {
               Let's build the future together.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/contact" className="btn-primary">
+              <LinkComponent href="/contact" className="btn-primary">
                 Get Started
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-              <Link href="/case-studies" className="btn-secondary">
-                View Case Studies
-              </Link>
+                <ArrowRightIcon className="ml-2 h-5 w-5" />
+              </LinkComponent>
+              <LinkComponent href="/case-studies" className="btn-secondary">
+                 View Case Studies
+               </LinkComponent>
             </div>
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
     </div>

@@ -2,6 +2,18 @@ import React, { useState } from 'react';
 import { Modal, Button, Form, Alert, Spinner } from 'react-bootstrap';
 import { useAuth } from './AuthContext';
 
+const ModalComponent = Modal as any;
+const ModalHeader = Modal.Header as any;
+const ModalTitle = Modal.Title as any;
+const ModalBody = Modal.Body as any;
+const AlertComponent = Alert as any;
+const ButtonComponent = Button as any;
+const FormComponent = Form as any;
+const FormGroup = Form.Group as any;
+const FormLabel = Form.Label as any;
+const FormControl = Form.Control as any;
+const SpinnerComponent = Spinner as any;
+
 interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -62,21 +74,21 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onSuccess }) =
   };
 
   return (
-    <Modal show={isOpen} onHide={handleClose} centered>
-      <Modal.Header closeButton>
-        <Modal.Title>Login to NQBA Platform</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
+    <ModalComponent show={isOpen} onHide={handleClose} centered>
+      <ModalHeader closeButton>
+        <ModalTitle>Login to NQBA Platform</ModalTitle>
+      </ModalHeader>
+      <ModalBody>
         {error && (
-          <Alert variant="danger" className="mb-3">
+          <AlertComponent variant="danger" className="mb-3">
             {error}
-          </Alert>
+          </AlertComponent>
         )}
         
-        <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-3">
-            <Form.Label>Username</Form.Label>
-            <Form.Control
+        <FormComponent onSubmit={handleSubmit}>
+          <FormGroup className="mb-3">
+            <FormLabel>Username</FormLabel>
+            <FormControl
               type="text"
               name="username"
               value={formData.username}
@@ -85,11 +97,11 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onSuccess }) =
               required
               disabled={loading}
             />
-          </Form.Group>
+          </FormGroup>
           
-          <Form.Group className="mb-3">
-            <Form.Label>Password</Form.Label>
-            <Form.Control
+          <FormGroup className="mb-3">
+            <FormLabel>Password</FormLabel>
+            <FormControl
               type="password"
               name="password"
               value={formData.password}
@@ -98,10 +110,10 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onSuccess }) =
               required
               disabled={loading}
             />
-          </Form.Group>
+          </FormGroup>
           
           <div className="d-grid gap-2">
-            <Button 
+            <ButtonComponent 
               variant="primary" 
               type="submit" 
               disabled={loading}
@@ -109,7 +121,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onSuccess }) =
             >
               {loading ? (
                 <>
-                  <Spinner
+                  <SpinnerComponent
                     as="span"
                     animation="border"
                     size="sm"
@@ -122,17 +134,17 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, onSuccess }) =
               ) : (
                 'Login'
               )}
-            </Button>
+            </ButtonComponent>
           </div>
-        </Form>
+        </FormComponent>
         
         <div className="mt-3 text-center">
           <small className="text-muted">
             Demo credentials: admin / admin123
           </small>
         </div>
-      </Modal.Body>
-    </Modal>
+      </ModalBody>
+    </ModalComponent>
   );
 };
 

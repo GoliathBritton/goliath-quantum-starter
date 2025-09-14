@@ -32,7 +32,7 @@ import {
   Twitter,
   LinkedIn,
   YouTube,
-  TikTok,
+  VideoLibrary,
   Add,
   MoreVert,
   Schedule,
@@ -168,7 +168,7 @@ const SocialMediaDashboard: React.FC = () => {
       case 'twitter': return <Twitter />;
       case 'linkedin': return <LinkedIn />;
       case 'youtube': return <YouTube />;
-      case 'tiktok': return <TikTok />;
+      case 'tiktok': return <VideoLibrary />;
       default: return null;
     }
   };
@@ -252,80 +252,82 @@ const SocialMediaDashboard: React.FC = () => {
 
       {/* Overview Tab */}
       <TabPanel value={activeTab} index={0}>
-        <Grid container spacing={3}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
           {/* Quick Stats */}
-          <Grid item xs={12} md={3}>
-            <Card>
-              <CardContent>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                  <People color="primary" />
-                  <Typography variant="h6" sx={{ ml: 1 }}>Total Followers</Typography>
-                </Box>
-                <Typography variant="h4">
-                  {formatNumber(accounts.reduce((sum, acc) => sum + acc.followers, 0))}
-                </Typography>
-                <Typography variant="body2" color="success.main">
-                  +12.5% this month
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-          
-          <Grid item xs={12} md={3}>
-            <Card>
-              <CardContent>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                  <TrendingUp color="primary" />
-                  <Typography variant="h6" sx={{ ml: 1 }}>Engagement Rate</Typography>
-                </Box>
-                <Typography variant="h4">4.2%</Typography>
-                <Typography variant="body2" color="success.main">
-                  +0.8% this week
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-          
-          <Grid item xs={12} md={3}>
-            <Card>
-              <CardContent>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                  <Visibility color="primary" />
-                  <Typography variant="h6" sx={{ ml: 1 }}>Total Reach</Typography>
-                </Box>
-                <Typography variant="h4">{formatNumber(120000)}</Typography>
-                <Typography variant="body2" color="success.main">
-                  +18.3% this month
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-          
-          <Grid item xs={12} md={3}>
-            <Card>
-              <CardContent>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                  <Schedule color="primary" />
-                  <Typography variant="h6" sx={{ ml: 1 }}>Scheduled Posts</Typography>
-                </Box>
-                <Typography variant="h4">
-                  {posts.filter(p => p.status === 'scheduled').length}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Next in 2 hours
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
+          <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
+            <Box sx={{ flex: '1 1 250px', minWidth: '250px' }}>
+              <Card>
+                <CardContent>
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                    <People color="primary" />
+                    <Typography variant="h6" sx={{ ml: 1 }}>Total Followers</Typography>
+                  </Box>
+                  <Typography variant="h4">
+                    {formatNumber(accounts.reduce((sum, acc) => sum + acc.followers, 0))}
+                  </Typography>
+                  <Typography variant="body2" color="success.main">
+                    +12.5% this month
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Box>
+            
+            <Box sx={{ flex: '1 1 250px', minWidth: '250px' }}>
+              <Card>
+                <CardContent>
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                    <TrendingUp color="primary" />
+                    <Typography variant="h6" sx={{ ml: 1 }}>Engagement Rate</Typography>
+                  </Box>
+                  <Typography variant="h4">4.2%</Typography>
+                  <Typography variant="body2" color="success.main">
+                    +0.8% this week
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Box>
+            
+            <Box sx={{ flex: '1 1 250px', minWidth: '250px' }}>
+              <Card>
+                <CardContent>
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                    <Visibility color="primary" />
+                    <Typography variant="h6" sx={{ ml: 1 }}>Total Reach</Typography>
+                  </Box>
+                  <Typography variant="h4">{formatNumber(120000)}</Typography>
+                  <Typography variant="body2" color="success.main">
+                    +18.3% this month
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Box>
+            
+            <Box sx={{ flex: '1 1 250px', minWidth: '250px' }}>
+              <Card>
+                <CardContent>
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                    <Schedule color="primary" />
+                    <Typography variant="h6" sx={{ ml: 1 }}>Scheduled Posts</Typography>
+                  </Box>
+                  <Typography variant="h4">
+                    {posts.filter(p => p.status === 'scheduled').length}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Next in 2 hours
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Box>
+          </Box>
 
           {/* Connected Accounts */}
-          <Grid item xs={12}>
+          <Box>
             <Card>
               <CardContent>
                 <Typography variant="h6" gutterBottom>Connected Accounts</Typography>
-                <Grid container spacing={2}>
+                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
                   {accounts.map((account) => (
-                    <Grid item xs={12} sm={6} md={3} key={account.id}>
+                    <Box key={account.id} sx={{ flex: '1 1 250px', minWidth: '250px' }}>
                       <Card variant="outlined">
                         <CardContent>
                           <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -348,20 +350,20 @@ const SocialMediaDashboard: React.FC = () => {
                           />
                         </CardContent>
                       </Card>
-                    </Grid>
+                    </Box>
                   ))}
-                </Grid>
+                </Box>
               </CardContent>
             </Card>
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       </TabPanel>
 
       {/* Posts Tab */}
       <TabPanel value={activeTab} index={1}>
-        <Grid container spacing={3}>
+        <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
           {posts.map((post) => (
-            <Grid item xs={12} md={6} key={post.id}>
+            <Box key={post.id} sx={{ flex: '1 1 400px', minWidth: '400px' }}>
               <Card>
                 <CardContent>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
@@ -405,15 +407,15 @@ const SocialMediaDashboard: React.FC = () => {
                   )}
                 </CardContent>
               </Card>
-            </Grid>
+            </Box>
           ))}
-        </Grid>
+        </Box>
       </TabPanel>
 
       {/* Analytics Tab */}
       <TabPanel value={activeTab} index={2}>
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={8}>
+        <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
+          <Box sx={{ flex: '2 1 500px', minWidth: '500px' }}>
             <Card>
               <CardContent>
                 <Typography variant="h6" gutterBottom>Engagement Over Time</Typography>
@@ -428,9 +430,9 @@ const SocialMediaDashboard: React.FC = () => {
                 </ResponsiveContainer>
               </CardContent>
             </Card>
-          </Grid>
+          </Box>
           
-          <Grid item xs={12} md={4}>
+          <Box sx={{ flex: '1 1 300px', minWidth: '300px' }}>
             <Card>
               <CardContent>
                 <Typography variant="h6" gutterBottom>Platform Distribution</Typography>
@@ -443,7 +445,7 @@ const SocialMediaDashboard: React.FC = () => {
                       outerRadius={80}
                       fill="#8884d8"
                       dataKey="followers"
-                      label={({ platform, value }) => `${platform}: ${formatNumber(value)}`}
+                      label={(entry: any) => `${entry.platform}: ${formatNumber(entry.value)}`}
                     >
                       {analyticsData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={getPlatformColor(entry.platform.toLowerCase())} />
@@ -454,15 +456,15 @@ const SocialMediaDashboard: React.FC = () => {
                 </ResponsiveContainer>
               </CardContent>
             </Card>
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       </TabPanel>
 
       {/* Accounts Tab */}
       <TabPanel value={activeTab} index={3}>
-        <Grid container spacing={3}>
+        <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
           {accounts.map((account) => (
-            <Grid item xs={12} md={6} key={account.id}>
+            <Box key={account.id} sx={{ flex: '1 1 400px', minWidth: '400px' }}>
               <Card>
                 <CardContent>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
@@ -503,9 +505,9 @@ const SocialMediaDashboard: React.FC = () => {
                   </Typography>
                 </CardContent>
               </Card>
-            </Grid>
+            </Box>
           ))}
-        </Grid>
+        </Box>
       </TabPanel>
 
       {/* Create Post Dialog */}

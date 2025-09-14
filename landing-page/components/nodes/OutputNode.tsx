@@ -1,6 +1,9 @@
 import React from 'react';
 import { Handle, Position, NodeProps } from 'reactflow';
 
+// Type assertion for component
+const HandleComponent = Handle as any;
+
 interface OutputNodeData {
   label: string;
   icon?: string;
@@ -23,7 +26,7 @@ const OutputNode: React.FC<NodeProps<OutputNodeData>> = ({ data, selected }) => 
         </div>
       </div>
       
-      <Handle
+      <HandleComponent
         type="target"
         position={Position.Left}
         className="w-16 !bg-purple-500"

@@ -62,14 +62,14 @@ import {
   Schedule,
   Psychology,
   Analytics,
-  Target,
+  GpsFixed,
   AutoAwesome,
   Instagram,
   Facebook,
   Twitter,
   LinkedIn,
   YouTube,
-  TikTok,
+  VideoLibrary,
   CalendarToday,
   People,
   AttachMoney,
@@ -325,14 +325,14 @@ const CampaignManager: React.FC = () => {
     { id: 'twitter', name: 'Twitter', icon: Twitter, color: '#1DA1F2' },
     { id: 'linkedin', name: 'LinkedIn', icon: LinkedIn, color: '#0A66C2' },
     { id: 'youtube', name: 'YouTube', icon: YouTube, color: '#FF0000' },
-    { id: 'tiktok', name: 'TikTok', icon: TikTok, color: '#000000' },
+    { id: 'tiktok', name: 'TikTok', icon: VideoLibrary, color: '#000000' },
   ];
 
   const objectives = [
     { id: 'awareness', name: 'Brand Awareness', icon: Visibility },
     { id: 'engagement', name: 'Engagement', icon: TrendingUp },
     { id: 'traffic', name: 'Website Traffic', icon: Share },
-    { id: 'conversions', name: 'Conversions', icon: Target },
+    { id: 'conversions', name: 'Conversions', icon: GpsFixed },
     { id: 'leads', name: 'Lead Generation', icon: People },
   ];
 
@@ -491,8 +491,8 @@ const CampaignManager: React.FC = () => {
         </Box>
 
         {/* Campaign Overview Cards */}
-        <Grid container spacing={3} sx={{ mb: 3 }}>
-          <Grid item xs={12} sm={6} md={3}>
+        <Box sx={{ display: 'flex', gap: 3, mb: 3, flexWrap: 'wrap' }}>
+          <Box sx={{ flex: '1 1 250px', minWidth: '250px' }}>
             <Card>
               <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -507,9 +507,9 @@ const CampaignManager: React.FC = () => {
                 </Typography>
               </CardContent>
             </Card>
-          </Grid>
+          </Box>
           
-          <Grid item xs={12} sm={6} md={3}>
+          <Box sx={{ flex: '1 1 250px', minWidth: '250px' }}>
             <Card>
               <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -524,9 +524,9 @@ const CampaignManager: React.FC = () => {
                 </Typography>
               </CardContent>
             </Card>
-          </Grid>
+          </Box>
           
-          <Grid item xs={12} sm={6} md={3}>
+          <Box sx={{ flex: '1 1 250px', minWidth: '250px' }}>
             <Card>
               <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -544,9 +544,9 @@ const CampaignManager: React.FC = () => {
                 </Box>
               </CardContent>
             </Card>
-          </Grid>
+          </Box>
           
-          <Grid item xs={12} sm={6} md={3}>
+          <Box sx={{ flex: '1 1 250px', minWidth: '250px' }}>
             <Card>
               <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -561,8 +561,8 @@ const CampaignManager: React.FC = () => {
                 </Typography>
               </CardContent>
             </Card>
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
 
         <Paper sx={{ width: '100%', mb: 3 }}>
           <Tabs value={activeTab} onChange={(e, newValue) => setActiveTab(newValue)}>
@@ -575,9 +575,9 @@ const CampaignManager: React.FC = () => {
 
         {/* All Campaigns Tab */}
         <TabPanel value={activeTab} index={0}>
-          <Grid container spacing={3}>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
             {campaigns.map((campaign) => (
-              <Grid item xs={12} lg={6} key={campaign.id}>
+              <Box key={campaign.id} sx={{ flex: '1 1 400px', minWidth: '400px' }}>
                 <Card>
                   <CardContent>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
@@ -617,8 +617,8 @@ const CampaignManager: React.FC = () => {
                       </Box>
                     </Box>
                     
-                    <Grid container spacing={2} sx={{ mb: 2 }}>
-                      <Grid item xs={6}>
+                    <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+                      <Box sx={{ flex: 1 }}>
                         <Typography variant="body2" color="text.secondary">Budget</Typography>
                         <Typography variant="h6">{formatCurrency(campaign.budget)}</Typography>
                         <LinearProgress
@@ -626,15 +626,15 @@ const CampaignManager: React.FC = () => {
                           value={(campaign.spent / campaign.budget) * 100}
                           sx={{ mt: 1 }}
                         />
-                      </Grid>
-                      <Grid item xs={6}>
+                      </Box>
+                      <Box sx={{ flex: 1 }}>
                         <Typography variant="body2" color="text.secondary">Reach</Typography>
                         <Typography variant="h6">{formatNumber(campaign.metrics.reach)}</Typography>
                         <Typography variant="body2" color="success.main">
                           ROI: {campaign.metrics.roi}x
                         </Typography>
-                      </Grid>
-                    </Grid>
+                      </Box>
+                    </Box>
                     
                     {campaign.quantumOptimization.enabled && (
                       <Alert severity="info" icon={<Psychology />} sx={{ mb: 2 }}>
@@ -690,15 +690,15 @@ const CampaignManager: React.FC = () => {
                     </Box>
                   </CardContent>
                 </Card>
-              </Grid>
+              </Box>
             ))}
-          </Grid>
+          </Box>
         </TabPanel>
 
         {/* Performance Tab */}
         <TabPanel value={activeTab} index={1}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} lg={8}>
+          <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
+            <Box sx={{ flex: '2 1 600px', minWidth: '600px' }}>
               <Card>
                 <CardContent>
                   <Typography variant="h6" gutterBottom>Campaign Performance Over Time</Typography>
@@ -720,9 +720,9 @@ const CampaignManager: React.FC = () => {
                   </ResponsiveContainer>
                 </CardContent>
               </Card>
-            </Grid>
+            </Box>
             
-            <Grid item xs={12} lg={4}>
+            <Box sx={{ flex: '1 1 300px', minWidth: '300px' }}>
               <Card sx={{ mb: 3 }}>
                 <CardContent>
                   <Typography variant="h6" gutterBottom>Budget Distribution</Typography>
@@ -735,7 +735,7 @@ const CampaignManager: React.FC = () => {
                         outerRadius={80}
                         fill="#8884d8"
                         dataKey="budget"
-                        label={({ name, value }) => `${name}: ${formatCurrency(value)}`}
+                        label={({ name, value }) => `${name}: ${formatCurrency(Number(value))}`}
                       >
                         {campaigns.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -779,14 +779,14 @@ const CampaignManager: React.FC = () => {
                   </List>
                 </CardContent>
               </Card>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         </TabPanel>
 
         {/* Quantum Insights Tab */}
         <TabPanel value={activeTab} index={2}>
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+            <Box>
               <Alert severity="info" icon={<Psychology />} sx={{ mb: 3 }}>
                 <Typography variant="h6" gutterBottom>
                   Quantum-Enhanced Campaign Intelligence
@@ -796,10 +796,10 @@ const CampaignManager: React.FC = () => {
                   with 410.7x faster processing than traditional methods.
                 </Typography>
               </Alert>
-            </Grid>
+            </Box>
             
             {campaigns.map((campaign) => (
-              <Grid item xs={12} md={6} key={campaign.id}>
+              <Box sx={{ flex: '1 1 calc(50% - 12px)', minWidth: '300px' }} key={campaign.id}>
                 <Card>
                   <CardContent>
                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -839,15 +839,15 @@ const CampaignManager: React.FC = () => {
                     </List>
                   </CardContent>
                 </Card>
-              </Grid>
+              </Box>
             ))}
-          </Grid>
+          </Box>
         </TabPanel>
 
         {/* Automation Tab */}
         <TabPanel value={activeTab} index={3}>
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+            <Box>
               <Alert severity="success" icon={<AutoAwesome />} sx={{ mb: 3 }}>
                 <Typography variant="h6" gutterBottom>
                   Quantum-Powered Automation
@@ -857,10 +857,10 @@ const CampaignManager: React.FC = () => {
                   and predictive scaling based on performance patterns.
                 </Typography>
               </Alert>
-            </Grid>
+            </Box>
             
             {campaigns.map((campaign) => (
-              <Grid item xs={12} md={6} key={campaign.id}>
+              <Box sx={{ flex: '1 1 calc(50% - 12px)', minWidth: '300px' }} key={campaign.id}>
                 <Card>
                   <CardContent>
                     <Typography variant="h6" gutterBottom>{campaign.name}</Typography>
@@ -937,9 +937,9 @@ const CampaignManager: React.FC = () => {
                     </Box>
                   </CardContent>
                 </Card>
-              </Grid>
+              </Box>
             ))}
-          </Grid>
+          </Box>
         </TabPanel>
 
         {/* Create Campaign Dialog */}
@@ -1045,9 +1045,9 @@ const CampaignManager: React.FC = () => {
                         <Typography variant="subtitle2" gutterBottom>
                           Select Platforms:
                         </Typography>
-                        <Grid container spacing={1} sx={{ mb: 3 }}>
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 3 }}>
                           {platforms.map((platform) => (
-                            <Grid item key={platform.id}>
+                            <Box key={platform.id}>
                               <Chip
                                 label={platform.name}
                                 icon={getPlatformIcon(platform.id)}
@@ -1061,9 +1061,9 @@ const CampaignManager: React.FC = () => {
                                   setNewCampaign({ ...newCampaign, platforms: newPlatforms });
                                 }}
                               />
-                            </Grid>
+                            </Box>
                           ))}
-                        </Grid>
+                        </Box>
                         <TextField
                           fullWidth
                           label="Budget ($)"

@@ -17,6 +17,15 @@ import ReactFlow, {
   ReactFlowInstance,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
+
+// Type assertions for components
+const ReactFlowComponent = ReactFlow as any;
+const ReactFlowProviderComponent = ReactFlowProvider as any;
+const BackgroundComponent = Background as any;
+const ControlsComponent = Controls as any;
+const MiniMapComponent = MiniMap as any;
+const PanelComponent = Panel as any;
+const PipelineLibraryComponent = PipelineLibrary as any;
 import useWebSocket from '../hooks/useWebSocket';
 import PipelineLibrary from './PipelineLibrary';
 
@@ -814,7 +823,7 @@ const PipelineBuilderInner: React.FC<PipelineBuilderProps> = ({
 
         {/* React Flow Canvas */}
         <div ref={reactFlowWrapper} style={{ height: 'calc(100vh - 120px)' }}>
-          <ReactFlow
+          <ReactFlowComponent
             nodes={nodes}
             edges={edges}
             onNodesChange={onNodesChange}
@@ -828,25 +837,25 @@ const PipelineBuilderInner: React.FC<PipelineBuilderProps> = ({
             fitView
             attributionPosition="bottom-left"
           >
-            <Background />
-            <Controls />
-            <MiniMap />
+            <BackgroundComponent />
+            <ControlsComponent />
+            <MiniMapComponent />
             
             {/* Instructions Panel */}
             {nodes.length === 0 && (
-              <Panel position="top-center">
+              <PanelComponent position="top-center">
                 <div className="alert alert-info text-center">
                   <h6>🚀 Start Building Your Pipeline</h6>
                   <p className="mb-0">Drag nodes from the sidebar to create your recipe</p>
                 </div>
-              </Panel>
+              </PanelComponent>
             )}
-          </ReactFlow>
+          </ReactFlowComponent>
         </div>
       </div>
       
       {/* Pipeline Library Modal */}
-      <PipelineLibrary
+      <PipelineLibraryComponent
         isOpen={showLibrary}
         onClose={() => setShowLibrary(false)}
         onLoad={loadPipeline}
@@ -855,12 +864,15 @@ const PipelineBuilderInner: React.FC<PipelineBuilderProps> = ({
   );
 };
 
+// Type assertion for PipelineBuilderInner
+const PipelineBuilderInnerComponent = PipelineBuilderInner as any;
+
 // Main component with ReactFlow provider
 const PipelineBuilder: React.FC<PipelineBuilderProps> = (props) => {
   return (
-    <ReactFlowProvider>
-      <PipelineBuilderInner {...props} />
-    </ReactFlowProvider>
+    <ReactFlowProviderComponent>
+      <PipelineBuilderInnerComponent {...props} />
+    </ReactFlowProviderComponent>
   );
 };
 

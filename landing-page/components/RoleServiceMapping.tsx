@@ -9,6 +9,25 @@ import {
 } from 'lucide-react'
 import { brand } from '@/lib/brand'
 
+// Type assertions for motion components
+const MotionDiv = motion.div as any;
+const AnimatePresenceComponent = AnimatePresence as any;
+
+// Type assertions for Lucide icons
+const CodeComponent = Code as any;
+const DatabaseComponent = Database as any;
+const CloudComponent = Cloud as any;
+const ShieldComponent = Shield as any;
+const TrendingUpComponent = TrendingUp as any;
+const UsersComponent = Users as any;
+const BriefcaseComponent = Briefcase as any;
+const SettingsComponent = Settings as any;
+const TargetComponent = Target as any;
+const MegaphoneComponent = Megaphone as any;
+const ArrowRightComponent = ArrowRight as any;
+const ExternalLinkComponent = ExternalLink as any;
+const ZapComponent = Zap as any;
+
 interface ServiceMapping {
   role: string
   services: {
@@ -292,7 +311,7 @@ export default function RoleServiceMapping() {
           const isSelected = selectedRole === mapping.role
           
           return (
-            <motion.div
+            <MotionDiv
               key={mapping.role}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -306,7 +325,7 @@ export default function RoleServiceMapping() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4">
                     <div className="w-12 h-12 bg-brand-gold/10 rounded-lg flex items-center justify-center">
-                      <Code className="w-6 h-6 text-brand-gold" />
+                      <CodeComponent className="w-6 h-6 text-brand-gold" />
                     </div>
                     <div>
                       <h3 className="text-xl font-bold text-black">{role?.title || mapping.role}</h3>
@@ -322,7 +341,7 @@ export default function RoleServiceMapping() {
                       </div>
                     </div>
                   </div>
-                  <ArrowRight 
+                  <ArrowRightComponent 
                     className={`w-5 h-5 text-gray-400 transition-transform duration-300 ${
                       isSelected ? 'rotate-90' : ''
                     }`} 
@@ -330,9 +349,9 @@ export default function RoleServiceMapping() {
                 </div>
               </div>
 
-              <AnimatePresence>
+              <AnimatePresenceComponent>
                 {isSelected && (
-                  <motion.div
+                  <MotionDiv
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: 'auto', opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
@@ -342,7 +361,7 @@ export default function RoleServiceMapping() {
                     <div className="p-6">
                       <div className="grid gap-4">
                         {mapping.services.map((service, serviceIndex) => (
-                          <motion.div
+                          <MotionDiv
                             key={service.name}
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
@@ -366,19 +385,19 @@ export default function RoleServiceMapping() {
                                     <code className="text-xs bg-gray-100 px-2 py-1 rounded font-mono text-gray-700">
                                       {service.endpoint}
                                     </code>
-                                    <ExternalLink className="w-3 h-3 text-gray-400" />
+                                    <ExternalLinkComponent className="w-3 h-3 text-gray-400" />
                                   </div>
                                 )}
                               </div>
                             </div>
-                          </motion.div>
+                          </MotionDiv>
                         ))}
                       </div>
                     </div>
-                  </motion.div>
+                  </MotionDiv>
                 )}
-              </AnimatePresence>
-            </motion.div>
+              </AnimatePresenceComponent>
+            </MotionDiv>
           )
         })}
       </div>

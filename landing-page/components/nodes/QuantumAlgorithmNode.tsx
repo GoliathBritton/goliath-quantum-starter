@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { Handle, Position, NodeProps } from 'reactflow';
 
+// Type assertion for component
+const HandleComponent = Handle as any;
+
 interface QuantumAlgorithmNodeData {
   label: string;
   algorithmType: string;
@@ -145,12 +148,12 @@ const QuantumAlgorithmNode: React.FC<NodeProps<QuantumAlgorithmNodeData>> = ({ d
         </div>
       )}
       
-      <Handle
+      <HandleComponent
         type="target"
         position={Position.Left}
         className="w-4 h-4 !bg-indigo-500"
       />
-      <Handle
+      <HandleComponent
         type="source"
         position={Position.Right}
         className="w-4 h-4 !bg-indigo-500"

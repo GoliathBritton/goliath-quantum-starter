@@ -164,19 +164,19 @@ const MainNavigator = () => (
     />
     <Stack.Screen 
       name="PodDetail" 
-      component={({ route }) => {
+      component={({ route, navigation }) => {
         const { podType } = route.params;
         switch (podType) {
           case 'SIGMA_SELECT':
-            return <SigmaSelectScreen />;
+            return <SigmaSelectScreen navigation={navigation} />;
           case 'FLYFOX_AI':
-            return <FlyFoxAIScreen />;
+            return <FlyFoxAIScreen navigation={navigation} />;
           case 'GOLIATH_TRADE':
-            return <GoliathTradeScreen />;
+            return <GoliathTradeScreen navigation={navigation} />;
           case 'SFG_SYMMETRY':
-            return <SFGSymmetryScreen />;
+            return <SFGSymmetryScreen navigation={navigation} />;
           case 'GHOST_NEUROQ':
-            return <GhostNeuroQScreen />;
+            return <GhostNeuroQScreen navigation={navigation} />;
           default:
             return <DashboardScreen />;
         }
@@ -187,17 +187,17 @@ const MainNavigator = () => (
     />
     <Stack.Screen 
       name="Settings" 
-      component={SettingsScreen} 
+      component={({ navigation }) => <SettingsScreen navigation={navigation} />} 
       options={{ title: 'Settings' }}
     />
     <Stack.Screen 
       name="Security" 
-      component={SecurityScreen} 
+      component={({ navigation }) => <SecurityScreen navigation={navigation} />} 
       options={{ title: 'Security & Privacy' }}
     />
     <Stack.Screen 
       name="Notifications" 
-      component={NotificationsScreen} 
+      component={({ navigation }) => <NotificationsScreen navigation={navigation} />} 
       options={{ title: 'Notifications' }}
     />
   </Stack.Navigator>

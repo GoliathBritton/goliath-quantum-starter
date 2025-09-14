@@ -57,7 +57,7 @@ interface TaskResult {
 interface CreateAgentRequest {
   name: string
   type: Agent['type']
-  tier?: Agent['metadata']['tier']
+  tier?: string
   capabilities?: string[]
 }
 
@@ -76,59 +76,53 @@ const mockAgents: Agent[] = [
   {
     id: 'agent_qc_001',
     name: 'Quantum Council Alpha',
-    type: 'quantum_council',
+    type: 'quantum',
     status: 'active',
     capabilities: ['governance', 'policy_enforcement', 'resource_allocation', 'strategic_planning'],
     performance_metrics: {
       tasks_completed: 1247,
       success_rate: 0.98,
-      average_execution_time: 2.3,
-      quantum_efficiency: 0.94
+      avg_execution_time: 2.3
     },
     metadata: {
-      created: '2024-01-15T10:00:00Z',
+      created: new Date().toISOString(),
       last_active: new Date().toISOString(),
-      version: '2.1.0',
-      tier: 'enterprise'
+      version: '2.1.0'
     }
   },
   {
     id: 'agent_qa_002',
     name: 'Quantum Architect Beta',
-    type: 'quantum_architect',
+    type: 'quantum',
     status: 'active',
     capabilities: ['qubo_design', 'optimization_modeling', 'algorithm_selection', 'performance_tuning'],
     performance_metrics: {
       tasks_completed: 892,
       success_rate: 0.96,
-      average_execution_time: 4.7,
-      quantum_efficiency: 0.91
+      avg_execution_time: 4.7
     },
     metadata: {
-      created: '2024-01-20T14:30:00Z',
+      created: new Date().toISOString(),
       last_active: new Date().toISOString(),
-      version: '2.0.5',
-      tier: 'pro'
+      version: '2.0.5'
     }
   },
   {
     id: 'agent_os_003',
     name: 'Optimization Specialist Gamma',
-    type: 'optimization_specialist',
+    type: 'hybrid',
     status: 'busy',
     capabilities: ['dynex_optimization', 'cpu_fallback', 'gpu_acceleration', 'parameter_tuning'],
     current_task: 'Optimizing supply chain QUBO for Goliath Energy',
     performance_metrics: {
       tasks_completed: 2156,
       success_rate: 0.99,
-      average_execution_time: 1.8,
-      quantum_efficiency: 0.97
+      avg_execution_time: 1.8
     },
     metadata: {
-      created: '2024-01-10T09:15:00Z',
+      created: new Date().toISOString(),
       last_active: new Date().toISOString(),
-      version: '2.2.1',
-      tier: 'enterprise'
+      version: '2.2.1'
     }
   }
 ]
@@ -321,8 +315,7 @@ export async function POST(request: NextRequest) {
       }
       
       const validTypes: Agent['type'][] = [
-        'quantum_architect', 'quantum_council', 'optimization_specialist', 
-        'validation_agent', 'integration_agent'
+        'quantum', 'classical', 'hybrid'
       ]
       
       if (!validTypes.includes(createRequest.type)) {
@@ -365,14 +358,12 @@ export async function POST(request: NextRequest) {
         performance_metrics: {
           tasks_completed: 0,
           success_rate: 1.0,
-          average_execution_time: 0,
-          quantum_efficiency: 1.0
+          avg_execution_time: 0
         },
         metadata: {
           created: new Date().toISOString(),
           last_active: new Date().toISOString(),
-          version: '1.0.0',
-          tier: createRequest.tier || 'standard'
+          version: '1.0.0'
         }
       }
       
@@ -423,10 +414,9 @@ export async function POST(request: NextRequest) {
         agent_id: taskRequest.agent_id,
         type: taskRequest.task_type,
         priority: taskRequest.priority,
-        status: 'assigned',
+        status: 'pending',
         payload: taskRequest.payload,
-        created: new Date().toISOString(),
-        assigned: new Date().toISOString()
+        created_at: new Date().toISOString()
       }
       
       return NextResponse.json({

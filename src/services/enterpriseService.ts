@@ -1880,6 +1880,13 @@ export interface CorrelationRule {
   enabled: boolean;
 }
 
+export interface SharingConfig {
+  enabled: boolean;
+  permissions: string[];
+  expiry?: number; // hours
+  password?: boolean;
+}
+
 export interface MonitoringVisualization {
   dashboards: GlobalDashboard[];
   reports: MonitoringReport[];

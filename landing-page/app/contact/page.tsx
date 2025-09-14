@@ -1,6 +1,35 @@
 'use client'
 
 import { motion } from 'framer-motion'
+
+// Type assertions for Framer Motion components
+const MotionDiv = motion.div as any
+const MotionForm = motion.form as any
+const MotionButton = motion.button as any
+
+// Type assertions for icons and components
+const CheckCircleIcon = CheckCircle as any
+const ArrowRightIcon = ArrowRight as any
+const MailIcon = Mail as any
+const PhoneIcon = Phone as any
+const MapPinIcon = MapPin as any
+const ClockIcon = Clock as any
+const SendIcon = Send as any
+const Building2Icon = Building2 as any
+const UsersIcon = Users as any
+const ZapIcon = Zap as any
+const ShieldIcon = Shield as any
+const GlobeIcon = Globe as any
+const CalendarIcon = Calendar as any
+const MessageSquareIcon = MessageSquare as any
+const StarIcon = Star as any
+const LinkedinIcon = Linkedin as any
+const TwitterIcon = Twitter as any
+const YoutubeIcon = Youtube as any
+const GithubIcon = Github as any
+
+// Type assertion for Next.js Link component
+const LinkComponent = Link as any
 import { 
   Mail, 
   Phone, 
@@ -23,8 +52,8 @@ import {
   Github
 } from 'lucide-react'
 import Link from 'next/link'
-import { useState } from 'react'
-import { businessUnits, strategicPartners } from '@/lib/brand'
+import React, { useState } from 'react'
+import { businessUnits, partners as strategicPartners } from '@/lib/brand'
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -144,23 +173,23 @@ export default function ContactPage() {
   ]
 
   const socialLinks = [
-    { icon: Linkedin, href: 'https://linkedin.com/company/flyfox-ai', label: 'LinkedIn' },
-    { icon: Twitter, href: 'https://twitter.com/flyfoxai', label: 'Twitter' },
-    { icon: Youtube, href: 'https://youtube.com/@flyfoxai', label: 'YouTube' },
-    { icon: Github, href: 'https://github.com/flyfox-ai', label: 'GitHub' }
+    { icon: LinkedinIcon, href: 'https://linkedin.com/company/flyfox-ai', label: 'LinkedIn' },
+    { icon: TwitterIcon, href: 'https://twitter.com/flyfoxai', label: 'Twitter' },
+    { icon: YoutubeIcon, href: 'https://youtube.com/@flyfoxai', label: 'YouTube' },
+    { icon: GithubIcon, href: 'https://github.com/flyfox-ai', label: 'GitHub' }
   ]
 
   if (isSubmitted) {
     return (
       <div className="bg-white min-h-screen flex items-center justify-center">
         <div className="container-narrow text-center">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8 }}
           >
             <div className="w-20 h-20 bg-brand-cyan rounded-full flex items-center justify-center mx-auto mb-8">
-              <CheckCircle className="h-10 w-10 text-white" />
+              <CheckCircleIcon className="h-10 w-10 text-white" />
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-black mb-6">
               Thank You!
@@ -169,15 +198,15 @@ export default function ContactPage() {
               Your message has been received. Our quantum intelligence team will review your inquiry and respond within 24 hours.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/" className="btn-primary">
+              <LinkComponent href="/" className="btn-primary">
                 Return Home
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-              <Link href="/resources" className="btn-secondary">
-                Explore Resources
-              </Link>
+                <ArrowRightIcon className="ml-2 h-5 w-5" />
+              </LinkComponent>
+              <LinkComponent href="/resources" className="btn-secondary">
+                Browse Resources
+              </LinkComponent>
             </div>
-          </motion.div>
+          </MotionDiv>
         </div>
       </div>
     )
@@ -188,10 +217,10 @@ export default function ContactPage() {
       {/* Hero Section */}
       <section className="hero-gradient section-padding">
         <div className="container-quantum text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+          <MotionDiv
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
           >
             <h1 className="text-5xl md:text-7xl font-bold text-black mb-6">
               <span className="text-gradient-cyan">Connect</span> with Us
@@ -201,22 +230,22 @@ export default function ContactPage() {
               Let's discuss your quantum transformation journey.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="#contact-form" className="btn-primary">
+              <LinkComponent href="#contact-form" className="btn-primary">
                 Start Conversation
-                <MessageSquare className="ml-2 h-5 w-5" />
-              </Link>
-              <Link href="#offices" className="btn-secondary">
+                <MessageSquareIcon className="ml-2 h-5 w-5" />
+              </LinkComponent>
+              <LinkComponent href="#offices" className="btn-secondary">
                 Find Our Offices
-              </Link>
+              </LinkComponent>
             </div>
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* Quick Contact Options */}
       <section className="section-padding">
         <div className="container-quantum">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -229,9 +258,9 @@ export default function ContactPage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Multiple ways to connect with our quantum intelligence experts.
             </p>
-          </motion.div>
+          </MotionDiv>
 
-          <motion.div
+          <MotionDiv
             variants={staggerContainer}
             initial="initial"
             whileInView="animate"
@@ -248,7 +277,7 @@ export default function ContactPage() {
                 color: 'bg-brand-cyan'
               },
               {
-                icon: Calendar,
+                icon: CalendarIcon,
                 title: 'Schedule a Demo',
                 description: 'Book a personalized NQBA platform demonstration',
                 action: 'Book Demo',
@@ -256,7 +285,7 @@ export default function ContactPage() {
                 color: 'bg-brand-gold'
               },
               {
-                icon: Phone,
+                icon: PhoneIcon,
                 title: 'Speak with Expert',
                 description: 'Direct line to our quantum consulting team',
                 action: 'Call Now',
@@ -264,7 +293,7 @@ export default function ContactPage() {
                 color: 'bg-brand-navy'
               },
               {
-                icon: Mail,
+                icon: MailIcon,
                 title: 'Email Us',
                 description: 'Send us your questions and requirements',
                 action: 'Send Email',
@@ -272,26 +301,26 @@ export default function ContactPage() {
                 color: 'bg-gray-600'
               }
             ].map((option) => (
-              <motion.div
+              <MotionDiv
                 key={option.title}
                 variants={fadeInUp}
                 className="card text-center group hover:shadow-lg transition-shadow duration-200"
               >
                 <div className={`w-16 h-16 ${option.color} rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-200`}>
-                  <option.icon className="h-8 w-8 text-white" />
+                  {React.createElement(option.icon, { className: "h-8 w-8 text-white" }) as JSX.Element}
                 </div>
                 <h3 className="text-xl font-bold text-black mb-3">{option.title}</h3>
                 <p className="text-gray-600 mb-6">{option.description}</p>
-                <Link
+                <LinkComponent
                   href={option.href}
                   className="inline-flex items-center text-brand-cyan font-medium hover:text-brand-gold transition-colors duration-200"
                 >
                   {option.action}
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </motion.div>
+                  <ArrowRightIcon className="ml-2 h-4 w-4" />
+                </LinkComponent>
+              </MotionDiv>
             ))}
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
@@ -300,7 +329,7 @@ export default function ContactPage() {
         <div className="container-quantum">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             {/* Form */}
-            <motion.div
+            <MotionDiv
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
@@ -405,7 +434,7 @@ export default function ContactPage() {
                   >
                     <option value="">Select a business unit</option>
                     {businessUnits.map((unit) => (
-                      <option key={unit.id} value={unit.id}>
+                      <option key={unit.name} value={unit.name}>
                         {unit.name} - {unit.description}
                       </option>
                     ))}
@@ -512,15 +541,15 @@ export default function ContactPage() {
                   ) : (
                     <>
                       Send Message
-                      <Send className="ml-2 h-5 w-5" />
+                      <SendIcon className="ml-2 h-5 w-5" />
                     </>
                   )}
                 </button>
               </form>
-            </motion.div>
+            </MotionDiv>
 
             {/* Contact Information */}
-            <motion.div
+            <MotionDiv
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
@@ -532,29 +561,29 @@ export default function ContactPage() {
                 <div className="space-y-4">
                   {[
                     {
-                      icon: Zap,
+                      icon: ZapIcon,
                       title: 'Quantum Advantage',
                       description: 'Leverage true quantum computing power for exponential performance gains'
                     },
                     {
-                      icon: Shield,
+                      icon: ShieldIcon,
                       title: 'Enterprise Security',
                       description: 'Bank-grade security with quantum-resistant encryption protocols'
                     },
                     {
-                      icon: Users,
+                      icon: UsersIcon,
                       title: 'Expert Team',
                       description: 'World-class quantum scientists and AI engineers at your service'
                     },
                     {
-                      icon: Globe,
+                      icon: GlobeIcon,
                       title: 'Global Reach',
                       description: 'Offices worldwide with 24/7 support for enterprise clients'
                     }
                   ].map((benefit) => (
                     <div key={benefit.title} className="flex items-start space-x-4">
                       <div className="w-10 h-10 bg-brand-cyan rounded-lg flex items-center justify-center flex-shrink-0">
-                        <benefit.icon className="h-5 w-5 text-white" />
+                        {React.createElement(benefit.icon, { className: "h-5 w-5 text-white" }) as JSX.Element}
                       </div>
                       <div>
                         <h4 className="font-semibold text-black mb-1">{benefit.title}</h4>
@@ -585,19 +614,19 @@ export default function ContactPage() {
                 <h4 className="text-lg font-bold text-black mb-4">Follow Us</h4>
                 <div className="flex space-x-4">
                   {socialLinks.map((social) => (
-                    <Link
+                    <LinkComponent
                       key={social.label}
                       href={social.href}
                       className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-brand-cyan hover:text-white transition-colors duration-200"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <social.icon className="h-5 w-5" />
-                    </Link>
+                      {React.createElement(social.icon, { className: "h-5 w-5" }) as JSX.Element}
+                    </LinkComponent>
                   ))}
                 </div>
               </div>
-            </motion.div>
+            </MotionDiv>
           </div>
         </div>
       </section>
@@ -605,7 +634,7 @@ export default function ContactPage() {
       {/* Office Locations */}
       <section id="offices" className="section-padding">
         <div className="container-quantum">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -618,9 +647,9 @@ export default function ContactPage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Connect with our quantum intelligence experts across four continents.
             </p>
-          </motion.div>
+          </MotionDiv>
 
-          <motion.div
+          <MotionDiv
             variants={staggerContainer}
             initial="initial"
             whileInView="animate"
@@ -628,52 +657,52 @@ export default function ContactPage() {
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
           >
             {offices.map((office) => (
-              <motion.div
+              <MotionDiv
                 key={office.name}
                 variants={fadeInUp}
                 className="card group hover:shadow-lg transition-shadow duration-200"
               >
                 <div className="w-12 h-12 bg-brand-cyan rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-200">
-                  <Building2 className="h-6 w-6 text-white" />
+                  <Building2Icon className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-lg font-bold text-black mb-2">{office.name}</h3>
                 <div className="text-brand-cyan font-medium mb-4">{office.location}</div>
                 
                 <div className="space-y-3 text-sm text-gray-600">
                   <div className="flex items-start space-x-2">
-                    <MapPin className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                    <MapPinIcon className="h-4 w-4 mt-0.5 flex-shrink-0" />
                     <div className="whitespace-pre-line">{office.address}</div>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Phone className="h-4 w-4 flex-shrink-0" />
-                    <Link href={`tel:${office.phone}`} className="hover:text-brand-cyan transition-colors duration-200">
+                    <PhoneIcon className="h-4 w-4 flex-shrink-0" />
+                    <LinkComponent href={`tel:${office.phone}`} className="hover:text-brand-cyan transition-colors duration-200">
                       {office.phone}
-                    </Link>
+                    </LinkComponent>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Mail className="h-4 w-4 flex-shrink-0" />
-                    <Link href={`mailto:${office.email}`} className="hover:text-brand-cyan transition-colors duration-200">
+                    <MailIcon className="h-4 w-4 flex-shrink-0" />
+                    <LinkComponent href={`mailto:${office.email}`} className="hover:text-brand-cyan transition-colors duration-200">
                       {office.email}
-                    </Link>
+                    </LinkComponent>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Clock className="h-4 w-4 flex-shrink-0" />
+                    <ClockIcon className="h-4 w-4 flex-shrink-0" />
                     <div>
                       <div>{office.hours}</div>
                       <div className="text-xs text-gray-500">{office.timezone}</div>
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </MotionDiv>
             ))}
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* Call to Action */}
       <section className="section-padding bg-gray-50">
         <div className="container-narrow text-center">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -686,15 +715,15 @@ export default function ContactPage() {
               Join the quantum revolution and unlock exponential business growth.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/resources/recipes" className="btn-primary">
+              <LinkComponent href="/resources/recipes" className="btn-primary">
                 Try QUBO Builder
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-              <Link href="/case-studies" className="btn-secondary">
+                <ArrowRightIcon className="ml-2 h-5 w-5" />
+              </LinkComponent>
+              <LinkComponent href="/case-studies" className="btn-secondary">
                 View Success Stories
-              </Link>
+              </LinkComponent>
             </div>
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
     </div>

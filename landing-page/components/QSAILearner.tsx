@@ -9,6 +9,24 @@ import {
 } from 'lucide-react'
 import { brand } from '@/lib/brand'
 
+// Type assertions for Lucide icons
+const BrainComponent = Brain as any;
+const ShieldComponent = Shield as any;
+const TrendingUpComponent = TrendingUp as any;
+const UsersComponent = Users as any;
+const ZapComponent = Zap as any;
+const ActivityComponent = Activity as any;
+const AlertTriangleComponent = AlertTriangle as any;
+const CheckCircleComponent = CheckCircle as any;
+const BarChart3Component = BarChart3 as any;
+const EyeComponent = Eye as any;
+const CpuComponent = Cpu as any;
+const DatabaseComponent = Database as any;
+
+// Type assertions for motion components
+const MotionDiv = motion.div as any;
+const MotionButton = motion.button as any;
+
 interface LearningMetric {
   name: string
   value: number
@@ -174,7 +192,7 @@ export default function QSAILearner() {
       <div className="mb-8">
         <div className="flex items-center space-x-4 mb-4">
           <div className="w-12 h-12 bg-brand-cyan/10 rounded-xl flex items-center justify-center">
-            <Brain className="w-6 h-6 text-brand-cyan" />
+            <BrainComponent className="w-6 h-6 text-brand-cyan" />
           </div>
           <div>
             <h2 className="text-3xl font-bold text-black">QSAI Learner</h2>
@@ -228,7 +246,7 @@ export default function QSAILearner() {
         <h3 className="text-xl font-bold text-black mb-4">Real-time Learning Metrics</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredMetrics.map((metric, index) => (
-            <motion.div
+            <MotionDiv
               key={metric.name}
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -248,20 +266,20 @@ export default function QSAILearner() {
                 </span>
                 <span className="text-gray-500 text-sm">{metric.unit}</span>
                 <div className="flex-1"></div>
-                {metric.trend === 'up' && <TrendingUp className="w-4 h-4 text-green-500" />}
-                {metric.trend === 'down' && <TrendingUp className="w-4 h-4 text-red-500 rotate-180" />}
-                {metric.trend === 'stable' && <Activity className="w-4 h-4 text-gray-500" />}
+                {metric.trend === 'up' && <TrendingUpComponent className="w-4 h-4 text-green-500" />}
+                {metric.trend === 'down' && <TrendingUpComponent className="w-4 h-4 text-red-500 rotate-180" />}
+                {metric.trend === 'stable' && <ActivityComponent className="w-4 h-4 text-gray-500" />}
               </div>
               
               <div className="w-full bg-gray-200 rounded-full h-2">
-                <motion.div 
+                <MotionDiv 
                   className="bg-brand-cyan h-2 rounded-full"
                   initial={{ width: 0 }}
                   animate={{ width: `${Math.min(metric.value, 100)}%` }}
                   transition={{ duration: 1, delay: index * 0.1 }}
-                ></motion.div>
+                ></MotionDiv>
               </div>
-            </motion.div>
+            </MotionDiv>
           ))}
         </div>
       </div>
@@ -271,10 +289,10 @@ export default function QSAILearner() {
         <h3 className="text-xl font-bold text-black mb-4">Self-Healing Events</h3>
         <div className="space-y-4">
           {filteredEvents.map((event, index) => {
-            const EventIcon = eventTypeIcons[event.type]
+            const EventIcon = eventTypeIcons[event.type] as any
             
             return (
-              <motion.div
+              <MotionDiv
                 key={event.id}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -308,10 +326,10 @@ export default function QSAILearner() {
                   </div>
                   
                   {event.status === 'resolved' && (
-                    <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
+                    <CheckCircleComponent className="w-5 h-5 text-green-500 flex-shrink-0" />
                   )}
                 </div>
-              </motion.div>
+              </MotionDiv>
             )
           })}
         </div>
@@ -322,7 +340,7 @@ export default function QSAILearner() {
         <h3 className="text-xl font-bold text-black mb-4">Embedded Advanced Roles</h3>
         <div className="grid md:grid-cols-2 gap-6">
           {qsaiRoles.map((role, index) => (
-            <motion.div
+            <MotionDiv
               key={role.name}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -352,7 +370,7 @@ export default function QSAILearner() {
                   ))}
                 </ul>
               </div>
-            </motion.div>
+            </MotionDiv>
           ))}
         </div>
       </div>

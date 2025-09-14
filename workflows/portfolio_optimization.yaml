@@ -1,0 +1,568 @@
+name: portfolio_optimization
+description: Quantum-enhanced portfolio optimization and risk analysis workflow
+version: "1.0"
+author: Quantum Nexus Engine
+created_at: "2024-01-15T00:00:00Z"
+
+triggers:
+  - type: api_request
+    endpoint: "/api/portfolio/optimize"
+    method: POST
+  - type: schedule
+    cron: "0 9 * * 1-5"  # Daily at 9 AM on weekdays
+  - type: event
+    source: "market.data.updated"
+  - type: webhook
+    source: "risk.threshold.exceeded"
+
+inputs:
+  - name: optimization_request
+    type: object
+    required: true
+    schema:
+      type: object
+      properties:
+        portfolio_id:
+          type: string
+        customer_id:
+          type: string
+        optimization_type:
+          type: string
+          enum: ["risk_parity", "mean_variance", "black_litterman", "quantum_enhanced", "esg_optimized"]
+        assets:
+          type: array
+          items:
+            type: object
+            properties:
+              symbol:
+                type: string
+              weight:
+                type: number
+                minimum: 0
+                maximum: 1
+              constraints:
+                type: object
+                properties:
+                  min_weight:
+                    type: number
+                  max_weight:
+                    type: number
+                  sector:
+                    type: string
+                  esg_score:
+                    type: number
+        constraints:
+          type: object
+          properties:
+            max_risk:
+              type: number
+            min_return:
+              type: number
+            max_drawdown:
+              type: number
+            sector_limits:
+              type: object
+            esg_minimum:
+              type: number
+        time_horizon:
+          type: integer
+          minimum: 1
+          maximum: 3650  # 10 years in days
+        rebalancing_frequency:
+          type: string
+          enum: ["daily", "weekly", "monthly", "quarterly", "annually"]
+        risk_tolerance:
+          type: string
+          enum: ["conservative", "moderate", "aggressive"]
+        quantum_parameters:
+          type: object
+          properties:
+            use_quantum:
+              type: boolean
+              default: true
+            num_qubits:
+              type: integer
+              minimum: 10
+              maximum: 50
+            optimization_depth:
+              type: integer
+              minimum: 1
+              maximum: 10
+            correlation_analysis:
+              type: boolean
+              default: true
+
+steps:
+  - name: validate_portfolio_request
+    type: data_transform
+    description: "Validate portfolio optimization request"
+    transform: "validate_portfolio_data"
+    input_key: "optimization_request"
+    validation_rules:
+      - field: "assets"
+        required: true
+        min_items: 2
+        max_items: 100
+      - field: "time_horizon"
+        required: true
+        range: [1, 3650]
+      - field: "constraints.max_risk"
+        range: [0, 1]
+      - field: "constraints.min_return"
+        range: [-1, 2]
+    output_key: "validated_request"
+    continue_on_error: false
+
+  - name: fetch_market_data
+    type: api_call
+    description: "Retrieve current and historical market data for assets"
+    endpoint: "/api/market-data/batch"
+    method: POST
+    headers:
+      Authorization: "Bearer ${MARKET_DATA_API_TOKEN}"
+      Content-Type: "application/json"
+    body:
+      symbols: "${extract_symbols(validated_request.assets)}"
+      time_horizon: "${validated_request.time_horizon}"
+      data_types: ["prices", "returns", "volatility", "correlations", "fundamentals"]
+      frequency: "daily"
+      include_dividends: true
+      adjust_for_splits: true
+    output_key: "market_data"
+    timeout: 60
+    retry_count: 3
+
+  - name: fetch_esg_data
+    type: condition
+    description: "Fetch ESG data if ESG optimization is requested"
+    condition: "validated_request.optimization_type == 'esg_optimized' or validated_request.constraints.esg_minimum != null"
+    true_branch:
+      - name: "get_esg_scores"
+        type: "api_call"
+        endpoint: "/api/esg-data/scores"
+        method: POST
+        body:
+          symbols: "${extract_symbols(validated_request.assets)}"
+          metrics: ["environmental", "social", "governance", "overall"]
+        output_key: "esg_data"
+        timeout: 30
+    false_branch:
+      - name: "set_empty_esg"
+        type: "data_transform"
+        transform: "set_default_value"
+        parameters:
+          key: "esg_data"
+          value: {}
+
+  - name: calculate_risk_metrics
+    type: data_transform
+    description: "Calculate comprehensive risk metrics"
+    transform: "risk_analysis"
+    input_data:
+      market_data: "${market_data}"
+      assets: "${validated_request.assets}"
+      time_horizon: "${validated_request.time_horizon}"
+    calculations:
+      - "value_at_risk"
+      - "conditional_var"
+      - "maximum_drawdown"
+      - "sharpe_ratio"
+      - "sortino_ratio"
+      - "beta_analysis"
+      - "correlation_matrix"
+      - "volatility_clustering"
+    confidence_levels: [0.95, 0.99]
+    output_key: "risk_metrics"
+    timeout: 45
+
+  - name: prepare_quantum_optimization
+    type: condition
+    description: "Prepare quantum optimization if requested"
+    condition: "validated_request.quantum_parameters.use_quantum == true"
+    true_branch:
+      - name: "formulate_qubo_problem"
+        type: "quantum_process"
+        process: "qubo_formulation"
+        description: "Formulate portfolio optimization as QUBO problem"
+        parameters:
+          assets: "${validated_request.assets}"
+          returns: "${market_data.expected_returns}"
+          covariance_matrix: "${risk_metrics.covariance_matrix}"
+          constraints: "${validated_request.constraints}"
+          risk_tolerance: "${validated_request.risk_tolerance}"
+          optimization_type: "${validated_request.optimization_type}"
+        qubo_formulation:
+          objective: "maximize_utility"
+          penalty_terms:
+            - "budget_constraint"
+            - "weight_bounds"
+            - "sector_limits"
+            - "risk_penalty"
+          regularization: 0.01
+        output_key: "qubo_problem"
+        timeout: 30
+    false_branch:
+      - name: "set_classical_optimization"
+        type: "data_transform"
+        transform: "set_flag"
+        parameters:
+          key: "use_classical"
+          value: true
+
+  - name: execute_optimization
+    type: condition
+    description: "Execute quantum or classical optimization"
+    condition: "validated_request.quantum_parameters.use_quantum == true"
+    true_branch:
+      - name: "quantum_portfolio_optimization"
+        type: "quantum_process"
+        process: "quantum_optimization"
+        description: "Execute quantum portfolio optimization"
+        parameters:
+          qubo_problem: "${qubo_problem}"
+          num_qubits: "${validated_request.quantum_parameters.num_qubits}"
+          optimization_depth: "${validated_request.quantum_parameters.optimization_depth}"
+          algorithm: "qaoa"
+          backend: "dynex_quantum"
+        quantum_config:
+          shots: 2048
+          optimization_level: 3
+          error_mitigation: "readout_error_mitigation"
+          noise_model: "realistic"
+        output_key: "optimization_result"
+        timeout: 300
+    false_branch:
+      - name: "classical_portfolio_optimization"
+        type: "api_call"
+        endpoint: "/api/optimization/classical"
+        method: POST
+        body:
+          assets: "${validated_request.assets}"
+          returns: "${market_data.expected_returns}"
+          covariance_matrix: "${risk_metrics.covariance_matrix}"
+          constraints: "${validated_request.constraints}"
+          optimization_type: "${validated_request.optimization_type}"
+          solver: "cvxpy"
+        output_key: "optimization_result"
+        timeout: 120
+
+  - name: validate_optimization_results
+    type: data_transform
+    description: "Validate and post-process optimization results"
+    transform: "validate_portfolio_weights"
+    input_data:
+      optimization_result: "${optimization_result}"
+      constraints: "${validated_request.constraints}"
+      assets: "${validated_request.assets}"
+    validation_checks:
+      - "weights_sum_to_one"
+      - "weight_bounds_respected"
+      - "sector_limits_respected"
+      - "minimum_esg_score"
+      - "risk_constraints_met"
+    post_processing:
+      - "normalize_weights"
+      - "round_to_precision"
+      - "apply_minimum_trade_size"
+    output_key: "validated_portfolio"
+    continue_on_error: false
+
+  - name: calculate_portfolio_metrics
+    type: data_transform
+    description: "Calculate comprehensive portfolio performance metrics"
+    transform: "portfolio_analysis"
+    input_data:
+      portfolio_weights: "${validated_portfolio.weights}"
+      market_data: "${market_data}"
+      risk_metrics: "${risk_metrics}"
+      esg_data: "${esg_data}"
+    calculations:
+      - "expected_return"
+      - "portfolio_volatility"
+      - "sharpe_ratio"
+      - "information_ratio"
+      - "tracking_error"
+      - "maximum_drawdown"
+      - "value_at_risk"
+      - "beta"
+      - "alpha"
+      - "esg_score"
+      - "sector_allocation"
+      - "geographic_allocation"
+    time_horizons: ["1m", "3m", "6m", "1y", "3y"]
+    output_key: "portfolio_metrics"
+    timeout: 60
+
+  - name: generate_rebalancing_schedule
+    type: data_transform
+    description: "Generate optimal rebalancing schedule"
+    transform: "rebalancing_optimization"
+    input_data:
+      current_portfolio: "${validated_portfolio}"
+      frequency: "${validated_request.rebalancing_frequency}"
+      transaction_costs: "${get_transaction_costs()}"
+      market_impact: "${estimate_market_impact()}"
+    optimization_criteria:
+      - "minimize_transaction_costs"
+      - "maintain_risk_profile"
+      - "tax_efficiency"
+      - "liquidity_considerations"
+    output_key: "rebalancing_schedule"
+    timeout: 30
+
+  - name: perform_stress_testing
+    type: api_call
+    description: "Perform stress testing and scenario analysis"
+    endpoint: "/api/risk/stress-test"
+    method: POST
+    body:
+      portfolio: "${validated_portfolio}"
+      scenarios:
+        - name: "market_crash"
+          description: "2008-style market crash"
+          market_shock: -0.3
+          correlation_increase: 0.2
+        - name: "interest_rate_shock"
+          description: "Rapid interest rate increase"
+          rate_change: 0.02
+          duration_impact: true
+        - name: "inflation_surge"
+          description: "High inflation environment"
+          inflation_rate: 0.06
+          real_return_impact: true
+        - name: "geopolitical_crisis"
+          description: "Major geopolitical event"
+          volatility_spike: 0.5
+          flight_to_quality: true
+        - name: "sector_rotation"
+          description: "Major sector rotation"
+          sector_shocks: "${generate_sector_shocks()}"
+      monte_carlo_simulations: 10000
+      confidence_levels: [0.95, 0.99]
+    output_key: "stress_test_results"
+    timeout: 180
+
+  - name: generate_ai_insights
+    type: api_call
+    description: "Generate AI-powered portfolio insights and recommendations"
+    endpoint: "/api/ai/portfolio-insights"
+    method: POST
+    headers:
+      Authorization: "Bearer ${AI_API_TOKEN}"
+    body:
+      portfolio_data: "${validated_portfolio}"
+      market_data: "${market_data}"
+      risk_metrics: "${risk_metrics}"
+      stress_test_results: "${stress_test_results}"
+      customer_profile:
+        risk_tolerance: "${validated_request.risk_tolerance}"
+        time_horizon: "${validated_request.time_horizon}"
+        investment_goals: "${get_customer_goals(validated_request.customer_id)}"
+    analysis_types:
+      - "performance_attribution"
+      - "risk_decomposition"
+      - "optimization_opportunities"
+      - "market_outlook_impact"
+      - "rebalancing_recommendations"
+      - "tax_optimization"
+    output_key: "ai_insights"
+    timeout: 90
+    continue_on_error: true
+
+  - name: create_portfolio_report
+    type: data_transform
+    description: "Generate comprehensive portfolio optimization report"
+    transform: "portfolio_report_generation"
+    input_data:
+      original_request: "${validated_request}"
+      optimized_portfolio: "${validated_portfolio}"
+      performance_metrics: "${portfolio_metrics}"
+      risk_analysis: "${risk_metrics}"
+      stress_tests: "${stress_test_results}"
+      ai_insights: "${ai_insights}"
+      rebalancing_schedule: "${rebalancing_schedule}"
+    report_sections:
+      - "executive_summary"
+      - "optimization_methodology"
+      - "portfolio_composition"
+      - "risk_return_profile"
+      - "stress_test_analysis"
+      - "rebalancing_strategy"
+      - "ai_recommendations"
+      - "implementation_guide"
+      - "monitoring_framework"
+    output_formats: ["pdf", "json", "excel"]
+    output_key: "portfolio_report"
+    timeout: 120
+
+  - name: store_optimization_results
+    type: api_call
+    description: "Store portfolio optimization results"
+    endpoint: "/api/portfolio/${validated_request.portfolio_id}/optimization"
+    method: POST
+    body:
+      optimization_id: "${generate_uuid()}"
+      customer_id: "${validated_request.customer_id}"
+      optimized_portfolio: "${validated_portfolio}"
+      performance_metrics: "${portfolio_metrics}"
+      risk_analysis: "${risk_metrics}"
+      stress_test_results: "${stress_test_results}"
+      ai_insights: "${ai_insights}"
+      rebalancing_schedule: "${rebalancing_schedule}"
+      report: "${portfolio_report}"
+      optimization_metadata:
+        method: "${validated_request.optimization_type}"
+        quantum_enhanced: "${validated_request.quantum_parameters.use_quantum}"
+        execution_time: "${workflow_duration}"
+        market_data_timestamp: "${market_data.timestamp}"
+      created_at: "${current_timestamp}"
+    timeout: 45
+
+  - name: update_customer_portfolio
+    type: api_call
+    description: "Update customer's portfolio with optimization results"
+    endpoint: "/api/customers/${validated_request.customer_id}/portfolio"
+    method: PATCH
+    body:
+      portfolio_id: "${validated_request.portfolio_id}"
+      weights: "${validated_portfolio.weights}"
+      last_optimized: "${current_timestamp}"
+      optimization_method: "${validated_request.optimization_type}"
+      next_rebalance: "${rebalancing_schedule.next_date}"
+      risk_metrics:
+        expected_return: "${portfolio_metrics.expected_return}"
+        volatility: "${portfolio_metrics.volatility}"
+        sharpe_ratio: "${portfolio_metrics.sharpe_ratio}"
+        var_95: "${portfolio_metrics.var_95}"
+    timeout: 30
+
+  - name: send_optimization_notification
+    type: api_call
+    description: "Send portfolio optimization completion notification"
+    endpoint: "/api/notifications/send"
+    method: POST
+    body:
+      customer_id: "${validated_request.customer_id}"
+      notification_type: "portfolio_optimization_complete"
+      channels: ["email", "app_notification"]
+      content:
+        subject: "Portfolio Optimization Complete"
+        message: "Your portfolio has been successfully optimized using ${validated_request.optimization_type} methodology."
+        data:
+          portfolio_id: "${validated_request.portfolio_id}"
+          expected_return: "${portfolio_metrics.expected_return}"
+          risk_level: "${portfolio_metrics.volatility}"
+          sharpe_ratio: "${portfolio_metrics.sharpe_ratio}"
+          report_url: "/api/portfolio/${validated_request.portfolio_id}/report"
+      priority: "normal"
+    timeout: 30
+    continue_on_error: true
+
+  - name: schedule_next_optimization
+    type: condition
+    description: "Schedule next optimization based on rebalancing frequency"
+    condition: "validated_request.rebalancing_frequency != 'manual'"
+    true_branch:
+      - name: "create_optimization_schedule"
+        type: "api_call"
+        endpoint: "/api/scheduler/create"
+        method: POST
+        body:
+          job_type: "portfolio_optimization"
+          customer_id: "${validated_request.customer_id}"
+          portfolio_id: "${validated_request.portfolio_id}"
+          schedule: "${calculate_next_optimization_time(validated_request.rebalancing_frequency)}"
+          parameters: "${validated_request}"
+        timeout: 15
+
+  - name: log_optimization_analytics
+    type: api_call
+    description: "Log optimization analytics for performance tracking"
+    endpoint: "/api/analytics/portfolio-optimization/log"
+    method: POST
+    body:
+      customer_id: "${validated_request.customer_id}"
+      portfolio_id: "${validated_request.portfolio_id}"
+      optimization_type: "${validated_request.optimization_type}"
+      quantum_enhanced: "${validated_request.quantum_parameters.use_quantum}"
+      execution_metrics:
+        total_time: "${workflow_duration}"
+        market_data_fetch_time: "${step_duration('fetch_market_data')}"
+        optimization_time: "${step_duration('execute_optimization')}"
+        num_assets: "${length(validated_request.assets)}"
+      performance_improvement:
+        sharpe_ratio_improvement: "${calculate_improvement('sharpe_ratio')}"
+        risk_reduction: "${calculate_improvement('risk')}"
+        return_enhancement: "${calculate_improvement('return')}"
+      quantum_metrics:
+        num_qubits_used: "${validated_request.quantum_parameters.num_qubits}"
+        quantum_advantage: "${calculate_quantum_advantage()}"
+    continue_on_error: true
+
+outputs:
+  - name: optimization_result
+    description: "Complete portfolio optimization results"
+    value:
+      portfolio_id: "${validated_request.portfolio_id}"
+      customer_id: "${validated_request.customer_id}"
+      optimized_portfolio: "${validated_portfolio}"
+      performance_metrics: "${portfolio_metrics}"
+      risk_analysis: "${risk_metrics}"
+      stress_test_results: "${stress_test_results}"
+      ai_insights: "${ai_insights}"
+      rebalancing_schedule: "${rebalancing_schedule}"
+      report_url: "/api/portfolio/${validated_request.portfolio_id}/report"
+      optimization_metadata:
+        method: "${validated_request.optimization_type}"
+        quantum_enhanced: "${validated_request.quantum_parameters.use_quantum}"
+        execution_time: "${workflow_duration}"
+        completed_at: "${current_timestamp}"
+
+error_handling:
+  on_step_failure:
+    - log_error: true
+    - notify_customer: true
+    - revert_portfolio_changes: false
+    - store_partial_results: true
+  on_timeout:
+    - retry_count: 2
+    - escalate_after: 3
+    - use_cached_data: true
+  on_market_data_failure:
+    - use_cached_data: true
+    - reduce_optimization_scope: true
+    - notify_data_staleness: true
+  critical_steps:
+    - "validate_portfolio_request"
+    - "execute_optimization"
+    - "store_optimization_results"
+
+monitoring:
+  metrics:
+    - name: "optimization_execution_time"
+      type: "duration"
+    - name: "portfolio_improvement_score"
+      type: "number"
+    - name: "quantum_vs_classical_performance"
+      type: "comparison"
+    - name: "customer_satisfaction_score"
+      type: "rating"
+    - name: "risk_adjusted_return_improvement"
+      type: "percentage"
+  alerts:
+    - condition: "optimization_execution_time > 1800"  # 30 minutes
+      severity: "warning"
+      message: "Portfolio optimization taking longer than expected"
+    - condition: "portfolio_improvement_score < 0.05"
+      severity: "info"
+      message: "Minimal portfolio improvement detected"
+    - condition: "stress_test_results.worst_case_loss > 0.5"
+      severity: "critical"
+      message: "High risk portfolio detected in stress testing"
+
+retention:
+  optimization_results: 2555  # 7 years
+  market_data: 1825          # 5 years
+  stress_test_results: 1095  # 3 years
+  execution_logs: 365        # 1 year
+  analytics_data: 1825       # 5 years

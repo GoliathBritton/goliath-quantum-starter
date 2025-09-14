@@ -398,8 +398,8 @@ const MultiTenantDashboard: React.FC = () => {
       )}
 
       {/* Overview Cards */}
-      <Grid container spacing={3} sx={{ mb: 3 }}>
-        <Grid item xs={12} sm={6} md={2.4}>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 3 }}>
+        <Box sx={{ flex: { xs: '1 1 100%', sm: '1 1 calc(50% - 12px)', md: '1 1 calc(20% - 12px)' } }}>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -415,9 +415,9 @@ const MultiTenantDashboard: React.FC = () => {
               </Box>
             </CardContent>
           </Card>
-        </Grid>
+        </Box>
         
-        <Grid item xs={12} sm={6} md={2.4}>
+        <Box sx={{ flex: { xs: '1 1 100%', sm: '1 1 calc(50% - 12px)', md: '1 1 calc(20% - 12px)' } }}>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -433,9 +433,9 @@ const MultiTenantDashboard: React.FC = () => {
               </Box>
             </CardContent>
           </Card>
-        </Grid>
+        </Box>
         
-        <Grid item xs={12} sm={6} md={2.4}>
+        <Box sx={{ flex: { xs: '1 1 100%', sm: '1 1 calc(50% - 12px)', md: '1 1 calc(20% - 12px)' } }}>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -451,9 +451,9 @@ const MultiTenantDashboard: React.FC = () => {
               </Box>
             </CardContent>
           </Card>
-        </Grid>
+        </Box>
         
-        <Grid item xs={12} sm={6} md={2.4}>
+        <Box sx={{ flex: { xs: '1 1 100%', sm: '1 1 calc(50% - 12px)', md: '1 1 calc(20% - 12px)' } }}>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -469,9 +469,9 @@ const MultiTenantDashboard: React.FC = () => {
               </Box>
             </CardContent>
           </Card>
-        </Grid>
+        </Box>
         
-        <Grid item xs={12} sm={6} md={2.4}>
+        <Box sx={{ flex: { xs: '1 1 100%', sm: '1 1 calc(50% - 12px)', md: '1 1 calc(20% - 12px)' } }}>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -487,8 +487,8 @@ const MultiTenantDashboard: React.FC = () => {
               </Box>
             </CardContent>
           </Card>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
 
       {/* Tabs */}
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -625,8 +625,8 @@ const MultiTenantDashboard: React.FC = () => {
 
       {/* Analytics Tab */}
       <TabPanel value={activeTab} index={1}>
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={8}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
+          <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 calc(66.67% - 12px)' } }}>
             <Card>
               <CardContent>
                 <Typography variant="h6" gutterBottom>
@@ -646,9 +646,9 @@ const MultiTenantDashboard: React.FC = () => {
                 </ResponsiveContainer>
               </CardContent>
             </Card>
-          </Grid>
+          </Box>
           
-          <Grid item xs={12} md={4}>
+          <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 calc(33.33% - 12px)' } }}>
             <Card>
               <CardContent>
                 <Typography variant="h6" gutterBottom>
@@ -661,7 +661,7 @@ const MultiTenantDashboard: React.FC = () => {
                       cx="50%"
                       cy="50%"
                       labelLine={false}
-                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                      label={(entry: any) => `${entry.name} ${(entry.percent * 100).toFixed(0)}%`}
                       outerRadius={80}
                       fill="#8884d8"
                       dataKey="value"
@@ -675,8 +675,8 @@ const MultiTenantDashboard: React.FC = () => {
                 </ResponsiveContainer>
               </CardContent>
             </Card>
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       </TabPanel>
 
       {/* Resource Usage Tab */}
@@ -705,11 +705,11 @@ const MultiTenantDashboard: React.FC = () => {
 
       {/* Security Tab */}
       <TabPanel value={activeTab} index={3}>
-        <Grid container spacing={3}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
           {tenants.slice(0, 6).map((tenant) => {
             const tenantMetrics = metrics.get(tenant.id);
             return (
-              <Grid item xs={12} md={6} key={tenant.id}>
+              <Box key={tenant.id} sx={{ flex: { xs: '1 1 100%', md: '1 1 calc(50% - 12px)' } }}>
                 <Card>
                   <CardContent>
                     <Typography variant="h6" gutterBottom>
@@ -755,10 +755,10 @@ const MultiTenantDashboard: React.FC = () => {
                     </List>
                   </CardContent>
                 </Card>
-              </Grid>
+              </Box>
             );
           })}
-        </Grid>
+        </Box>
       </TabPanel>
 
       {/* Billing Tab */}
@@ -830,16 +830,16 @@ const MultiTenantDashboard: React.FC = () => {
       <Dialog open={createDialogOpen} onClose={() => setCreateDialogOpen(false)} maxWidth="md" fullWidth>
         <DialogTitle>Create New Tenant</DialogTitle>
         <DialogContent>
-          <Grid container spacing={2} sx={{ mt: 1 }}>
-            <Grid item xs={12} sm={6}>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mt: 1 }}>
+            <Box sx={{ flex: { xs: '1 1 100%', sm: '1 1 calc(50% - 8px)' } }}>
               <TextField
                 fullWidth
                 label="Tenant Name"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               />
-            </Grid>
-            <Grid item xs={12} sm={6}>
+            </Box>
+            <Box sx={{ flex: { xs: '1 1 100%', sm: '1 1 calc(50% - 8px)' } }}>
               <TextField
                 fullWidth
                 label="Subdomain"
@@ -847,8 +847,8 @@ const MultiTenantDashboard: React.FC = () => {
                 onChange={(e) => setFormData({ ...formData, subdomain: e.target.value })}
                 helperText="Will be used as subdomain.quantum-platform.com"
               />
-            </Grid>
-            <Grid item xs={12}>
+            </Box>
+            <Box sx={{ flex: '1 1 100%' }}>
               <TextField
                 fullWidth
                 label="Custom Domain"
@@ -856,8 +856,8 @@ const MultiTenantDashboard: React.FC = () => {
                 onChange={(e) => setFormData({ ...formData, domain: e.target.value })}
                 helperText="Optional custom domain"
               />
-            </Grid>
-            <Grid item xs={12} sm={6}>
+            </Box>
+            <Box sx={{ flex: { xs: '1 1 100%', sm: '1 1 calc(50% - 8px)' } }}>
               <FormControl fullWidth>
                 <InputLabel>Plan Type</InputLabel>
                 <Select
@@ -869,8 +869,8 @@ const MultiTenantDashboard: React.FC = () => {
                   <MenuItem value="enterprise">Enterprise - $2499/month</MenuItem>
                 </Select>
               </FormControl>
-            </Grid>
-            <Grid item xs={12} sm={6}>
+            </Box>
+            <Box sx={{ flex: { xs: '1 1 100%', sm: '1 1 calc(50% - 8px)' } }}>
               <FormControl fullWidth>
                 <InputLabel>Initial Status</InputLabel>
                 <Select
@@ -881,8 +881,8 @@ const MultiTenantDashboard: React.FC = () => {
                   <MenuItem value="active">Active</MenuItem>
                 </Select>
               </FormControl>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setCreateDialogOpen(false)}>Cancel</Button>
@@ -896,32 +896,32 @@ const MultiTenantDashboard: React.FC = () => {
       <Dialog open={editDialogOpen} onClose={() => setEditDialogOpen(false)} maxWidth="md" fullWidth>
         <DialogTitle>Edit Tenant</DialogTitle>
         <DialogContent>
-          <Grid container spacing={2} sx={{ mt: 1 }}>
-            <Grid item xs={12} sm={6}>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mt: 1 }}>
+            <Box sx={{ flex: { xs: '1 1 100%', sm: '1 1 calc(50% - 8px)' } }}>
               <TextField
                 fullWidth
                 label="Tenant Name"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               />
-            </Grid>
-            <Grid item xs={12} sm={6}>
+            </Box>
+            <Box sx={{ flex: { xs: '1 1 100%', sm: '1 1 calc(50% - 8px)' } }}>
               <TextField
                 fullWidth
                 label="Subdomain"
                 value={formData.subdomain}
                 onChange={(e) => setFormData({ ...formData, subdomain: e.target.value })}
               />
-            </Grid>
-            <Grid item xs={12}>
+            </Box>
+            <Box sx={{ flex: '1 1 100%' }}>
               <TextField
                 fullWidth
                 label="Custom Domain"
                 value={formData.domain}
                 onChange={(e) => setFormData({ ...formData, domain: e.target.value })}
               />
-            </Grid>
-            <Grid item xs={12}>
+            </Box>
+            <Box sx={{ flex: '1 1 100%' }}>
               <FormControl fullWidth>
                 <InputLabel>Status</InputLabel>
                 <Select
@@ -934,8 +934,8 @@ const MultiTenantDashboard: React.FC = () => {
                   <MenuItem value="expired">Expired</MenuItem>
                 </Select>
               </FormControl>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setEditDialogOpen(false)}>Cancel</Button>
@@ -952,8 +952,8 @@ const MultiTenantDashboard: React.FC = () => {
         </DialogTitle>
         <DialogContent>
           {selectedTenant && (
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={6}>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
+              <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 calc(50% - 12px)' } }}>
                 <Typography variant="h6" gutterBottom>Basic Information</Typography>
                 <List>
                   <ListItem>
@@ -972,9 +972,9 @@ const MultiTenantDashboard: React.FC = () => {
                     <ListItemText primary="Last Active" secondary={selectedTenant.lastActive.toLocaleString()} />
                   </ListItem>
                 </List>
-              </Grid>
+              </Box>
               
-              <Grid item xs={12} md={6}>
+              <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 calc(50% - 12px)' } }}>
                 <Typography variant="h6" gutterBottom>Resource Allocation</Typography>
                 <List>
                   <ListItem>
@@ -1002,12 +1002,12 @@ const MultiTenantDashboard: React.FC = () => {
                     />
                   </ListItem>
                 </List>
-              </Grid>
+              </Box>
               
-              <Grid item xs={12}>
+              <Box sx={{ flex: '1 1 100%' }}>
                 <Typography variant="h6" gutterBottom>Current Usage</Typography>
-                <Grid container spacing={2}>
-                  <Grid item xs={6} sm={3}>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+                  <Box sx={{ flex: { xs: '1 1 calc(50% - 8px)', sm: '1 1 calc(25% - 8px)' } }}>
                     <Card variant="outlined">
                       <CardContent>
                         <Typography color="textSecondary" gutterBottom>Active Users</Typography>
@@ -1016,8 +1016,8 @@ const MultiTenantDashboard: React.FC = () => {
                         </Typography>
                       </CardContent>
                     </Card>
-                  </Grid>
-                  <Grid item xs={6} sm={3}>
+                  </Box>
+                  <Box sx={{ flex: { xs: '1 1 calc(50% - 8px)', sm: '1 1 calc(25% - 8px)' } }}>
                     <Card variant="outlined">
                       <CardContent>
                         <Typography color="textSecondary" gutterBottom>Storage Used</Typography>
@@ -1026,8 +1026,8 @@ const MultiTenantDashboard: React.FC = () => {
                         </Typography>
                       </CardContent>
                     </Card>
-                  </Grid>
-                  <Grid item xs={6} sm={3}>
+                  </Box>
+                  <Box sx={{ flex: { xs: '1 1 calc(50% - 8px)', sm: '1 1 calc(25% - 8px)' } }}>
                     <Card variant="outlined">
                       <CardContent>
                         <Typography color="textSecondary" gutterBottom>Quantum Jobs</Typography>
@@ -1036,8 +1036,8 @@ const MultiTenantDashboard: React.FC = () => {
                         </Typography>
                       </CardContent>
                     </Card>
-                  </Grid>
-                  <Grid item xs={6} sm={3}>
+                  </Box>
+                  <Box sx={{ flex: { xs: '1 1 calc(50% - 8px)', sm: '1 1 calc(25% - 8px)' } }}>
                     <Card variant="outlined">
                       <CardContent>
                         <Typography color="textSecondary" gutterBottom>API Calls</Typography>
@@ -1046,10 +1046,10 @@ const MultiTenantDashboard: React.FC = () => {
                         </Typography>
                       </CardContent>
                     </Card>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
           )}
         </DialogContent>
         <DialogActions>

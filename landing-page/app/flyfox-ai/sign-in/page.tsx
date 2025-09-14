@@ -1,6 +1,32 @@
 'use client'
 
 import { motion } from 'framer-motion'
+
+// Type assertions for Framer Motion components
+const MotionDiv = motion.div as any
+const MotionH1 = motion.h1 as any
+const MotionP = motion.p as any
+const MotionForm = motion.form as any
+
+// Type assertions for Lucide icons
+const ZapIcon = Zap as any
+const ShieldIcon = Shield as any
+const UsersIcon = Users as any
+const Building2Icon = Building2 as any
+const CheckCircleIcon = CheckCircle as any
+const AlertCircleIcon = AlertCircle as any
+const Loader2Icon = Loader2 as any
+const GithubIcon = Github as any
+const LinkedinIcon = Linkedin as any
+const ChromeIcon = Chrome as any
+const MailIcon = Mail as any
+const LockIcon = Lock as any
+const EyeIcon = Eye as any
+const EyeOffIcon = EyeOff as any
+const ArrowRightIcon = ArrowRight as any
+
+// Type assertion for Next.js Link
+const LinkComponent = Link as any
 import { 
   Mail, 
   Lock, 
@@ -63,15 +89,7 @@ export default function SignInPage() {
       
       // Demo credentials check
       if (formData.email === 'demo@flyfoxai.com' && formData.password === 'quantum2024') {
-        await signIn({
-          id: '1',
-          email: formData.email,
-          name: 'Demo User',
-          role: 'admin',
-          company: 'FLYFOX AI',
-          tier: 'enterprise',
-          permissions: ['read', 'write', 'admin']
-        })
+        await signIn(formData.email, formData.password)
         setSuccess('Successfully signed in! Redirecting...')
         setTimeout(() => {
           router.push('/resources/recipes')
@@ -99,7 +117,7 @@ export default function SignInPage() {
         <div className="container-quantum">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             {/* Left Side - Branding */}
-            <motion.div
+            <MotionDiv
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
@@ -115,7 +133,7 @@ export default function SignInPage() {
               <div className="space-y-6">
                 <div className="flex items-center space-x-4">
                   <div className="w-12 h-12 bg-brand-cyan rounded-lg flex items-center justify-center">
-                    <Zap className="h-6 w-6 text-white" />
+                    <ZapIcon className="h-6 w-6 text-white" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-black">Quantum-Powered Analytics</h3>
@@ -124,7 +142,7 @@ export default function SignInPage() {
                 </div>
                 <div className="flex items-center space-x-4">
                   <div className="w-12 h-12 bg-brand-gold rounded-lg flex items-center justify-center">
-                    <Shield className="h-6 w-6 text-white" />
+                    <ShieldIcon className="h-6 w-6 text-white" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-black">Enterprise Security</h3>
@@ -133,7 +151,7 @@ export default function SignInPage() {
                 </div>
                 <div className="flex items-center space-x-4">
                   <div className="w-12 h-12 bg-brand-navy rounded-lg flex items-center justify-center">
-                    <Users className="h-6 w-6 text-white" />
+                    <UsersIcon className="h-6 w-6 text-white" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-black">Global Collaboration</h3>
@@ -141,10 +159,10 @@ export default function SignInPage() {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </MotionDiv>
 
             {/* Right Side - Sign In Form */}
-            <motion.div
+            <MotionDiv
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
@@ -158,7 +176,7 @@ export default function SignInPage() {
               {/* Demo Credentials Notice */}
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
                 <div className="flex items-start space-x-3">
-                  <AlertCircle className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                  <AlertCircleIcon className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
                   <div>
                     <h4 className="text-sm font-medium text-blue-800 mb-1">Demo Access</h4>
                     <p className="text-sm text-blue-700 mb-2">
@@ -176,7 +194,7 @@ export default function SignInPage() {
               {error && (
                 <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
                   <div className="flex items-center space-x-3">
-                    <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0" />
+                    <AlertCircleIcon className="h-5 w-5 text-red-600 flex-shrink-0" />
                     <span className="text-sm text-red-700">{error}</span>
                   </div>
                 </div>
@@ -185,7 +203,7 @@ export default function SignInPage() {
               {success && (
                 <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
                   <div className="flex items-center space-x-3">
-                    <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
+                    <CheckCircleIcon className="h-5 w-5 text-green-600 flex-shrink-0" />
                     <span className="text-sm text-green-700">{success}</span>
                   </div>
                 </div>
@@ -197,7 +215,7 @@ export default function SignInPage() {
                     Email Address
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    <MailIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                     <input
                       type="email"
                       name="email"
@@ -215,7 +233,7 @@ export default function SignInPage() {
                     Password
                   </label>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    <LockIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                     <input
                       type={showPassword ? 'text' : 'password'}
                       name="password"
@@ -230,7 +248,7 @@ export default function SignInPage() {
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors duration-200"
                     >
-                      {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                      {showPassword ? <EyeOffIcon className="h-5 w-5" /> : <EyeIcon className="h-5 w-5" />}
                     </button>
                   </div>
                 </div>
@@ -248,12 +266,12 @@ export default function SignInPage() {
                       Remember me
                     </label>
                   </div>
-                  <Link
+                  <LinkComponent
                     href="#"
                     className="text-sm text-brand-cyan hover:text-brand-gold transition-colors duration-200"
                   >
                     Forgot password?
-                  </Link>
+                  </LinkComponent>
                 </div>
 
                 <button
@@ -263,13 +281,13 @@ export default function SignInPage() {
                 >
                   {isLoading ? (
                     <>
-                      <Loader2 className="animate-spin h-5 w-5 mr-2" />
+                      <Loader2Icon className="animate-spin h-5 w-5 mr-2" />
                       Signing In...
                     </>
                   ) : (
                     <>
                       Sign In
-                      <ArrowRight className="ml-2 h-5 w-5" />
+                      <ArrowRightIcon className="ml-2 h-5 w-5" />
                     </>
                   )}
                 </button>
@@ -290,19 +308,19 @@ export default function SignInPage() {
                     onClick={() => handleSocialSignIn('Google')}
                     className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-lg bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors duration-200"
                   >
-                    <Chrome className="h-5 w-5" />
+                    <ChromeIcon className="h-5 w-5" />
                   </button>
                   <button
                     onClick={() => handleSocialSignIn('LinkedIn')}
                     className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-lg bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors duration-200"
                   >
-                    <Linkedin className="h-5 w-5" />
+                    <LinkedinIcon className="h-5 w-5" />
                   </button>
                   <button
                     onClick={() => handleSocialSignIn('GitHub')}
                     className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-lg bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors duration-200"
                   >
-                    <Github className="h-5 w-5" />
+                    <GithubIcon className="h-5 w-5" />
                   </button>
                 </div>
               </div>
@@ -310,15 +328,15 @@ export default function SignInPage() {
               <div className="mt-8 text-center">
                 <p className="text-sm text-gray-600">
                   Don't have an account?{' '}
-                  <Link
+                  <LinkComponent
                     href="/contact"
                     className="text-brand-cyan hover:text-brand-gold transition-colors duration-200 font-medium"
                   >
                     Contact Sales
-                  </Link>
+                  </LinkComponent>
                 </p>
               </div>
-            </motion.div>
+            </MotionDiv>
           </div>
         </div>
       </section>
@@ -326,7 +344,7 @@ export default function SignInPage() {
       {/* Business Units Overview */}
       <section className="section-padding bg-gray-50">
         <div className="container-quantum">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -339,12 +357,12 @@ export default function SignInPage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Your credentials provide access to our complete ecosystem of quantum-powered business units.
             </p>
-          </motion.div>
+          </MotionDiv>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {businessUnits.map((unit, index) => (
-              <motion.div
-                key={unit.id}
+              <MotionDiv
+                key={unit.name}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
@@ -352,14 +370,14 @@ export default function SignInPage() {
                 className="card text-center group hover:shadow-lg transition-shadow duration-200"
               >
                 <div className={`w-16 h-16 ${unit.color} rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-200`}>
-                  <Building2 className="h-8 w-8 text-white" />
+                  <Building2Icon className="h-8 w-8 text-white" />
                 </div>
                 <h3 className="text-xl font-bold text-black mb-3">{unit.name}</h3>
                 <p className="text-gray-600 mb-4">{unit.description}</p>
                 <div className="text-sm text-brand-cyan font-medium">
-                  {unit.focus.join(' • ')}
+                  {unit.focus}
                 </div>
-              </motion.div>
+              </MotionDiv>
             ))}
           </div>
         </div>
@@ -368,7 +386,7 @@ export default function SignInPage() {
       {/* Pricing Tiers */}
       <section className="section-padding">
         <div className="container-quantum">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -381,55 +399,42 @@ export default function SignInPage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Flexible pricing tiers designed to scale with your quantum transformation journey.
             </p>
-          </motion.div>
+          </MotionDiv>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {pricingTiers.map((tier, index) => (
-              <motion.div
-                key={tier.id}
+              <MotionDiv
+                key={tier.name}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className={`card relative group hover:shadow-lg transition-shadow duration-200 ${
-                  tier.popular ? 'ring-2 ring-brand-cyan' : ''
-                }`}
+                className="card relative group hover:shadow-lg transition-shadow duration-200"
               >
-                {tier.popular && (
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <span className="bg-brand-cyan text-white px-4 py-1 rounded-full text-sm font-medium">
-                      Most Popular
-                    </span>
-                  </div>
-                )}
+
                 <div className="text-center">
                   <h3 className="text-2xl font-bold text-black mb-2">{tier.name}</h3>
-                  <div className="text-4xl font-bold text-brand-cyan mb-1">{tier.price}</div>
-                  <div className="text-gray-500 mb-6">{tier.billing}</div>
+                  <div className="text-4xl font-bold text-brand-cyan mb-6">{tier.price}</div>
                   <p className="text-gray-600 mb-8">{tier.description}</p>
                   
                   <div className="space-y-4 mb-8">
                     {tier.features.map((feature, idx) => (
                       <div key={idx} className="flex items-center space-x-3">
-                        <CheckCircle className="h-5 w-5 text-brand-cyan flex-shrink-0" />
+                        <CheckCircleIcon className="h-5 w-5 text-brand-cyan flex-shrink-0" />
                         <span className="text-gray-700">{feature}</span>
                       </div>
                     ))}
                   </div>
                   
-                  <Link
+                  <LinkComponent
                     href="/contact"
-                    className={`w-full inline-flex items-center justify-center px-6 py-3 rounded-lg font-medium transition-colors duration-200 ${
-                      tier.popular
-                        ? 'bg-brand-cyan text-white hover:bg-brand-gold'
-                        : 'bg-white text-brand-cyan border-2 border-brand-cyan hover:bg-brand-cyan hover:text-white'
-                    }`}
+                    className="w-full inline-flex items-center justify-center px-6 py-3 rounded-lg font-medium transition-colors duration-200 bg-white text-brand-cyan border-2 border-brand-cyan hover:bg-brand-cyan hover:text-white"
                   >
                     Get Started
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
+                    <ArrowRightIcon className="ml-2 h-4 w-4" />
+                  </LinkComponent>
                 </div>
-              </motion.div>
+              </MotionDiv>
             ))}
           </div>
         </div>
@@ -438,7 +443,7 @@ export default function SignInPage() {
       {/* Call to Action */}
       <section className="section-padding bg-gray-50">
         <div className="container-narrow text-center">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -451,15 +456,15 @@ export default function SignInPage() {
               Our quantum intelligence experts are here to guide your transformation journey.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/contact" className="btn-primary">
+              <LinkComponent href="/contact" className="btn-primary">
                 Contact Sales Team
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-              <Link href="/resources" className="btn-secondary">
+                <ArrowRightIcon className="ml-2 h-5 w-5" />
+              </LinkComponent>
+              <LinkComponent href="/resources" className="btn-secondary">
                 Explore Resources
-              </Link>
+              </LinkComponent>
             </div>
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
     </div>

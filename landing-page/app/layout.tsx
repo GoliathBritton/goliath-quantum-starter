@@ -7,6 +7,7 @@ import Footer from '../components/Footer'
 import { brand } from '../lib/brand'
 
 const inter = Inter({ subsets: ['latin'] })
+const AuthProviderComponent = AuthProvider as any
 
 export const metadata: Metadata = {
   title: {
@@ -79,7 +80,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body className={`${inter.className} antialiased bg-white text-black`}>
-        <AuthProvider>
+        <AuthProviderComponent>
           <div className="min-h-screen flex flex-col bg-white">
             <Nav />
             <main className="flex-1 bg-white">
@@ -87,7 +88,7 @@ export default function RootLayout({
             </main>
             <Footer />
           </div>
-        </AuthProvider>
+        </AuthProviderComponent>
       </body>
     </html>
   )

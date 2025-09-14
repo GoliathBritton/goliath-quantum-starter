@@ -21,8 +21,29 @@ import {
   Code,
   FileJson
 } from 'lucide-react'
-import { useState, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd'
+
+// Type assertions for motion components and icons
+const MotionDiv = motion.div as any
+const PlusIcon = Plus as any
+const DownloadIcon = Download as any
+const UploadIcon = Upload as any
+const SaveIcon = Save as any
+const PlayIcon = Play as any
+const Trash2Icon = Trash2 as any
+const CopyIcon = Copy as any
+const SettingsIcon = Settings as any
+const InfoIcon = Info as any
+const ArrowRightIcon = ArrowRight as any
+const ZapIcon = Zap as any
+const DatabaseIcon = Database as any
+const CpuIcon = Cpu as any
+const NetworkIcon = Network as any
+const TargetIcon = Target as any
+const GitBranchIcon = GitBranch as any
+const CodeIcon = Code as any
+const FileJsonIcon = FileJson as any
 
 interface QUBONode {
   id: string
@@ -32,6 +53,13 @@ interface QUBONode {
   description: string
   position: { x: number; y: number }
   connections: string[]
+  data: {
+    label: string
+    description?: string
+    config?: any
+    inputs?: any[]
+    outputs?: any[]
+  }
 }
 
 interface QUBORecipe {
@@ -104,7 +132,14 @@ export default function QUBORecipePage() {
       description: `New ${type} node`,
       position: { x: Math.random() * 400, y: Math.random() * 300 },
       connections: [],
-      value: type === 'parameter' ? 1 : undefined
+      value: type === 'parameter' ? 1 : undefined,
+      data: {
+        label: `${type.charAt(0).toUpperCase() + type.slice(1)} ${recipe.nodes.filter(n => n.type === type).length + 1}`,
+        description: `New ${type} node`,
+        config: {},
+        inputs: [],
+        outputs: []
+      }
     }
 
     setRecipe(prev => ({
@@ -296,7 +331,7 @@ export default function QUBORecipePage() {
                 onClick={exportRecipe}
                 className="btn-secondary flex items-center"
               >
-                <Download className="mr-2 h-4 w-4" />
+                <DownloadIcon className="mr-2 h-4 w-4" />
                 Export JSON
               </button>
               <button
@@ -311,7 +346,7 @@ export default function QUBORecipePage() {
                   </>
                 ) : (
                   <>
-                    <Play className="mr-2 h-4 w-4" />
+                    <PlayIcon className="mr-2 h-4 w-4" />
                     Compile & Run
                   </>
                 )}
@@ -327,7 +362,7 @@ export default function QUBORecipePage() {
           <div className="lg:col-span-1">
             <div className="card">
               <h3 className="text-lg font-semibold text-black mb-4 flex items-center">
-                <Code className="mr-2 h-5 w-5 text-brand-cyan" />
+                <CodeIcon className="mr-2 h-5 w-5 text-brand-cyan" />
                 Node Palette
               </h3>
               <div className="space-y-3">
@@ -341,7 +376,7 @@ export default function QUBORecipePage() {
                     >
                       <div className="flex items-center space-x-3">
                         <div className={`w-8 h-8 ${nodeType.color} rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-200`}>
-                          <Icon className="h-4 w-4 text-white" />
+                          {React.createElement(Icon, { className: "h-4 w-4 text-white" }) as JSX.Element}
                         </div>
                         <div>
                           <div className="font-medium text-black text-sm">{nodeType.label}</div>
@@ -393,7 +428,7 @@ export default function QUBORecipePage() {
             <div className="card h-[600px] relative overflow-hidden">
               <div className="absolute top-4 left-4 z-10">
                 <h3 className="text-lg font-semibold text-black flex items-center">
-                  <Network className="mr-2 h-5 w-5 text-brand-cyan" />
+                  <NetworkIcon className="mr-2 h-5 w-5 text-brand-cyan" />
                   Recipe Canvas
                 </h3>
               </div>
@@ -409,7 +444,7 @@ export default function QUBORecipePage() {
                 {recipe.nodes.length === 0 ? (
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="text-center text-gray-500">
-                      <Network className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                      <NetworkIcon className="h-12 w-12 mx-auto mb-4 opacity-50" />
                       <p className="text-lg font-medium mb-2">Start Building Your QUBO Recipe</p>
                       <p className="text-sm">Add nodes from the palette to begin</p>
                     </div>
@@ -433,7 +468,7 @@ export default function QUBORecipePage() {
                       >
                         <div className="flex items-center space-x-2 mb-2">
                           <div className={`w-6 h-6 ${getNodeColor(node.type)} rounded flex items-center justify-center`}>
-                            <Icon className="h-3 w-3 text-white" />
+                            {React.createElement(Icon, { className: "h-3 w-3 text-white" }) as JSX.Element}
                           </div>
                           <div className="text-xs font-medium text-gray-600 uppercase tracking-wide">
                             {node.type}
@@ -459,7 +494,7 @@ export default function QUBORecipePage() {
           <div className="lg:col-span-1">
             <div className="card">
               <h3 className="text-lg font-semibold text-black mb-4 flex items-center">
-                <Settings className="mr-2 h-5 w-5 text-brand-cyan" />
+                <SettingsIcon className="mr-2 h-5 w-5 text-brand-cyan" />
                 Properties
               </h3>
               
@@ -508,14 +543,14 @@ export default function QUBORecipePage() {
                       onClick={() => deleteNode(selectedNode.id)}
                       className="w-full flex items-center justify-center px-3 py-2 border border-red-300 text-red-700 rounded-md hover:bg-red-50 transition-colors duration-200"
                     >
-                      <Trash2 className="mr-2 h-4 w-4" />
+                      <Trash2Icon className="mr-2 h-4 w-4" />
                       Delete Node
                     </button>
                   </div>
                 </div>
               ) : (
                 <div className="text-center text-gray-500 py-8">
-                  <Info className="h-8 w-8 mx-auto mb-3 opacity-50" />
+                  <InfoIcon className="h-8 w-8 mx-auto mb-3 opacity-50" />
                   <p className="text-sm">Select a node to edit its properties</p>
                 </div>
               )}
@@ -572,7 +607,7 @@ export default function QUBORecipePage() {
       {/* Integration Info */}
       <section className="section-padding bg-white border-t border-gray-200">
         <div className="container-quantum">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -585,7 +620,7 @@ export default function QUBORecipePage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Your QUBO recipes integrate seamlessly with the NQBA quantum computing platform.
             </p>
-          </motion.div>
+          </MotionDiv>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
@@ -608,7 +643,7 @@ export default function QUBORecipePage() {
                 color: "text-brand-navy"
               }
             ].map((feature) => (
-              <motion.div
+              <MotionDiv
                 key={feature.title}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -617,11 +652,11 @@ export default function QUBORecipePage() {
                 className="card text-center"
               >
                 <div className={`w-12 h-12 ${feature.color} mx-auto mb-4`}>
-                  <feature.icon className="w-full h-full" />
+                  {React.createElement(feature.icon, { className: "w-full h-full" }) as JSX.Element}
                 </div>
                 <h3 className="text-xl font-bold text-black mb-3">{feature.title}</h3>
                 <p className="text-gray-600 leading-relaxed">{feature.description}</p>
-              </motion.div>
+              </MotionDiv>
             ))}
           </div>
         </div>

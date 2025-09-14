@@ -16,6 +16,23 @@ import {
 } from 'lucide-react'
 import { brand, navigation, partners as strategicPartners, businessUnits } from '../lib/brand'
 
+// Type assertion for motion components
+const MotionDiv = motion.div as any
+
+// Type assertions for Lucide icons
+const LinkedinIcon = Linkedin as any
+const TwitterIcon = Twitter as any
+const GithubIcon = Github as any
+const MailIcon = Mail as any
+const PhoneIcon = Phone as any
+const MapPinIcon = MapPin as any
+const ExternalLinkIcon = ExternalLink as any
+const ShieldIcon = Shield as any
+const ZapIcon = Zap as any
+
+// Type assertion for Next.js Link
+const LinkComponent = Link as any
+
 export default function Footer() {
   const currentYear = new Date().getFullYear()
 
@@ -31,7 +48,7 @@ export default function Footer() {
       <div className="container-quantum py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand & Description */}
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
@@ -61,7 +78,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Linkedin className="h-5 w-5" />
+                <LinkedinIcon className="h-5 w-5" />
               </a>
               <a
                 href="https://twitter.com/flyfox_ai"
@@ -69,7 +86,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Twitter className="h-5 w-5" />
+                <TwitterIcon className="h-5 w-5" />
               </a>
               <a
                 href="https://github.com/flyfox-ai"
@@ -77,13 +94,13 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Github className="h-5 w-5" />
+                <GithubIcon className="h-5 w-5" />
               </a>
             </div>
-          </motion.div>
+          </MotionDiv>
 
           {/* Navigation Links */}
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
@@ -93,19 +110,19 @@ export default function Footer() {
             <ul className="space-y-3">
               {navigation.main.slice(0, 6).map((item) => (
                 <li key={item.path}>
-                  <Link
+                  <LinkComponent
                     href={item.path}
                     className="text-gray-300 hover:text-brand-cyan transition-colors duration-200 text-sm"
                   >
                     {item.label}
-                  </Link>
+                  </LinkComponent>
                 </li>
               ))}
             </ul>
-          </motion.div>
+          </MotionDiv>
 
           {/* Business Units */}
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
@@ -123,10 +140,10 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-          </motion.div>
+          </MotionDiv>
 
           {/* Contact & Support */}
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
@@ -135,7 +152,7 @@ export default function Footer() {
             <h3 className="font-semibold text-lg mb-4">Contact</h3>
             <ul className="space-y-3">
               <li className="flex items-center space-x-3">
-                <Mail className="h-4 w-4 text-brand-cyan flex-shrink-0" />
+                <MailIcon className="h-4 w-4 text-brand-cyan flex-shrink-0" />
                 <a
                   href="mailto:hello@flyfox.ai"
                   className="text-gray-300 hover:text-brand-cyan transition-colors duration-200 text-sm"
@@ -144,7 +161,7 @@ export default function Footer() {
                 </a>
               </li>
               <li className="flex items-center space-x-3">
-                <Phone className="h-4 w-4 text-brand-cyan flex-shrink-0" />
+                <PhoneIcon className="h-4 w-4 text-brand-cyan flex-shrink-0" />
                 <a
                   href="tel:517-213-8392"
                   className="text-gray-300 hover:text-brand-cyan transition-colors duration-200 text-sm"
@@ -153,7 +170,7 @@ export default function Footer() {
                 </a>
               </li>
               <li className="flex items-start space-x-3">
-                <MapPin className="h-4 w-4 text-brand-cyan flex-shrink-0 mt-0.5" />
+                <MapPinIcon className="h-4 w-4 text-brand-cyan flex-shrink-0 mt-0.5" />
                 <div className="text-gray-300 text-sm">
                   <div>Quantum Computing Center</div>
                   <div>Silicon Valley, CA</div>
@@ -169,17 +186,17 @@ export default function Footer() {
                 rel="noopener noreferrer"
               >
                 <span>Book a Demo</span>
-                <ExternalLink className="h-4 w-4" />
+                <ExternalLinkIcon className="h-4 w-4" />
               </a>
             </div>
-          </motion.div>
+          </MotionDiv>
         </div>
       </div>
 
       {/* Strategic Partners Section */}
       <div className="border-t border-gray-700">
         <div className="container-quantum py-8">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
@@ -190,9 +207,9 @@ export default function Footer() {
             <p className="text-gray-400 text-sm">
               Powered by industry-leading quantum and AI infrastructure
             </p>
-          </motion.div>
+          </MotionDiv>
 
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
@@ -211,11 +228,11 @@ export default function Footer() {
                   <div className="text-sm font-medium text-white group-hover:text-brand-cyan transition-colors duration-200">
                     {partner.name}
                   </div>
-                  <div className="text-xs text-gray-400">{partner.category}</div>
+                  <div className="text-xs text-gray-400">{partner.type}</div>
                 </div>
               </div>
             ))}
-          </motion.div>
+          </MotionDiv>
         </div>
       </div>
 
@@ -228,34 +245,34 @@ export default function Footer() {
                 © {currentYear} {brand.name}. All rights reserved.
               </p>
               <div className="flex items-center space-x-4 text-xs">
-                <Link
+                <LinkComponent
                   href="/privacy"
                   className="text-gray-400 hover:text-brand-cyan transition-colors duration-200"
                 >
                   Privacy Policy
-                </Link>
-                <Link
+                </LinkComponent>
+                <LinkComponent
                   href="/terms"
                   className="text-gray-400 hover:text-brand-cyan transition-colors duration-200"
                 >
                   Terms of Service
-                </Link>
-                <Link
+                </LinkComponent>
+                <LinkComponent
                   href="/security"
                   className="text-gray-400 hover:text-brand-cyan transition-colors duration-200"
                 >
                   Security
-                </Link>
+                </LinkComponent>
               </div>
             </div>
 
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2 px-3 py-1 bg-gray-800 rounded-full">
-                <Shield className="h-3 w-3 text-green-400" />
+                <ShieldIcon className="h-3 w-3 text-green-400" />
                 <span className="text-xs font-medium text-gray-300">SOC 2 Compliant</span>
               </div>
               <div className="flex items-center space-x-2 px-3 py-1 bg-gray-800 rounded-full">
-                <Zap className="h-3 w-3 text-brand-cyan" />
+                <ZapIcon className="h-3 w-3 text-brand-cyan" />
                 <span className="text-xs font-medium text-gray-300">Quantum Ready</span>
               </div>
             </div>

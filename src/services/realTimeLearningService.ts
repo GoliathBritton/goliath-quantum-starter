@@ -681,7 +681,7 @@ class RealTimeLearningService extends EventEmitter {
     }
     
     // Train each model with its data
-    for (const [modelId, data] of modelGroups) {
+    for (const [modelId, data] of Array.from(modelGroups.entries())) {
       try {
         await this.trainModel(modelId, data);
       } catch (error) {

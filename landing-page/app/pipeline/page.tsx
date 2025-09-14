@@ -16,6 +16,22 @@ import {
 import Link from 'next/link'
 import { useState } from 'react'
 
+// Type assertions for motion components
+const MotionDiv = motion.div as any
+const LinkComponent = Link as any
+
+// Type assertions for icon components
+const ArrowRightIcon = ArrowRight as any
+const CheckCircleIcon = CheckCircle as any
+const ClockIcon = Clock as any
+const TargetIcon = Target as any
+const TrendingUpIcon = TrendingUp as any
+const Building2Icon = Building2 as any
+const UsersIcon = Users as any
+const ZapIcon = Zap as any
+const ShieldIcon = Shield as any
+const BarChart3Icon = BarChart3 as any
+
 export default function PipelinePage() {
   const [activeStep, setActiveStep] = useState(0)
 
@@ -57,7 +73,7 @@ export default function PipelinePage() {
       {/* Hero Section */}
       <section className="hero-gradient section-padding">
         <div className="container-quantum text-center">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -69,22 +85,22 @@ export default function PipelinePage() {
               Transform your business with our proven quantum intelligence implementation methodology.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/contact" className="btn-primary">
+              <LinkComponent href="/contact" className="btn-primary">
                 Start Your Journey
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-              <Link href="/case-studies" className="btn-secondary">
+                <ArrowRightIcon className="ml-2 h-5 w-5" />
+              </LinkComponent>
+              <LinkComponent href="/case-studies" className="btn-secondary">
                 View Success Stories
-              </Link>
+              </LinkComponent>
             </div>
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* Implementation Pipeline */}
       <section className="section-padding">
         <div className="container-quantum">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -97,11 +113,11 @@ export default function PipelinePage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Our structured approach ensures successful quantum transformation with measurable business outcomes.
             </p>
-          </motion.div>
+          </MotionDiv>
 
           <div className="space-y-8">
             {pipelineSteps.map((step, index) => (
-              <motion.div
+              <MotionDiv
                 key={index}
                 variants={fadeInUp}
                 initial="initial"
@@ -123,7 +139,7 @@ export default function PipelinePage() {
                     <p className="text-gray-600 mb-4">{step.description}</p>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div className="flex items-center space-x-2">
-                        <Clock className="h-5 w-5 text-brand-cyan" />
+                        <ClockIcon className="h-5 w-5 text-brand-cyan" />
                         <span className="text-sm font-medium">{step.duration}</span>
                       </div>
                       <div className="md:col-span-2">
@@ -142,7 +158,7 @@ export default function PipelinePage() {
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </MotionDiv>
             ))}
           </div>
         </div>
@@ -151,7 +167,7 @@ export default function PipelinePage() {
       {/* Call to Action */}
       <section className="section-padding bg-gray-50">
         <div className="container-narrow text-center">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -166,13 +182,13 @@ export default function PipelinePage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a href="https://live.flyfoxai.com/widget/booking/BJV7BainocNCHj2XDtt8" className="btn-primary" target="_blank" rel="noopener noreferrer">
                 Schedule Consultation
-                <ArrowRight className="ml-2 h-5 w-5" />
+                <ArrowRightIcon className="ml-2 h-5 w-5" />
               </a>
-              <Link href="/resources" className="btn-secondary">
+              <LinkComponent href="/resources" className="btn-secondary">
                 Download Resources
-              </Link>
+              </LinkComponent>
             </div>
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
     </div>

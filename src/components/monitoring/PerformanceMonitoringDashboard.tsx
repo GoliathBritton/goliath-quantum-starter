@@ -4,7 +4,6 @@ import {
   Card,
   CardContent,
   Typography,
-  Grid,
   Chip,
   LinearProgress,
   Button,
@@ -103,7 +102,7 @@ function TabPanel(props: TabPanelProps) {
   );
 }
 
-const PerformanceMonitoringDashboard: React.FC = () => {
+const PerformanceMonitoringDashboard = () => {
   const [monitoringService] = useState(() => new PerformanceMonitoringService());
   const [isMonitoring, setIsMonitoring] = useState(false);
   const [metrics, setMetrics] = useState<PerformanceMetrics[]>([]);
@@ -127,6 +126,16 @@ const PerformanceMonitoringDashboard: React.FC = () => {
     quantum: '#7c3aed',
   };
 
+  const loadInitialData = useCallback(async () => {
+    const historicalMetrics = monitoringService.getMetrics();
+    const currentAlerts = monitoringService.getAlerts();
+    const latest = monitoringService.getLatestMetrics();
+    
+    setMetrics(historicalMetrics);
+    setAlerts(currentAlerts);
+    setLatestMetrics(latest);
+  }, [monitoringService]);
+
   useEffect(() => {
     // Initialize monitoring service
     monitoringService.on('metricsCollected', (newMetrics: PerformanceMetrics) => {
@@ -147,17 +156,7 @@ const PerformanceMonitoringDashboard: React.FC = () => {
         monitoringService.stopMonitoring();
       }
     };
-  }, []);
-
-  const loadInitialData = useCallback(async () => {
-    const historicalMetrics = monitoringService.getMetrics();
-    const currentAlerts = monitoringService.getAlerts();
-    const latest = monitoringService.getLatestMetrics();
-    
-    setMetrics(historicalMetrics);
-    setAlerts(currentAlerts);
-    setLatestMetrics(latest);
-  }, [monitoringService]);
+  }, [loadInitialData, isMonitoring, monitoringService]);
 
   const handleStartMonitoring = () => {
     monitoringService.startMonitoring(refreshInterval * 1000);
@@ -282,8 +281,8 @@ const PerformanceMonitoringDashboard: React.FC = () => {
     const { system, quantum, application } = latestMetrics;
 
     return (
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={3}>
+      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(4, 1fr)' }, gap: 3 }}>
+        <Box>
           {renderMetricCard(
             'CPU Usage',
             system.cpu.usage,
@@ -292,8 +291,8 @@ const PerformanceMonitoringDashboard: React.FC = () => {
             system.cpu.usage > 80 ? colors.error : system.cpu.usage > 60 ? colors.warning : colors.success,
             <Speed />
           )}
-        </Grid>
-        <Grid item xs={12} md={3}>
+        </Box>
+        <Box>
           {renderMetricCard(
             'Memory Usage',
             system.memory.usage,
@@ -302,8 +301,8 @@ const PerformanceMonitoringDashboard: React.FC = () => {
             system.memory.usage > 85 ? colors.error : system.memory.usage > 70 ? colors.warning : colors.success,
             <Memory />
           )}
-        </Grid>
-        <Grid item xs={12} md={3}>
+        </Box>
+        <Box>
           {renderMetricCard(
             'Disk Usage',
             system.disk.usage,
@@ -312,8 +311,8 @@ const PerformanceMonitoringDashboard: React.FC = () => {
             system.disk.usage > 90 ? colors.error : system.disk.usage > 75 ? colors.warning : colors.success,
             <Storage />
           )}
-        </Grid>
-        <Grid item xs={12} md={3}>
+        </Box>
+        <Box>
           {renderMetricCard(
             'Network Latency',
             system.network.latency,
@@ -322,9 +321,9 @@ const PerformanceMonitoringDashboard: React.FC = () => {
             system.network.latency > 100 ? colors.error : system.network.latency > 50 ? colors.warning : colors.success,
             <NetworkCheck />
           )}
-        </Grid>
+        </Box>
 
-        <Grid item xs={12} md={3}>
+        <Box>
           {renderMetricCard(
             'Quantum Advantage',
             quantum.advantage.advantageScore,
@@ -333,17 +332,18 @@ const PerformanceMonitoringDashboard: React.FC = () => {
             colors.quantum,
             <Assessment />
           )}
-        </Grid>
-        <Grid item xs={12} md={3}>
+        </Box>
+        <Box>
           {renderMetricCard(
             'Quantum Error Rate',
             quantum.errors.errorRate,
             '%',
             getMetricTrend('quantum.errors.errorRate'),
-            quantum.errors.errorRate > 5 ? colors.error : quantum.errors.errorRate > 2 ? colors.warning : colors.success
+            quantum.errors.errorRate > 5 ? colors.error : quantum.errors.errorRate > 2 ? colors.warning : colors.success,
+            <Error />
           )}
-        </Grid>
-        <Grid item xs={12} md={3}>
+        </Box>
+        <Box>
           {renderMetricCard(
             'Response Time',
             application.response.averageResponseTime,
@@ -351,8 +351,8 @@ const PerformanceMonitoringDashboard: React.FC = () => {
             getMetricTrend('application.response.averageResponseTime'),
             application.response.averageResponseTime > 1000 ? colors.error : application.response.averageResponseTime > 500 ? colors.warning : colors.success
           )}
-        </Grid>
-        <Grid item xs={12} md={3}>
+        </Box>
+        <Box>
           {renderMetricCard(
             'Active Users',
             application.users.activeUsers,
@@ -360,94 +360,8 @@ const PerformanceMonitoringDashboard: React.FC = () => {
             getMetricTrend('application.users.activeUsers'),
             colors.info
           )}
-        </Grid>
-
-        {/* Performance Charts */}
-        <Grid item xs={12} md={6}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                System Performance Trends
-              </Typography>
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={metrics.slice(-20)}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis 
-                    dataKey="timestamp" 
-                    tickFormatter={(value) => new Date(value).toLocaleTimeString()}
-                  />
-                  <YAxis />
-                  <RechartsTooltip 
-                    labelFormatter={(value) => new Date(value).toLocaleString()}
-                  />
-                  <Legend />
-                  <Line 
-                    type="monotone" 
-                    dataKey="system.cpu.usage" 
-                    stroke={colors.primary} 
-                    name="CPU %"
-                    strokeWidth={2}
-                  />
-                  <Line 
-                    type="monotone" 
-                    dataKey="system.memory.usage" 
-                    stroke={colors.secondary} 
-                    name="Memory %"
-                    strokeWidth={2}
-                  />
-                  <Line 
-                    type="monotone" 
-                    dataKey="system.disk.usage" 
-                    stroke={colors.warning} 
-                    name="Disk %"
-                    strokeWidth={2}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        <Grid item xs={12} md={6}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                Quantum Performance
-              </Typography>
-              <ResponsiveContainer width="100%" height={300}>
-                <AreaChart data={metrics.slice(-20)}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis 
-                    dataKey="timestamp" 
-                    tickFormatter={(value) => new Date(value).toLocaleTimeString()}
-                  />
-                  <YAxis />
-                  <RechartsTooltip 
-                    labelFormatter={(value) => new Date(value).toLocaleString()}
-                  />
-                  <Legend />
-                  <Area 
-                    type="monotone" 
-                    dataKey="quantum.advantage.advantageScore" 
-                    stroke={colors.quantum} 
-                    fill={colors.quantum}
-                    fillOpacity={0.3}
-                    name="Advantage Score"
-                  />
-                  <Area 
-                    type="monotone" 
-                    dataKey="quantum.advantage.efficiency" 
-                    stroke={colors.success} 
-                    fill={colors.success}
-                    fillOpacity={0.3}
-                    name="Efficiency %"
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
     );
   };
 
@@ -457,8 +371,9 @@ const PerformanceMonitoringDashboard: React.FC = () => {
     const warningAlerts = unresolvedAlerts.filter(alert => alert.severity === 'warning');
 
     return (
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={4}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' }, gap: 3 }}>
+          <Box>
           {renderMetricCard(
             'Critical Alerts',
             criticalAlerts.length,
@@ -467,8 +382,8 @@ const PerformanceMonitoringDashboard: React.FC = () => {
             colors.error,
             <Error />
           )}
-        </Grid>
-        <Grid item xs={12} md={4}>
+          </Box>
+          <Box>
           {renderMetricCard(
             'Warning Alerts',
             warningAlerts.length,
@@ -477,8 +392,8 @@ const PerformanceMonitoringDashboard: React.FC = () => {
             colors.warning,
             <Warning />
           )}
-        </Grid>
-        <Grid item xs={12} md={4}>
+          </Box>
+          <Box>
           {renderMetricCard(
             'Total Unresolved',
             unresolvedAlerts.length,
@@ -487,9 +402,10 @@ const PerformanceMonitoringDashboard: React.FC = () => {
             colors.info,
             <Notifications />
           )}
-        </Grid>
+          </Box>
+        </Box>
 
-        <Grid item xs={12}>
+        <Box>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
@@ -573,8 +489,8 @@ const PerformanceMonitoringDashboard: React.FC = () => {
               </TableContainer>
             </CardContent>
           </Card>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
     );
   };
 
@@ -585,8 +501,8 @@ const PerformanceMonitoringDashboard: React.FC = () => {
     const performanceSummary = monitoringService.getPerformanceSummary();
 
     return (
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={6}>
+      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 3 }}>
+        <Box>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
@@ -613,9 +529,9 @@ const PerformanceMonitoringDashboard: React.FC = () => {
               </ResponsiveContainer>
             </CardContent>
           </Card>
-        </Grid>
+        </Box>
 
-        <Grid item xs={12} md={6}>
+        <Box>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
@@ -643,9 +559,9 @@ const PerformanceMonitoringDashboard: React.FC = () => {
               </ResponsiveContainer>
             </CardContent>
           </Card>
-        </Grid>
+        </Box>
 
-        <Grid item xs={12}>
+        <Box sx={{ gridColumn: { xs: '1', md: '1 / -1' } }}>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
@@ -670,8 +586,8 @@ const PerformanceMonitoringDashboard: React.FC = () => {
               </ResponsiveContainer>
             </CardContent>
           </Card>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
     );
   };
 

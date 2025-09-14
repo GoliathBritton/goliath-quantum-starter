@@ -73,7 +73,7 @@ const BusinessPodsScreen: React.FC = () => {
       
       switch (action) {
         case 'scoreLeads':
-          await dispatch(scoreLeads({ podId, leads: [] }));
+          await dispatch(scoreLeads([]));
           Alert.alert('Success', 'Lead scoring initiated with quantum enhancement');
           break;
         case 'optimizeEnergy':
@@ -89,7 +89,7 @@ const BusinessPodsScreen: React.FC = () => {
           Alert.alert('Success', 'Financial plan generation started');
           break;
         case 'gatherIntel':
-          await dispatch(gatherIntelligence({ podId, targets: [] }));
+          await dispatch(gatherIntelligence('market analysis'));
           Alert.alert('Success', 'Intelligence gathering initiated');
           break;
         default:

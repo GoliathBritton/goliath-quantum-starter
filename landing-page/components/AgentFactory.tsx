@@ -2,11 +2,29 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+
+const MotionDiv = motion.div as any
+const AnimatePresenceComponent = AnimatePresence as any
 import { 
   Bot, Code, Wrench, ClipboardList, Rocket,
   Play, Pause, Settings, TrendingUp, Users,
   Zap, CheckCircle, Clock, AlertCircle
 } from 'lucide-react'
+
+const BotIcon = Bot as any
+const CodeIcon = Code as any
+const WrenchIcon = Wrench as any
+const ClipboardListIcon = ClipboardList as any
+const RocketIcon = Rocket as any
+const PlayIcon = Play as any
+const PauseIcon = Pause as any
+const SettingsIcon = Settings as any
+const TrendingUpIcon = TrendingUp as any
+const UsersIcon = Users as any
+const ZapIcon = Zap as any
+const CheckCircleIcon = CheckCircle as any
+const ClockIcon = Clock as any
+const AlertCircleIcon = AlertCircle as any
 import { brand } from '@/lib/brand'
 
 interface Agent {
@@ -121,10 +139,10 @@ const statusColors = {
 }
 
 const statusIcons = {
-  'active': Play,
-  'training': Settings,
-  'optimizing': Wrench,
-  'deployed': CheckCircle
+  'active': PlayIcon,
+  'training': SettingsIcon,
+  'optimizing': WrenchIcon,
+  'deployed': CheckCircleIcon
 }
 
 export default function AgentFactory() {
@@ -156,7 +174,7 @@ export default function AgentFactory() {
       <div className="mb-8">
         <div className="flex items-center space-x-4 mb-4">
           <div className="w-12 h-12 bg-brand-gold/10 rounded-xl flex items-center justify-center">
-            <Bot className="w-6 h-6 text-brand-gold" />
+            <BotIcon className="w-6 h-6 text-brand-gold" />
           </div>
           <div>
             <h2 className="text-3xl font-bold text-black">Agent Factory</h2>
@@ -172,7 +190,7 @@ export default function AgentFactory() {
                   : 'bg-green-100 text-green-700 hover:bg-green-200'
               }`}
             >
-              {isProducing ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+              {isProducing ? <PauseIcon className="w-4 h-4" /> : <PlayIcon className="w-4 h-4" />}
               <span>{isProducing ? 'Pause Production' : 'Start Production'}</span>
             </button>
             <div className="flex items-center space-x-2">
@@ -194,7 +212,7 @@ export default function AgentFactory() {
         <h3 className="text-xl font-bold text-black mb-4">Real-time Production Metrics</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {realTimeMetrics.map((metric, index) => (
-            <motion.div
+            <MotionDiv
               key={metric.name}
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -214,20 +232,20 @@ export default function AgentFactory() {
                 </span>
                 <span className="text-gray-500 text-sm">{metric.unit}</span>
                 <div className="flex-1"></div>
-                {metric.trend === 'up' && <TrendingUp className="w-4 h-4 text-green-500" />}
-                {metric.trend === 'down' && <TrendingUp className="w-4 h-4 text-red-500 rotate-180" />}
+                {metric.trend === 'up' && <TrendingUpIcon className="w-4 h-4 text-green-500" />}
+                {metric.trend === 'down' && <TrendingUpIcon className="w-4 h-4 text-red-500 rotate-180" />}
                 {metric.trend === 'stable' && <div className="w-4 h-4 bg-gray-400 rounded-full"></div>}
               </div>
               
               <div className="w-full bg-gray-200 rounded-full h-2">
-                <motion.div 
+                <MotionDiv 
                   className="bg-brand-gold h-2 rounded-full"
                   initial={{ width: 0 }}
                   animate={{ width: `${Math.min(metric.value * 2, 100)}%` }}
                   transition={{ duration: 1, delay: index * 0.1 }}
-                ></motion.div>
+                ></MotionDiv>
               </div>
-            </motion.div>
+            </MotionDiv>
           ))}
         </div>
       </div>
@@ -241,7 +259,7 @@ export default function AgentFactory() {
             const isSelected = selectedAgent === agent.id
             
             return (
-              <motion.div
+              <MotionDiv
                 key={agent.id}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -255,7 +273,7 @@ export default function AgentFactory() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                       <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                        <Bot className="w-6 h-6 text-gray-600" />
+                        <BotIcon className="w-6 h-6 text-gray-600" />
                       </div>
                       <div>
                         <h4 className="text-lg font-bold text-black">{agent.name}</h4>
@@ -282,9 +300,9 @@ export default function AgentFactory() {
                   </div>
                 </div>
 
-                <AnimatePresence>
+                <AnimatePresenceComponent>
                   {isSelected && (
-                    <motion.div
+                    <MotionDiv
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: 'auto', opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
@@ -298,7 +316,7 @@ export default function AgentFactory() {
                             <ul className="space-y-2">
                               {agent.advancedEnhancements.map((enhancement, enhIndex) => (
                                 <li key={enhIndex} className="flex items-center space-x-2">
-                                  <Zap className="w-4 h-4 text-brand-gold" />
+                                  <ZapIcon className="w-4 h-4 text-brand-gold" />
                                   <span className="text-sm text-gray-700">{enhancement}</span>
                                 </li>
                               ))}
@@ -310,7 +328,7 @@ export default function AgentFactory() {
                             <ul className="space-y-2">
                               {agent.capabilities.map((capability, capIndex) => (
                                 <li key={capIndex} className="flex items-center space-x-2">
-                                  <CheckCircle className="w-4 h-4 text-green-500" />
+                                  <CheckCircleIcon className="w-4 h-4 text-green-500" />
                                   <span className="text-sm text-gray-700">{capability}</span>
                                 </li>
                               ))}
@@ -334,10 +352,10 @@ export default function AgentFactory() {
                           </div>
                         </div>
                       </div>
-                    </motion.div>
+                    </MotionDiv>
                   )}
-                </AnimatePresence>
-              </motion.div>
+                </AnimatePresenceComponent>
+              </MotionDiv>
             )
           })}
         </div>
@@ -348,7 +366,7 @@ export default function AgentFactory() {
           <h3 className="text-xl font-bold text-black mb-4">Integrated Advanced Roles</h3>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {agentFactoryRoles.map((role, index) => (
-            <motion.div
+            <MotionDiv
               key={role.name}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -378,7 +396,7 @@ export default function AgentFactory() {
                   ))}
                 </ul>
               </div>
-            </motion.div>
+            </MotionDiv>
           ))}
         </div>
       </div>

@@ -40,6 +40,7 @@ import {
   Divider,
   List,
   ListItem,
+  ListItemButton,
   ListItemText,
   ListItemIcon,
   ListItemSecondaryAction,
@@ -86,7 +87,6 @@ import {
   AutoAwesome,
   Functions,
   Calculate,
-  Matrix,
   GridOn,
   Tune,
   Analytics,
@@ -97,7 +97,7 @@ import {
   Architecture,
   AccountTree,
   Hub,
-  Scatter3D,
+  Schedule,
   ShowChart,
   BarChart,
   PieChart,
@@ -118,7 +118,6 @@ import {
   ComposedChart,
   Bar,
   Legend,
-  Heatmap,
 } from 'recharts';
 import quantumOptimizationService, {
   QUBOMatrix,
@@ -186,12 +185,15 @@ const QUBOSolver: React.FC = () => {
         description: 'Optimize asset allocation for maximum return with risk constraints',
         matrix: {
           size: 4,
-          values: [
+          matrix: [
             [0.1, -0.05, 0.02, -0.01],
             [-0.05, 0.15, -0.03, 0.01],
             [0.02, -0.03, 0.12, -0.02],
             [-0.01, 0.01, -0.02, 0.08],
           ],
+          variables: ['x1', 'x2', 'x3', 'x4'],
+          constraints: [],
+          objective: 'minimize' as const,
         },
         variables: ['AAPL', 'GOOGL', 'MSFT', 'TSLA'],
         constraints: [
@@ -224,12 +226,15 @@ const QUBOSolver: React.FC = () => {
         description: 'Find maximum cut in a weighted graph',
         matrix: {
           size: 4,
-          values: [
+          matrix: [
             [0, 1, 1, 0],
             [1, 0, 1, 1],
             [1, 1, 0, 1],
             [0, 1, 1, 0],
           ],
+          variables: ['x1', 'x2', 'x3', 'x4'],
+          constraints: [],
+          objective: 'minimize' as const,
         },
         variables: ['v1', 'v2', 'v3', 'v4'],
         constraints: [],
@@ -245,14 +250,17 @@ const QUBOSolver: React.FC = () => {
         description: 'Optimize power generation and distribution',
         matrix: {
           size: 6,
-          values: [
+          matrix: [
             [0.2, -0.1, 0.05, 0, 0, 0],
             [-0.1, 0.25, -0.08, 0.02, 0, 0],
-            [0.05, -0.08, 0.18, -0.06, 0.01, 0],
-            [0, 0.02, -0.06, 0.22, -0.04, 0.01],
-            [0, 0, 0.01, -0.04, 0.15, -0.03],
-            [0, 0, 0, 0.01, -0.03, 0.12],
+            [0.05, -0.08, 0.18, -0.03, 0.01, 0],
+            [0, 0.02, -0.03, 0.22, -0.05, 0.02],
+            [0, 0, 0.01, -0.05, 0.19, -0.04],
+            [0, 0, 0, 0.02, -0.04, 0.21],
           ],
+          variables: ['x1', 'x2', 'x3', 'x4', 'x5', 'x6'],
+          constraints: [],
+          objective: 'minimize' as const,
         },
         variables: ['Solar', 'Wind', 'Hydro', 'Gas', 'Coal', 'Nuclear'],
         constraints: [
@@ -326,7 +334,10 @@ const QUBOSolver: React.FC = () => {
       description: 'Enter problem description',
       matrix: {
         size: matrixSize,
-        values: Array(matrixSize).fill(null).map(() => Array(matrixSize).fill(0)),
+        matrix: Array(matrixSize).fill(null).map(() => Array(matrixSize).fill(0)),
+        variables: Array(matrixSize).fill(null).map((_, i) => `x${i + 1}`),
+        constraints: [],
+        objective: 'minimize' as const,
       },
       variables: Array(matrixSize).fill(null).map((_, i) => `x${i + 1}`),
       constraints: [],
@@ -347,11 +358,11 @@ const QUBOSolver: React.FC = () => {
     if (!selectedProblem) return;
     
     const newMatrix = { ...selectedProblem.matrix };
-    newMatrix.values[row][col] = value;
+    newMatrix.matrix[row][col] = value;
     
     // Ensure symmetry for QUBO matrix
     if (row !== col) {
-      newMatrix.values[col][row] = value;
+      newMatrix.matrix[col][row] = value;
     }
     
     const updatedProblem = {
@@ -422,13 +433,7 @@ const QUBOSolver: React.FC = () => {
       
       // Call the quantum optimization service
       const result = await quantumOptimizationService.solveQUBO(
-        selectedProblem.matrix,
-        {
-          algorithm: algorithmSettings.algorithm as any,
-          maxIterations: algorithmSettings.maxIterations,
-          convergenceThreshold: algorithmSettings.convergenceThreshold,
-          shots: algorithmSettings.shots,
-        }
+        selectedProblem.matrix
       );
       
       setOptimizationResult(result);
@@ -520,7 +525,7 @@ const QUBOSolver: React.FC = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {selectedProblem.matrix.values.map((row, i) => (
+                {selectedProblem.matrix.matrix.map((row, i) => (
                   <TableRow key={i}>
                     <TableCell>
                       <Typography variant="caption" fontWeight="bold">
@@ -562,10 +567,10 @@ const QUBOSolver: React.FC = () => {
               Matrix Size: {selectedProblem.matrix.size} × {selectedProblem.matrix.size}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Non-zero Elements: {selectedProblem.matrix.values.flat().filter(v => v !== 0).length}
+              Non-zero Elements: {selectedProblem.matrix.matrix.flat().filter(v => v !== 0).length}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Density: {((selectedProblem.matrix.values.flat().filter(v => v !== 0).length / (selectedProblem.matrix.size ** 2)) * 100).toFixed(1)}%
+              Density: {((selectedProblem.matrix.matrix.flat().filter(v => v !== 0).length / (selectedProblem.matrix.size ** 2)) * 100).toFixed(1)}%
             </Typography>
           </Box>
         </CardContent>
@@ -681,7 +686,7 @@ const QUBOSolver: React.FC = () => {
         </Typography>
         
         <Grid container spacing={3}>
-          <Grid item xs={12} sm={6}>
+          <Grid size={{ xs: 12, sm: 6 }}>
             <FormControl fullWidth>
               <InputLabel>Algorithm</InputLabel>
               <Select
@@ -699,7 +704,7 @@ const QUBOSolver: React.FC = () => {
             </FormControl>
           </Grid>
           
-          <Grid item xs={12} sm={6}>
+          <Grid size={{ xs: 12, sm: 6 }}>
             <TextField
               label="Circuit Layers"
               type="number"
@@ -712,7 +717,7 @@ const QUBOSolver: React.FC = () => {
             />
           </Grid>
           
-          <Grid item xs={12} sm={6}>
+          <Grid size={{ xs: 12, sm: 6 }}>
             <TextField
               label="Shots"
               type="number"
@@ -725,7 +730,7 @@ const QUBOSolver: React.FC = () => {
             />
           </Grid>
           
-          <Grid item xs={12} sm={6}>
+          <Grid size={{ xs: 12, sm: 6 }}>
             <TextField
               label="Max Iterations"
               type="number"
@@ -738,7 +743,7 @@ const QUBOSolver: React.FC = () => {
             />
           </Grid>
           
-          <Grid item xs={12} sm={6}>
+          <Grid size={{ xs: 12, sm: 6 }}>
             <TextField
               label="Convergence Threshold"
               type="number"
@@ -752,7 +757,7 @@ const QUBOSolver: React.FC = () => {
             />
           </Grid>
           
-          <Grid item xs={12} sm={6}>
+          <Grid size={{ xs: 12, sm: 6 }}>
             <FormControl fullWidth>
               <InputLabel>Classical Optimizer</InputLabel>
               <Select
@@ -770,7 +775,7 @@ const QUBOSolver: React.FC = () => {
             </FormControl>
           </Grid>
           
-          <Grid item xs={12}>
+          <Grid size={{ xs: 12 }}>
             <FormControlLabel
               control={
                 <Switch
@@ -835,7 +840,7 @@ const QUBOSolver: React.FC = () => {
     
     return (
       <Grid container spacing={3}>
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
@@ -865,7 +870,7 @@ const QUBOSolver: React.FC = () => {
           </Card>
         </Grid>
         
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
@@ -913,7 +918,7 @@ const QUBOSolver: React.FC = () => {
           </Card>
         </Grid>
         
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
@@ -949,7 +954,7 @@ const QUBOSolver: React.FC = () => {
           </Card>
         </Grid>
         
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
@@ -972,7 +977,7 @@ const QUBOSolver: React.FC = () => {
           </Card>
         </Grid>
         
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
@@ -1040,17 +1045,16 @@ const QUBOSolver: React.FC = () => {
       </Box>
 
       <Grid container spacing={3}>
-        <Grid item xs={12} md={3}>
+        <Grid size={{ xs: 12, md: 3 }}>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
                 Problem Library
               </Typography>
               <List>
-                {problems.map((problem) => (
-                  <ListItem
-                    key={problem.id}
-                    button
+                  {problems.map((problem) => (
+                    <ListItem key={problem.id} disablePadding>
+                      <ListItemButton
                     selected={selectedProblem?.id === problem.id}
                     onClick={() => setSelectedProblem(problem)}
                   >
@@ -1076,6 +1080,7 @@ const QUBOSolver: React.FC = () => {
                         </Box>
                       }
                     />
+                  </ListItemButton>
                   </ListItem>
                 ))}
               </List>
@@ -1083,7 +1088,7 @@ const QUBOSolver: React.FC = () => {
           </Card>
         </Grid>
         
-        <Grid item xs={12} md={9}>
+        <Grid size={{ xs: 12, md: 9 }}>
           {selectedProblem && (
             <>
               <Card sx={{ mb: 3 }}>

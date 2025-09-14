@@ -3,13 +3,19 @@
 import { useState } from 'react';
 import { Check, Zap, Crown, Building } from 'lucide-react';
 
+// Type assertions for icons
+const CheckIcon = Check as any;
+const ZapIcon = Zap as any;
+const CrownIcon = Crown as any;
+const BuildingIcon = Building as any;
+
 const PricingPage = () => {
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'annual'>('monthly');
 
   const plans = [
     {
       name: 'Starter',
-      icon: <Zap className="w-6 h-6" />,
+      icon: <ZapIcon className="w-6 h-6" />,
       price: { monthly: 99, annual: 990 },
       description: 'Perfect for small teams getting started with quantum computing',
       features: [
@@ -26,7 +32,7 @@ const PricingPage = () => {
     },
     {
       name: 'Professional',
-      icon: <Crown className="w-6 h-6" />,
+      icon: <CrownIcon className="w-6 h-6" />,
       price: { monthly: 499, annual: 4990 },
       description: 'Advanced quantum algorithms for growing businesses',
       features: [
@@ -45,7 +51,7 @@ const PricingPage = () => {
     },
     {
       name: 'Enterprise',
-      icon: <Building className="w-6 h-6" />,
+      icon: <BuildingIcon className="w-6 h-6" />,
       price: { monthly: 2999, annual: 29990 },
       description: 'Unlimited quantum power for large organizations',
       features: [
@@ -151,7 +157,7 @@ const PricingPage = () => {
               <ul className="space-y-4 mb-8">
                 {plan.features.map((feature, featureIndex) => (
                   <li key={featureIndex} className="flex items-start">
-                    <Check className="w-5 h-5 text-green-400 mr-3 mt-0.5 flex-shrink-0" />
+                    <CheckIcon className="w-5 h-5 text-green-400 mr-3 mt-0.5 flex-shrink-0" />
                     <span className="text-gray-300">{feature}</span>
                   </li>
                 ))}

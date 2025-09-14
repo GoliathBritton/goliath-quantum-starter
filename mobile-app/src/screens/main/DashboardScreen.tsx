@@ -18,7 +18,7 @@ import {
 } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { LineChart, PieChart } from 'react-native-chart-kit';
+// import { LineChart, PieChart } from 'react-native-chart-kit'; // Removed for compatibility
 
 import { RootState, AppDispatch } from '../../store';
 import { fetchBusinessPods, fetchOperations } from '../../store/slices/businessPodsSlice';
@@ -42,7 +42,7 @@ const DashboardScreen: React.FC = () => {
     try {
       await Promise.all([
         dispatch(fetchBusinessPods()),
-        dispatch(fetchOperations()),
+        dispatch(fetchOperations(undefined)),
       ]);
     } catch (error) {
       console.error('Failed to load dashboard data:', error);
@@ -177,29 +177,9 @@ const DashboardScreen: React.FC = () => {
         <Card style={styles.card}>
           <Card.Content>
             <Title>Quantum Advantage by Pod</Title>
-            <LineChart
-              data={getQuantumAdvantageData()}
-              width={screenWidth - 60}
-              height={220}
-              chartConfig={{
-                backgroundColor: theme.colors.surface,
-                backgroundGradientFrom: theme.colors.surface,
-                backgroundGradientTo: theme.colors.surface,
-                decimalPlaces: 1,
-                color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`,
-                labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-                style: {
-                  borderRadius: 16,
-                },
-                propsForDots: {
-                  r: '6',
-                  strokeWidth: '2',
-                  stroke: theme.colors.primary,
-                },
-              }}
-              bezier
-              style={styles.chart}
-            />
+            <View style={[styles.chart, { height: 220, backgroundColor: theme.colors.surfaceVariant, justifyContent: 'center', alignItems: 'center' }]}>
+              <Text>Chart placeholder - react-native-chart-kit not available</Text>
+            </View>
           </Card.Content>
         </Card>
       )}
@@ -209,18 +189,9 @@ const DashboardScreen: React.FC = () => {
         <Card style={styles.card}>
           <Card.Content>
             <Title>Pod Status Distribution</Title>
-            <PieChart
-              data={getPodStatusData()}
-              width={screenWidth - 60}
-              height={220}
-              chartConfig={{
-                color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-              }}
-              accessor="population"
-              backgroundColor="transparent"
-              paddingLeft="15"
-              style={styles.chart}
-            />
+            <View style={[styles.chart, { height: 220, backgroundColor: theme.colors.surfaceVariant, justifyContent: 'center', alignItems: 'center' }]}>
+              <Text>Chart placeholder - react-native-chart-kit not available</Text>
+            </View>
           </Card.Content>
         </Card>
       )}

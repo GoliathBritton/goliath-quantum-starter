@@ -20,36 +20,56 @@ import {
   Lightbulb,
   UserCheck
 } from 'lucide-react'
-import { brand } from '@/lib/brand'
-import RoleServiceMapping from '@/components/RoleServiceMapping'
-import QSAILearner from '@/components/QSAILearner'
-import AgentFactory from '@/components/AgentFactory'
-import QSalesDivision from '@/components/QSalesDivision'
-import MarketplacePods from '@/components/MarketplacePods'
-import QuantumIntegration from '@/components/QuantumIntegration'
+import { brand } from '../../lib/brand'
+import RoleServiceMapping from '../../components/RoleServiceMapping'
+import QSAILearner from '../../components/QSAILearner'
+import AgentFactory from '../../components/AgentFactory'
+import QSalesDivision from '../../components/QSalesDivision'
+import MarketplacePods from '../../components/MarketplacePods'
+import QuantumIntegration from '../../components/QuantumIntegration'
+
+// Type assertions for framer-motion and Lucide icons
+const MotionDiv = motion.div as any
+const AnimatePresenceComponent = AnimatePresence as any
+const BrainIcon = Brain as any
+const CrownIcon = Crown as any
+const ChevronRightIcon = ChevronRight as any
+const CodeIcon = Code as any
+const DatabaseIcon = Database as any
+const ShieldIcon = Shield as any
+const UsersIcon = Users as any
+const BriefcaseIcon = Briefcase as any
+const TrendingUpIcon = TrendingUp as any
+const ZapIcon = Zap as any
+const TargetIcon = Target as any
+const SettingsIcon = Settings as any
+const GlobeIcon = Globe as any
+const BarChart3Icon = BarChart3 as any
+const LightbulbIcon = Lightbulb as any
+const UserCheckIcon = UserCheck as any
 
 const layerIcons = {
-  'Quantum High Council': Crown,
-  'NQBA Orchestrator': Brain,
-  'QSAI Learner': Database,
-  'Agent Factory': Settings,
-  'Marketplace Pods': Globe
+  'Quantum High Council': CrownIcon,
+  'NQBA Orchestrator': BrainIcon,
+  'QSAI Learner': DatabaseIcon,
+  'Agent Factory': SettingsIcon,
+  'Marketplace Pods': GlobeIcon
 }
 
 const roleIcons = {
-  'crown': Crown,
-  'briefcase': Briefcase,
-  'brain': Brain,
-  'code': Code,
-  'database': Database,
-  'shield': Shield,
-  'users': Users,
-  'trending-up': TrendingUp,
-  'bar-chart': BarChart3,
-  'lightbulb': Lightbulb,
-  'user-check': UserCheck,
-  'settings': Settings,
-  'globe': Globe
+  'crown': CrownIcon,
+  'briefcase': BriefcaseIcon,
+  'brain': BrainIcon,
+  'code': CodeIcon,
+  'database': DatabaseIcon,
+  'shield': ShieldIcon,
+  'users': UsersIcon,
+  'trending-up': TrendingUpIcon,
+  'bar-chart': BarChart3Icon,
+  'lightbulb': LightbulbIcon,
+  'user-check': UserCheckIcon,
+  'settings': SettingsIcon,
+  'globe': GlobeIcon
 }
 
 export default function AdvancedPage() {
@@ -80,7 +100,7 @@ export default function AdvancedPage() {
       {/* Hero Section */}
       <section className="section-padding bg-gradient-to-br from-quantum-purple/5 via-brand-cyan/5 to-brand-gold/5">
         <div className="container-quantum">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center max-w-4xl mx-auto"
@@ -105,14 +125,14 @@ export default function AdvancedPage() {
                 Cross-feeding Loops
               </span>
             </div>
-          </motion.div>
+          </MotionDiv>
         </div>
       </section>
 
       {/* Quantum High Council */}
       <section className="section-padding bg-white">
         <div className="container-quantum">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -124,11 +144,11 @@ export default function AdvancedPage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Strategic governance enhanced with advanced advisors for ethical AI, financial optimization, and behavioral architecture.
             </p>
-          </motion.div>
+          </MotionDiv>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {getCouncilMembers().map((member, index) => (
-              <motion.div
+              <MotionDiv
                 key={member.role}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -137,14 +157,14 @@ export default function AdvancedPage() {
                 className="bg-white border-2 border-gray-200 rounded-xl p-6 hover:border-brand-cyan transition-all duration-300 hover:shadow-lg"
               >
                 <div className="w-12 h-12 bg-quantum-purple/10 rounded-lg flex items-center justify-center mb-4">
-                  <Crown className="w-6 h-6 text-quantum-purple" />
+                  <CrownIcon className="w-6 h-6 text-quantum-purple" />
                 </div>
                 <h3 className="text-lg font-bold text-black mb-2">{member.title}</h3>
                 <p className="text-sm text-gray-600 mb-3">{member.focus}</p>
                 <div className="text-xs text-brand-cyan font-medium">
                   {member.quantumAdvantage}
                 </div>
-              </motion.div>
+              </MotionDiv>
             ))}
           </div>
         </div>
@@ -153,7 +173,7 @@ export default function AdvancedPage() {
       {/* NQBA Architecture Layers */}
       <section className="section-padding bg-gray-50">
         <div className="container-quantum">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -165,7 +185,7 @@ export default function AdvancedPage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Each layer enhanced with specialized advanced roles for autonomous intelligence and quantum-optimized operations.
             </p>
-          </motion.div>
+          </MotionDiv>
 
           <div className="space-y-8">
             {brand.nqbaLayers.map((layer, index) => {
@@ -174,7 +194,7 @@ export default function AdvancedPage() {
               const isSelected = selectedLayer === layer.name
 
               return (
-                <motion.div
+                <MotionDiv
                   key={layer.name}
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
@@ -199,7 +219,7 @@ export default function AdvancedPage() {
                           <p className="text-gray-600">{layer.description}</p>
                         </div>
                       </div>
-                      <ChevronRight 
+                      <ChevronRightIcon 
                         className={`w-5 h-5 text-gray-400 transition-transform duration-300 ${
                           isSelected ? 'rotate-90' : ''
                         }`} 
@@ -207,15 +227,15 @@ export default function AdvancedPage() {
                     </div>
                   </div>
 
-                  <AnimatePresence>
+                  <AnimatePresenceComponent>
                     {isSelected && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="border-t border-gray-200 bg-gray-50"
-                      >
+                      <MotionDiv
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="border-t border-gray-200 bg-gray-50"
+                        >
                         <div className="p-6">
                           <h4 className="text-lg font-semibold text-black mb-4">Advanced Roles</h4>
                           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -240,10 +260,10 @@ export default function AdvancedPage() {
                             })}
                           </div>
                         </div>
-                      </motion.div>
+                      </MotionDiv>
                     )}
-                  </AnimatePresence>
-                </motion.div>
+                  </AnimatePresenceComponent>
+                </MotionDiv>
               )
             })}
           </div>
@@ -251,16 +271,16 @@ export default function AdvancedPage() {
       </section>
 
       {/* Role Details Modal */}
-      <AnimatePresence>
+      <AnimatePresenceComponent>
         {selectedRole && (
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
             onClick={() => setSelectedRole(null)}
           >
-            <motion.div
+            <MotionDiv
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
@@ -313,15 +333,15 @@ export default function AdvancedPage() {
                 )
               })()
               }
-            </motion.div>
-          </motion.div>
+            </MotionDiv>
+          </MotionDiv>
         )}
-      </AnimatePresence>
+      </AnimatePresenceComponent>
 
       {/* Integration Benefits */}
       <section className="section-padding bg-white">
         <div className="container-quantum">
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -333,25 +353,25 @@ export default function AdvancedPage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               A living ecosystem where every critical organizational function is AI-augmented and quantum-enhanced.
             </p>
-          </motion.div>
+          </MotionDiv>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <motion.div
+            <MotionDiv
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className="text-center"
             >
               <div className="w-16 h-16 bg-brand-cyan/10 rounded-xl flex items-center justify-center mx-auto mb-6">
-                <Zap className="w-8 h-8 text-brand-cyan" />
+                <ZapIcon className="w-8 h-8 text-brand-cyan" />
               </div>
               <h3 className="text-xl font-bold text-black mb-4">Living Ecosystem of Roles</h3>
               <p className="text-gray-600">
                 Every critical organizational function is AI-augmented and quantum-enhanced for autonomous operation.
               </p>
-            </motion.div>
+            </MotionDiv>
 
-            <motion.div
+            <MotionDiv
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -359,15 +379,15 @@ export default function AdvancedPage() {
               className="text-center"
             >
               <div className="w-16 h-16 bg-brand-gold/10 rounded-xl flex items-center justify-center mx-auto mb-6">
-                <TrendingUp className="w-8 h-8 text-brand-gold" />
+                <TrendingUpIcon className="w-8 h-8 text-brand-gold" />
               </div>
               <h3 className="text-xl font-bold text-black mb-4">Cross-feeding Loops</h3>
               <p className="text-gray-600">
                 Each role's outputs are fed into NQBA, re-optimized by QSAI, and deployed into intelligent agents.
               </p>
-            </motion.div>
+            </MotionDiv>
 
-            <motion.div
+            <MotionDiv
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -375,13 +395,13 @@ export default function AdvancedPage() {
               className="text-center"
             >
               <div className="w-16 h-16 bg-quantum-purple/10 rounded-xl flex items-center justify-center mx-auto mb-6">
-                <Target className="w-8 h-8 text-quantum-purple" />
+                <TargetIcon className="w-8 h-8 text-quantum-purple" />
               </div>
               <h3 className="text-xl font-bold text-black mb-4">Branded Business Model</h3>
               <p className="text-gray-600">
                 FLYFOX AI (Technology), Goliath (Finance & Energy), Sigma Select (Sales & Leadership) unified.
               </p>
-            </motion.div>
+            </MotionDiv>
           </div>
         </div>
       </section>

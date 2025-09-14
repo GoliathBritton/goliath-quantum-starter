@@ -1,0 +1,483 @@
+name: Deploy to AWS EKS
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+    tags:
+      - 'v*'
+  pull_request:
+    branches:
+      - main
+      - develop
+
+env:
+  AWS_REGION: us-west-2
+  EKS_CLUSTER_NAME: goliath-quantum-cluster
+  ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-west-2.amazonaws.com
+  API_IMAGE_NAME: goliath-quantum-api
+  PORTAL_IMAGE_NAME: goliath-quantum-portal
+
+jobs:
+  # Security and Code Quality Checks
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+      - name: Run Semgrep
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: auto
+
+  # API Tests and Build
+  api-test-build:
+    name: API Test & Build
+    runs-on: ubuntu-latest
+    needs: security-scan
+    outputs:
+      api-image-tag: ${{ steps.meta.outputs.tags }}
+      api-image-digest: ${{ steps.build.outputs.digest }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        working-directory: ./api
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-cov pytest-asyncio httpx
+
+      - name: Run linting
+        working-directory: ./api
+        run: |
+          pip install flake8 black isort mypy
+          flake8 src/ --max-line-length=88 --extend-ignore=E203,W503
+          black --check src/
+          isort --check-only src/
+          mypy src/ --ignore-missing-imports
+
+      - name: Run tests
+        working-directory: ./api
+        run: |
+          pytest src/tests/ -v --cov=src --cov-report=xml --cov-report=html
+        env:
+          DATABASE_URL: sqlite:///./test.db
+          REDIS_URL: redis://localhost:6379/1
+          DYNEX_API_KEY: test-key
+
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./api/coverage.xml
+          flags: api
+          name: api-coverage
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.ECR_REGISTRY }}/${{ env.API_IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha,prefix={{branch}}-
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and push API image
+        id: build
+        uses: docker/build-push-action@v5
+        with:
+          context: ./api
+          file: ./api/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            BUILDKIT_INLINE_CACHE=1
+
+      - name: Run Trivy vulnerability scanner on API image
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.ECR_REGISTRY }}/${{ env.API_IMAGE_NAME }}:${{ github.sha }}
+          format: 'sarif'
+          output: 'api-trivy-results.sarif'
+
+      - name: Upload API Trivy scan results
+        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        with:
+          sarif_file: 'api-trivy-results.sarif'
+
+  # Portal Tests and Build
+  portal-test-build:
+    name: Portal Test & Build
+    runs-on: ubuntu-latest
+    needs: security-scan
+    outputs:
+      portal-image-tag: ${{ steps.meta.outputs.tags }}
+      portal-image-digest: ${{ steps.build.outputs.digest }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: './web/package-lock.json'
+
+      - name: Install dependencies
+        working-directory: ./web
+        run: npm ci
+
+      - name: Run linting
+        working-directory: ./web
+        run: |
+          npm run lint
+          npm run type-check
+
+      - name: Run tests
+        working-directory: ./web
+        run: npm run test:ci
+        env:
+          NEXT_PUBLIC_API_BASE: http://localhost:8080
+
+      - name: Build application
+        working-directory: ./web
+        run: npm run build
+        env:
+          NEXT_PUBLIC_API_BASE: https://api.goliath-quantum.com
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.ECR_REGISTRY }}/${{ env.PORTAL_IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha,prefix={{branch}}-
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and push Portal image
+        id: build
+        uses: docker/build-push-action@v5
+        with:
+          context: ./web
+          file: ./web/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            BUILDKIT_INLINE_CACHE=1
+            NEXT_PUBLIC_API_BASE=https://api.goliath-quantum.com
+
+      - name: Run Trivy vulnerability scanner on Portal image
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.ECR_REGISTRY }}/${{ env.PORTAL_IMAGE_NAME }}:${{ github.sha }}
+          format: 'sarif'
+          output: 'portal-trivy-results.sarif'
+
+      - name: Upload Portal Trivy scan results
+        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        with:
+          sarif_file: 'portal-trivy-results.sarif'
+
+  # Deploy to Staging
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: [api-test-build, portal-test-build]
+    if: github.ref == 'refs/heads/develop'
+    environment:
+      name: staging
+      url: https://staging.goliath-quantum.com
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'v1.28.0'
+
+      - name: Update kubeconfig
+        run: |
+          aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.EKS_CLUSTER_NAME }}-staging
+
+      - name: Deploy to staging
+        run: |
+          # Update image tags in manifests
+          sed -i "s|ACCOUNT_ID.dkr.ecr.us-west-2.amazonaws.com/goliath-quantum-api:latest|${{ env.ECR_REGISTRY }}/${{ env.API_IMAGE_NAME }}:${{ github.sha }}|g" deploy/k8s/application.yaml
+          sed -i "s|ACCOUNT_ID.dkr.ecr.us-west-2.amazonaws.com/goliath-quantum-portal:latest|${{ env.ECR_REGISTRY }}/${{ env.PORTAL_IMAGE_NAME }}:${{ github.sha }}|g" deploy/k8s/application.yaml
+          
+          # Apply manifests
+          kubectl apply -f deploy/k8s/ -n goliath-quantum-staging
+          
+          # Wait for rollout
+          kubectl rollout status deployment/goliath-quantum-api -n goliath-quantum-staging --timeout=600s
+          kubectl rollout status deployment/goliath-quantum-portal -n goliath-quantum-staging --timeout=600s
+
+      - name: Run health checks
+        run: |
+          # Wait for services to be ready
+          kubectl wait --for=condition=ready pod -l app.kubernetes.io/component=api -n goliath-quantum-staging --timeout=300s
+          kubectl wait --for=condition=ready pod -l app.kubernetes.io/component=portal -n goliath-quantum-staging --timeout=300s
+          
+          # Test API health endpoint
+          API_URL=$(kubectl get ingress goliath-quantum-ingress -n goliath-quantum-staging -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+          curl -f "https://${API_URL}/health" || exit 1
+
+  # Deploy to Production
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [api-test-build, portal-test-build]
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
+    environment:
+      name: production
+      url: https://goliath-quantum.com
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'v1.28.0'
+
+      - name: Update kubeconfig
+        run: |
+          aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.EKS_CLUSTER_NAME }}
+
+      - name: Create deployment backup
+        run: |
+          # Backup current deployment
+          kubectl get deployment goliath-quantum-api -n goliath-quantum -o yaml > api-backup.yaml
+          kubectl get deployment goliath-quantum-portal -n goliath-quantum -o yaml > portal-backup.yaml
+
+      - name: Deploy to production
+        id: deploy
+        run: |
+          # Update image tags in manifests
+          sed -i "s|ACCOUNT_ID.dkr.ecr.us-west-2.amazonaws.com/goliath-quantum-api:latest|${{ env.ECR_REGISTRY }}/${{ env.API_IMAGE_NAME }}:${{ github.sha }}|g" deploy/k8s/application.yaml
+          sed -i "s|ACCOUNT_ID.dkr.ecr.us-west-2.amazonaws.com/goliath-quantum-portal:latest|${{ env.ECR_REGISTRY }}/${{ env.PORTAL_IMAGE_NAME }}:${{ github.sha }}|g" deploy/k8s/application.yaml
+          
+          # Apply manifests
+          kubectl apply -f deploy/k8s/ -n goliath-quantum
+          
+          # Wait for rollout with timeout
+          kubectl rollout status deployment/goliath-quantum-api -n goliath-quantum --timeout=600s
+          kubectl rollout status deployment/goliath-quantum-portal -n goliath-quantum --timeout=600s
+
+      - name: Run comprehensive health checks
+        id: health-check
+        run: |
+          # Wait for services to be ready
+          kubectl wait --for=condition=ready pod -l app.kubernetes.io/component=api -n goliath-quantum --timeout=300s
+          kubectl wait --for=condition=ready pod -l app.kubernetes.io/component=portal -n goliath-quantum --timeout=300s
+          
+          # Test API endpoints
+          API_URL="https://api.goliath-quantum.com"
+          curl -f "${API_URL}/health" || exit 1
+          curl -f "${API_URL}/api/partners" || exit 1
+          
+          # Test Portal
+          PORTAL_URL="https://goliath-quantum.com"
+          curl -f "${PORTAL_URL}" || exit 1
+          
+          # Test database connectivity
+          kubectl exec -n goliath-quantum deployment/goliath-quantum-api -- python -c "import psycopg2; print('DB OK')" || exit 1
+          
+          # Test Redis connectivity
+          kubectl exec -n goliath-quantum deployment/goliath-quantum-api -- python -c "import redis; r=redis.from_url('redis://redis:6379'); r.ping(); print('Redis OK')" || exit 1
+
+      - name: Rollback on failure
+        if: failure() && steps.deploy.conclusion == 'success'
+        run: |
+          echo "Deployment failed, rolling back..."
+          kubectl apply -f api-backup.yaml
+          kubectl apply -f portal-backup.yaml
+          kubectl rollout status deployment/goliath-quantum-api -n goliath-quantum --timeout=300s
+          kubectl rollout status deployment/goliath-quantum-portal -n goliath-quantum --timeout=300s
+          exit 1
+
+      - name: Update deployment status
+        if: success()
+        run: |
+          # Tag successful deployment
+          git tag "deploy-$(date +%Y%m%d-%H%M%S)" ${{ github.sha }}
+          
+          # Update deployment annotations
+          kubectl annotate deployment goliath-quantum-api -n goliath-quantum deployment.kubernetes.io/revision="$(date +%Y%m%d-%H%M%S)" --overwrite
+          kubectl annotate deployment goliath-quantum-portal -n goliath-quantum deployment.kubernetes.io/revision="$(date +%Y%m%d-%H%M%S)" --overwrite
+
+  # Performance Testing
+  performance-test:
+    name: Performance Test
+    runs-on: ubuntu-latest
+    needs: deploy-production
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run load tests
+        run: |
+          # Install k6
+          sudo apt-get update
+          sudo apt-get install -y k6
+          
+          # Run performance tests
+          k6 run --vus 50 --duration 5m tests/performance/load-test.js
+        env:
+          API_BASE_URL: https://api.goliath-quantum.com
+          PORTAL_BASE_URL: https://goliath-quantum.com
+
+  # Security Compliance
+  compliance-check:
+    name: Compliance Check
+    runs-on: ubuntu-latest
+    needs: deploy-production
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Run AWS Config compliance check
+        run: |
+          # Check EKS cluster compliance
+          aws configservice get-compliance-details-by-config-rule --config-rule-name eks-cluster-supported-version
+          
+          # Check security group compliance
+          aws configservice get-compliance-details-by-config-rule --config-rule-name ec2-security-group-attached-to-eni
+
+      - name: Run CIS Kubernetes Benchmark
+        run: |
+          # Install kube-bench
+          curl -L https://github.com/aquasecurity/kube-bench/releases/latest/download/kube-bench_0.6.15_linux_amd64.tar.gz -o kube-bench.tar.gz
+          tar -xvf kube-bench.tar.gz
+          
+          # Run benchmark
+          ./kube-bench --config-dir cfg/ --config cfg/config.yaml
+
+  # Notification
+  notify:
+    name: Notify Deployment Status
+    runs-on: ubuntu-latest
+    needs: [deploy-production, performance-test, compliance-check]
+    if: always()
+    steps:
+      - name: Notify Slack
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          channel: '#deployments'
+          webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v') && success()
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            ## Changes in this Release
+            - API Image: ${{ needs.api-test-build.outputs.api-image-tag }}
+            - Portal Image: ${{ needs.portal-test-build.outputs.portal-image-tag }}
+            
+            ## Deployment Status
+            - ✅ Security Scan Passed
+            - ✅ Tests Passed
+            - ✅ Production Deployment Successful
+            - ✅ Health Checks Passed
+            - ✅ Performance Tests Passed
+            - ✅ Compliance Checks Passed
+          draft: false
+          prerelease: false

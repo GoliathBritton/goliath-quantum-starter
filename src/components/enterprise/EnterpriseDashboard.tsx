@@ -298,12 +298,12 @@ const EnterpriseDashboard: React.FC = () => {
     ];
 
     return (
-      <Grid container spacing={3}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
         {/* Overview Cards */}
-        <Grid item xs={12}>
-          <Grid container spacing={3}>
+        <Box>
+          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' }, gap: 3 }}>
             {overviewData.map((item, index) => (
-              <Grid item xs={12} sm={6} md={3} key={index}>
+              <Box key={index}>
                 <Card>
                   <CardContent>
                     <Box display="flex" alignItems="center" mb={2}>
@@ -332,13 +332,14 @@ const EnterpriseDashboard: React.FC = () => {
                     </Typography>
                   </CardContent>
                 </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Grid>
+              </Box>
+              ))}
+            </Box>
+          </Box>
 
         {/* Charts */}
-        <Grid item xs={12} md={6}>
+        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' }, gap: 3 }}>
+          <Box>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
@@ -351,7 +352,7 @@ const EnterpriseDashboard: React.FC = () => {
                     cx="50%"
                     cy="50%"
                     labelLine={false}
-                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                    label={({ name, percent }: any) => `${name} ${(percent * 100).toFixed(0)}%`}
                     outerRadius={80}
                     fill="#8884d8"
                     dataKey="value"
@@ -365,9 +366,9 @@ const EnterpriseDashboard: React.FC = () => {
               </ResponsiveContainer>
             </CardContent>
           </Card>
-        </Grid>
+          </Box>
 
-        <Grid item xs={12} md={6}>
+          <Box>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
@@ -386,10 +387,11 @@ const EnterpriseDashboard: React.FC = () => {
               </ResponsiveContainer>
             </CardContent>
           </Card>
-        </Grid>
+          </Box>
+        </Box>
 
         {/* Recent Activities */}
-        <Grid item xs={12}>
+        <Box>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
@@ -438,14 +440,14 @@ const EnterpriseDashboard: React.FC = () => {
               </List>
             </CardContent>
           </Card>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
     );
   };
 
   const renderComplianceTab = () => (
-    <Grid container spacing={3}>
-      <Grid item xs={12}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+        <Box>
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
           <Typography variant="h5">Compliance Management</Typography>
           <Button
@@ -456,9 +458,9 @@ const EnterpriseDashboard: React.FC = () => {
             Add Framework
           </Button>
         </Box>
-      </Grid>
+      </Box>
 
-      <Grid item xs={12}>
+        <Box>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
@@ -531,13 +533,13 @@ const EnterpriseDashboard: React.FC = () => {
             </TableBody>
           </Table>
         </TableContainer>
-      </Grid>
-    </Grid>
-  );
+      </Box>
+      </Box>
+    );
 
   const renderSecurityTab = () => (
-    <Grid container spacing={3}>
-      <Grid item xs={12}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+        <Box>
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
           <Typography variant="h5">Security Management</Typography>
           <Box>
@@ -558,9 +560,9 @@ const EnterpriseDashboard: React.FC = () => {
             </Button>
           </Box>
         </Box>
-      </Grid>
+      </Box>
 
-      <Grid item xs={12}>
+        <Box>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
@@ -631,13 +633,13 @@ const EnterpriseDashboard: React.FC = () => {
             </TableBody>
           </Table>
         </TableContainer>
-      </Grid>
-    </Grid>
-  );
+      </Box>
+      </Box>
+    );
 
   const renderGlobalDeploymentTab = () => (
-    <Grid container spacing={3}>
-      <Grid item xs={12}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+        <Box>
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
           <Typography variant="h5">Global Deployment</Typography>
           <Button
@@ -648,9 +650,9 @@ const EnterpriseDashboard: React.FC = () => {
             Add Deployment
           </Button>
         </Box>
-      </Grid>
+      </Box>
 
-      <Grid item xs={12}>
+        <Box>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
@@ -726,9 +728,9 @@ const EnterpriseDashboard: React.FC = () => {
             </TableBody>
           </Table>
         </TableContainer>
-      </Grid>
-    </Grid>
-  );
+      </Box>
+      </Box>
+    );
 
   if (loading) {
     return (

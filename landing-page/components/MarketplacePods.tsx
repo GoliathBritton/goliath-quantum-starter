@@ -5,6 +5,23 @@ import { motion } from 'framer-motion'
 import { Store, Users, Settings, TrendingUp, Globe, Shield, Zap, Award, Building, UserCheck, DollarSign, BarChart3 } from 'lucide-react'
 import { brand } from '@/lib/brand'
 
+// Type assertion for motion components
+const MotionDiv = motion.div as any
+
+// Type assertions for Lucide icons
+const StoreIcon = Store as any
+const UsersIcon = Users as any
+const SettingsIcon = Settings as any
+const TrendingUpIcon = TrendingUp as any
+const GlobeIcon = Globe as any
+const ShieldIcon = Shield as any
+const ZapIcon = Zap as any
+const AwardIcon = Award as any
+const BuildingIcon = Building as any
+const UserCheckIcon = UserCheck as any
+const DollarSignIcon = DollarSign as any
+const BarChart3Icon = BarChart3 as any
+
 interface Pod {
   id: string
   name: string
@@ -183,11 +200,11 @@ export default function MarketplacePods() {
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'enterprise': return Building
-      case 'startup': return Zap
-      case 'agency': return Award
-      case 'saas': return Settings
-      default: return Store
+      case 'enterprise': return BuildingIcon
+      case 'startup': return ZapIcon
+      case 'agency': return AwardIcon
+      case 'saas': return SettingsIcon
+      default: return StoreIcon
     }
   }
 
@@ -204,14 +221,14 @@ export default function MarketplacePods() {
     <div className="space-y-12">
       {/* Header */}
       <div className="text-center">
-        <motion.div
+        <MotionDiv
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-100 to-red-100 px-4 py-2 rounded-full mb-6"
         >
-          <Store className="w-5 h-5 text-orange-600" />
+          <StoreIcon className="w-5 h-5 text-orange-600" />
           <span className="text-orange-800 font-medium">Marketplace Pods</span>
-        </motion.div>
+        </MotionDiv>
         
         <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
           Partner Ecosystem Scaling
@@ -227,7 +244,7 @@ export default function MarketplacePods() {
         {partnerMetrics.map((metric, index) => {
           const IconComponent = metric.icon
           return (
-            <motion.div
+            <MotionDiv
               key={metric.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -239,7 +256,7 @@ export default function MarketplacePods() {
                   <IconComponent className={`w-6 h-6 text-${metric.color}-600`} />
                 </div>
                 <div className="flex items-center gap-1 text-sm font-medium text-green-600">
-                  <TrendingUp className="w-4 h-4" />
+                  <TrendingUpIcon className="w-4 h-4" />
                   {metric.change}
                 </div>
               </div>
@@ -251,7 +268,7 @@ export default function MarketplacePods() {
               <div className="text-sm text-gray-600">
                 {metric.name}
               </div>
-            </motion.div>
+            </MotionDiv>
           )
         })}
       </div>
@@ -291,7 +308,7 @@ export default function MarketplacePods() {
           {filteredPods.map((pod, index) => {
             const TypeIcon = getTypeIcon(pod.type)
             return (
-              <motion.div
+              <MotionDiv
                 key={pod.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -356,7 +373,7 @@ export default function MarketplacePods() {
                     ))}
                   </div>
                 </div>
-              </motion.div>
+              </MotionDiv>
             )
           })}
         </div>
@@ -368,7 +385,7 @@ export default function MarketplacePods() {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {scalingInitiatives.map((initiative, index) => (
-            <motion.div
+            <MotionDiv
               key={initiative.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -400,7 +417,7 @@ export default function MarketplacePods() {
                   <span className="text-sm font-medium text-blue-600">{initiative.timeline}</span>
                 </div>
               </div>
-            </motion.div>
+            </MotionDiv>
           ))}
         </div>
       </div>

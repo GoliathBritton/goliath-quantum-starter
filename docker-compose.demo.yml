@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  # FastAPI Backend
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=development
+      - PYTHONPATH=/app
+      - CORS_ORIGINS=http://localhost:3000
+    volumes:
+      - ./api/src:/app/src
+      - ./logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - demo-network
+
+  # Next.js Frontend
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    volumes:
+      - ./web/src:/app/src
+      - ./web/public:/app/public
+      - /app/node_modules
+    depends_on:
+      - api
+    restart: unless-stopped
+    networks:
+      - demo-network
+
+  # Redis for caching (optional)
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    networks:
+      - demo-network
+    volumes:
+      - redis_data:/data
+
+networks:
+  demo-network:
+    driver: bridge
+
+volumes:
+  logs:
+    driver: local
+  redis_data:
+    driver: local

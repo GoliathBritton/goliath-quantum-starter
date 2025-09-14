@@ -20,10 +20,10 @@ import {
 } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { LinearGradient } from 'expo-linear-gradient';
+// import { LinearGradient } from 'expo-linear-gradient'; // Removed for compatibility
 
 import { RootState, AppDispatch } from '../../store';
-import { register } from '../../store/slices/authSlice';
+import { registerUser } from '../../store/slices/authSlice';
 import { theme } from '../../theme';
 import LoadingSpinner from '../../components/LoadingSpinner';
 
@@ -135,10 +135,11 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
     }
     
     try {
-      await dispatch(register({
-        ...formData,
-        tier: selectedTier,
-      })).unwrap();
+      await dispatch(registerUser({
+          email: formData.email,
+          password: formData.password,
+          name: formData.name,
+        })).unwrap();
       
       Alert.alert(
         'Registration Successful',
@@ -171,10 +172,7 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
-      <LinearGradient
-        colors={[theme.colors.primary, theme.colors.secondary]}
-        style={styles.gradient}
-      >
+      <View style={styles.gradient}>
         <ScrollView 
           contentContainerStyle={styles.scrollContent}
           keyboardShouldPersistTaps="handled"
@@ -419,7 +417,7 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
             </Card.Content>
           </Card>
         </ScrollView>
-      </LinearGradient>
+      </View>
     </KeyboardAvoidingView>
   );
 };
@@ -430,6 +428,7 @@ const styles = StyleSheet.create({
   },
   gradient: {
     flex: 1,
+    backgroundColor: theme.colors.primary,
   },
   scrollContent: {
     flexGrow: 1,

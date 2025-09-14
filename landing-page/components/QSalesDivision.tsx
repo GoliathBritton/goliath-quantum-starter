@@ -5,6 +5,21 @@ import { motion } from 'framer-motion'
 import { TrendingUp, Target, Users, DollarSign, Zap, Brain, BarChart3, Filter, ArrowUpRight, Sparkles } from 'lucide-react'
 import { brand } from '@/lib/brand'
 
+// Type assertions for motion components
+const MotionDiv = motion.div as any;
+
+// Type assertions for Lucide icons
+const TrendingUpComponent = TrendingUp as any;
+const TargetComponent = Target as any;
+const UsersComponent = Users as any;
+const DollarSignComponent = DollarSign as any;
+const ZapComponent = Zap as any;
+const BrainComponent = Brain as any;
+const BarChart3Component = BarChart3 as any;
+const FilterComponent = Filter as any;
+const ArrowUpRightComponent = ArrowUpRight as any;
+const SparklesComponent = Sparkles as any;
+
 interface SalesMetric {
   id: string
   name: string
@@ -165,11 +180,11 @@ export default function QSalesDivision() {
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'funnel': return TrendingUp
-      case 'conversion': return Target
-      case 'retention': return Users
-      case 'acquisition': return Zap
-      default: return Brain
+      case 'funnel': return TrendingUpComponent
+      case 'conversion': return TargetComponent
+      case 'retention': return UsersComponent
+      case 'acquisition': return ZapComponent
+      default: return BrainComponent
     }
   }
 
@@ -177,14 +192,14 @@ export default function QSalesDivision() {
     <div className="space-y-12">
       {/* Header */}
       <div className="text-center">
-        <motion.div
+        <MotionDiv
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-100 to-blue-100 px-4 py-2 rounded-full mb-6"
         >
-          <TrendingUp className="w-5 h-5 text-purple-600" />
+          <TrendingUpComponent className="w-5 h-5 text-purple-600" />
           <span className="text-purple-800 font-medium">Q-Sales Division™</span>
-        </motion.div>
+        </MotionDiv>
         
         <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
           Quantum Growth Intelligence
@@ -200,7 +215,7 @@ export default function QSalesDivision() {
         {salesMetrics.map((metric, index) => {
           const IconComponent = metric.icon
           return (
-            <motion.div
+            <MotionDiv
               key={metric.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -214,7 +229,7 @@ export default function QSalesDivision() {
                 <div className={`flex items-center gap-1 text-sm font-medium ${
                   metric.trend === 'up' ? 'text-green-600' : 'text-red-600'
                 }`}>
-                  <ArrowUpRight className="w-4 h-4" />
+                  <ArrowUpRightComponent className="w-4 h-4" />
                   {metric.change}
                 </div>
               </div>
@@ -226,7 +241,7 @@ export default function QSalesDivision() {
               <div className="text-sm text-gray-600">
                 {metric.name}
               </div>
-            </motion.div>
+            </MotionDiv>
           )
         })}
       </div>
@@ -266,7 +281,7 @@ export default function QSalesDivision() {
           {filteredHacks.map((hack, index) => {
             const TypeIcon = getTypeIcon(hack.type)
             return (
-              <motion.div
+              <MotionDiv
                 key={hack.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -293,7 +308,7 @@ export default function QSalesDivision() {
                 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-purple-600" />
+                    <SparklesComponent className="w-4 h-4 text-purple-600" />
                     <span className="text-sm font-medium text-purple-600">{hack.impact}</span>
                   </div>
                   
@@ -301,7 +316,7 @@ export default function QSalesDivision() {
                     {hack.advancedRole}
                   </div>
                 </div>
-              </motion.div>
+              </MotionDiv>
             )
           })}
         </div>
@@ -315,7 +330,7 @@ export default function QSalesDivision() {
           {funnelStages.map((stage, index) => {
             const width = (stage.conversion / 100) * 100
             return (
-              <motion.div
+              <MotionDiv
                 key={stage.id}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -336,7 +351,7 @@ export default function QSalesDivision() {
                 
                 <div className="mb-4">
                   <div className="w-full bg-gray-200 rounded-full h-3">
-                    <motion.div
+                    <MotionDiv
                       initial={{ width: 0 }}
                       animate={{ width: `${width}%` }}
                       transition={{ delay: index * 0.2, duration: 1 }}
@@ -355,7 +370,7 @@ export default function QSalesDivision() {
                     </span>
                   ))}
                 </div>
-              </motion.div>
+              </MotionDiv>
             )
           })}
         </div>

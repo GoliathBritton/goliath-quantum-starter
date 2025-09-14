@@ -48,7 +48,7 @@ import {
   Twitter,
   LinkedIn,
   YouTube,
-  TikTok,
+  VideoLibrary,
   CalendarToday,
   Schedule,
   Campaign,
@@ -262,7 +262,7 @@ const SocialAnalytics: React.FC = () => {
     { id: 'twitter', name: 'Twitter', icon: Twitter, color: '#1DA1F2' },
     { id: 'linkedin', name: 'LinkedIn', icon: LinkedIn, color: '#0A66C2' },
     { id: 'youtube', name: 'YouTube', icon: YouTube, color: '#FF0000' },
-    { id: 'tiktok', name: 'TikTok', icon: TikTok, color: '#000000' },
+    { id: 'tiktok', name: 'TikTok', icon: VideoLibrary, color: '#000000' },
   ];
 
   const getPlatformIcon = (platformId: string) => {
@@ -355,8 +355,8 @@ const SocialAnalytics: React.FC = () => {
         </Box>
 
         {/* Key Metrics Cards */}
-        <Grid container spacing={3} sx={{ mb: 3 }}>
-          <Grid item xs={12} sm={6} md={3}>
+        <Box sx={{ display: 'flex', gap: 3, mb: 3, flexWrap: 'wrap' }}>
+          <Box sx={{ flex: '1 1 250px', minWidth: '250px' }}>
             <Card>
               <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -372,9 +372,9 @@ const SocialAnalytics: React.FC = () => {
                 </Box>
               </CardContent>
             </Card>
-          </Grid>
+          </Box>
           
-          <Grid item xs={12} sm={6} md={3}>
+          <Box sx={{ flex: '1 1 250px', minWidth: '250px' }}>
             <Card>
               <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -390,9 +390,9 @@ const SocialAnalytics: React.FC = () => {
                 </Box>
               </CardContent>
             </Card>
-          </Grid>
+          </Box>
           
-          <Grid item xs={12} sm={6} md={3}>
+          <Box sx={{ flex: '1 1 250px', minWidth: '250px' }}>
             <Card>
               <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -408,9 +408,9 @@ const SocialAnalytics: React.FC = () => {
                 </Box>
               </CardContent>
             </Card>
-          </Grid>
+          </Box>
           
-          <Grid item xs={12} sm={6} md={3}>
+          <Box sx={{ flex: '1 1 250px', minWidth: '250px' }}>
             <Card>
               <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -426,8 +426,8 @@ const SocialAnalytics: React.FC = () => {
                 </Box>
               </CardContent>
             </Card>
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
 
         <Paper sx={{ width: '100%', mb: 3 }}>
           <Tabs value={activeTab} onChange={(e, newValue) => setActiveTab(newValue)}>
@@ -441,8 +441,8 @@ const SocialAnalytics: React.FC = () => {
 
         {/* Overview Tab */}
         <TabPanel value={activeTab} index={0}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} lg={8}>
+          <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
+            <Box sx={{ flex: '2 1 600px', minWidth: '600px' }}>
               <Card>
                 <CardContent>
                   <Typography variant="h6" gutterBottom>Engagement Over Time</Typography>
@@ -460,9 +460,9 @@ const SocialAnalytics: React.FC = () => {
                   </ResponsiveContainer>
                 </CardContent>
               </Card>
-            </Grid>
+            </Box>
             
-            <Grid item xs={12} lg={4}>
+            <Box sx={{ flex: '1 1 300px', minWidth: '300px' }}>
               <Card sx={{ mb: 3 }}>
                 <CardContent>
                   <Typography variant="h6" gutterBottom>Platform Distribution</Typography>
@@ -475,7 +475,7 @@ const SocialAnalytics: React.FC = () => {
                         outerRadius={80}
                         fill="#8884d8"
                         dataKey="followers"
-                        label={({ platform, value }) => `${platform}: ${formatNumber(value)}`}
+                        label={(entry: any) => `${entry.platform}: ${formatNumber(entry.followers)}`}
                       >
                         {metrics.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={getPlatformColor(entry.platform)} />
@@ -501,15 +501,15 @@ const SocialAnalytics: React.FC = () => {
                   </ResponsiveContainer>
                 </CardContent>
               </Card>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         </TabPanel>
 
         {/* Platform Performance Tab */}
         <TabPanel value={activeTab} index={1}>
-          <Grid container spacing={3}>
+          <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
             {metrics.map((metric) => (
-              <Grid item xs={12} md={6} lg={4} key={metric.platform}>
+              <Box key={metric.platform} sx={{ flex: '1 1 300px', minWidth: '300px' }}>
                 <Card>
                   <CardContent>
                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -526,24 +526,24 @@ const SocialAnalytics: React.FC = () => {
                       </Box>
                     </Box>
                     
-                    <Grid container spacing={2}>
-                      <Grid item xs={6}>
+                    <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2 }}>
+                      <Box>
                         <Typography variant="body2" color="text.secondary">Likes</Typography>
                         <Typography variant="h6">{formatNumber(metric.likes)}</Typography>
-                      </Grid>
-                      <Grid item xs={6}>
+                      </Box>
+                      <Box>
                         <Typography variant="body2" color="text.secondary">Comments</Typography>
                         <Typography variant="h6">{formatNumber(metric.comments)}</Typography>
-                      </Grid>
-                      <Grid item xs={6}>
+                      </Box>
+                      <Box>
                         <Typography variant="body2" color="text.secondary">Shares</Typography>
                         <Typography variant="h6">{formatNumber(metric.shares)}</Typography>
-                      </Grid>
-                      <Grid item xs={6}>
+                      </Box>
+                      <Box>
                         <Typography variant="body2" color="text.secondary">Reach</Typography>
                         <Typography variant="h6">{formatNumber(metric.reach)}</Typography>
-                      </Grid>
-                    </Grid>
+                      </Box>
+                    </Box>
                     
                     <Box sx={{ mt: 2 }}>
                       <Typography variant="body2" color="text.secondary">Engagement Rate</Typography>
@@ -569,9 +569,9 @@ const SocialAnalytics: React.FC = () => {
                     </Box>
                   </CardContent>
                 </Card>
-              </Grid>
+              </Box>
             ))}
-          </Grid>
+          </Box>
         </TabPanel>
 
         {/* Top Posts Tab */}
@@ -636,8 +636,8 @@ const SocialAnalytics: React.FC = () => {
 
         {/* Audience Insights Tab */}
         <TabPanel value={activeTab} index={3}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
+          <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
+            <Box sx={{ flex: '1 1 400px', minWidth: '400px' }}>
               <Card>
                 <CardContent>
                   <Typography variant="h6" gutterBottom>Age Demographics</Typography>
@@ -652,9 +652,9 @@ const SocialAnalytics: React.FC = () => {
                   </ResponsiveContainer>
                 </CardContent>
               </Card>
-            </Grid>
+            </Box>
             
-            <Grid item xs={12} md={6}>
+            <Box sx={{ flex: '1 1 400px', minWidth: '400px' }}>
               <Card>
                 <CardContent>
                   <Typography variant="h6" gutterBottom>Geographic Distribution</Typography>
@@ -680,9 +680,9 @@ const SocialAnalytics: React.FC = () => {
                   </List>
                 </CardContent>
               </Card>
-            </Grid>
+            </Box>
             
-            <Grid item xs={12} md={6}>
+            <Box sx={{ flex: '1 1 400px', minWidth: '400px' }}>
               <Card>
                 <CardContent>
                   <Typography variant="h6" gutterBottom>Audience Activity</Typography>
@@ -697,9 +697,9 @@ const SocialAnalytics: React.FC = () => {
                   </ResponsiveContainer>
                 </CardContent>
               </Card>
-            </Grid>
+            </Box>
             
-            <Grid item xs={12} md={6}>
+            <Box sx={{ flex: '1 1 400px', minWidth: '400px' }}>
               <Card>
                 <CardContent>
                   <Typography variant="h6" gutterBottom>Interest Categories</Typography>
@@ -719,14 +719,14 @@ const SocialAnalytics: React.FC = () => {
                   </ResponsiveContainer>
                 </CardContent>
               </Card>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         </TabPanel>
 
         {/* Quantum Analytics Tab */}
         <TabPanel value={activeTab} index={4}>
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
+          <Box sx={{ display: 'flex', gap: 3, flexDirection: 'column' }}>
+            <Box>
               <Alert severity="info" icon={<Psychology />} sx={{ mb: 3 }}>
                 <Typography variant="h6" gutterBottom>
                   Quantum-Enhanced Analytics
@@ -736,72 +736,74 @@ const SocialAnalytics: React.FC = () => {
                   unprecedented insights and predictions with 410.7x faster processing than traditional methods.
                 </Typography>
               </Alert>
-            </Grid>
+            </Box>
             
-            <Grid item xs={12} md={4}>
-              <Card>
-                <CardContent>
-                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                    <Psychology color="primary" />
-                    <Typography variant="h6" sx={{ ml: 1 }}>Quantum Advantage</Typography>
-                  </Box>
-                  <Typography variant="h3" color="primary">410.7x</Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Faster analytics processing
-                  </Typography>
-                  <LinearProgress
-                    variant="determinate"
-                    value={95}
-                    sx={{ mt: 2 }}
-                    color="primary"
-                  />
-                </CardContent>
-              </Card>
-            </Grid>
+            <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
+              <Box sx={{ flex: '1 1 300px', minWidth: '300px' }}>
+                <Card>
+                  <CardContent>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                      <Psychology color="primary" />
+                      <Typography variant="h6" sx={{ ml: 1 }}>Quantum Advantage</Typography>
+                    </Box>
+                    <Typography variant="h3" color="primary">410.7x</Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Faster analytics processing
+                    </Typography>
+                    <LinearProgress
+                      variant="determinate"
+                      value={95}
+                      sx={{ mt: 2 }}
+                      color="primary"
+                    />
+                  </CardContent>
+                </Card>
+              </Box>
+              
+              <Box sx={{ flex: '1 1 300px', minWidth: '300px' }}>
+                <Card>
+                  <CardContent>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                      <TrendingUp color="success" />
+                      <Typography variant="h6" sx={{ ml: 1 }}>Prediction Accuracy</Typography>
+                    </Box>
+                    <Typography variant="h3" color="success.main">94.2%</Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Engagement prediction accuracy
+                    </Typography>
+                    <LinearProgress
+                      variant="determinate"
+                      value={94.2}
+                      sx={{ mt: 2 }}
+                      color="success"
+                    />
+                  </CardContent>
+                </Card>
+              </Box>
+              
+              <Box sx={{ flex: '1 1 300px', minWidth: '300px' }}>
+                <Card>
+                  <CardContent>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                      <Schedule color="warning" />
+                      <Typography variant="h6" sx={{ ml: 1 }}>Optimal Timing</Typography>
+                    </Box>
+                    <Typography variant="h3" color="warning.main">+28%</Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Engagement boost from quantum timing
+                    </Typography>
+                    <LinearProgress
+                      variant="determinate"
+                      value={78}
+                      sx={{ mt: 2 }}
+                      color="warning"
+                    />
+                  </CardContent>
+                </Card>
+              </Box>
+            </Box>
             
-            <Grid item xs={12} md={4}>
-              <Card>
-                <CardContent>
-                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                    <TrendingUp color="success" />
-                    <Typography variant="h6" sx={{ ml: 1 }}>Prediction Accuracy</Typography>
-                  </Box>
-                  <Typography variant="h3" color="success.main">94.2%</Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Engagement prediction accuracy
-                  </Typography>
-                  <LinearProgress
-                    variant="determinate"
-                    value={94.2}
-                    sx={{ mt: 2 }}
-                    color="success"
-                  />
-                </CardContent>
-              </Card>
-            </Grid>
-            
-            <Grid item xs={12} md={4}>
-              <Card>
-                <CardContent>
-                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                    <Schedule color="warning" />
-                    <Typography variant="h6" sx={{ ml: 1 }}>Optimal Timing</Typography>
-                  </Box>
-                  <Typography variant="h3" color="warning.main">+28%</Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Engagement boost from quantum timing
-                  </Typography>
-                  <LinearProgress
-                    variant="determinate"
-                    value={78}
-                    sx={{ mt: 2 }}
-                    color="warning"
-                  />
-                </CardContent>
-              </Card>
-            </Grid>
-            
-            <Grid item xs={12}>
+            <Box>
               <Card>
                 <CardContent>
                   <Typography variant="h6" gutterBottom>
@@ -810,8 +812,8 @@ const SocialAnalytics: React.FC = () => {
                   <Typography variant="body2" color="text.secondary" gutterBottom>
                     Advanced quantum algorithms identify hidden patterns in your social media performance
                   </Typography>
-                  <Grid container spacing={2} sx={{ mt: 2 }}>
-                    <Grid item xs={12} md={6}>
+                  <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mt: 2 }}>
+                    <Box sx={{ flex: '1 1 400px', minWidth: '400px' }}>
                       <Paper sx={{ p: 2, bgcolor: 'primary.light', color: 'primary.contrastText' }}>
                         <Typography variant="subtitle1" gutterBottom>
                           🔮 Quantum Insight: Optimal Posting Windows
@@ -821,8 +823,8 @@ const SocialAnalytics: React.FC = () => {
                           achieve 34% higher engagement rates due to quantum-detected audience behavior patterns.
                         </Typography>
                       </Paper>
-                    </Grid>
-                    <Grid item xs={12} md={6}>
+                    </Box>
+                    <Box sx={{ flex: '1 1 400px', minWidth: '400px' }}>
                       <Paper sx={{ p: 2, bgcolor: 'success.light', color: 'success.contrastText' }}>
                         <Typography variant="subtitle1" gutterBottom>
                           ⚡ Quantum Prediction: Viral Content Probability
@@ -832,12 +834,12 @@ const SocialAnalytics: React.FC = () => {
                           viral status based on quantum sentiment analysis and engagement modeling.
                         </Typography>
                       </Paper>
-                    </Grid>
-                  </Grid>
+                    </Box>
+                  </Box>
                 </CardContent>
               </Card>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         </TabPanel>
       </Box>
     </LocalizationProvider>

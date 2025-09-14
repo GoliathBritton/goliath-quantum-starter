@@ -6,6 +6,9 @@ export interface User {
   id: string;
   email: string;
   name: string;
+  firstName?: string;
+  lastName?: string;
+  avatar?: string;
   role: string;
   businessPods: string[];
   quantumCredits: number;
