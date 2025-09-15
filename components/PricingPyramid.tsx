@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 
 interface PyramidTier {
   name: string;
@@ -210,7 +210,7 @@ const PricingPyramid: React.FC = () => {
       <div className="mt-8 text-center">
         <div className="grid md:grid-cols-4 gap-4 text-sm">
           <div className="bg-gray-800/30 rounded-lg p-4">
-            <div className="text-green-400 font-bold mb-2">✓ Oracle IP Safe</div>
+            <div className="text-green-400 font-bold mb-2">✓ Quantum Nexus IP Safe</div>
             <div className="text-gray-300">Entirely new language</div>
           </div>
           <div className="bg-gray-800/30 rounded-lg p-4">

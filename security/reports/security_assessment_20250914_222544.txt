@@ -1,0 +1,4544 @@
+
+================================================================================
+QUANTUM NEXUS PLATFORM - SOC2-LITE SECURITY ASSESSMENT REPORT
+================================================================================
+
+Assessment Date: 2025-09-14T22:25:44.185001
+Project Root: .
+
+EXECUTIVE SUMMARY
+----------------------------------------
+Total Security Findings: 746
+Critical Findings: 0
+High Risk Findings: 210
+Medium Risk Findings: 536
+Low Risk Findings: 0
+SOC2 Compliance Score: 100.0%
+Overall Risk Score: 48.4/100 (MEDIUM)
+
+DETAILED SECURITY FINDINGS
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: quantum-worker\qubo_solver.py:363
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Sql Injection Detected
+Description: Potential sql injection found in code
+File: security\soc2-lite-checklist.py:115
+Recommendation: Use parameterized queries and ORM frameworks
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: security\soc2-lite-checklist.py:194
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: security\soc2-lite-checklist.py:279
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\nqba_stack\qsai_agents.py:973
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\nqba_stack\qsai_engine.py:373
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\nqba_stack\q_cortex_parser.py:267
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\nqba_stack\algorithms\advanced_algorithm_templates.py:529
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\nqba_stack\algorithms\advanced_algorithm_templates.py:549
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\nqba_stack\algorithms\advanced_algorithm_templates.py:769
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\nqba_stack\automation\quantum_automation_orchestrator.py:605
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\nqba_stack\benchmarks\solvers.py:416
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\nqba_stack\benchmarks\solvers.py:568
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\nqba_stack\benchmarks\solvers.py:615
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\nqba_stack\community\community_platform.py:725
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\nqba_stack\core\ltc_logger.py:179
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\nqba_stack\core\orchestrator.py:377
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\nqba_stack\enterprise\enterprise_security_manager.py:712
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\nqba_stack\enterprise\enterprise_security_manager.py:770
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\nqba_stack\enterprise\enterprise_security_manager.py:1075
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\nqba_stack\multi_tenant\multi_tenant_manager.py:287
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\nqba_stack\real_time_learning\real_time_learning_engine.py:656
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\nqba_stack\scaling\predictive_scaler.py:1044
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\nqba_stack\training\data_ingestion_pipeline.py:514
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\nqba_stack\training\data_validation_framework.py:1064
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\nqba_stack\training\training_infrastructure.py:189
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\nqba_stack\training\training_infrastructure.py:435
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\nqba_stack\training\training_infrastructure.py:440
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\nqba_stack\training\training_infrastructure.py:444
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\nqba_stack\training\training_infrastructure.py:448
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\nqba_stack\training\training_infrastructure.py:458
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\nqba_stack\training\training_infrastructure.py:514
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\nqba_stack\training\training_infrastructure.py:919
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\goliath\quantum\sigmaeq_engine.py:617
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\goliath\quantum\sigmaeq_engine.py:629
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\goliath\quantum\sigmaeq_engine.py:644
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\goliath\quantum\sigmaeq_engine.py:647
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\goliath\quantum\sigmaeq_engine.py:656
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: api\src\dynex_client.py:42
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: api\src\dynex_client.py:48
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: api\src\dynex_client.py:227
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: api\src\security\compliance.py:162
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: api\src\security\middleware.py:333
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: quantum-worker.js:22
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: quantum-worker.js:44
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: quantum-worker.js:57
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: quantum-worker.js:58
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: quantum-worker.js:59
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: quantum-worker.js:61
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: quantum-worker.js:63
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: quantum-worker.js:64
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: quantum-worker.js:65
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\server\_error.js:152
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\server\_error.js:282
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Sql Injection Detected
+Description: Potential sql injection found in code
+File: web\.next\static\chunks\main.js:621
+Recommendation: Use parameterized queries and ORM frameworks
+----------------------------------------
+
+[HIGH] Sql Injection Detected
+Description: Potential sql injection found in code
+File: web\.next\static\chunks\main.js:632
+Recommendation: Use parameterized queries and ORM frameworks
+----------------------------------------
+
+[HIGH] Sql Injection Detected
+Description: Potential sql injection found in code
+File: web\.next\static\chunks\main.js:885
+Recommendation: Use parameterized queries and ORM frameworks
+----------------------------------------
+
+[HIGH] Sql Injection Detected
+Description: Potential sql injection found in code
+File: web\.next\static\chunks\main.js:1133
+Recommendation: Use parameterized queries and ORM frameworks
+----------------------------------------
+
+[HIGH] Xss Vulnerabilities Detected
+Description: Potential xss vulnerabilities found in code
+File: web\.next\static\chunks\main.js:27
+Recommendation: Implement proper input validation and output encoding
+----------------------------------------
+
+[HIGH] Xss Vulnerabilities Detected
+Description: Potential xss vulnerabilities found in code
+File: web\.next\static\chunks\main.js:82
+Recommendation: Implement proper input validation and output encoding
+----------------------------------------
+
+[HIGH] Xss Vulnerabilities Detected
+Description: Potential xss vulnerabilities found in code
+File: web\.next\static\chunks\main.js:1133
+Recommendation: Implement proper input validation and output encoding
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\.next\static\chunks\main.js:104
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\.next\static\chunks\main.js:181
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\.next\static\chunks\main.js:632
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\.next\static\chunks\main.js:1089
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\.next\static\chunks\main.js:1133
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\.next\static\chunks\main.js:1166
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\static\chunks\main.js:27
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\static\chunks\main.js:93
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\static\chunks\main.js:137
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\static\chunks\main.js:192
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\static\chunks\main.js:324
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\static\chunks\main.js:632
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\static\chunks\main.js:709
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\static\chunks\main.js:808
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\static\chunks\main.js:874
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\static\chunks\main.js:929
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\static\chunks\main.js:1089
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\static\chunks\main.js:1133
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\static\chunks\main.js:1166
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\.next\static\chunks\polyfills.js:1
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Sql Injection Detected
+Description: Potential sql injection found in code
+File: web\.next\static\chunks\fallback\amp.js:315
+Recommendation: Use parameterized queries and ORM frameworks
+----------------------------------------
+
+[HIGH] Sql Injection Detected
+Description: Potential sql injection found in code
+File: web\.next\static\chunks\fallback\amp.js:535
+Recommendation: Use parameterized queries and ORM frameworks
+----------------------------------------
+
+[HIGH] Sql Injection Detected
+Description: Potential sql injection found in code
+File: web\.next\static\chunks\fallback\amp.js:678
+Recommendation: Use parameterized queries and ORM frameworks
+----------------------------------------
+
+[HIGH] Xss Vulnerabilities Detected
+Description: Potential xss vulnerabilities found in code
+File: web\.next\static\chunks\fallback\amp.js:678
+Recommendation: Implement proper input validation and output encoding
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\.next\static\chunks\fallback\amp.js:315
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\.next\static\chunks\fallback\amp.js:678
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\.next\static\chunks\fallback\amp.js:700
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\static\chunks\fallback\amp.js:84
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\static\chunks\fallback\amp.js:183
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\static\chunks\fallback\amp.js:315
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\static\chunks\fallback\amp.js:392
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\static\chunks\fallback\amp.js:491
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\static\chunks\fallback\amp.js:678
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\static\chunks\fallback\amp.js:700
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Sql Injection Detected
+Description: Potential sql injection found in code
+File: web\.next\static\chunks\fallback\main.js:610
+Recommendation: Use parameterized queries and ORM frameworks
+----------------------------------------
+
+[HIGH] Sql Injection Detected
+Description: Potential sql injection found in code
+File: web\.next\static\chunks\fallback\main.js:621
+Recommendation: Use parameterized queries and ORM frameworks
+----------------------------------------
+
+[HIGH] Sql Injection Detected
+Description: Potential sql injection found in code
+File: web\.next\static\chunks\fallback\main.js:841
+Recommendation: Use parameterized queries and ORM frameworks
+----------------------------------------
+
+[HIGH] Sql Injection Detected
+Description: Potential sql injection found in code
+File: web\.next\static\chunks\fallback\main.js:1067
+Recommendation: Use parameterized queries and ORM frameworks
+----------------------------------------
+
+[HIGH] Xss Vulnerabilities Detected
+Description: Potential xss vulnerabilities found in code
+File: web\.next\static\chunks\fallback\main.js:27
+Recommendation: Implement proper input validation and output encoding
+----------------------------------------
+
+[HIGH] Xss Vulnerabilities Detected
+Description: Potential xss vulnerabilities found in code
+File: web\.next\static\chunks\fallback\main.js:71
+Recommendation: Implement proper input validation and output encoding
+----------------------------------------
+
+[HIGH] Xss Vulnerabilities Detected
+Description: Potential xss vulnerabilities found in code
+File: web\.next\static\chunks\fallback\main.js:1067
+Recommendation: Implement proper input validation and output encoding
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\.next\static\chunks\fallback\main.js:93
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\.next\static\chunks\fallback\main.js:170
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\.next\static\chunks\fallback\main.js:621
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\.next\static\chunks\fallback\main.js:1023
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\.next\static\chunks\fallback\main.js:1067
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\.next\static\chunks\fallback\main.js:1100
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\static\chunks\fallback\main.js:27
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\static\chunks\fallback\main.js:82
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\static\chunks\fallback\main.js:126
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\static\chunks\fallback\main.js:181
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\static\chunks\fallback\main.js:313
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\static\chunks\fallback\main.js:621
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\static\chunks\fallback\main.js:698
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\static\chunks\fallback\main.js:797
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\static\chunks\fallback\main.js:1023
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\static\chunks\fallback\main.js:1067
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\static\chunks\fallback\main.js:1100
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Sql Injection Detected
+Description: Potential sql injection found in code
+File: web\.next\static\chunks\pages\_app.js:84
+Recommendation: Use parameterized queries and ORM frameworks
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\static\chunks\pages\_app.js:40
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\static\chunks\pages\_app.js:274
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\static\chunks\pages\_app.js:285
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\server\pages\index.js:152
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\server\pages\index.js:271
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\server\pages\_app.js:152
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\server\pages\_app.js:260
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\server\pages\_document.js:152
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\server\pages\_document.js:260
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\server\pages\_error.js:152
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\.next\server\pages\_error.js:282
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\.next\static\chunks\app-pages-internals.js:39
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Sql Injection Detected
+Description: Potential sql injection found in code
+File: landing-page\.next\static\chunks\main-app.js:457
+Recommendation: Use parameterized queries and ORM frameworks
+----------------------------------------
+
+[HIGH] Sql Injection Detected
+Description: Potential sql injection found in code
+File: landing-page\.next\static\chunks\main-app.js:1596
+Recommendation: Use parameterized queries and ORM frameworks
+----------------------------------------
+
+[HIGH] Xss Vulnerabilities Detected
+Description: Potential xss vulnerabilities found in code
+File: landing-page\.next\static\chunks\main-app.js:457
+Recommendation: Implement proper input validation and output encoding
+----------------------------------------
+
+[HIGH] Xss Vulnerabilities Detected
+Description: Potential xss vulnerabilities found in code
+File: landing-page\.next\static\chunks\main-app.js:1596
+Recommendation: Implement proper input validation and output encoding
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: landing-page\.next\static\chunks\main-app.js:270
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: landing-page\.next\static\chunks\main-app.js:1596
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: landing-page\.next\static\chunks\main-app.js:1684
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\.next\static\chunks\main-app.js:501
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\.next\static\chunks\main-app.js:633
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\.next\static\chunks\main-app.js:787
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\.next\static\chunks\main-app.js:809
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\.next\static\chunks\main-app.js:820
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\.next\static\chunks\main-app.js:1293
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\.next\static\chunks\main-app.js:1596
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\.next\static\chunks\main-app.js:1684
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: landing-page\.next\static\chunks\polyfills.js:1
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Sql Injection Detected
+Description: Potential sql injection found in code
+File: landing-page\.next\static\chunks\app\layout.js:402
+Recommendation: Use parameterized queries and ORM frameworks
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\.next\static\chunks\app\layout.js:336
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\.next\static\chunks\app\layout.js:391
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\.next\static\chunks\app\layout.js:477
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\.next\static\chunks\app\layout.js:827
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\.next\static\chunks\app\layout.js:1564
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\.next\static\chunks\app\layout.js:1795
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\.next\static\chunks\app\layout.js:2774
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Sql Injection Detected
+Description: Potential sql injection found in code
+File: landing-page\.next\static\chunks\app\page.js:314
+Recommendation: Use parameterized queries and ORM frameworks
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\.next\static\chunks\app\page.js:248
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\.next\static\chunks\app\page.js:303
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\.next\static\chunks\app\page.js:369
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\.next\static\chunks\app\page.js:1413
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\.next\static\chunks\app\page.js:1644
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\.next\static\chunks\app\page.js:2590
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\.next\server\vendor-chunks\framer-motion.js:300
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\.next\server\vendor-chunks\framer-motion.js:970
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\.next\server\vendor-chunks\framer-motion.js:1180
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\.next\server\vendor-chunks\framer-motion.js:2070
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Sql Injection Detected
+Description: Potential sql injection found in code
+File: landing-page\.next\server\vendor-chunks\next.js:1592
+Recommendation: Use parameterized queries and ORM frameworks
+----------------------------------------
+
+[HIGH] Sql Injection Detected
+Description: Potential sql injection found in code
+File: landing-page\.next\server\vendor-chunks\next.js:426
+Recommendation: Use parameterized queries and ORM frameworks
+----------------------------------------
+
+[HIGH] Xss Vulnerabilities Detected
+Description: Potential xss vulnerabilities found in code
+File: landing-page\.next\server\vendor-chunks\next.js:426
+Recommendation: Implement proper input validation and output encoding
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: landing-page\.next\server\vendor-chunks\next.js:239
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\.next\server\vendor-chunks\next.js:162
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\.next\server\vendor-chunks\next.js:470
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\.next\server\vendor-chunks\next.js:602
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\.next\server\vendor-chunks\next.js:756
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\.next\server\vendor-chunks\next.js:778
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\.next\server\vendor-chunks\next.js:1295
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\.next\server\vendor-chunks\next.js:1482
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\.next\server\vendor-chunks\next.js:1559
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: .next\static\chunks\0a2f8ba0-74b585d9be5b91d6.js:1
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: .next\static\chunks\2d36dd80.f3d92e7316b76904.js:1
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: .next\static\chunks\409-d8decea4bc3c915b.js:1
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Xss Vulnerabilities Detected
+Description: Potential xss vulnerabilities found in code
+File: .next\static\chunks\417.2aa938b1bf728121.js:485
+Recommendation: Implement proper input validation and output encoding
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: .next\static\chunks\417.2aa938b1bf728121.js:485
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: .next\static\chunks\417.2aa938b1bf728121.js:424
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: .next\static\chunks\417.2aa938b1bf728121.js:485
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: .next\static\chunks\463-a5d0fcd09f72875d.js:1
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Sql Injection Detected
+Description: Potential sql injection found in code
+File: .next\static\chunks\712565b9.c8e9c0ad54057c6c.js:1
+Recommendation: Use parameterized queries and ORM frameworks
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: .next\static\chunks\712565b9.c8e9c0ad54057c6c.js:1
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: .next\static\chunks\768-54d745273b716536.js:1
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: .next\static\chunks\fb7d5399.da13d53ffe41ac68.js:1
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Xss Vulnerabilities Detected
+Description: Potential xss vulnerabilities found in code
+File: .next\static\chunks\framework-64ad27b21261a9ce.js:1
+Recommendation: Implement proper input validation and output encoding
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: .next\static\chunks\framework-64ad27b21261a9ce.js:1
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: .next\static\chunks\framework-64ad27b21261a9ce.js:1
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Sql Injection Detected
+Description: Potential sql injection found in code
+File: .next\static\chunks\main-eb143115b8bf2786.js:1
+Recommendation: Use parameterized queries and ORM frameworks
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: .next\static\chunks\main-eb143115b8bf2786.js:1
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: .next\static\chunks\main-eb143115b8bf2786.js:1
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Sql Injection Detected
+Description: Potential sql injection found in code
+File: .next\static\chunks\polyfills-42372ed130431b0a.js:1
+Recommendation: Use parameterized queries and ORM frameworks
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: .next\static\chunks\polyfills-42372ed130431b0a.js:1
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: .next\static\chunks\polyfills-42372ed130431b0a.js:1
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: .next\static\chunks\pages\entanglement-map-8b540e8404a1cbfc.js:1
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: .next\static\chunks\pages\entanglement-map-8b540e8404a1cbfc.js:1
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: .next\server\chunks\844.js:1
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: .next\server\chunks\899.js:1
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: .next\server\chunks\899.js:5
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: .next\server\chunks\899.js:6
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: .next\server\pages\api\workflows.js:1
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: .next\server\pages\api\quantum\submit.js:1
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: .next\server\pages\api\Quantum Nexus\predict.js:1
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: .next\server\pages\api\quantum\status\[id].js:1
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: lib\oracle-engine.ts:57
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: lib\oracle-engine.ts:58
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: lib\oracle-engine.ts:99
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: lib\oracle-engine.ts:100
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: lib\oracle-engine.ts:104
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: lib\oracle-engine.ts:105
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: lib\oracle-engine.ts:109
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: lib\oracle-engine.ts:110
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: lib\oracle-engine.ts:200
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: lib\oracle-engine.ts:394
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: lib\oracle-engine.ts:217
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: lib\quantum-nexus-engine.ts:57
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: lib\quantum-nexus-engine.ts:58
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: lib\quantum-nexus-engine.ts:99
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: lib\quantum-nexus-engine.ts:100
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: lib\quantum-nexus-engine.ts:104
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: lib\quantum-nexus-engine.ts:105
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: lib\quantum-nexus-engine.ts:109
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: lib\quantum-nexus-engine.ts:110
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: lib\quantum-nexus-engine.ts:200
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: lib\quantum-nexus-engine.ts:394
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: lib\quantum-nexus-engine.ts:217
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: quantum-worker\index.ts:214
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: quantum-worker\index.ts:228
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: quantum-worker\index.ts:230
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: quantum-worker\index.ts:231
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: quantum-worker\index.ts:233
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: quantum-worker\index.ts:247
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: quantum-worker\index.ts:248
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: quantum-worker\index.ts:250
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: quantum-worker\index.ts:265
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: quantum-worker\index.ts:267
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: quantum-worker\index.ts:275
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\src\lib\utils.ts:62
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\src\lib\utils.ts:63
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\src\lib\utils.ts:96
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\enterpriseService.ts:2124
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\enterpriseService.ts:2191
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\enterpriseService.ts:2223
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\enterpriseService.ts:2252
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\services\enterpriseService.ts:2299
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\multiTenantService.ts:1327
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\multiTenantService.ts:1328
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\multiTenantService.ts:1329
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\multiTenantService.ts:1330
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\multiTenantService.ts:1331
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\multiTenantService.ts:1332
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\multiTenantService.ts:1340
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\multiTenantService.ts:1343
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\multiTenantService.ts:1344
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\multiTenantService.ts:1345
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\multiTenantService.ts:1346
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\multiTenantService.ts:1347
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\multiTenantService.ts:1348
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\multiTenantService.ts:1351
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\multiTenantService.ts:1352
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\multiTenantService.ts:1353
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\multiTenantService.ts:1354
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\multiTenantService.ts:1356
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\multiTenantService.ts:1359
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\multiTenantService.ts:1360
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1168
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1171
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1174
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1175
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1181
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1186
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1187
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1191
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1193
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1194
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1195
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1196
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1197
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1198
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1199
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1202
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1203
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1204
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1205
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1206
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1207
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1208
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1209
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1211
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1212
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1213
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1216
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1217
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1226
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1227
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1228
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1229
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1230
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1231
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1232
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1233
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1234
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1237
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1238
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1239
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1240
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1241
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1242
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1243
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1244
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1245
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1252
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1253
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1254
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1255
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1256
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1259
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1260
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1261
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1262
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1266
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1267
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1268
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1269
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1270
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1271
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1272
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1273
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1274
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1275
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1278
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1279
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1280
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1281
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1282
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1283
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1285
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1289
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1290
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1291
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1292
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1293
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1294
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1297
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1298
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1299
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1300
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1301
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1302
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1303
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1313
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1314
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1315
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1316
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1319
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1322
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1323
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1324
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1325
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1326
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1327
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1330
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1331
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1333
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1334
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1335
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1338
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1339
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1341
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1342
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1343
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1344
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1345
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1348
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1349
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1350
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1351
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1352
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1353
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1354
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1357
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1358
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1359
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1360
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1361
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1365
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1366
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1367
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1371
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1372
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1373
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1374
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1375
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1376
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1377
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1392
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1393
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1394
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1395
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1396
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1397
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1405
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1407
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1408
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1409
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1410
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1411
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1412
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1413
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1414
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1418
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1419
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1420
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1421
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1422
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1423
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1424
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1425
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1428
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1429
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1430
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1431
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1432
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1433
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1434
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1435
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1438
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1439
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1440
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1443
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1444
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1447
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1448
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1449
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1452
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1453
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1457
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1458
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1460
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1461
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1462
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1463
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1466
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1467
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1470
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1471
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1472
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1474
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1475
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1478
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1479
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1480
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1481
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1482
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1483
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1485
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1488
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1489
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1497
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1498
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1499
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1500
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1501
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1502
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1503
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1506
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1507
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1509
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1521
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1522
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1523
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1525
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1526
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1527
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1528
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1529
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1531
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1532
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1535
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1536
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1537
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1538
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1539
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1540
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1541
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1544
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1545
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1546
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1550
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1551
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1552
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1553
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1559
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1560
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1561
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1562
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1565
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1568
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1569
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1570
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1571
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1573
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1574
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1575
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1576
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1578
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1579
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1582
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1583
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1584
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1585
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1586
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1587
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1588
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1598
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1599
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1600
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1602
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1603
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1604
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1607
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1608
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1609
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1610
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1612
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1613
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1616
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1617
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1618
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1619
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1620
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1621
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1622
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1625
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1626
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1627
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1628
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1629
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1632
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1633
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1634
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1635
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1636
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1639
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1640
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1641
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1642
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\performanceMonitoringService.ts:1643
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\services\performanceMonitoringService.ts:904
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\services\performanceMonitoringService.ts:913
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\services\quantumMarketplaceService.ts:696
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\services\quantumMarketplaceService.ts:707
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\services\quantumMarketplaceService.ts:736
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\services\quantumMarketplaceService.ts:742
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\services\quantumMarketplaceService.ts:748
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\quantumOptimizationService.ts:449
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\services\quantumOptimizationService.ts:722
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\realTimeLearningService.ts:227
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\realTimeLearningService.ts:384
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\realTimeLearningService.ts:485
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\realTimeLearningService.ts:598
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\realTimeLearningService.ts:599
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\realTimeLearningService.ts:601
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\realTimeLearningService.ts:602
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\realTimeLearningService.ts:777
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\realTimeLearningService.ts:783
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\realTimeLearningService.ts:857
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\realTimeLearningService.ts:860
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\realTimeLearningService.ts:877
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\realTimeLearningService.ts:878
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\realTimeLearningService.ts:886
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\realTimeLearningService.ts:894
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\realTimeLearningService.ts:896
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\realTimeLearningService.ts:901
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\realTimeLearningService.ts:902
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\services\socialMediaService.ts:168
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: pages\api\quantum-nexus-engine\predict.ts:29
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: pages\api\quantum-nexus-engine\predict.ts:31
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: pages\api\quantum-nexus-engine\predict.ts:48
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: pages\api\quantum-nexus-engine\predict.ts:66
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: pages\api\quantum-nexus-engine\predict.ts:87
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: pages\api\quantum-nexus-engine\predict.ts:94
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: pages\api\quantum-nexus-engine\predict.ts:119
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: pages\api\quantum-nexus-engine\predict.ts:120
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: pages\api\quantum-nexus-engine\predict.ts:121
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: pages\api\quantum-nexus-engine\predict.ts:122
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: pages\api\quantum-nexus-engine\predict.ts:158
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: pages\api\quantum-nexus-engine\predict.ts:162
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: pages\api\quantum-nexus-engine\predict.ts:163
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: pages\api\quantum-nexus-engine\predict.ts:165
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: pages\api\quantum-nexus-engine\predict.ts:279
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: pages\api\workflows\index.ts:13
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: pages\api\quantum\status\[id].ts:82
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: mobile-app\src\store\slices\quantumSlice.ts:34
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: landing-page\app\api\agents\route.ts:180
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: landing-page\app\api\agents\route.ts:181
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: landing-page\app\api\agents\route.ts:182
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\app\api\agents\route.ts:321
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: components\PipelineBuilder.tsx:161
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: components\PipelineBuilder.tsx:204
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: components\PipelineBuilder.tsx:318
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: components\PipelineBuilder.tsx:448
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: components\QuantumUpsellModal.tsx:356
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: pages\entanglement-map.tsx:66
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: pages\entanglement-map.tsx:61
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\src\components\QuantumParticles.tsx:29
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\src\components\QuantumParticles.tsx:30
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\src\components\QuantumParticles.tsx:31
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\src\components\QuantumParticles.tsx:34
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\src\components\QuantumParticles.tsx:35
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\src\components\QuantumParticles.tsx:36
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\src\components\QuantumParticles.tsx:99
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\src\components\QuantumParticles.tsx:100
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\src\components\QuantumParticles.tsx:101
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\src\components\QuantumParticles.tsx:112
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\src\components\QuantumParticles.tsx:264
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\src\components\QuantumParticles.tsx:268
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\src\components\QuantumParticles.tsx:272
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\src\pages\index.tsx:57
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\src\pages\index.tsx:58
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\src\pages\index.tsx:59
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: web\src\pages\index.tsx:60
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\src\pages\index.tsx:199
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: web\src\pages\index.tsx:205
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\components\client\AlliancePartnerStrategy.tsx:162
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\components\client\AlliancePartnerStrategy.tsx:163
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\components\client\AlliancePartnerStrategy.tsx:164
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\client\ClientDashboard.tsx:149
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\client\ClientDashboard.tsx:150
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\client\ClientDashboard.tsx:151
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\client\ClientDashboard.tsx:152
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\client\ClientDashboard.tsx:153
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\client\ClientDashboard.tsx:163
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\client\ClientDashboard.tsx:164
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\client\ClientDashboard.tsx:165
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\client\ClientDashboard.tsx:166
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\client\ClientDashboard.tsx:172
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\client\ClientDashboard.tsx:173
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\client\ClientDashboard.tsx:174
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\components\client\PartnerEnablementPlatform.tsx:295
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\components\client\PartnerEnablementPlatform.tsx:296
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\client\POVAutomationPlatform.tsx:207
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\client\POVAutomationPlatform.tsx:208
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\client\POVAutomationPlatform.tsx:209
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\client\POVAutomationPlatform.tsx:210
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\client\POVAutomationPlatform.tsx:211
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\client\POVAutomationPlatform.tsx:212
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\components\client\StrategicImplementationDashboard.tsx:780
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\components\client\StrategicImplementationDashboard.tsx:781
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\components\client\StrategicImplementationDashboard.tsx:782
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\components\client\StrategicImplementationDashboard.tsx:786
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\components\client\StrategicImplementationDashboard.tsx:787
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\components\client\StrategicImplementationDashboard.tsx:788
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\components\client\StrategicImplementationDashboard.tsx:793
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\components\client\VerticalContentStrategy.tsx:922
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\components\client\VerticalContentStrategy.tsx:923
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\components\client\VerticalContentStrategy.tsx:924
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\learning\RealTimeLearningDashboard.tsx:207
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\learning\RealTimeLearningDashboard.tsx:208
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\learning\RealTimeLearningDashboard.tsx:209
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\learning\RealTimeLearningDashboard.tsx:210
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\learning\RealTimeLearningDashboard.tsx:211
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\components\marketplace\QuantumMarketplaceDashboard.tsx:169
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\components\marketplace\QuantumMarketplaceDashboard.tsx:175
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\components\marketplace\QuantumMarketplaceDashboard.tsx:426
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\optimization\QuantumOptimizationDashboard.tsx:343
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\optimization\QuantumOptimizationDashboard.tsx:360
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\optimization\QuantumOptimizationDashboard.tsx:363
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\optimization\QuantumOptimizationDashboard.tsx:366
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\optimization\QuantumOptimizationDashboard.tsx:367
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\optimization\QuantumOptimizationDashboard.tsx:368
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\optimization\QuantumOptimizationDashboard.tsx:371
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\optimization\QuantumOptimizationDashboard.tsx:372
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\optimization\QuantumOptimizationDashboard.tsx:374
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\optimization\QUBOSolver.tsx:445
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\optimization\QUBOSolver.tsx:446
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\optimization\QUBOSolver.tsx:450
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\optimization\QUBOSolver.tsx:451
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\optimization\QUBOSolver.tsx:454
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\optimization\QUBOSolver.tsx:455
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\optimization\QUBOSolver.tsx:456
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\optimization\QUBOSolver.tsx:462
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\social\CampaignManager.tsx:708
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\social\CampaignManager.tsx:709
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\social\CampaignManager.tsx:710
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\social\CampaignManager.tsx:767
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\social\CampaignManager.tsx:773
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\components\social\CampaignManager.tsx:1055
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: src\components\social\CampaignManager.tsx:1058
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\social\SocialAnalytics.tsx:239
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\social\SocialAnalytics.tsx:252
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\social\SocialAnalytics.tsx:253
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\social\SocialAnalytics.tsx:254
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\social\SocialAnalytics.tsx:255
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\social\SocialMediaIntegration.tsx:327
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\social\SocialMediaIntegration.tsx:328
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\social\SocialMediaIntegration.tsx:329
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: src\components\social\SocialMediaIntegration.tsx:330
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: mobile-app\src\screens\pods\GhostNeuroQScreen.tsx:448
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: mobile-app\src\screens\pods\GhostNeuroQScreen.tsx:526
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: mobile-app\src\screens\pods\SigmaSelectScreen.tsx:174
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: mobile-app\src\screens\pods\SigmaSelectScreen.tsx:175
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: mobile-app\src\screens\pods\SigmaSelectScreen.tsx:176
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: mobile-app\src\screens\settings\SecurityScreen.tsx:509
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: landing-page\components\AgentFactory.tsx:160
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\components\AgentFactory.tsx:168
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\components\AuthProvider.tsx:73
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\components\AuthProvider.tsx:82
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\components\AuthProvider.tsx:138
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: landing-page\components\PipelineBuilder.tsx:235
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\components\PipelineBuilder.tsx:278
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\components\PipelineBuilder.tsx:475
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\components\PipelineBuilder.tsx:494
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\components\PipelineBuilder.tsx:538
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\components\PipelineBuilder.tsx:668
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: landing-page\components\QSAILearner.tsx:170
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\components\QSAILearner.tsx:178
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\app\resources\page.tsx:185
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\app\resources\page.tsx:186
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[HIGH] Weak Crypto Detected
+Description: Potential weak crypto found in code
+File: landing-page\app\resources\page.tsx:187
+Recommendation: Use modern, secure cryptographic algorithms
+----------------------------------------
+
+[MEDIUM] Insecure Random Detected
+Description: Potential insecure random found in code
+File: landing-page\app\resources\recipes\page.tsx:133
+Recommendation: Use cryptographically secure random number generators
+----------------------------------------
+
+[MEDIUM] Manual Dependency Check Required
+Description: Automated dependency vulnerability scanning not available
+File: requirements-dev.txt
+Recommendation: Install 'safety' package and run 'safety check' manually
+----------------------------------------
+
+[MEDIUM] Manual Dependency Check Required
+Description: Automated dependency vulnerability scanning not available
+File: requirements-prod.txt
+Recommendation: Install 'safety' package and run 'safety check' manually
+----------------------------------------
+
+[MEDIUM] Manual Dependency Check Required
+Description: Automated dependency vulnerability scanning not available
+File: requirements.txt
+Recommendation: Install 'safety' package and run 'safety check' manually
+----------------------------------------
+
+[MEDIUM] Manual Dependency Check Required
+Description: Automated dependency vulnerability scanning not available
+File: api\requirements-consolidated.txt
+Recommendation: Install 'safety' package and run 'safety check' manually
+----------------------------------------
+
+[MEDIUM] Manual Dependency Check Required
+Description: Automated dependency vulnerability scanning not available
+File: api\requirements-db.txt
+Recommendation: Install 'safety' package and run 'safety check' manually
+----------------------------------------
+
+[MEDIUM] Manual Dependency Check Required
+Description: Automated dependency vulnerability scanning not available
+File: api\requirements-security.txt
+Recommendation: Install 'safety' package and run 'safety check' manually
+----------------------------------------
+
+[MEDIUM] Manual Dependency Check Required
+Description: Automated dependency vulnerability scanning not available
+File: api\requirements.txt
+Recommendation: Install 'safety' package and run 'safety check' manually
+----------------------------------------
+
+[MEDIUM] Manual Dependency Check Required
+Description: Automated dependency vulnerability scanning not available
+File: backup_20250914_171116\requirements-dev.txt
+Recommendation: Install 'safety' package and run 'safety check' manually
+----------------------------------------
+
+[MEDIUM] Manual Dependency Check Required
+Description: Automated dependency vulnerability scanning not available
+File: backup_20250914_171116\requirements-prod.txt
+Recommendation: Install 'safety' package and run 'safety check' manually
+----------------------------------------
+
+[MEDIUM] Manual Dependency Check Required
+Description: Automated dependency vulnerability scanning not available
+File: backup_20250914_171116\requirements.txt
+Recommendation: Install 'safety' package and run 'safety check' manually
+----------------------------------------
+
+[MEDIUM] Manual Dependency Check Required
+Description: Automated dependency vulnerability scanning not available
+File: backup_20250914_171116\api\requirements-consolidated.txt
+Recommendation: Install 'safety' package and run 'safety check' manually
+----------------------------------------
+
+[MEDIUM] Manual Dependency Check Required
+Description: Automated dependency vulnerability scanning not available
+File: backup_20250914_171116\api\requirements-db.txt
+Recommendation: Install 'safety' package and run 'safety check' manually
+----------------------------------------
+
+[MEDIUM] Manual Dependency Check Required
+Description: Automated dependency vulnerability scanning not available
+File: backup_20250914_171116\api\requirements-security.txt
+Recommendation: Install 'safety' package and run 'safety check' manually
+----------------------------------------
+
+[MEDIUM] Manual Dependency Check Required
+Description: Automated dependency vulnerability scanning not available
+File: backup_20250914_171116\api\requirements.txt
+Recommendation: Install 'safety' package and run 'safety check' manually
+----------------------------------------
+
+[MEDIUM] Docker Container Running as Root
+Description: Container may be running as root user
+File: Dockerfile
+Recommendation: Add USER directive to run container as non-root user
+----------------------------------------
+
+[MEDIUM] Docker Container Running as Root
+Description: Container may be running as root user
+File: api\Dockerfile
+Recommendation: Add USER directive to run container as non-root user
+----------------------------------------
+
+[MEDIUM] Docker Container Running as Root
+Description: Container may be running as root user
+File: web\Dockerfile
+Recommendation: Add USER directive to run container as non-root user
+----------------------------------------
+
+[MEDIUM] Docker Container Running as Root
+Description: Container may be running as root user
+File: mobile-app\node_modules\recast\.devcontainer\Dockerfile
+Recommendation: Add USER directive to run container as non-root user
+----------------------------------------
+
+[MEDIUM] Docker Container Running as Root
+Description: Container may be running as root user
+File: mobile-app\node_modules\recast\.devcontainer\base.Dockerfile
+Recommendation: Add USER directive to run container as non-root user
+----------------------------------------
+
+SOC2 COMPLIANCE CHECKS
+----------------------------------------
+
+CC6.1: Logical and Physical Access Controls
+Status: COMPLIANT
+Description: Access to data and systems is restricted to authorized users
+Evidence: Authentication files found: 144
+----------------------------------------
+
+CC6.2: Authentication and Authorization
+Status: COMPLIANT
+Description: Users are authenticated and authorized before accessing systems
+Evidence: JWT implementation found, OAUTH implementation found, SESSION implementation found, PASSPORT implementation found
+----------------------------------------
+
+CC6.3: System Access Monitoring
+Status: COMPLIANT
+Description: System access is monitored and logged
+Evidence: Monitoring/logging files found: 1677
+----------------------------------------
+
+CC6.7: Data Transmission and Disposal
+Status: COMPLIANT
+Description: Data is protected during transmission and disposal
+Evidence: SSL certificates found: 2
+----------------------------------------
+
+CC7.1: System Availability
+Status: COMPLIANT
+Description: Systems are available for operation and use
+Evidence: Backup procedures found: 97, Containerization found: 21
+----------------------------------------
+
+RECOMMENDATIONS
+----------------------------------------
+1. Use parameterized queries and ORM frameworks to prevent SQL injection
+2. Implement proper input validation and output encoding to prevent XSS attacks
+3. Follow Docker security best practices including running as non-root user
+4. Implement comprehensive logging and monitoring
+5. Regular security assessments and penetration testing
+6. Employee security awareness training
+7. Incident response plan development and testing
+8. Regular backup and recovery testing
+
+Next Assessment Date: 2025-10-14T22:25:44.188802
+
+================================================================================

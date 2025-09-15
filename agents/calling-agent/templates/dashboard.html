@@ -1,0 +1,474 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Quantum Nexus Calling Agent{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2 mb-0">
+        <i class="fas fa-tachometer-alt me-2"></i>
+        Dashboard
+    </h1>
+    <div>
+        <button class="btn btn-quantum me-2" onclick="refreshDashboard()">
+            <i class="fas fa-sync-alt me-1"></i>
+            Refresh
+        </button>
+        {% if data.is_running %}
+            <form method="POST" action="{{ url_for('stop_campaign', campaign_id='current') }}" class="d-inline">
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-stop me-1"></i>
+                    Stop Campaign
+                </button>
+            </form>
+        {% else %}
+            <a href="{{ url_for('add_campaign') }}" class="btn btn-success">
+                <i class="fas fa-play me-1"></i>
+                Start Campaign
+            </a>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Status Overview -->
+<div class="row mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="stat-card {{ 'success' if data.is_running else 'danger' }}">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="stat-value" id="agent-status">
+                        {{ 'RUNNING' if data.is_running else 'STOPPED' }}
+                    </div>
+                    <div class="stat-label">Agent Status</div>
+                    {% if data.current_campaign %}
+                        <small class="d-block mt-1">{{ data.current_campaign }}</small>
+                    {% endif %}
+                </div>
+                <div class="stat-icon">
+                    <i class="fas {{ 'fa-play-circle' if data.is_running else 'fa-stop-circle' }}"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-3">
+        <div class="stat-card">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="stat-value" id="queue-size">{{ data.queue_size }}</div>
+                    <div class="stat-label">Queue Size</div>
+                </div>
+                <div class="stat-icon">
+                    <i class="fas fa-list"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-3">
+        <div class="stat-card success">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="stat-value" id="total-contacts">{{ '{:,}'.format(data.contacts.total) }}</div>
+                    <div class="stat-label">Total Contacts</div>
+                    <small class="d-block mt-1">{{ data.contacts.active }} active</small>
+                </div>
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-3">
+        <div class="stat-card warning">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="stat-value" id="total-campaigns">{{ data.campaigns.total }}</div>
+                    <div class="stat-label">Total Campaigns</div>
+                    <small class="d-block mt-1">{{ data.campaigns.active }} active</small>
+                </div>
+                <div class="stat-icon">
+                    <i class="fas fa-bullhorn"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Today's Performance -->
+<div class="row mb-4">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-chart-line me-2"></i>
+                    Today's Performance
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 text-center mb-3">
+                        <div class="h3 text-primary mb-1" id="today-calls">{{ data.today_stats.total_calls }}</div>
+                        <div class="text-muted">Calls Made</div>
+                    </div>
+                    <div class="col-md-3 text-center mb-3">
+                        <div class="h3 text-success mb-1" id="today-connected">{{ data.today_stats.connected_calls }}</div>
+                        <div class="text-muted">Connected</div>
+                    </div>
+                    <div class="col-md-3 text-center mb-3">
+                        <div class="h3 text-info mb-1" id="today-connection-rate">
+                            {{ '{:.1f}%'.format(data.today_stats.connection_rate or 0) }}
+                        </div>
+                        <div class="text-muted">Connection Rate</div>
+                    </div>
+                    <div class="col-md-3 text-center mb-3">
+                        <div class="h3 text-warning mb-1" id="today-duration">
+                            {{ '{:.1f}m'.format(data.today_stats.total_duration_minutes or 0) }}
+                        </div>
+                        <div class="text-muted">Total Duration</div>
+                    </div>
+                </div>
+                
+                <!-- Call Outcomes Chart -->
+                {% if data.today_stats.outcomes %}
+                <div class="mt-4">
+                    <h6>Call Outcomes</h6>
+                    <canvas id="outcomesChart" height="100"></canvas>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-clock me-2"></i>
+                    Real-time Activity
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span>Active Calls</span>
+                        <span class="badge bg-primary" id="active-calls-count">0</span>
+                    </div>
+                    <div class="progress" style="height: 8px;">
+                        <div class="progress-bar" role="progressbar" style="width: 0%" id="active-calls-progress"></div>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span>Queue Progress</span>
+                        <span class="badge bg-info" id="queue-progress-count">{{ data.queue_size }}</span>
+                    </div>
+                    <div class="progress" style="height: 8px;">
+                        <div class="progress-bar bg-info" role="progressbar" style="width: 100%" id="queue-progress-bar"></div>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <h6>Recent Activity</h6>
+                    <div id="activity-feed" class="small">
+                        <div class="text-muted">No recent activity</div>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <button class="btn btn-outline-primary btn-sm" onclick="requestUpdate()">
+                        <i class="fas fa-sync-alt me-1"></i>
+                        Update Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Overall Statistics -->
+<div class="row mb-4">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-chart-bar me-2"></i>
+                    Overall Statistics
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6 text-center mb-3">
+                        <div class="h4 text-primary mb-1">{{ '{:,}'.format(data.overall_stats.total_calls) }}</div>
+                        <div class="text-muted">Total Calls</div>
+                    </div>
+                    <div class="col-6 text-center mb-3">
+                        <div class="h4 text-success mb-1">{{ '{:.1f}%'.format(data.overall_stats.connection_rate or 0) }}</div>
+                        <div class="text-muted">Connection Rate</div>
+                    </div>
+                    <div class="col-6 text-center mb-3">
+                        <div class="h4 text-info mb-1">{{ '{:.1f}%'.format(data.overall_stats.completion_rate or 0) }}</div>
+                        <div class="text-muted">Completion Rate</div>
+                    </div>
+                    <div class="col-6 text-center mb-3">
+                        <div class="h4 text-warning mb-1">{{ '{:.1f}h'.format((data.overall_stats.total_duration_minutes or 0) / 60) }}</div>
+                        <div class="text-muted">Total Duration</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-tasks me-2"></i>
+                    Quick Actions
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('add_contact') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-user-plus me-2"></i>
+                        Add New Contact
+                    </a>
+                    <a href="{{ url_for('add_campaign') }}" class="btn btn-outline-success">
+                        <i class="fas fa-plus me-2"></i>
+                        Create Campaign
+                    </a>
+                    <a href="{{ url_for('import_contacts') }}" class="btn btn-outline-info">
+                        <i class="fas fa-file-import me-2"></i>
+                        Import Contacts
+                    </a>
+                    <a href="{{ url_for('analytics') }}" class="btn btn-outline-warning">
+                        <i class="fas fa-chart-line me-2"></i>
+                        View Analytics
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Calls -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-phone me-2"></i>
+                    Recent Calls
+                </h5>
+                <a href="{{ url_for('calls') }}" class="btn btn-sm btn-outline-primary">
+                    View All
+                </a>
+            </div>
+            <div class="card-body">
+                <div id="recent-calls">
+                    <div class="text-center text-muted py-4">
+                        <i class="fas fa-spinner fa-spin me-2"></i>
+                        Loading recent calls...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    let outcomesChart = null;
+    
+    // Socket.IO event handlers
+    socket.on('dashboard_update', function(data) {
+        updateDashboard(data);
+    });
+    
+    function updateDashboard(data) {
+        // Update status
+        document.getElementById('agent-status').textContent = data.is_running ? 'RUNNING' : 'STOPPED';
+        document.getElementById('queue-size').textContent = data.queue_size;
+        document.getElementById('total-contacts').textContent = formatNumber(data.contacts.total);
+        document.getElementById('total-campaigns').textContent = data.campaigns.total;
+        
+        // Update today's stats
+        document.getElementById('today-calls').textContent = data.today_stats.total_calls;
+        document.getElementById('today-connected').textContent = data.today_stats.connected_calls;
+        document.getElementById('today-connection-rate').textContent = formatPercentage(data.today_stats.connection_rate || 0);
+        document.getElementById('today-duration').textContent = (data.today_stats.total_duration_minutes || 0).toFixed(1) + 'm';
+        
+        // Update real-time activity
+        updateActivityFeed(data);
+        
+        // Update outcomes chart
+        if (data.today_stats.outcomes && Object.keys(data.today_stats.outcomes).length > 0) {
+            updateOutcomesChart(data.today_stats.outcomes);
+        }
+    }
+    
+    function updateActivityFeed(data) {
+        const feed = document.getElementById('activity-feed');
+        const activities = [];
+        
+        if (data.is_running) {
+            activities.push(`<div class="mb-1"><span class="status-indicator status-running"></span>Campaign running</div>`);
+        }
+        
+        if (data.queue_size > 0) {
+            activities.push(`<div class="mb-1"><i class="fas fa-clock text-warning me-1"></i>${data.queue_size} contacts in queue</div>`);
+        }
+        
+        if (data.today_stats.total_calls > 0) {
+            activities.push(`<div class="mb-1"><i class="fas fa-phone text-primary me-1"></i>${data.today_stats.total_calls} calls made today</div>`);
+        }
+        
+        if (activities.length === 0) {
+            feed.innerHTML = '<div class="text-muted">No recent activity</div>';
+        } else {
+            feed.innerHTML = activities.join('');
+        }
+        
+        // Update progress bars
+        const maxCalls = 10; // Assume max 10 concurrent calls
+        const activeCalls = 0; // This would come from real-time data
+        const activeCallsProgress = (activeCalls / maxCalls) * 100;
+        document.getElementById('active-calls-count').textContent = activeCalls;
+        document.getElementById('active-calls-progress').style.width = activeCallsProgress + '%';
+        
+        document.getElementById('queue-progress-count').textContent = data.queue_size;
+    }
+    
+    function updateOutcomesChart(outcomes) {
+        const ctx = document.getElementById('outcomesChart');
+        if (!ctx) return;
+        
+        const labels = Object.keys(outcomes);
+        const data = Object.values(outcomes);
+        const colors = [
+            '#10b981', '#f59e0b', '#ef4444', '#6366f1', '#8b5cf6',
+            '#06b6d4', '#84cc16', '#f97316', '#ec4899', '#64748b'
+        ];
+        
+        if (outcomesChart) {
+            outcomesChart.destroy();
+        }
+        
+        outcomesChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labels.map(label => label.replace('_', ' ').toUpperCase()),
+                datasets: [{
+                    data: data,
+                    backgroundColor: colors.slice(0, labels.length),
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            usePointStyle: true
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    function refreshDashboard() {
+        fetch('/api/dashboard')
+            .then(response => response.json())
+            .then(data => updateDashboard(data))
+            .catch(error => console.error('Error refreshing dashboard:', error));
+    }
+    
+    function requestUpdate() {
+        socket.emit('request_update');
+    }
+    
+    // Load recent calls
+    function loadRecentCalls() {
+        fetch('/api/calls/recent?limit=5')
+            .then(response => response.json())
+            .then(calls => {
+                const container = document.getElementById('recent-calls');
+                if (calls.length === 0) {
+                    container.innerHTML = '<div class="text-muted text-center py-3">No recent calls</div>';
+                    return;
+                }
+                
+                let html = '<div class="table-responsive"><table class="table table-sm">';
+                html += '<thead><tr><th>Contact</th><th>Status</th><th>Outcome</th><th>Duration</th><th>Time</th></tr></thead><tbody>';
+                
+                calls.forEach(call => {
+                    const statusBadge = getStatusBadge(call.status);
+                    const outcomeBadge = call.outcome ? getOutcomeBadge(call.outcome) : '-';
+                    const duration = call.duration ? formatDuration(call.duration) : '-';
+                    const time = new Date(call.created_at).toLocaleTimeString();
+                    
+                    html += `<tr>
+                        <td>${call.contact_name || 'Unknown'}</td>
+                        <td>${statusBadge}</td>
+                        <td>${outcomeBadge}</td>
+                        <td>${duration}</td>
+                        <td>${time}</td>
+                    </tr>`;
+                });
+                
+                html += '</tbody></table></div>';
+                container.innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Error loading recent calls:', error);
+                document.getElementById('recent-calls').innerHTML = 
+                    '<div class="text-danger text-center py-3">Error loading recent calls</div>';
+            });
+    }
+    
+    function getStatusBadge(status) {
+        const badges = {
+            'completed': '<span class="badge bg-success">Completed</span>',
+            'failed': '<span class="badge bg-danger">Failed</span>',
+            'no_answer': '<span class="badge bg-warning">No Answer</span>',
+            'busy': '<span class="badge bg-secondary">Busy</span>',
+            'voicemail': '<span class="badge bg-info">Voicemail</span>',
+            'connected': '<span class="badge bg-primary">Connected</span>'
+        };
+        return badges[status] || `<span class="badge bg-secondary">${status}</span>`;
+    }
+    
+    function getOutcomeBadge(outcome) {
+        const badges = {
+            'sale': '<span class="badge bg-success">Sale</span>',
+            'appointment': '<span class="badge bg-primary">Appointment</span>',
+            'follow_up': '<span class="badge bg-info">Follow Up</span>',
+            'not_interested': '<span class="badge bg-danger">Not Interested</span>',
+            'callback': '<span class="badge bg-warning">Callback</span>',
+            'voicemail_left': '<span class="badge bg-secondary">Voicemail Left</span>'
+        };
+        return badges[outcome] || `<span class="badge bg-secondary">${outcome}</span>`;
+    }
+    
+    // Initialize dashboard
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initial chart setup
+        {% if data.today_stats.outcomes %}
+        updateOutcomesChart({{ data.today_stats.outcomes | tojson }});
+        {% endif %}
+        
+        // Load recent calls (simulated for now)
+        setTimeout(loadRecentCalls, 1000);
+        
+        // Auto-refresh every 30 seconds
+        setInterval(refreshDashboard, 30000);
+    });
+</script>
+{% endblock %}

@@ -1,4 +1,4 @@
-from datetime import datetime
+﻿from datetime import datetime
 from typing import Optional
 from sqlalchemy import String, Text, Boolean, JSON, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -76,7 +76,7 @@ class User(Base):
     
     # Relationships
     # partner = relationship("Partner", back_populates="users")
-    # oracle_queries = relationship("OracleQuery", back_populates="user")
+    # quantum_nexus_queries = relationship("Quantum NexusQuery", back_populates="user")
     
     def __repr__(self) -> str:
         return f"<User(id={self.id}, email={self.email}, role={self.role})>"

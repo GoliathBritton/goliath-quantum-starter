@@ -1,0 +1,51 @@
+NQBA Stack Benchmark Summary
+==================================================
+
+Problem: Portfolio_Optimization
+Solver: Classical
+Time: 0.009s
+Quality: 0.000
+Memory: 0.01 MB
+Energy: 1.72 J
+Cost: $0.0001
+------------------------------
+Problem: Portfolio_Optimization
+Solver: Quantum
+Time: 0.001s
+Quality: 0.874
+Memory: 0.18 MB
+Energy: 1.45 J
+Cost: $0.0001
+------------------------------
+Problem: Traveling_Salesman
+Solver: Classical
+Time: 0.000s
+Quality: -694.755
+Memory: 0.00 MB
+Energy: 0.03 J
+Cost: $0.0000
+------------------------------
+Problem: Traveling_Salesman
+Solver: Quantum
+Time: 0.023s
+Quality: -1785.251
+Memory: 0.07 MB
+Energy: 23.13 J
+Cost: $0.0023
+------------------------------
+Problem: Knapsack_Problem
+Solver: Classical
+Time: 0.000s
+Quality: 1695.418
+Memory: 0.00 MB
+Energy: 0.02 J
+Cost: $0.0000
+------------------------------
+Problem: Knapsack_Problem
+Solver: Quantum
+Time: 0.000s
+Quality: 981.782
+Memory: 0.02 MB
+Energy: 0.28 J
+Cost: $0.0000
+------------------------------

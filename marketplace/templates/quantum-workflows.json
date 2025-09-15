@@ -1,0 +1,674 @@
+{
+  "quantum_workflow_marketplace": {
+    "metadata": {
+      "version": "1.0.0",
+      "created_at": "2024-01-15T00:00:00Z",
+      "description": "Quantum Nexus Workflow Marketplace - Pre-built automation templates",
+      "total_templates": 25,
+      "categories": [
+        "sales_automation",
+        "customer_service",
+        "marketing_optimization",
+        "operations_management",
+        "financial_analysis",
+        "hr_automation",
+        "supply_chain",
+        "quantum_computing"
+      ]
+    },
+    "templates": [
+      {
+        "id": "qw-001",
+        "name": "Quantum Lead Scoring & Routing",
+        "category": "sales_automation",
+        "description": "AI-powered lead qualification using quantum optimization algorithms to maximize conversion probability",
+        "complexity": "intermediate",
+        "estimated_setup_time": "30 minutes",
+        "roi_potential": "300-500%",
+        "integrations": [
+          "salesforce",
+          "hubspot",
+          "pipedrive",
+          "twilio",
+          "openai"
+        ],
+        "quantum_features": [
+          "QUBO optimization for lead scoring",
+          "Quantum annealing for territory assignment",
+          "Superposition-based A/B testing"
+        ],
+        "workflow_steps": [
+          {
+            "step": 1,
+            "action": "data_ingestion",
+            "description": "Collect lead data from multiple sources",
+            "quantum_component": false
+          },
+          {
+            "step": 2,
+            "action": "quantum_scoring",
+            "description": "Apply quantum machine learning for lead scoring",
+            "quantum_component": true,
+            "dynex_job_type": "classification"
+          },
+          {
+            "step": 3,
+            "action": "route_optimization",
+            "description": "Quantum-optimized assignment to sales reps",
+            "quantum_component": true,
+            "dynex_job_type": "optimization"
+          },
+          {
+            "step": 4,
+            "action": "automated_outreach",
+            "description": "Trigger personalized communication sequences",
+            "quantum_component": false
+          }
+        ],
+        "configuration": {
+          "scoring_weights": {
+            "company_size": 0.25,
+            "industry_fit": 0.30,
+            "engagement_history": 0.20,
+            "budget_indicators": 0.25
+          },
+          "quantum_parameters": {
+            "annealing_time": 1000,
+            "num_reads": 100,
+            "chain_strength": 1.0
+          }
+        },
+        "pricing": {
+          "setup_fee": 0,
+          "per_lead_cost": 0.50,
+          "quantum_compute_cost": "variable",
+          "monthly_minimum": 100
+        }
+      },
+      {
+        "id": "qw-002",
+        "name": "Dynamic Pricing Optimization",
+        "category": "sales_automation",
+        "description": "Real-time price optimization using quantum algorithms to maximize revenue while maintaining competitiveness",
+        "complexity": "advanced",
+        "estimated_setup_time": "2 hours",
+        "roi_potential": "200-400%",
+        "integrations": [
+          "shopify",
+          "woocommerce",
+          "magento",
+          "stripe",
+          "competitor_apis"
+        ],
+        "quantum_features": [
+          "Multi-objective optimization",
+          "Real-time market analysis",
+          "Quantum game theory pricing"
+        ],
+        "workflow_steps": [
+          {
+            "step": 1,
+            "action": "market_data_collection",
+            "description": "Gather competitor pricing and market conditions",
+            "quantum_component": false
+          },
+          {
+            "step": 2,
+            "action": "demand_forecasting",
+            "description": "Quantum-enhanced demand prediction",
+            "quantum_component": true,
+            "dynex_job_type": "regression"
+          },
+          {
+            "step": 3,
+            "action": "price_optimization",
+            "description": "Multi-objective quantum optimization for optimal pricing",
+            "quantum_component": true,
+            "dynex_job_type": "optimization"
+          },
+          {
+            "step": 4,
+            "action": "price_deployment",
+            "description": "Automatically update prices across all channels",
+            "quantum_component": false
+          }
+        ],
+        "configuration": {
+          "optimization_objectives": {
+            "revenue_maximization": 0.60,
+            "market_share_protection": 0.25,
+            "inventory_turnover": 0.15
+          },
+          "constraints": {
+            "min_margin_percent": 15,
+            "max_price_change_percent": 10,
+            "competitor_price_buffer": 0.05
+          }
+        },
+        "pricing": {
+          "setup_fee": 500,
+          "per_product_cost": 2.00,
+          "revenue_share_percent": 1.5,
+          "quantum_compute_cost": "variable"
+        }
+      },
+      {
+        "id": "qw-003",
+        "name": "Intelligent Customer Service Routing",
+        "category": "customer_service",
+        "description": "Quantum-optimized ticket routing and agent assignment for maximum customer satisfaction and efficiency",
+        "complexity": "intermediate",
+        "estimated_setup_time": "45 minutes",
+        "roi_potential": "150-300%",
+        "integrations": [
+          "zendesk",
+          "freshdesk",
+          "intercom",
+          "slack",
+          "microsoft_teams"
+        ],
+        "quantum_features": [
+          "Multi-dimensional agent matching",
+          "Quantum workload balancing",
+          "Predictive escalation prevention"
+        ],
+        "workflow_steps": [
+          {
+            "step": 1,
+            "action": "ticket_analysis",
+            "description": "AI-powered ticket classification and sentiment analysis",
+            "quantum_component": false
+          },
+          {
+            "step": 2,
+            "action": "agent_matching",
+            "description": "Quantum optimization for agent-ticket pairing",
+            "quantum_component": true,
+            "dynex_job_type": "assignment"
+          },
+          {
+            "step": 3,
+            "action": "workload_balancing",
+            "description": "Dynamic workload distribution optimization",
+            "quantum_component": true,
+            "dynex_job_type": "optimization"
+          },
+          {
+            "step": 4,
+            "action": "escalation_prediction",
+            "description": "Proactive escalation risk assessment",
+            "quantum_component": false
+          }
+        ],
+        "configuration": {
+          "matching_criteria": {
+            "skill_match": 0.40,
+            "language_preference": 0.20,
+            "workload_balance": 0.25,
+            "customer_history": 0.15
+          },
+          "sla_targets": {
+            "first_response_minutes": 15,
+            "resolution_hours": 24,
+            "customer_satisfaction_min": 4.5
+          }
+        },
+        "pricing": {
+          "setup_fee": 200,
+          "per_agent_monthly": 25,
+          "per_ticket_cost": 0.10,
+          "quantum_compute_cost": "included"
+        }
+      },
+      {
+        "id": "qw-004",
+        "name": "Quantum Marketing Campaign Optimizer",
+        "category": "marketing_optimization",
+        "description": "Multi-channel marketing optimization using quantum algorithms to maximize ROI across all touchpoints",
+        "complexity": "advanced",
+        "estimated_setup_time": "3 hours",
+        "roi_potential": "400-800%",
+        "integrations": [
+          "google_ads",
+          "facebook_ads",
+          "linkedin_ads",
+          "mailchimp",
+          "google_analytics"
+        ],
+        "quantum_features": [
+          "Multi-channel budget optimization",
+          "Quantum A/B testing",
+          "Attribution modeling with superposition"
+        ],
+        "workflow_steps": [
+          {
+            "step": 1,
+            "action": "data_aggregation",
+            "description": "Collect performance data from all marketing channels",
+            "quantum_component": false
+          },
+          {
+            "step": 2,
+            "action": "attribution_modeling",
+            "description": "Quantum-enhanced multi-touch attribution",
+            "quantum_component": true,
+            "dynex_job_type": "modeling"
+          },
+          {
+            "step": 3,
+            "action": "budget_optimization",
+            "description": "Quantum portfolio optimization for marketing spend",
+            "quantum_component": true,
+            "dynex_job_type": "optimization"
+          },
+          {
+            "step": 4,
+            "action": "campaign_execution",
+            "description": "Automated budget reallocation and campaign adjustments",
+            "quantum_component": false
+          }
+        ],
+        "configuration": {
+          "optimization_goals": {
+            "cost_per_acquisition": 0.50,
+            "lifetime_value": 0.30,
+            "brand_awareness": 0.20
+          },
+          "rebalancing_frequency": "daily",
+          "risk_tolerance": "moderate"
+        },
+        "pricing": {
+          "setup_fee": 1000,
+          "management_fee_percent": 3.0,
+          "performance_bonus_percent": 10.0,
+          "minimum_monthly_spend": 5000
+        }
+      },
+      {
+        "id": "qw-005",
+        "name": "Supply Chain Optimization Engine",
+        "category": "operations_management",
+        "description": "Quantum-powered supply chain optimization for inventory, logistics, and vendor management",
+        "complexity": "expert",
+        "estimated_setup_time": "1 week",
+        "roi_potential": "500-1000%",
+        "integrations": [
+          "sap",
+          "oracle_scm",
+          "netsuite",
+          "ups_api",
+          "fedex_api"
+        ],
+        "quantum_features": [
+          "Multi-objective supply chain optimization",
+          "Quantum risk assessment",
+          "Dynamic routing optimization"
+        ],
+        "workflow_steps": [
+          {
+            "step": 1,
+            "action": "demand_forecasting",
+            "description": "AI-powered demand prediction across all SKUs",
+            "quantum_component": false
+          },
+          {
+            "step": 2,
+            "action": "inventory_optimization",
+            "description": "Quantum optimization for inventory levels",
+            "quantum_component": true,
+            "dynex_job_type": "optimization"
+          },
+          {
+            "step": 3,
+            "action": "logistics_routing",
+            "description": "Quantum vehicle routing and scheduling",
+            "quantum_component": true,
+            "dynex_job_type": "routing"
+          },
+          {
+            "step": 4,
+            "action": "vendor_optimization",
+            "description": "Supplier selection and contract optimization",
+            "quantum_component": true,
+            "dynex_job_type": "assignment"
+          }
+        ],
+        "configuration": {
+          "optimization_objectives": {
+            "cost_minimization": 0.40,
+            "delivery_time": 0.30,
+            "risk_mitigation": 0.20,
+            "sustainability": 0.10
+          },
+          "constraints": {
+            "max_stockout_probability": 0.05,
+            "min_service_level": 0.95,
+            "budget_limit": "variable"
+          }
+        },
+        "pricing": {
+          "setup_fee": 5000,
+          "monthly_base": 2000,
+          "cost_savings_share_percent": 15,
+          "quantum_compute_cost": "variable"
+        }
+      },
+      {
+        "id": "qw-006",
+        "name": "Quantum Portfolio Risk Management",
+        "category": "financial_analysis",
+        "description": "Advanced portfolio optimization using quantum algorithms for risk-adjusted returns",
+        "complexity": "expert",
+        "estimated_setup_time": "4 hours",
+        "roi_potential": "200-600%",
+        "integrations": [
+          "bloomberg_api",
+          "alpha_vantage",
+          "interactive_brokers",
+          "td_ameritrade",
+          "risk_metrics"
+        ],
+        "quantum_features": [
+          "Quantum Monte Carlo simulations",
+          "Multi-objective portfolio optimization",
+          "Quantum correlation analysis"
+        ],
+        "workflow_steps": [
+          {
+            "step": 1,
+            "action": "market_data_ingestion",
+            "description": "Real-time market data collection and preprocessing",
+            "quantum_component": false
+          },
+          {
+            "step": 2,
+            "action": "risk_modeling",
+            "description": "Quantum-enhanced risk factor modeling",
+            "quantum_component": true,
+            "dynex_job_type": "simulation"
+          },
+          {
+            "step": 3,
+            "action": "portfolio_optimization",
+            "description": "Multi-objective quantum portfolio optimization",
+            "quantum_component": true,
+            "dynex_job_type": "optimization"
+          },
+          {
+            "step": 4,
+            "action": "rebalancing",
+            "description": "Automated portfolio rebalancing execution",
+            "quantum_component": false
+          }
+        ],
+        "configuration": {
+          "optimization_objectives": {
+            "return_maximization": 0.60,
+            "risk_minimization": 0.30,
+            "liquidity_maintenance": 0.10
+          },
+          "risk_constraints": {
+            "max_var_95": 0.05,
+            "max_drawdown": 0.15,
+            "correlation_limit": 0.70
+          }
+        },
+        "pricing": {
+          "setup_fee": 2500,
+          "management_fee_percent": 0.75,
+          "performance_fee_percent": 20,
+          "minimum_aum": 1000000
+        }
+      },
+      {
+        "id": "qw-007",
+        "name": "AI-Powered Recruitment Optimizer",
+        "category": "hr_automation",
+        "description": "Quantum-enhanced candidate matching and interview scheduling optimization",
+        "complexity": "intermediate",
+        "estimated_setup_time": "1 hour",
+        "roi_potential": "300-500%",
+        "integrations": [
+          "workday",
+          "bamboohr",
+          "greenhouse",
+          "lever",
+          "linkedin_recruiter"
+        ],
+        "quantum_features": [
+          "Multi-dimensional candidate scoring",
+          "Quantum interview scheduling",
+          "Bias-free selection optimization"
+        ],
+        "workflow_steps": [
+          {
+            "step": 1,
+            "action": "candidate_sourcing",
+            "description": "Automated candidate discovery and initial screening",
+            "quantum_component": false
+          },
+          {
+            "step": 2,
+            "action": "quantum_matching",
+            "description": "Quantum algorithm for job-candidate matching",
+            "quantum_component": true,
+            "dynex_job_type": "matching"
+          },
+          {
+            "step": 3,
+            "action": "interview_optimization",
+            "description": "Optimal interview panel and schedule assignment",
+            "quantum_component": true,
+            "dynex_job_type": "scheduling"
+          },
+          {
+            "step": 4,
+            "action": "decision_support",
+            "description": "AI-powered hiring recommendations",
+            "quantum_component": false
+          }
+        ],
+        "configuration": {
+          "matching_weights": {
+            "skills_match": 0.35,
+            "experience_level": 0.25,
+            "cultural_fit": 0.20,
+            "growth_potential": 0.20
+          },
+          "bias_mitigation": {
+            "anonymize_demographics": true,
+            "diverse_panel_requirement": true,
+            "structured_evaluation": true
+          }
+        },
+        "pricing": {
+          "setup_fee": 300,
+          "per_hire_fee": 500,
+          "monthly_subscription": 200,
+          "quantum_compute_cost": "included"
+        }
+      },
+      {
+        "id": "qw-008",
+        "name": "Quantum Fraud Detection System",
+        "category": "financial_analysis",
+        "description": "Real-time fraud detection using quantum machine learning and pattern recognition",
+        "complexity": "expert",
+        "estimated_setup_time": "2 weeks",
+        "roi_potential": "1000-5000%",
+        "integrations": [
+          "stripe",
+          "paypal",
+          "square",
+          "plaid",
+          "sift_science"
+        ],
+        "quantum_features": [
+          "Quantum anomaly detection",
+          "Real-time pattern recognition",
+          "Quantum ensemble learning"
+        ],
+        "workflow_steps": [
+          {
+            "step": 1,
+            "action": "transaction_monitoring",
+            "description": "Real-time transaction data ingestion and preprocessing",
+            "quantum_component": false
+          },
+          {
+            "step": 2,
+            "action": "quantum_analysis",
+            "description": "Quantum machine learning for fraud pattern detection",
+            "quantum_component": true,
+            "dynex_job_type": "classification"
+          },
+          {
+            "step": 3,
+            "action": "risk_scoring",
+            "description": "Dynamic risk score calculation and threshold optimization",
+            "quantum_component": true,
+            "dynex_job_type": "optimization"
+          },
+          {
+            "step": 4,
+            "action": "automated_response",
+            "description": "Automated fraud prevention actions",
+            "quantum_component": false
+          }
+        ],
+        "configuration": {
+          "detection_thresholds": {
+            "high_risk": 0.85,
+            "medium_risk": 0.65,
+            "low_risk": 0.45
+          },
+          "response_actions": {
+            "block_transaction": "high_risk",
+            "require_verification": "medium_risk",
+            "flag_for_review": "low_risk"
+          }
+        },
+        "pricing": {
+          "setup_fee": 10000,
+          "per_transaction_cost": 0.01,
+          "fraud_prevention_bonus": "50% of prevented losses",
+          "monthly_minimum": 1000
+        }
+      }
+    ],
+    "integration_connectors": {
+      "uipath": {
+        "name": "UiPath RPA Integration",
+        "description": "Connect quantum workflows with UiPath robotic process automation",
+        "supported_actions": [
+          "trigger_robot",
+          "pass_data",
+          "receive_results",
+          "monitor_execution"
+        ],
+        "setup_complexity": "intermediate",
+        "documentation_url": "https://docs.quantumnexus.ai/integrations/uipath"
+      },
+      "n8n": {
+        "name": "n8n Workflow Automation",
+        "description": "Seamless integration with n8n for extended automation capabilities",
+        "supported_actions": [
+          "webhook_triggers",
+          "data_transformation",
+          "api_calls",
+          "conditional_logic"
+        ],
+        "setup_complexity": "beginner",
+        "documentation_url": "https://docs.quantumnexus.ai/integrations/n8n"
+      },
+      "mendix": {
+        "name": "Mendix Low-Code Platform",
+        "description": "Integrate quantum intelligence into Mendix applications",
+        "supported_actions": [
+          "microflow_integration",
+          "data_widgets",
+          "rest_services",
+          "real_time_updates"
+        ],
+        "setup_complexity": "intermediate",
+        "documentation_url": "https://docs.quantumnexus.ai/integrations/mendix"
+      },
+      "prismatic": {
+        "name": "Prismatic Integration Platform",
+        "description": "Native integration with Prismatic for B2B SaaS workflows",
+        "supported_actions": [
+          "component_library",
+          "customer_deployments",
+          "monitoring_alerts",
+          "version_management"
+        ],
+        "setup_complexity": "advanced",
+        "documentation_url": "https://docs.quantumnexus.ai/integrations/prismatic"
+      }
+    },
+    "deployment_options": {
+      "cloud_hosted": {
+        "description": "Fully managed quantum workflows in the cloud",
+        "benefits": [
+          "Zero infrastructure management",
+          "Automatic scaling",
+          "Built-in monitoring",
+          "99.9% uptime SLA"
+        ],
+        "pricing_model": "pay_per_use"
+      },
+      "hybrid": {
+        "description": "Sensitive data on-premises, quantum compute in cloud",
+        "benefits": [
+          "Data sovereignty",
+          "Compliance friendly",
+          "Reduced latency",
+          "Custom security controls"
+        ],
+        "pricing_model": "subscription_plus_usage"
+      },
+      "on_premises": {
+        "description": "Complete quantum workflow platform on your infrastructure",
+        "benefits": [
+          "Full control",
+          "Maximum security",
+          "Custom configurations",
+          "No data egress"
+        ],
+        "pricing_model": "enterprise_license"
+      }
+    },
+    "support_tiers": {
+      "community": {
+        "description": "Community-driven support for basic templates",
+        "features": [
+          "Documentation access",
+          "Community forums",
+          "Basic templates",
+          "Self-service setup"
+        ],
+        "cost": "free"
+      },
+      "professional": {
+        "description": "Professional support with SLA guarantees",
+        "features": [
+          "Email support (24h response)",
+          "Advanced templates",
+          "Custom configurations",
+          "Training materials"
+        ],
+        "cost": "$500/month"
+      },
+      "enterprise": {
+        "description": "White-glove support with dedicated success manager",
+        "features": [
+          "24/7 phone support",
+          "Custom template development",
+          "Dedicated success manager",
+          "On-site training"
+        ],
+        "cost": "$5000/month"
+      }
+    }
+  }
+}

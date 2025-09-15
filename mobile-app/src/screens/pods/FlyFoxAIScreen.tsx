@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -129,7 +129,7 @@ const FlyFoxAIScreen: React.FC<FlyFoxAIScreenProps> = ({ navigation }) => {
         },
         {
           id: '3',
-          name: 'Predictive Oracle',
+          name: 'Predictive Quantum Nexus',
           type: 'predictor',
           status: 'training',
           capabilities: ['Time Series Forecasting', 'Risk Assessment', 'Market Prediction'],
@@ -199,7 +199,7 @@ const FlyFoxAIScreen: React.FC<FlyFoxAIScreenProps> = ({ navigation }) => {
           type: 'prediction',
           status: 'pending',
           progress: 0,
-          assignedAgent: 'Predictive Oracle',
+          assignedAgent: 'Predictive Quantum Nexus',
           createdAt: new Date(Date.now() - 900000).toISOString(),
           estimatedCompletion: new Date(Date.now() + 3600000).toISOString(),
           priority: 'critical'

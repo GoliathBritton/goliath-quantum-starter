@@ -1,4 +1,4 @@
-from typing import List, Dict
+﻿from typing import List, Dict
 
 PARTNERS = [
     {
@@ -60,7 +60,7 @@ LEADS = [
     }
 ]
 
-ORACLE_PREDICTIONS = [
+quantum_nexus_PREDICTIONS = [
     {
         "id": "pred_001",
         "query": "Market trend analysis for Q1 2024",

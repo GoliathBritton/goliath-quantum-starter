@@ -1,0 +1,319 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flyfox-worker
+  namespace: flyfox
+  labels:
+    app: flyfox-worker
+    component: worker
+    tier: worker
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: flyfox-worker
+  template:
+    metadata:
+      labels:
+        app: flyfox-worker
+        component: worker
+        tier: worker
+    spec:
+      containers:
+      - name: quantum-worker
+        image: <ECR_REGISTRY>/flyfox-quantum-worker:latest
+        imagePullPolicy: IfNotPresent
+        envFrom:
+          - secretRef:
+              name: flyfox-secrets
+          - configMapRef:
+              name: flyfox-config
+        env:
+        - name: WORKER_TYPE
+          value: "quantum"
+        - name: WORKER_CONCURRENCY
+          value: "4"
+        - name: DYNEX_COMPUTE_MODE
+          value: "preferred"
+        ports:
+        - containerPort: 9000
+          name: metrics
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 9000
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 9000
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        resources:
+          requests:
+            cpu: "1000m"
+            memory: "2Gi"
+          limits:
+            cpu: "8"
+            memory: "16Gi"
+        volumeMounts:
+        - name: model-volume
+          mountPath: /models
+        - name: temp-volume
+          mountPath: /tmp
+        - name: quantum-cache
+          mountPath: /quantum-cache
+      - name: calling-worker
+        image: <ECR_REGISTRY>/flyfox-worker:latest
+        imagePullPolicy: IfNotPresent
+        envFrom:
+          - secretRef:
+              name: flyfox-secrets
+          - configMapRef:
+              name: flyfox-config
+        env:
+        - name: WORKER_TYPE
+          value: "calling"
+        - name: WORKER_CONCURRENCY
+          value: "8"
+        - name: TWILIO_WEBHOOK_URL
+          value: "https://api.flyfox.ai/webhooks/twilio"
+        ports:
+        - containerPort: 9001
+          name: calling-metrics
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 9001
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 2
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 9001
+          initialDelaySeconds: 20
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 3
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
+          limits:
+            cpu: "4"
+            memory: "8Gi"
+        volumeMounts:
+        - name: call-recordings
+          mountPath: /recordings
+        - name: temp-volume
+          mountPath: /tmp
+      volumes:
+      - name: model-volume
+        emptyDir:
+          sizeLimit: 10Gi
+      - name: temp-volume
+        emptyDir:
+          sizeLimit: 5Gi
+      - name: quantum-cache
+        emptyDir:
+          sizeLimit: 2Gi
+      - name: call-recordings
+        emptyDir:
+          sizeLimit: 20Gi
+      imagePullSecrets:
+      - name: regcred
+      nodeSelector:
+        node-type: worker
+      tolerations:
+      - key: "worker-node"
+        operator: "Equal"
+        value: "true"
+        effect: "NoSchedule"
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - flyfox-worker
+              topologyKey: kubernetes.io/hostname
+        - name: POSTGRES_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: flyfox-config
+              key: POSTGRES_HOST
+        - name: POSTGRES_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: flyfox-config
+              key: POSTGRES_PORT
+        - name: POSTGRES_DB
+          valueFrom:
+            configMapKeyRef:
+              name: flyfox-config
+              key: POSTGRES_DB
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: flyfox-secrets
+              key: POSTGRES_PASSWORD
+        - name: TWILIO_ACCOUNT_SID
+          valueFrom:
+            secretKeyRef:
+              name: flyfox-secrets
+              key: TWILIO_ACCOUNT_SID
+        - name: TWILIO_AUTH_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: flyfox-secrets
+              key: TWILIO_AUTH_TOKEN
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: flyfox-secrets
+              key: OPENAI_API_KEY
+        - name: DYNEX_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: flyfox-secrets
+              key: DYNEX_API_KEY
+        - name: QUEUE_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: flyfox-config
+              key: QUEUE_NAME
+        - name: MAX_WORKERS
+          valueFrom:
+            configMapKeyRef:
+              name: flyfox-config
+              key: MAX_WORKERS
+        - name: COMPLIANCE_MODE
+          valueFrom:
+            configMapKeyRef:
+              name: flyfox-config
+              key: COMPLIANCE_MODE
+        - name: TCPA_ENABLED
+          valueFrom:
+            configMapKeyRef:
+              name: flyfox-config
+              key: TCPA_ENABLED
+        - name: DNC_CHECK_ENABLED
+          valueFrom:
+            configMapKeyRef:
+              name: flyfox-config
+              key: DNC_CHECK_ENABLED
+        - name: CALL_RECORDING_ENABLED
+          valueFrom:
+            configMapKeyRef:
+              name: flyfox-config
+              key: CALL_RECORDING_ENABLED
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+            nvidia.com/gpu: 1
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+            nvidia.com/gpu: 1
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          allowPrivilegeEscalation: false
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: models
+          mountPath: /models
+      volumes:
+      - name: tmp
+        emptyDir: {}
+      - name: models
+        emptyDir:
+          sizeLimit: 10Gi
+      nodeSelector:
+        node-type: gpu
+      tolerations:
+      - key: nvidia.com/gpu
+        operator: Exists
+        effect: NoSchedule
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flyfox-quantum-worker
+  namespace: flyfox
+  labels:
+    app: flyfox-quantum-worker
+    component: quantum
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: flyfox-quantum-worker
+  template:
+    metadata:
+      labels:
+        app: flyfox-quantum-worker
+        component: quantum
+    spec:
+      imagePullSecrets:
+      - name: registry-secret
+      containers:
+      - name: quantum-worker
+        image: flyfox/quantum-worker:latest
+        env:
+        - name: ENVIRONMENT
+          valueFrom:
+            configMapKeyRef:
+              name: flyfox-config
+              key: ENVIRONMENT
+        - name: DYNEX_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: flyfox-secrets
+              key: DYNEX_API_KEY
+        - name: DYNEX_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              name: flyfox-config
+              key: DYNEX_ENDPOINT
+        - name: QUANTUM_PRIORITY_QUEUE
+          valueFrom:
+            configMapKeyRef:
+              name: flyfox-config
+              key: QUANTUM_PRIORITY_QUEUE
+        - name: REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: flyfox-config
+              key: REDIS_HOST
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: flyfox-secrets
+              key: REDIS_PASSWORD
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "1000m"
+          limits:
+            memory: "4Gi"
+            cpu: "2000m"
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          allowPrivilegeEscalation: false

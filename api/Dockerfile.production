@@ -1,0 +1,150 @@
+# Quantum Nexus Platform - Production API Dockerfile
+# Multi-stage build with security hardening and optimization
+
+# =============================================================================
+# Build Stage
+# =============================================================================
+FROM python:3.11-slim as builder
+
+# Build arguments
+ARG BUILD_ENV=production
+ARG PYTHON_VERSION=3.11
+ARG DEBIAN_FRONTEND=noninteractive
+
+# Set build environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_DEFAULT_TIMEOUT=100
+
+# Install system dependencies for building
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    gcc \
+    g++ \
+    libc6-dev \
+    libffi-dev \
+    libssl-dev \
+    pkg-config \
+    curl \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create virtual environment
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Upgrade pip and install wheel
+RUN pip install --upgrade pip setuptools wheel
+
+# Copy requirements first for better caching
+COPY requirements.txt requirements-prod.txt ./
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements-prod.txt
+
+# Install additional production dependencies
+RUN pip install --no-cache-dir \
+    gunicorn[gevent]==21.2.0 \
+    prometheus-client==0.17.1 \
+    structlog==23.1.0 \
+    uvloop==0.17.0 \
+    httptools==0.6.0
+
+# =============================================================================
+# Runtime Stage
+# =============================================================================
+FROM python:3.11-slim as runtime
+
+# Runtime arguments
+ARG BUILD_ENV=production
+ARG BUILD_DATE
+ARG VERSION
+ARG VCS_REF
+
+# Add metadata labels
+LABEL maintainer="Quantum Nexus Team <team@quantum-nexus.ai>" \
+      org.opencontainers.image.title="Quantum Nexus API" \
+      org.opencontainers.image.description="Production API server for Quantum Nexus Platform" \
+      org.opencontainers.image.version="${VERSION}" \
+      org.opencontainers.image.created="${BUILD_DATE}" \
+      org.opencontainers.image.revision="${VCS_REF}" \
+      org.opencontainers.image.vendor="Quantum Nexus" \
+      org.opencontainers.image.source="https://github.com/quantum-nexus/platform"
+
+# Set runtime environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONPATH=/app \
+    PATH="/opt/venv/bin:$PATH" \
+    ENVIRONMENT=production \
+    LOG_LEVEL=INFO \
+    LOG_FORMAT=json \
+    WORKERS=4 \
+    WORKER_CLASS=uvicorn.workers.UvicornWorker \
+    WORKER_CONNECTIONS=1000 \
+    MAX_REQUESTS=1000 \
+    MAX_REQUESTS_JITTER=100 \
+    TIMEOUT=30 \
+    KEEPALIVE=5 \
+    BIND=0.0.0.0:8000
+
+# Install runtime system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    ca-certificates \
+    dumb-init \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
+# Create non-root user for security
+RUN groupadd -r quantum && useradd -r -g quantum -u 1000 quantum
+
+# Copy virtual environment from builder
+COPY --from=builder /opt/venv /opt/venv
+
+# Create application directories
+RUN mkdir -p /app /app/logs /app/cache /tmp/prometheus \
+    && chown -R quantum:quantum /app /tmp/prometheus
+
+# Set working directory
+WORKDIR /app
+
+# Copy application code
+COPY --chown=quantum:quantum . .
+
+# Copy production configuration files
+COPY --chown=quantum:quantum config/production/ ./config/
+COPY --chown=quantum:quantum scripts/entrypoint.production.sh ./entrypoint.sh
+COPY --chown=quantum:quantum scripts/healthcheck.sh ./healthcheck.sh
+
+# Make scripts executable
+RUN chmod +x entrypoint.sh healthcheck.sh
+
+# Create necessary directories and set permissions
+RUN mkdir -p \
+    /app/static \
+    /app/media \
+    /app/logs \
+    /app/cache \
+    /tmp/prometheus \
+    && chown -R quantum:quantum /app /tmp/prometheus \
+    && chmod -R 755 /app \
+    && chmod -R 777 /tmp/prometheus
+
+# Switch to non-root user
+USER quantum
+
+# Expose ports
+EXPOSE 8000 9090
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD ./healthcheck.sh
+
+# Use dumb-init to handle signals properly
+ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+
+# Start the application
+CMD ["./entrypoint.sh"]

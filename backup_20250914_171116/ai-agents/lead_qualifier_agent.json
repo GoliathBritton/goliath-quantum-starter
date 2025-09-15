@@ -1,0 +1,599 @@
+{
+  "agent_id": "lead-qualifier-003",
+  "name": "Quantum Lead Qualifier",
+  "description": "AI agent specialized in intelligent lead scoring, qualification, and conversion optimization using quantum-enhanced algorithms",
+  "version": "1.0.0",
+  "created_at": "2024-01-15T00:00:00Z",
+  "updated_at": "2024-01-15T00:00:00Z",
+  "status": "active",
+  
+  "capabilities": {
+    "primary_functions": [
+      "lead_scoring",
+      "lead_qualification",
+      "conversion_prediction",
+      "lead_enrichment",
+      "behavioral_analysis",
+      "intent_detection",
+      "churn_prediction",
+      "opportunity_sizing",
+      "next_best_action"
+    ],
+    "scoring_models": [
+      "demographic_scoring",
+      "behavioral_scoring",
+      "firmographic_scoring",
+      "engagement_scoring",
+      "intent_scoring",
+      "quantum_enhanced_scoring",
+      "predictive_scoring",
+      "composite_scoring"
+    ],
+    "quantum_algorithms": [
+      "quantum_machine_learning",
+      "variational_quantum_classifier",
+      "quantum_feature_mapping",
+      "quantum_kernel_methods",
+      "quantum_neural_networks"
+    ],
+    "data_sources": [
+      "crm_data",
+      "website_analytics",
+      "email_engagement",
+      "social_media",
+      "third_party_data",
+      "technographic_data",
+      "intent_data",
+      "company_data"
+    ]
+  },
+  
+  "openai_realtime_config": {
+    "model": "gpt-4o-realtime-preview",
+    "voice": "alloy",
+    "modalities": ["text", "audio"],
+    "instructions": "You are an expert lead qualification specialist with advanced knowledge of sales processes, customer behavior analysis, and quantum-enhanced machine learning. You help sales teams identify, score, and prioritize leads using sophisticated algorithms and data analysis. Always provide actionable insights, explain your reasoning, and suggest specific next steps for lead nurturing and conversion. Focus on data-driven recommendations while considering the human element in sales processes.",
+    "temperature": 0.7,
+    "max_response_output_tokens": 4096,
+    "tool_choice": "auto",
+    "parallel_tool_calls": true,
+    "response_format": {
+      "type": "json_schema",
+      "json_schema": {
+        "name": "lead_qualification_response",
+        "strict": true,
+        "schema": {
+          "type": "object",
+          "properties": {
+            "qualification_summary": {
+              "type": "string",
+              "description": "Summary of lead qualification analysis"
+            },
+            "lead_score": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100,
+              "description": "Overall lead score (0-100)"
+            },
+            "qualification_grade": {
+              "type": "string",
+              "enum": ["A", "B", "C", "D", "F"],
+              "description": "Lead qualification grade"
+            },
+            "conversion_probability": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Probability of conversion (0-1)"
+            },
+            "score_breakdown": {
+              "type": "object",
+              "properties": {
+                "demographic_score": {"type": "number", "minimum": 0, "maximum": 100},
+                "behavioral_score": {"type": "number", "minimum": 0, "maximum": 100},
+                "firmographic_score": {"type": "number", "minimum": 0, "maximum": 100},
+                "engagement_score": {"type": "number", "minimum": 0, "maximum": 100},
+                "intent_score": {"type": "number", "minimum": 0, "maximum": 100}
+              }
+            },
+            "key_strengths": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "Key strengths of this lead"
+            },
+            "risk_factors": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "Potential risk factors or concerns"
+            },
+            "next_best_actions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "action": {"type": "string"},
+                  "priority": {"type": "string", "enum": ["high", "medium", "low"]},
+                  "timeline": {"type": "string"},
+                  "expected_impact": {"type": "string"}
+                },
+                "required": ["action", "priority"]
+              },
+              "description": "Recommended next actions for this lead"
+            },
+            "quantum_insights": {
+              "type": "object",
+              "properties": {
+                "quantum_advantage_used": {"type": "boolean"},
+                "pattern_complexity": {"type": "string"},
+                "confidence_improvement": {"type": "number"},
+                "unique_patterns_detected": {"type": "array", "items": {"type": "string"}}
+              }
+            },
+            "estimated_deal_value": {
+              "type": "object",
+              "properties": {
+                "low_estimate": {"type": "number"},
+                "high_estimate": {"type": "number"},
+                "confidence_level": {"type": "number", "minimum": 0, "maximum": 1}
+              }
+            },
+            "nurturing_strategy": {
+              "type": "object",
+              "properties": {
+                "content_preferences": {"type": "array", "items": {"type": "string"}},
+                "communication_frequency": {"type": "string"},
+                "preferred_channels": {"type": "array", "items": {"type": "string"}},
+                "personalization_opportunities": {"type": "array", "items": {"type": "string"}}
+              }
+            }
+          },
+          "required": ["qualification_summary", "lead_score", "qualification_grade", "conversion_probability", "key_strengths", "next_best_actions"]
+        }
+      }
+    }
+  },
+  
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "score_lead",
+        "description": "Score a lead using quantum-enhanced algorithms",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "lead_data": {
+              "type": "object",
+              "properties": {
+                "contact_info": {
+                  "type": "object",
+                  "properties": {
+                    "email": {"type": "string"},
+                    "phone": {"type": "string"},
+                    "name": {"type": "string"},
+                    "title": {"type": "string"},
+                    "company": {"type": "string"}
+                  }
+                },
+                "demographic_data": {
+                  "type": "object",
+                  "properties": {
+                    "age": {"type": "integer"},
+                    "location": {"type": "string"},
+                    "industry": {"type": "string"},
+                    "company_size": {"type": "string"},
+                    "revenue": {"type": "number"}
+                  }
+                },
+                "behavioral_data": {
+                  "type": "object",
+                  "properties": {
+                    "website_visits": {"type": "integer"},
+                    "pages_viewed": {"type": "array", "items": {"type": "string"}},
+                    "time_on_site": {"type": "number"},
+                    "downloads": {"type": "array", "items": {"type": "string"}},
+                    "email_engagement": {
+                      "type": "object",
+                      "properties": {
+                        "open_rate": {"type": "number"},
+                        "click_rate": {"type": "number"},
+                        "last_engagement": {"type": "string"}
+                      }
+                    }
+                  }
+                }
+              },
+              "description": "Comprehensive lead data for scoring"
+            },
+            "scoring_model": {
+              "type": "string",
+              "enum": ["standard", "quantum_enhanced", "industry_specific", "custom"],
+              "description": "Scoring model to use"
+            },
+            "quantum_params": {
+              "type": "object",
+              "properties": {
+                "use_quantum": {"type": "boolean", "default": true},
+                "feature_mapping": {"type": "string", "enum": ["linear", "polynomial", "rbf", "quantum"]},
+                "quantum_depth": {"type": "integer", "minimum": 1, "maximum": 10},
+                "entanglement_strategy": {"type": "string", "enum": ["linear", "circular", "full"]}
+              }
+            },
+            "context": {
+              "type": "object",
+              "properties": {
+                "lead_source": {"type": "string"},
+                "campaign": {"type": "string"},
+                "sales_stage": {"type": "string"},
+                "assigned_rep": {"type": "string"}
+              }
+            }
+          },
+          "required": ["lead_data"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "batch_score_leads",
+        "description": "Score multiple leads in batch for efficiency",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "leads": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "lead_id": {"type": "string"},
+                  "lead_data": {"type": "object"}
+                },
+                "required": ["lead_id", "lead_data"]
+              },
+              "description": "Array of leads to score"
+            },
+            "scoring_model": {
+              "type": "string",
+              "enum": ["standard", "quantum_enhanced", "industry_specific"],
+              "description": "Scoring model to use for all leads"
+            },
+            "prioritization_criteria": {
+              "type": "object",
+              "properties": {
+                "sort_by": {"type": "string", "enum": ["score", "conversion_probability", "deal_value"]},
+                "filter_threshold": {"type": "number", "minimum": 0, "maximum": 100}
+              }
+            }
+          },
+          "required": ["leads"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "enrich_lead_data",
+        "description": "Enrich lead data with additional information from external sources",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "lead_identifier": {
+              "type": "object",
+              "properties": {
+                "email": {"type": "string"},
+                "company": {"type": "string"},
+                "domain": {"type": "string"}
+              },
+              "description": "Lead identifier for enrichment"
+            },
+            "enrichment_sources": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["social_media", "company_database", "technographic", "intent_data", "news_sentiment"]
+              },
+              "description": "Data sources for enrichment"
+            },
+            "enrichment_depth": {
+              "type": "string",
+              "enum": ["basic", "standard", "comprehensive"],
+              "description": "Depth of enrichment to perform"
+            }
+          },
+          "required": ["lead_identifier"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "analyze_lead_behavior",
+        "description": "Analyze lead behavior patterns and predict intent",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "lead_id": {
+              "type": "string",
+              "description": "Lead identifier"
+            },
+            "behavior_data": {
+              "type": "object",
+              "properties": {
+                "website_activity": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "timestamp": {"type": "string"},
+                      "page": {"type": "string"},
+                      "duration": {"type": "number"},
+                      "actions": {"type": "array", "items": {"type": "string"}}
+                    }
+                  }
+                },
+                "email_interactions": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "timestamp": {"type": "string"},
+                      "action": {"type": "string", "enum": ["open", "click", "reply", "forward"]},
+                      "content_type": {"type": "string"}
+                    }
+                  }
+                },
+                "content_engagement": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "content_id": {"type": "string"},
+                      "engagement_type": {"type": "string"},
+                      "engagement_score": {"type": "number"}
+                    }
+                  }
+                }
+              },
+              "description": "Behavioral data for analysis"
+            },
+            "analysis_timeframe": {
+              "type": "string",
+              "enum": ["7d", "30d", "90d", "180d", "1y"],
+              "description": "Timeframe for behavior analysis"
+            },
+            "intent_signals": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["pricing_page_visits", "demo_requests", "competitor_research", "feature_comparisons", "case_study_downloads"]
+              },
+              "description": "Specific intent signals to analyze"
+            }
+          },
+          "required": ["lead_id", "behavior_data"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "predict_churn_risk",
+        "description": "Predict churn risk for existing leads or customers",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "lead_id": {
+              "type": "string",
+              "description": "Lead or customer identifier"
+            },
+            "engagement_history": {
+              "type": "object",
+              "properties": {
+                "last_interaction": {"type": "string"},
+                "interaction_frequency": {"type": "number"},
+                "engagement_trend": {"type": "string", "enum": ["increasing", "stable", "decreasing"]},
+                "support_tickets": {"type": "integer"},
+                "satisfaction_scores": {"type": "array", "items": {"type": "number"}}
+              },
+              "description": "Historical engagement data"
+            },
+            "account_data": {
+              "type": "object",
+              "properties": {
+                "contract_value": {"type": "number"},
+                "contract_end_date": {"type": "string"},
+                "usage_metrics": {"type": "object"},
+                "payment_history": {"type": "array"}
+              }
+            },
+            "prediction_horizon": {
+              "type": "string",
+              "enum": ["30d", "60d", "90d", "180d"],
+              "description": "Time horizon for churn prediction"
+            }
+          },
+          "required": ["lead_id", "engagement_history"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "generate_lead_insights",
+        "description": "Generate actionable insights and recommendations for lead management",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "lead_portfolio": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "lead_id": {"type": "string"},
+                  "score": {"type": "number"},
+                  "stage": {"type": "string"},
+                  "last_activity": {"type": "string"}
+                }
+              },
+              "description": "Portfolio of leads to analyze"
+            },
+            "insight_types": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["conversion_opportunities", "at_risk_leads", "high_value_prospects", "nurturing_gaps", "channel_performance"]
+              },
+              "description": "Types of insights to generate"
+            },
+            "time_period": {
+              "type": "string",
+              "enum": ["week", "month", "quarter", "year"],
+              "description": "Time period for analysis"
+            },
+            "benchmarks": {
+              "type": "object",
+              "properties": {
+                "industry_averages": {"type": "boolean"},
+                "historical_performance": {"type": "boolean"},
+                "competitor_data": {"type": "boolean"}
+              }
+            }
+          },
+          "required": ["lead_portfolio"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "optimize_lead_routing",
+        "description": "Optimize lead routing and assignment to sales representatives",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "incoming_leads": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "lead_id": {"type": "string"},
+                  "score": {"type": "number"},
+                  "characteristics": {"type": "object"}
+                }
+              },
+              "description": "New leads to route"
+            },
+            "sales_team": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "rep_id": {"type": "string"},
+                  "specialties": {"type": "array", "items": {"type": "string"}},
+                  "current_workload": {"type": "integer"},
+                  "performance_metrics": {"type": "object"},
+                  "availability": {"type": "string"}
+                }
+              },
+              "description": "Available sales representatives"
+            },
+            "routing_criteria": {
+              "type": "object",
+              "properties": {
+                "workload_balancing": {"type": "boolean"},
+                "specialty_matching": {"type": "boolean"},
+                "performance_weighting": {"type": "boolean"},
+                "geographic_proximity": {"type": "boolean"}
+              }
+            },
+            "optimization_objective": {
+              "type": "string",
+              "enum": ["conversion_rate", "response_time", "revenue_potential", "balanced"],
+              "description": "Primary optimization objective"
+            }
+          },
+          "required": ["incoming_leads", "sales_team"]
+        }
+      }
+    }
+  ],
+  
+  "conversation_starters": [
+    "How can I improve my lead scoring accuracy?",
+    "What quantum advantages exist for lead qualification?",
+    "Can you analyze this lead's conversion potential?",
+    "How should I prioritize my lead pipeline?",
+    "What are the best practices for lead nurturing?",
+    "Can you help identify at-risk leads in my pipeline?"
+  ],
+  
+  "personality": {
+    "tone": "analytical",
+    "expertise_level": "expert",
+    "communication_style": "data_driven_and_actionable",
+    "insight_depth": "comprehensive",
+    "recommendation_specificity": "highly_specific"
+  },
+  
+  "knowledge_domains": [
+    "lead_scoring_methodologies",
+    "sales_process_optimization",
+    "customer_behavior_analysis",
+    "quantum_machine_learning",
+    "predictive_analytics",
+    "crm_systems",
+    "marketing_automation",
+    "conversion_optimization",
+    "sales_psychology",
+    "data_enrichment",
+    "intent_data_analysis"
+  ],
+  
+  "limitations": [
+    "Requires sufficient historical data for accurate predictions",
+    "Quantum algorithms may have longer processing times for complex datasets",
+    "Cannot guarantee conversion outcomes due to external factors",
+    "Data quality directly impacts scoring accuracy",
+    "Real-time scoring may have latency constraints"
+  ],
+  
+  "integration_endpoints": {
+    "lead_scoring": "/api/leads/score",
+    "batch_scoring": "/api/leads/batch-score",
+    "lead_enrichment": "/api/leads/enrich",
+    "behavior_analysis": "/api/leads/behavior-analysis",
+    "churn_prediction": "/api/leads/churn-risk",
+    "lead_insights": "/api/leads/insights",
+    "lead_routing": "/api/leads/route"
+  },
+  
+  "performance_metrics": {
+    "scoring_accuracy_target": "> 90%",
+    "processing_time_target": "< 5 seconds per lead",
+    "batch_processing_target": "< 30 seconds per 100 leads",
+    "uptime_target": "> 99.9%",
+    "quantum_advantage_target": "> 15% accuracy improvement"
+  },
+  
+  "security": {
+    "authentication_required": true,
+    "rate_limiting": {
+      "requests_per_minute": 60,
+      "requests_per_hour": 1000
+    },
+    "data_encryption": "AES-256",
+    "audit_logging": true,
+    "pii_handling": "strict",
+    "gdpr_compliance": true
+  },
+  
+  "monitoring": {
+    "health_check_endpoint": "/api/agents/lead-qualifier-003/health",
+    "metrics_collection": true,
+    "error_tracking": true,
+    "performance_analytics": true,
+    "quantum_performance_tracking": true,
+    "lead_conversion_tracking": true
+  }
+}

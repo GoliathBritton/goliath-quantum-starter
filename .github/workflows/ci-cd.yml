@@ -1,10 +1,14 @@
-name: CI/CD
+name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "develop" ]
   pull_request:
     branches: [ "main" ]
+
+env:
+  AWS_REGION: us-east-1
+  ECR_REGISTRY: ${{ secrets.ECR_REGISTRY }}
 
 jobs:
   test:
@@ -65,6 +69,18 @@ jobs:
           docker build -t partner-portal:latest ./
           docker tag partner-portal:latest ${{ secrets.AWS_ACCOUNT }}.dkr.ecr.us-east-1.amazonaws.com/flyfox-portal:latest
           docker push ${{ secrets.AWS_ACCOUNT }}.dkr.ecr.us-east-1.amazonaws.com/flyfox-portal:latest
+
+      - name: Build and push Worker image
+        run: |
+          docker build -t flyfox-quantum-worker:latest -f worker/Dockerfile worker/
+          docker tag flyfox-quantum-worker:latest ${{ secrets.AWS_ACCOUNT }}.dkr.ecr.us-east-1.amazonaws.com/flyfox-quantum-worker:latest
+          docker push ${{ secrets.AWS_ACCOUNT }}.dkr.ecr.us-east-1.amazonaws.com/flyfox-quantum-worker:latest
+
+      - name: Build and push Ingest image
+        run: |
+          docker build -t flyfox-ingest:latest -f ingest_contacts/Dockerfile ingest_contacts/
+          docker tag flyfox-ingest:latest ${{ secrets.AWS_ACCOUNT }}.dkr.ecr.us-east-1.amazonaws.com/flyfox-ingest:latest
+          docker push ${{ secrets.AWS_ACCOUNT }}.dkr.ecr.us-east-1.amazonaws.com/flyfox-ingest:latest
 
   deploy:
     needs: build-and-push

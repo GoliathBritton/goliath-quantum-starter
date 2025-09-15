@@ -1,4 +1,4 @@
-# FLYFOX AI Custom Quantum Workflows
+﻿# FLYFOX AI Custom Quantum Workflows
 # Specialized AI/ML Optimization Pipelines
 
 workflows:
@@ -116,7 +116,7 @@ workflows:
       quantum_config:
         algorithm: "grover_search"
         qubits: 512
-        oracle_iterations: 50
+        quantum_nexus_iterations: 50
         amplification_rounds: 10
       
       architecture_encoding:
@@ -141,7 +141,7 @@ workflows:
       - name: "quantum_search_execution"
         type: "grover_search"
         config:
-          oracle_function: "performance_oracle"
+          quantum_nexus_function: "performance_Quantum Nexus"
           success_probability: 0.95
       
       - name: "architecture_validation"

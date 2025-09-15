@@ -1,0 +1,20 @@
+
+================================================================================
+QUANTUM NEXUS PLATFORM - SOC2-LITE SECURITY ASSESSMENT REPORT
+================================================================================
+
+Assessment Date: 2025-09-14T22:23:27.576946
+Project Root: .
+
+EXECUTIVE SUMMARY
+----------------------------------------
+Total Security Findings: 746
+Critical Findings: 0
+High Risk Findings: 210
+Medium Risk Findings: 536
+Low Risk Findings: 0
+SOC2 Compliance Score: 100.0%
+Overall Risk Score: 48.4/100 (MEDIUM)
+
+DETAILED SECURITY FINDINGS
+----------------------------------------

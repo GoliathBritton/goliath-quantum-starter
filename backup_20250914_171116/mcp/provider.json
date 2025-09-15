@@ -1,0 +1,373 @@
+{
+  "name": "flyfox-ai-quantum",
+  "version": "1.0.0",
+  "description": "FLYFOX AI Quantum Integration Hub - Powered by NQBA",
+  "author": "FLYFOX AI",
+  "license": "MIT",
+  "repository": "https://github.com/FLYFOX-AI/flyfoxai-nqba-core",
+  "homepage": "https://flyfox-ai.github.io/nqba-core",
+  "keywords": [
+    "quantum-computing",
+    "optimization",
+    "machine-learning",
+    "nqba",
+    "flyfox-ai",
+    "mcp"
+  ],
+  "tools": [
+    {
+      "name": "quantum.optimize.qubo",
+      "description": "Optimize a QUBO problem using quantum computing",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "qubo_matrix": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            },
+            "description": "QUBO matrix (quadratic terms)"
+          },
+          "linear_terms": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "Linear terms"
+          },
+          "constraints": {
+            "type": "object",
+            "description": "Problem constraints"
+          },
+          "preferred_provider": {
+            "type": "string",
+            "description": "Preferred quantum provider"
+          },
+          "max_runtime": {
+            "type": "integer",
+            "description": "Maximum runtime in seconds"
+          }
+        },
+        "required": ["qubo_matrix"]
+      }
+    },
+    {
+      "name": "quantum.optimize.portfolio",
+      "description": "Optimize investment portfolio using quantum computing",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "assets": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of asset symbols"
+          },
+          "prices": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "Current asset prices"
+          },
+          "returns": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "Historical returns"
+          },
+          "covariance_matrix": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            },
+            "description": "Asset covariance matrix"
+          },
+          "budget": {
+            "type": "number",
+            "description": "Total investment budget"
+          },
+          "risk_tolerance": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Risk tolerance (0-1)"
+          }
+        },
+        "required": ["assets", "prices", "budget"]
+      }
+    },
+    {
+      "name": "quantum.optimize.schedule",
+      "description": "Optimize scheduling problems using quantum computing",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "tasks": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "duration": {
+                  "type": "number"
+                },
+                "dependencies": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "resources": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "description": "List of tasks to schedule"
+          },
+          "resources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "capacity": {
+                  "type": "number"
+                }
+              }
+            },
+            "description": "Available resources"
+          },
+          "constraints": {
+            "type": "object",
+            "description": "Scheduling constraints"
+          }
+        },
+        "required": ["tasks", "resources"]
+      }
+    },
+    {
+      "name": "quantum.llm.generate",
+      "description": "Generate text using quantum-enhanced language models",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Input prompt"
+          },
+          "context": {
+            "type": "string",
+            "description": "Additional context"
+          },
+          "temperature": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 2,
+            "description": "Sampling temperature"
+          },
+          "max_tokens": {
+            "type": "integer",
+            "description": "Maximum tokens to generate"
+          },
+          "use_quantum_enhancement": {
+            "type": "boolean",
+            "description": "Whether to use quantum enhancement"
+          }
+        },
+        "required": ["prompt"]
+      }
+    },
+    {
+      "name": "quantum.score.lead",
+      "description": "Score sales leads using quantum-enhanced algorithms",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "lead_data": {
+            "type": "object",
+            "description": "Lead information"
+          },
+          "scoring_criteria": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Scoring criteria"
+          },
+          "weights": {
+            "type": "object",
+            "description": "Criteria weights"
+          }
+        },
+        "required": ["lead_data"]
+      }
+    },
+    {
+      "name": "quantum.optimize.energy",
+      "description": "Optimize energy consumption and scheduling",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "energy_sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "capacity": {
+                  "type": "number"
+                },
+                "cost": {
+                  "type": "number"
+                },
+                "availability": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              }
+            },
+            "description": "Available energy sources"
+          },
+          "demand_forecast": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "description": "Energy demand forecast"
+          },
+          "constraints": {
+            "type": "object",
+            "description": "Optimization constraints"
+          }
+        },
+        "required": ["energy_sources", "demand_forecast"]
+      }
+    }
+  ],
+  "resources": [
+    {
+      "uri": "datasets://energy/*",
+      "name": "Energy Datasets",
+      "description": "Energy consumption and optimization datasets",
+      "mimeType": "application/json"
+    },
+    {
+      "uri": "datasets://finance/*",
+      "name": "Financial Datasets", 
+      "description": "Financial market and portfolio datasets",
+      "mimeType": "application/json"
+    },
+    {
+      "uri": "datasets://sales/*",
+      "name": "Sales Datasets",
+      "description": "Sales lead and customer datasets",
+      "mimeType": "application/json"
+    },
+    {
+      "uri": "ltc://jobs/{id}",
+      "name": "Job Records",
+      "description": "Living Technical Codex job records",
+      "mimeType": "application/json"
+    },
+    {
+      "uri": "ltc://audits/{id}",
+      "name": "Audit Records",
+      "description": "Living Technical Codex audit records",
+      "mimeType": "application/json"
+    }
+  ],
+  "events": [
+    {
+      "name": "quantum.job.started",
+      "description": "Quantum job started execution"
+    },
+    {
+      "name": "quantum.job.completed",
+      "description": "Quantum job completed successfully"
+    },
+    {
+      "name": "quantum.job.failed",
+      "description": "Quantum job failed"
+    },
+    {
+      "name": "quantum.provider.registered",
+      "description": "New quantum provider registered"
+    },
+    {
+      "name": "quantum.provider.unavailable",
+      "description": "Quantum provider became unavailable"
+    },
+    {
+      "name": "quantum.capability.added",
+      "description": "New quantum capability added"
+    },
+    {
+      "name": "quantum.audit.recorded",
+      "description": "New audit record created"
+    }
+  ],
+  "capabilities": {
+    "tools": {
+      "listChanged": true,
+      "listRequired": false
+    },
+    "resources": {
+      "listChanged": true,
+      "listRequired": false
+    },
+    "events": {
+      "listChanged": true,
+      "listRequired": false
+    }
+  },
+  "configSchema": {
+    "type": "object",
+    "properties": {
+      "default_provider": {
+        "type": "string",
+        "description": "Default quantum provider",
+        "default": "dynex"
+      },
+      "max_concurrent_jobs": {
+        "type": "integer",
+        "description": "Maximum concurrent quantum jobs",
+        "default": 10
+      },
+      "default_timeout": {
+        "type": "integer",
+        "description": "Default job timeout in seconds",
+        "default": 300
+      },
+      "enable_audit_logging": {
+        "type": "boolean",
+        "description": "Enable audit logging to LTC",
+        "default": true
+      },
+      "cost_limit": {
+        "type": "number",
+        "description": "Default cost limit in credits",
+        "default": 100.0
+      }
+    }
+  }
+}

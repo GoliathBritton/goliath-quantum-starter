@@ -1,0 +1,448 @@
+{% extends "base.html" %}
+
+{% block title %}Campaigns - Quantum Nexus Calling Agent{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2 mb-0">
+        <i class="fas fa-bullhorn me-2"></i>
+        Campaigns
+    </h1>
+    <div>
+        <a href="{{ url_for('add_campaign') }}" class="btn btn-quantum">
+            <i class="fas fa-plus me-1"></i>
+            Create Campaign
+        </a>
+    </div>
+</div>
+
+<!-- Campaign Stats -->
+<div class="row mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="stat-card">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="stat-value">{{ stats.total_campaigns }}</div>
+                    <div class="stat-label">Total Campaigns</div>
+                </div>
+                <div class="stat-icon">
+                    <i class="fas fa-bullhorn"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-3">
+        <div class="stat-card success">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="stat-value">{{ stats.active_campaigns }}</div>
+                    <div class="stat-label">Active Campaigns</div>
+                </div>
+                <div class="stat-icon">
+                    <i class="fas fa-play-circle"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-3">
+        <div class="stat-card warning">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="stat-value">{{ '{:,}'.format(stats.total_contacts) }}</div>
+                    <div class="stat-label">Total Contacts</div>
+                </div>
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-3">
+        <div class="stat-card info">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="stat-value">{{ '{:.1f}%'.format(stats.avg_completion_rate or 0) }}</div>
+                    <div class="stat-label">Avg Completion</div>
+                </div>
+                <div class="stat-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filters -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="GET" class="row g-3">
+            <div class="col-md-4">
+                <label for="search" class="form-label">Search</label>
+                <input type="text" class="form-control" id="search" name="search" 
+                       value="{{ request.args.get('search', '') }}" 
+                       placeholder="Campaign name...">
+            </div>
+            <div class="col-md-2">
+                <label for="status" class="form-label">Status</label>
+                <select class="form-select" id="status" name="status">
+                    <option value="">All Statuses</option>
+                    <option value="draft" {{ 'selected' if request.args.get('status') == 'draft' }}>Draft</option>
+                    <option value="active" {{ 'selected' if request.args.get('status') == 'active' }}>Active</option>
+                    <option value="paused" {{ 'selected' if request.args.get('status') == 'paused' }}>Paused</option>
+                    <option value="completed" {{ 'selected' if request.args.get('status') == 'completed' }}>Completed</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label for="sort" class="form-label">Sort By</label>
+                <select class="form-select" id="sort" name="sort">
+                    <option value="created_at" {{ 'selected' if request.args.get('sort') == 'created_at' }}>Created Date</option>
+                    <option value="name" {{ 'selected' if request.args.get('sort') == 'name' }}>Name</option>
+                    <option value="progress" {{ 'selected' if request.args.get('sort') == 'progress' }}>Progress</option>
+                    <option value="completion_rate" {{ 'selected' if request.args.get('sort') == 'completion_rate' }}>Completion Rate</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label for="order" class="form-label">Order</label>
+                <select class="form-select" id="order" name="order">
+                    <option value="desc" {{ 'selected' if request.args.get('order') == 'desc' }}>Descending</option>
+                    <option value="asc" {{ 'selected' if request.args.get('order') == 'asc' }}>Ascending</option>
+                </select>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary me-2">
+                    <i class="fas fa-search me-1"></i>
+                    Filter
+                </button>
+                <a href="{{ url_for('campaigns') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-times"></i>
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Campaigns List -->
+<div class="row">
+    {% if campaigns %}
+        {% for campaign in campaigns %}
+        <div class="col-lg-6 col-xl-4 mb-4">
+            <div class="card campaign-card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0 text-truncate me-2">{{ campaign.name }}</h6>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-outline-secondary" type="button" 
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{{ url_for('edit_campaign', campaign_id=campaign.id) }}">
+                                <i class="fas fa-edit me-2"></i>Edit
+                            </a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('campaign_details', campaign_id=campaign.id) }}">
+                                <i class="fas fa-eye me-2"></i>View Details
+                            </a></li>
+                            {% if campaign.status == 'draft' %}
+                                <li><a class="dropdown-item" href="#" onclick="startCampaign('{{ campaign.id }}')">
+                                    <i class="fas fa-play me-2"></i>Start
+                                </a></li>
+                            {% elif campaign.status == 'active' %}
+                                <li><a class="dropdown-item" href="#" onclick="pauseCampaign('{{ campaign.id }}')">
+                                    <i class="fas fa-pause me-2"></i>Pause
+                                </a></li>
+                            {% elif campaign.status == 'paused' %}
+                                <li><a class="dropdown-item" href="#" onclick="resumeCampaign('{{ campaign.id }}')">
+                                    <i class="fas fa-play me-2"></i>Resume
+                                </a></li>
+                            {% endif %}
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="duplicateCampaign('{{ campaign.id }}')">
+                                <i class="fas fa-copy me-2"></i>Duplicate
+                            </a></li>
+                            <li><a class="dropdown-item text-danger" href="#" onclick="deleteCampaign('{{ campaign.id }}', '{{ campaign.name }}')">
+                                <i class="fas fa-trash me-2"></i>Delete
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <!-- Status Badge -->
+                    <div class="mb-3">
+                        {% if campaign.status == 'draft' %}
+                            <span class="badge bg-secondary">Draft</span>
+                        {% elif campaign.status == 'active' %}
+                            <span class="badge bg-success">Active</span>
+                        {% elif campaign.status == 'paused' %}
+                            <span class="badge bg-warning">Paused</span>
+                        {% elif campaign.status == 'completed' %}
+                            <span class="badge bg-primary">Completed</span>
+                        {% endif %}
+                        
+                        {% if campaign.priority == 'high' %}
+                            <span class="badge bg-danger ms-1">High Priority</span>
+                        {% elif campaign.priority == 'medium' %}
+                            <span class="badge bg-warning ms-1">Medium Priority</span>
+                        {% elif campaign.priority == 'low' %}
+                            <span class="badge bg-info ms-1">Low Priority</span>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Description -->
+                    {% if campaign.description %}
+                    <p class="text-muted small mb-3">{{ campaign.description[:100] }}{% if campaign.description|length > 100 %}...{% endif %}</p>
+                    {% endif %}
+                    
+                    <!-- Progress -->
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <small class="text-muted">Progress</small>
+                            <small class="text-muted">{{ campaign.completed_calls }}/{{ campaign.total_contacts }}</small>
+                        </div>
+                        <div class="progress" style="height: 6px;">
+                            <div class="progress-bar" role="progressbar" 
+                                 style="width: {{ (campaign.completed_calls / campaign.total_contacts * 100) if campaign.total_contacts > 0 else 0 }}%"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Stats -->
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <div class="text-center">
+                                <div class="h6 mb-0 text-primary">{{ campaign.total_contacts }}</div>
+                                <small class="text-muted">Contacts</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-center">
+                                <div class="h6 mb-0 text-success">{{ '{:.1f}%'.format(campaign.completion_rate or 0) }}</div>
+                                <small class="text-muted">Completion</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Call Outcomes -->
+                    {% if campaign.call_outcomes %}
+                    <div class="mb-3">
+                        <small class="text-muted d-block mb-2">Recent Outcomes</small>
+                        <div class="d-flex flex-wrap gap-1">
+                            {% for outcome, count in campaign.call_outcomes.items() %}
+                                {% if count > 0 %}
+                                <span class="badge bg-light text-dark border">{{ outcome.replace('_', ' ').title() }}: {{ count }}</span>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Schedule Info -->
+                    {% if campaign.schedule %}
+                    <div class="mb-3">
+                        <small class="text-muted d-block mb-1">Schedule</small>
+                        <small class="text-dark">
+                            {% if campaign.schedule.start_time and campaign.schedule.end_time %}
+                                {{ campaign.schedule.start_time.strftime('%I:%M %p') }} - {{ campaign.schedule.end_time.strftime('%I:%M %p') }}
+                            {% endif %}
+                            {% if campaign.schedule.days %}
+                                <br>{{ campaign.schedule.days | join(', ') }}
+                            {% endif %}
+                        </small>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="card-footer bg-transparent">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">
+                            Created {{ campaign.created_at.strftime('%m/%d/%y') }}
+                        </small>
+                        <div class="btn-group btn-group-sm" role="group">
+                            {% if campaign.status == 'draft' %}
+                                <button class="btn btn-outline-success" onclick="startCampaign('{{ campaign.id }}')">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                            {% elif campaign.status == 'active' %}
+                                <button class="btn btn-outline-warning" onclick="pauseCampaign('{{ campaign.id }}')">
+                                    <i class="fas fa-pause"></i>
+                                </button>
+                            {% elif campaign.status == 'paused' %}
+                                <button class="btn btn-outline-success" onclick="resumeCampaign('{{ campaign.id }}')">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                            {% endif %}
+                            <a href="{{ url_for('campaign_details', campaign_id=campaign.id) }}" class="btn btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="{{ url_for('edit_campaign', campaign_id=campaign.id) }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body text-center py-5">
+                    <i class="fas fa-bullhorn fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">No campaigns found</h5>
+                    <p class="text-muted">Create your first campaign to start making calls.</p>
+                    <a href="{{ url_for('add_campaign') }}" class="btn btn-quantum">
+                        <i class="fas fa-plus me-1"></i>
+                        Create Campaign
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Pagination -->
+{% if pagination and pagination.pages > 1 %}
+<nav aria-label="Campaigns pagination" class="mt-4">
+    <ul class="pagination justify-content-center">
+        {% if pagination.has_prev %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('campaigns', page=pagination.prev_num, **request.args) }}">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            </li>
+        {% endif %}
+        
+        {% for page_num in pagination.iter_pages() %}
+            {% if page_num %}
+                {% if page_num != pagination.page %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('campaigns', page=page_num, **request.args) }}">
+                            {{ page_num }}
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ page_num }}</span>
+                    </li>
+                {% endif %}
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">...</span>
+                </li>
+            {% endif %}
+        {% endfor %}
+        
+        {% if pagination.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('campaigns', page=pagination.next_num, **request.args) }}">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function startCampaign(campaignId) {
+        if (confirm('Are you sure you want to start this campaign?')) {
+            updateCampaignStatus(campaignId, 'start');
+        }
+    }
+    
+    function pauseCampaign(campaignId) {
+        if (confirm('Are you sure you want to pause this campaign?')) {
+            updateCampaignStatus(campaignId, 'pause');
+        }
+    }
+    
+    function resumeCampaign(campaignId) {
+        if (confirm('Are you sure you want to resume this campaign?')) {
+            updateCampaignStatus(campaignId, 'resume');
+        }
+    }
+    
+    function updateCampaignStatus(campaignId, action) {
+        fetch(`/api/campaigns/${campaignId}/${action}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                showAlert(result.message, 'success');
+                location.reload();
+            } else {
+                showAlert(result.message || `Failed to ${action} campaign`, 'danger');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showAlert(`An error occurred while trying to ${action} the campaign.`, 'danger');
+        });
+    }
+    
+    function duplicateCampaign(campaignId) {
+        if (confirm('Are you sure you want to duplicate this campaign?')) {
+            fetch(`/api/campaigns/${campaignId}/duplicate`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    showAlert('Campaign duplicated successfully', 'success');
+                    location.reload();
+                } else {
+                    showAlert(result.message || 'Failed to duplicate campaign', 'danger');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showAlert('An error occurred while duplicating the campaign.', 'danger');
+            });
+        }
+    }
+    
+    function deleteCampaign(campaignId, campaignName) {
+        if (confirm(`Are you sure you want to delete "${campaignName}"? This action cannot be undone.`)) {
+            fetch(`/api/campaigns/${campaignId}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    showAlert('Campaign deleted successfully', 'success');
+                    location.reload();
+                } else {
+                    showAlert(result.message || 'Failed to delete campaign', 'danger');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showAlert('An error occurred while deleting the campaign.', 'danger');
+            });
+        }
+    }
+    
+    // Auto-submit form on filter changes
+    document.querySelectorAll('#status, #sort, #order').forEach(select => {
+        select.addEventListener('change', function() {
+            this.form.submit();
+        });
+    });
+    
+    // Real-time updates via Socket.IO
+    socket.on('campaign_update', function(data) {
+        // Update campaign cards with new data
+        location.reload(); // Simple approach for now
+    });
+</script>
+{% endblock %}

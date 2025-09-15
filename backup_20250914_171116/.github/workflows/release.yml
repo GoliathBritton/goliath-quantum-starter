@@ -1,0 +1,145 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., v1.0.0)'
+        required: true
+        default: 'v1.0.0'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install build twine
+          
+      - name: Build package
+        run: |
+          python -m build
+          
+      - name: Generate SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          image: goliath-quantum-starter
+          format: 'spdx-json'
+          output-file: 'sbom.json'
+          
+      - name: Sign release artifacts
+        uses: sigstore/cosign-installer@v3
+        with:
+          cosign-release: 'v2.1.1'
+          
+      - name: Sign container image
+        run: |
+          cosign sign --key ${{ secrets.COSIGN_KEY }} \
+            --tlog-upload=true \
+            goliath-quantum-starter:${{ github.ref_name }}
+        env:
+          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+          
+      - name: Create GitHub release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref_name }}
+          release_name: Release ${{ github.ref_name }}
+          body: |
+            ## What's Changed
+            
+            ### New Features
+            - Quantum optimization improvements
+            - Enhanced security features
+            - Performance optimizations
+            
+            ### Bug Fixes
+            - Various bug fixes and improvements
+            
+            ### Security
+            - Updated dependencies
+            - Security patches
+            
+            ## Downloads
+            
+            - [Source Code (zip)](https://github.com/${{ github.repository }}/archive/${{ github.ref_name }}.zip)
+            - [Source Code (tar.gz)](https://github.com/${{ github.repository }}/archive/${{ github.ref_name }}.tar.gz)
+            
+            ## Installation
+            
+            ```bash
+            pip install goliath-quantum-starter==${{ github.ref_name }}
+            ```
+            
+            ## Documentation
+            
+            - [API Documentation](https://docs.flyfox.ai)
+            - [Quick Start Guide](https://docs.flyfox.ai/quickstart)
+            - [Contributing Guidelines](CONTRIBUTING.md)
+            
+          draft: false
+          prerelease: false
+          
+      - name: Upload release assets
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./dist/goliath_quantum_starter-${{ github.ref_name }}.tar.gz
+          asset_name: goliath_quantum_starter-${{ github.ref_name }}.tar.gz
+          asset_content_type: application/gzip
+          
+      - name: Upload SBOM
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./sbom.json
+          asset_name: sbom-${{ github.ref_name }}.json
+          asset_content_type: application/json
+          
+      - name: Notify team
+        run: |
+          echo "Release ${{ github.ref_name }} has been published!"
+          echo "Check the release at: https://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }}"
+          
+  deploy-staging:
+    runs-on: ubuntu-latest
+    needs: release
+    if: contains(github.ref_name, 'beta') || contains(github.ref_name, 'rc')
+    
+    steps:
+      - name: Deploy to staging
+        run: |
+          echo "Deploying ${{ github.ref_name }} to staging environment"
+          # Add your staging deployment logic here
+          
+  deploy-production:
+    runs-on: ubuntu-latest
+    needs: release
+    if: contains(github.ref_name, 'beta') == false && contains(github.ref_name, 'rc') == false && contains(github.ref_name, 'alpha') == false
+    
+    steps:
+      - name: Deploy to production
+        run: |
+          echo "Deploying ${{ github.ref_name }} to production environment"
+          # Add your production deployment logic here

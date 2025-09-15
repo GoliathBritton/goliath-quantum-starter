@@ -1,0 +1,45 @@
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="quantumField" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#0F0F23;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#1a1a3a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#000000;stop-opacity:1" />
+    </radialGradient>
+    <filter id="quantumGlow">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Base gradient -->
+  <rect width="1920" height="1080" fill="url(#quantumField)"/>
+  
+  <!-- Quantum particles -->
+  <g opacity="0.6" filter="url(#quantumGlow)">
+    <circle cx="200" cy="200" r="3" fill="#00D4FF" opacity="0.8">
+      <animate attributeName="opacity" values="0.3;0.8;0.3" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="800" cy="300" r="2" fill="#0066FF" opacity="0.6">
+      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1400" cy="500" r="4" fill="#6B46C1" opacity="0.7">
+      <animate attributeName="opacity" values="0.4;0.7;0.4" dur="2.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="600" cy="700" r="2" fill="#FF006B" opacity="0.5">
+      <animate attributeName="opacity" values="0.2;0.5;0.2" dur="3.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1200" cy="800" r="3" fill="#00FF88" opacity="0.6">
+      <animate attributeName="opacity" values="0.3;0.6;0.3" dur="4.5s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- Quantum connections -->
+  <g opacity="0.3" stroke-width="1">
+    <line x1="200" y1="200" x2="800" y2="300" stroke="#00D4FF" opacity="0.4"/>
+    <line x1="800" y1="300" x2="1400" y2="500" stroke="#0066FF" opacity="0.3"/>
+    <line x1="600" y1="700" x2="1200" y2="800" stroke="#FF006B" opacity="0.4"/>
+  </g>
+</svg>

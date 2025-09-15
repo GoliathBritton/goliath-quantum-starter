@@ -1,0 +1,356 @@
+# NQBA Platform - Production Kubernetes Resources
+# Additional resources for production deployment
+
+# =============================================================================
+# Priority Classes
+# =============================================================================
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: nqba-critical-priority
+  labels:
+    app: nqba-platform
+    environment: production
+value: 1000000
+globalDefault: false
+description: "Critical priority for NQBA Platform core services"
+
+---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: nqba-high-priority
+  labels:
+    app: nqba-platform
+    environment: production
+value: 100000
+globalDefault: false
+description: "High priority for NQBA Platform API and worker services"
+
+---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: nqba-medium-priority
+  labels:
+    app: nqba-platform
+    environment: production
+value: 10000
+globalDefault: false
+description: "Medium priority for NQBA Platform supporting services"
+
+---
+# =============================================================================
+# Ingress Configuration
+# =============================================================================
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nqba-platform-ingress
+  namespace: nqba-platform
+  labels:
+    app: nqba-platform
+    component: ingress
+    environment: production
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+    nginx.ingress.kubernetes.io/rate-limit-window: "1m"
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "https://nqba.flyfox.ai"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, PUT, DELETE, OPTIONS"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "X-Frame-Options: DENY";
+      more_set_headers "X-Content-Type-Options: nosniff";
+      more_set_headers "X-XSS-Protection: 1; mode=block";
+      more_set_headers "Referrer-Policy: strict-origin-when-cross-origin";
+      more_set_headers "Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https:; frame-ancestors 'none';";
+spec:
+  tls:
+  - hosts:
+    - api.nqba.flyfox.ai
+    - nqba.flyfox.ai
+    secretName: nqba-platform-tls
+  rules:
+  - host: api.nqba.flyfox.ai
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nqba-api
+            port:
+              number: 80
+      - path: /metrics
+        pathType: Prefix
+        backend:
+          service:
+            name: nqba-api
+            port:
+              number: 9090
+  - host: nqba.flyfox.ai
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nqba-frontend
+            port:
+              number: 80
+
+---
+# =============================================================================
+# Persistent Volume Claims
+# =============================================================================
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nqba-database-pvc
+  namespace: nqba-platform
+  labels:
+    app: nqba-platform
+    component: database
+    environment: production
+  annotations:
+    volume.beta.kubernetes.io/storage-class: "gp3"
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: gp3
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nqba-redis-pvc
+  namespace: nqba-platform
+  labels:
+    app: nqba-platform
+    component: redis
+    environment: production
+  annotations:
+    volume.beta.kubernetes.io/storage-class: "gp3"
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: gp3
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nqba-logs-pvc
+  namespace: nqba-platform
+  labels:
+    app: nqba-platform
+    component: logging
+    environment: production
+  annotations:
+    volume.beta.kubernetes.io/storage-class: "gp3"
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 50Gi
+  storageClassName: efs
+
+---
+# =============================================================================
+# Resource Quotas
+# =============================================================================
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: nqba-platform-quota
+  namespace: nqba-platform
+  labels:
+    app: nqba-platform
+    environment: production
+spec:
+  hard:
+    requests.cpu: "50"
+    requests.memory: 100Gi
+    limits.cpu: "100"
+    limits.memory: 200Gi
+    persistentvolumeclaims: "10"
+    pods: "100"
+    services: "20"
+    secrets: "50"
+    configmaps: "50"
+    count/deployments.apps: "20"
+    count/jobs.batch: "50"
+    count/cronjobs.batch: "10"
+
+---
+# =============================================================================
+# Limit Ranges
+# =============================================================================
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: nqba-platform-limits
+  namespace: nqba-platform
+  labels:
+    app: nqba-platform
+    environment: production
+spec:
+  limits:
+  - default:
+      cpu: "1"
+      memory: "2Gi"
+    defaultRequest:
+      cpu: "100m"
+      memory: "128Mi"
+    max:
+      cpu: "8"
+      memory: "16Gi"
+    min:
+      cpu: "50m"
+      memory: "64Mi"
+    type: Container
+  - max:
+      storage: "200Gi"
+    min:
+      storage: "1Gi"
+    type: PersistentVolumeClaim
+
+---
+# =============================================================================
+# Vertical Pod Autoscaler
+# =============================================================================
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: nqba-api-vpa
+  namespace: nqba-platform
+  labels:
+    app: nqba-platform
+    component: api
+    environment: production
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: nqba-api
+  updatePolicy:
+    updateMode: "Auto"
+  resourcePolicy:
+    containerPolicies:
+    - containerName: api
+      maxAllowed:
+        cpu: "4"
+        memory: "8Gi"
+      minAllowed:
+        cpu: "100m"
+        memory: "256Mi"
+      controlledResources: ["cpu", "memory"]
+      controlledValues: RequestsAndLimits
+
+---
+# =============================================================================
+# Pod Monitor for Prometheus
+# =============================================================================
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: nqba-platform-monitor
+  namespace: nqba-platform
+  labels:
+    app: nqba-platform
+    environment: production
+spec:
+  selector:
+    matchLabels:
+      app: nqba-platform
+  podMetricsEndpoints:
+  - port: metrics
+    path: /metrics
+    interval: 30s
+    scrapeTimeout: 10s
+  - port: http
+    path: /health
+    interval: 60s
+    scrapeTimeout: 5s
+
+---
+# =============================================================================
+# Service Monitor for Prometheus
+# =============================================================================
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: nqba-platform-service-monitor
+  namespace: nqba-platform
+  labels:
+    app: nqba-platform
+    environment: production
+spec:
+  selector:
+    matchLabels:
+      app: nqba-platform
+  endpoints:
+  - port: metrics
+    path: /metrics
+    interval: 30s
+    scrapeTimeout: 10s
+  - port: http
+    path: /health
+    interval: 60s
+    scrapeTimeout: 5s
+
+---
+# =============================================================================
+# Cluster Role for Metrics Collection
+# =============================================================================
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: nqba-metrics-reader
+  labels:
+    app: nqba-platform
+    environment: production
+rules:
+- apiGroups: [""]
+  resources: ["nodes", "nodes/metrics", "services", "endpoints", "pods"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["networking.k8s.io"]
+  resources: ["ingresses"]
+  verbs: ["get", "list", "watch"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: nqba-metrics-reader-binding
+  labels:
+    app: nqba-platform
+    environment: production
+subjects:
+- kind: ServiceAccount
+  name: nqba-monitoring
+  namespace: nqba-platform
+roleRef:
+  kind: ClusterRole
+  name: nqba-metrics-reader
+  apiGroup: rbac.authorization.k8s.io

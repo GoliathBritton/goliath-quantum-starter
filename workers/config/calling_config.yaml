@@ -1,0 +1,286 @@
+# FLYFOX AI - Calling Worker Configuration
+# Production-ready settings with safety and compliance controls
+
+# Twilio Configuration
+twilio:
+  account_sid: ${TWILIO_ACCOUNT_SID}
+  auth_token: ${TWILIO_AUTH_TOKEN}
+  phone_number: ${TWILIO_PHONE_NUMBER}
+  webhook_base_url: ${WEBHOOK_BASE_URL}
+  
+  # Call settings
+  call_timeout: 30  # seconds
+  recording_enabled: true
+  machine_detection: true
+  max_call_duration: 300  # 5 minutes
+  
+  # Rate limiting
+  max_concurrent_calls: 10
+  calls_per_minute: 30
+  calls_per_hour: 500
+  calls_per_day: 2000
+
+# AI Configuration
+ai:
+  openai:
+    api_key: ${OPENAI_API_KEY}
+    model: "gpt-4"
+    max_tokens: 300
+    temperature: 0.7
+    timeout: 10
+  
+  nvidia:
+    api_key: ${NVIDIA_API_KEY}
+    base_url: "https://api.nvcf.nvidia.com/v2/nvcf"
+    model: "nvidia/llama-2-70b-chat"
+    fallback_enabled: true
+  
+  # Conversation settings
+  max_conversation_turns: 5
+  response_timeout: 10
+  speech_confidence_threshold: 0.7
+  sentiment_analysis_enabled: true
+
+# Compliance & Safety
+compliance:
+  # Calling hours (local time)
+  calling_hours:
+    start: "08:00"
+    end: "21:00"
+    timezone_aware: true
+    respect_weekends: true
+    holidays_file: "config/holidays.json"
+  
+  # Do Not Call (DNC) compliance
+  dnc:
+    check_enabled: true
+    cache_duration: 3600  # 1 hour
+    external_api_url: ${DNC_API_URL}
+    scrub_frequency: "daily"
+  
+  # Consent management
+  consent:
+    require_explicit: false
+    implied_consent_days: 90
+    opt_out_keywords:
+      - "stop"
+      - "remove"
+      - "unsubscribe"
+      - "do not call"
+      - "take me off"
+    
+  # TCPA compliance
+  tcpa:
+    max_attempts_per_number: 3
+    attempt_interval_hours: 24
+    abandoned_call_rate_limit: 0.03  # 3%
+    caller_id_required: true
+  
+  # GDPR compliance
+  gdpr:
+    data_retention_days: 365
+    anonymize_after_days: 730
+    consent_withdrawal_honored: true
+    data_export_enabled: true
+
+# Safety Checks
+safety:
+  # Content filtering
+  content_filter:
+    enabled: true
+    block_inappropriate: true
+    profanity_filter: true
+    sensitive_topics:
+      - "medical"
+      - "financial_advice"
+      - "legal_advice"
+      - "political"
+  
+  # Call quality
+  quality_control:
+    min_call_duration: 10  # seconds
+    max_silence_duration: 30  # seconds
+    audio_quality_threshold: 0.7
+    transcript_confidence_min: 0.6
+  
+  # Fraud prevention
+  fraud_prevention:
+    suspicious_pattern_detection: true
+    rapid_hangup_threshold: 5  # seconds
+    repeated_callback_limit: 3
+    blacklist_enabled: true
+
+# Database Configuration
+database:
+  postgresql:
+    url: ${DATABASE_URL}
+    pool_size: 20
+    max_overflow: 30
+    pool_timeout: 30
+    pool_recycle: 3600
+  
+  redis:
+    url: ${REDIS_URL}
+    max_connections: 50
+    retry_on_timeout: true
+    socket_timeout: 5
+
+# Monitoring & Logging
+monitoring:
+  # Metrics
+  metrics:
+    enabled: true
+    prometheus_port: 9090
+    custom_metrics:
+      - "calls_initiated"
+      - "calls_completed"
+      - "conversion_rate"
+      - "average_call_duration"
+      - "sentiment_scores"
+  
+  # Logging
+  logging:
+    level: "INFO"
+    format: "json"
+    file: "/var/log/calling_worker.log"
+    max_size: "100MB"
+    backup_count: 5
+    
+  # Alerting
+  alerts:
+    enabled: true
+    webhook_url: ${ALERT_WEBHOOK_URL}
+    thresholds:
+      error_rate: 0.05  # 5%
+      response_time: 5000  # 5 seconds
+      queue_depth: 1000
+
+# Campaign Settings
+campaign:
+  # Default settings
+  defaults:
+    max_attempts: 3
+    retry_interval: "24h"
+    priority: "normal"
+    timezone: "America/New_York"
+  
+  # Lead scoring
+  lead_scoring:
+    enabled: true
+    factors:
+      conversation_length: 0.3
+      sentiment_score: 0.4
+      engagement_level: 0.3
+    thresholds:
+      hot_lead: 8
+      warm_lead: 6
+      cold_lead: 4
+  
+  # Follow-up automation
+  followup:
+    enabled: true
+    email_integration: true
+    sms_integration: true
+    crm_sync: true
+
+# Integration Settings
+integrations:
+  # CRM systems
+  crm:
+    salesforce:
+      enabled: false
+      api_url: ${SALESFORCE_API_URL}
+      client_id: ${SALESFORCE_CLIENT_ID}
+      client_secret: ${SALESFORCE_CLIENT_SECRET}
+    
+    hubspot:
+      enabled: false
+      api_key: ${HUBSPOT_API_KEY}
+      portal_id: ${HUBSPOT_PORTAL_ID}
+  
+  # Email platforms
+  email:
+    sendgrid:
+      enabled: true
+      api_key: ${SENDGRID_API_KEY}
+      from_email: "noreply@flyfox.ai"
+    
+  # SMS platforms
+  sms:
+    twilio_sms:
+      enabled: true
+      from_number: ${TWILIO_SMS_NUMBER}
+  
+  # Analytics
+  analytics:
+    google_analytics:
+      enabled: false
+      tracking_id: ${GA_TRACKING_ID}
+    
+    mixpanel:
+      enabled: false
+      project_token: ${MIXPANEL_TOKEN}
+
+# Performance Tuning
+performance:
+  # Worker settings
+  workers:
+    concurrent_calls: 10
+    queue_batch_size: 50
+    processing_timeout: 300
+    heartbeat_interval: 30
+  
+  # Caching
+  cache:
+    contact_cache_ttl: 3600  # 1 hour
+    script_cache_ttl: 7200   # 2 hours
+    dnc_cache_ttl: 86400     # 24 hours
+  
+  # Resource limits
+  resources:
+    max_memory_mb: 2048
+    max_cpu_percent: 80
+    max_disk_usage_gb: 10
+
+# Development Settings
+development:
+  debug_mode: false
+  mock_calls: false
+  test_phone_numbers:
+    - "+15551234567"
+    - "+15551234568"
+  log_all_requests: false
+  disable_rate_limiting: false
+
+# Security Settings
+security:
+  # API security
+  api:
+    rate_limiting: true
+    cors_enabled: true
+    allowed_origins:
+      - "https://app.flyfox.ai"
+      - "https://admin.flyfox.ai"
+  
+  # Data encryption
+  encryption:
+    at_rest: true
+    in_transit: true
+    key_rotation_days: 90
+  
+  # Access control
+  access:
+    require_authentication: true
+    session_timeout: 3600
+    max_failed_attempts: 5
+
+# Feature Flags
+feature_flags:
+  ai_conversation: true
+  sentiment_analysis: true
+  lead_scoring: true
+  real_time_transcription: true
+  voice_cloning: false
+  multilingual_support: false
+  advanced_analytics: true
+  webhook_retries: true

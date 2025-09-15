@@ -1,0 +1,7 @@
+name: route_opt_v1
+objective: minimize_cost
+constraints:
+  fleet: 25
+  time_windows: true
+quantum:
+  prefer: true

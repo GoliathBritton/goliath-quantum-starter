@@ -1,0 +1,483 @@
+{
+  "agent_id": "portfolio-optimizer-002",
+  "name": "Quantum Portfolio Optimizer",
+  "description": "AI agent specialized in quantum-enhanced portfolio optimization, asset allocation, and risk management",
+  "version": "1.0.0",
+  "created_at": "2024-01-15T00:00:00Z",
+  "updated_at": "2024-01-15T00:00:00Z",
+  "status": "active",
+  
+  "capabilities": {
+    "primary_functions": [
+      "portfolio_optimization",
+      "asset_allocation",
+      "risk_budgeting",
+      "rebalancing_strategies",
+      "factor_analysis",
+      "stress_testing",
+      "esg_optimization",
+      "tax_optimization",
+      "liquidity_management"
+    ],
+    "optimization_methods": [
+      "mean_variance",
+      "risk_parity",
+      "black_litterman",
+      "quantum_enhanced",
+      "hierarchical_risk_parity",
+      "minimum_variance",
+      "maximum_diversification",
+      "equal_weight"
+    ],
+    "quantum_algorithms": [
+      "qaoa",
+      "vqe",
+      "quantum_annealing",
+      "quantum_approximate_optimization",
+      "variational_quantum_eigensolver"
+    ],
+    "asset_classes": [
+      "equities",
+      "fixed_income",
+      "commodities",
+      "real_estate",
+      "alternatives",
+      "cryptocurrencies",
+      "derivatives"
+    ]
+  },
+  
+  "openai_realtime_config": {
+    "model": "gpt-4o-realtime-preview",
+    "voice": "nova",
+    "modalities": ["text", "audio"],
+    "instructions": "You are a quantum-enhanced portfolio optimization specialist with expertise in modern portfolio theory, risk management, and quantum computing applications in finance. You help users optimize their portfolios using advanced quantum algorithms while considering their risk tolerance, investment goals, and constraints. Always explain the quantum advantages and provide clear reasoning for your recommendations. Include appropriate risk disclaimers and emphasize the importance of diversification.",
+    "temperature": 0.6,
+    "max_response_output_tokens": 4096,
+    "tool_choice": "auto",
+    "parallel_tool_calls": true,
+    "response_format": {
+      "type": "json_schema",
+      "json_schema": {
+        "name": "portfolio_optimization_response",
+        "strict": true,
+        "schema": {
+          "type": "object",
+          "properties": {
+            "optimization_summary": {
+              "type": "string",
+              "description": "Summary of portfolio optimization results"
+            },
+            "recommended_allocation": {
+              "type": "object",
+              "description": "Recommended asset allocation weights",
+              "additionalProperties": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "expected_return": {
+              "type": "number",
+              "description": "Expected annual return"
+            },
+            "expected_volatility": {
+              "type": "number",
+              "description": "Expected annual volatility"
+            },
+            "sharpe_ratio": {
+              "type": "number",
+              "description": "Expected Sharpe ratio"
+            },
+            "risk_metrics": {
+              "type": "object",
+              "properties": {
+                "var_95": {"type": "number"},
+                "cvar_95": {"type": "number"},
+                "max_drawdown": {"type": "number"},
+                "beta": {"type": "number"}
+              }
+            },
+            "optimization_method": {
+              "type": "string",
+              "description": "Method used for optimization"
+            },
+            "quantum_advantage": {
+              "type": "object",
+              "properties": {
+                "used_quantum": {"type": "boolean"},
+                "performance_improvement": {"type": "number"},
+                "computation_speedup": {"type": "number"},
+                "solution_quality": {"type": "string"}
+              }
+            },
+            "rebalancing_recommendations": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "frequency": {"type": "string"},
+                  "trigger_conditions": {"type": "array", "items": {"type": "string"}},
+                  "expected_turnover": {"type": "number"}
+                }
+              }
+            },
+            "key_insights": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "Key insights from the optimization"
+            },
+            "risk_warnings": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "Important risk considerations"
+            }
+          },
+          "required": ["optimization_summary", "recommended_allocation", "expected_return", "expected_volatility", "key_insights"]
+        }
+      }
+    }
+  },
+  
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "optimize_portfolio",
+        "description": "Optimize portfolio allocation using quantum or classical methods",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "assets": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "symbol": {"type": "string"},
+                  "current_weight": {"type": "number", "minimum": 0, "maximum": 1},
+                  "min_weight": {"type": "number", "minimum": 0, "maximum": 1},
+                  "max_weight": {"type": "number", "minimum": 0, "maximum": 1}
+                },
+                "required": ["symbol"]
+              },
+              "description": "List of assets to include in optimization"
+            },
+            "optimization_method": {
+              "type": "string",
+              "enum": ["mean_variance", "risk_parity", "black_litterman", "quantum_enhanced", "minimum_variance"],
+              "description": "Optimization method to use"
+            },
+            "risk_tolerance": {
+              "type": "string",
+              "enum": ["conservative", "moderate", "aggressive"],
+              "description": "Investor risk tolerance"
+            },
+            "investment_horizon": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 3650,
+              "description": "Investment horizon in days"
+            },
+            "constraints": {
+              "type": "object",
+              "properties": {
+                "max_sector_weight": {"type": "number"},
+                "min_esg_score": {"type": "number"},
+                "max_tracking_error": {"type": "number"},
+                "liquidity_requirement": {"type": "string"}
+              }
+            },
+            "quantum_params": {
+              "type": "object",
+              "properties": {
+                "use_quantum": {"type": "boolean", "default": true},
+                "num_qubits": {"type": "integer", "minimum": 8, "maximum": 50},
+                "algorithm": {"type": "string", "enum": ["qaoa", "vqe", "quantum_annealing"]},
+                "optimization_depth": {"type": "integer", "minimum": 1, "maximum": 10}
+              }
+            }
+          },
+          "required": ["assets", "optimization_method"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "calculate_efficient_frontier",
+        "description": "Calculate the efficient frontier for a set of assets",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "assets": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "List of asset symbols"
+            },
+            "num_portfolios": {
+              "type": "integer",
+              "minimum": 10,
+              "maximum": 1000,
+              "description": "Number of portfolios to generate on the frontier"
+            },
+            "use_quantum": {
+              "type": "boolean",
+              "description": "Whether to use quantum optimization"
+            },
+            "constraints": {
+              "type": "object",
+              "description": "Portfolio constraints"
+            }
+          },
+          "required": ["assets"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "perform_stress_testing",
+        "description": "Perform stress testing on portfolio under various scenarios",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "portfolio_weights": {
+              "type": "object",
+              "description": "Current portfolio weights"
+            },
+            "stress_scenarios": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["market_crash", "interest_rate_shock", "inflation_surge", "geopolitical_crisis", "sector_rotation"]
+              },
+              "description": "Stress scenarios to test"
+            },
+            "confidence_levels": {
+              "type": "array",
+              "items": {"type": "number", "minimum": 0.9, "maximum": 0.99},
+              "description": "Confidence levels for stress testing"
+            },
+            "time_horizon": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 252,
+              "description": "Time horizon for stress testing in days"
+            }
+          },
+          "required": ["portfolio_weights"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "analyze_factor_exposure",
+        "description": "Analyze portfolio exposure to various risk factors",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "portfolio_weights": {
+              "type": "object",
+              "description": "Portfolio weights to analyze"
+            },
+            "factor_models": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["fama_french_3", "fama_french_5", "carhart_4", "custom"]
+              },
+              "description": "Factor models to use for analysis"
+            },
+            "benchmark": {
+              "type": "string",
+              "description": "Benchmark for comparison"
+            }
+          },
+          "required": ["portfolio_weights"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "generate_rebalancing_strategy",
+        "description": "Generate optimal rebalancing strategy for portfolio",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "current_portfolio": {
+              "type": "object",
+              "description": "Current portfolio weights"
+            },
+            "target_portfolio": {
+              "type": "object",
+              "description": "Target portfolio weights"
+            },
+            "rebalancing_frequency": {
+              "type": "string",
+              "enum": ["daily", "weekly", "monthly", "quarterly", "annually", "threshold_based"],
+              "description": "Rebalancing frequency"
+            },
+            "transaction_costs": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 0.1,
+              "description": "Transaction costs as percentage"
+            },
+            "tax_considerations": {
+              "type": "object",
+              "properties": {
+                "tax_rate_short_term": {"type": "number"},
+                "tax_rate_long_term": {"type": "number"},
+                "tax_loss_harvesting": {"type": "boolean"}
+              }
+            }
+          },
+          "required": ["current_portfolio", "target_portfolio"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "optimize_esg_portfolio",
+        "description": "Optimize portfolio with ESG constraints and objectives",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "assets": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "List of asset symbols"
+            },
+            "esg_objectives": {
+              "type": "object",
+              "properties": {
+                "min_esg_score": {"type": "number", "minimum": 0, "maximum": 100},
+                "carbon_intensity_limit": {"type": "number"},
+                "exclude_sectors": {"type": "array", "items": {"type": "string"}},
+                "esg_tilt": {"type": "string", "enum": ["none", "moderate", "strong"]}
+              }
+            },
+            "financial_objectives": {
+              "type": "object",
+              "properties": {
+                "target_return": {"type": "number"},
+                "max_risk": {"type": "number"},
+                "tracking_error_limit": {"type": "number"}
+              }
+            }
+          },
+          "required": ["assets", "esg_objectives"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "calculate_portfolio_attribution",
+        "description": "Calculate performance attribution for portfolio returns",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "portfolio_weights": {
+              "type": "object",
+              "description": "Portfolio weights"
+            },
+            "benchmark_weights": {
+              "type": "object",
+              "description": "Benchmark weights"
+            },
+            "time_period": {
+              "type": "string",
+              "enum": ["1m", "3m", "6m", "1y", "3y", "5y"],
+              "description": "Time period for attribution analysis"
+            },
+            "attribution_method": {
+              "type": "string",
+              "enum": ["brinson", "brinson_fachler", "geometric"],
+              "description": "Attribution methodology"
+            }
+          },
+          "required": ["portfolio_weights", "benchmark_weights"]
+        }
+      }
+    }
+  ],
+  
+  "conversation_starters": [
+    "How can quantum computing improve my portfolio optimization?",
+    "What's the optimal asset allocation for my risk tolerance?",
+    "Can you help me rebalance my portfolio with tax efficiency in mind?",
+    "How would my portfolio perform under different stress scenarios?",
+    "What are the benefits of quantum-enhanced portfolio optimization?",
+    "Can you create an ESG-optimized portfolio for me?"
+  ],
+  
+  "personality": {
+    "tone": "professional",
+    "expertise_level": "expert",
+    "communication_style": "methodical_and_thorough",
+    "risk_disclaimer_frequency": "always",
+    "quantum_explanation_depth": "detailed"
+  },
+  
+  "knowledge_domains": [
+    "modern_portfolio_theory",
+    "quantum_optimization",
+    "risk_management",
+    "asset_allocation",
+    "factor_investing",
+    "esg_investing",
+    "behavioral_finance",
+    "derivatives",
+    "alternative_investments",
+    "tax_optimization",
+    "performance_attribution"
+  ],
+  
+  "limitations": [
+    "Cannot provide personalized investment advice without proper licensing",
+    "Quantum optimization results may vary due to quantum noise",
+    "Historical performance does not guarantee future results",
+    "Market conditions can change rapidly affecting optimization results",
+    "Cannot execute trades or manage accounts directly"
+  ],
+  
+  "integration_endpoints": {
+    "portfolio_optimization": "/api/portfolio/optimize",
+    "efficient_frontier": "/api/portfolio/efficient-frontier",
+    "stress_testing": "/api/risk/stress-test",
+    "factor_analysis": "/api/portfolio/factor-analysis",
+    "rebalancing": "/api/portfolio/rebalance",
+    "esg_optimization": "/api/portfolio/esg-optimize",
+    "attribution_analysis": "/api/portfolio/attribution"
+  },
+  
+  "performance_metrics": {
+    "optimization_time_target": "< 30 seconds",
+    "accuracy_target": "> 85%",
+    "quantum_speedup_target": "> 2x",
+    "uptime_target": "> 99.9%"
+  },
+  
+  "security": {
+    "authentication_required": true,
+    "rate_limiting": {
+      "requests_per_minute": 30,
+      "requests_per_hour": 500
+    },
+    "data_encryption": "AES-256",
+    "audit_logging": true,
+    "pii_handling": "strict"
+  },
+  
+  "monitoring": {
+    "health_check_endpoint": "/api/agents/portfolio-optimizer-002/health",
+    "metrics_collection": true,
+    "error_tracking": true,
+    "performance_analytics": true,
+    "quantum_performance_tracking": true
+  }
+}

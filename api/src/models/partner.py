@@ -1,4 +1,4 @@
-from datetime import datetime
+﻿from datetime import datetime
 from typing import Optional
 from sqlalchemy import String, Text, Integer, Boolean, Numeric, JSON
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -72,7 +72,7 @@ class Partner(Base):
     # Relationships
     # users = relationship("User", back_populates="partner")
     # leads = relationship("Lead", back_populates="partner")
-    # oracle_queries = relationship("OracleQuery", back_populates="partner")
+    # quantum_nexus_queries = relationship("Quantum NexusQuery", back_populates="partner")
     # quantum_credits = relationship("QuantumCredit", back_populates="partner")
     
     def __repr__(self) -> str:

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+﻿import React, { useState, useCallback } from "react";
 import ReactFlow, {
   Node,
   Edge,
@@ -93,7 +93,7 @@ export default function WorkflowBuilder() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [jobStatus, setJobStatus] = useState<any>(null);
   const [currentJobId, setCurrentJobId] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'builder' | 'oracle' | 'pricing'>('builder');
+  const [activeTab, setActiveTab] = useState<'builder' | 'Quantum Nexus' | 'pricing'>('builder');
   const [userTier, setUserTier] = useState<'basic' | 'premium' | 'elite'>('basic');
 
   const onConnect = useCallback(
@@ -205,9 +205,9 @@ export default function WorkflowBuilder() {
                 Workflow Builder
               </button>
               <button
-                onClick={() => setActiveTab('oracle')}
+                onClick={() => setActiveTab('Quantum Nexus')}
                 className={`px-6 py-3 rounded-lg font-medium transition-all flex items-center gap-2 ${
-                  activeTab === 'oracle'
+                  activeTab === 'Quantum Nexus'
                     ? 'bg-gradient-to-r from-flyfox-600 to-quantum-600 text-white shadow-lg quantum-glow'
                     : 'bg-space-700 text-gray-300 hover:bg-space-600'
                 }`}
@@ -313,7 +313,7 @@ export default function WorkflowBuilder() {
                 badge and open the upsell modal.
               </div>
             </div>
-          ) : activeTab === 'oracle' ? (
+          ) : activeTab === 'Quantum Nexus' ? (
             <QuantumNexusEngine 
               userTier={userTier}
               onUpgrade={() => setShowUpsellModal(true)}

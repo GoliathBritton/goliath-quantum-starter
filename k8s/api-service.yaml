@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: flyfox-api
+  namespace: flyfox
+  labels:
+    app: flyfox-api
+    component: api
+    tier: backend
+spec:
+  selector:
+    app: flyfox-api
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+      protocol: TCP
+  type: ClusterIP
+  sessionAffinity: None
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flyfox-api-internal
+  namespace: flyfox
+  labels:
+    app: flyfox-api
+    component: api-internal
+    tier: backend
+spec:
+  selector:
+    app: flyfox-api
+  ports:
+    - name: metrics
+      port: 9090
+      targetPort: 9090
+      protocol: TCP
+  type: ClusterIP

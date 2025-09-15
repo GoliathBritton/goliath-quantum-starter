@@ -1,4 +1,4 @@
-# Sigma Select Beta Client Configuration
+﻿# Sigma Select Beta Client Configuration
 # Quantum Nexus Engine - Financial AI & Trading Optimization
 
 client:
@@ -99,7 +99,7 @@ ai_agents:
   
   # Market Intelligence Agent
   market_intelligence_agent:
-    name: "MarketOracleAI"
+    name: "MarketQuantumNexus"
     type: "market_analysis"
     capabilities:
       - "sentiment_analysis"

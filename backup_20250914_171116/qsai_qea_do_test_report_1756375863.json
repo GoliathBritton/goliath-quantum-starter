@@ -1,0 +1,35 @@
+{
+  "summary": {
+    "total_tests": 4,
+    "passed_tests": 3,
+    "failed_tests": 1,
+    "success_rate": "75.0%",
+    "timestamp": "2025-08-28T05:11:03.554702"
+  },
+  "test_results": [
+    {
+      "test_name": "QSAI Engine",
+      "status": "FAILED",
+      "details": "'await' outside async function (qsai_agents.py, line 650)",
+      "timestamp": "2025-08-28T05:11:02.867408"
+    },
+    {
+      "test_name": "QEA-DO System",
+      "status": "PASSED",
+      "details": "All QEA-DO tests completed successfully",
+      "timestamp": "2025-08-28T05:11:02.881766"
+    },
+    {
+      "test_name": "Integration",
+      "status": "PASSED",
+      "details": "All integration tests completed successfully",
+      "timestamp": "2025-08-28T05:11:02.882649"
+    },
+    {
+      "test_name": "Performance",
+      "status": "PASSED",
+      "details": "All performance tests completed successfully",
+      "timestamp": "2025-08-28T05:11:03.554403"
+    }
+  ]
+}

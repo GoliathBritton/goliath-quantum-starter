@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+﻿import { NextApiRequest, NextApiResponse } from 'next';
 import { v4 as uuidv4 } from 'uuid';
 
 // Quantum High Council (QHC) - Governance & Ethics Layer
@@ -315,8 +315,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
     }
 
-    const oracle = new QuantumNexusEngine();
-     const prediction = await oracle.consultQuantumNexus({
+    const Quantum Nexus = new QuantumNexusEngine();
+     const prediction = await Quantum Nexus.consultQuantumNexus({
       question,
       context,
       decisionOptions,

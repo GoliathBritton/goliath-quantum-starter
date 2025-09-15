@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, BackgroundTasks
+﻿from fastapi import FastAPI, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from contextlib import asynccontextmanager
@@ -11,7 +11,7 @@ from typing import Dict, Any
 # Import routers
 from .routes.partners import router as partners_router
 from .routes.leads import router as leads_router
-from .routes.oracle import router as quantum_nexus_router
+from .routes.Quantum Nexus import router as quantum_nexus_router
 from .routes.stripe import router as stripe_router
 from .routes.auth import router as auth_router
 

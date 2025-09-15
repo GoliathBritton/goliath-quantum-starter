@@ -1,4 +1,4 @@
-# 💼 Goliath Quantum Starter Business Case
+﻿# 💼 Goliath Quantum Starter Business Case
 
 **Transform your business with quantum advantage at 90% lower cost than traditional quantum computing.**
 
@@ -356,7 +356,7 @@ Operating Costs:
 ### Strategic Partners
 - **Dynex**: Primary quantum computing partner
 - **Cloud Providers**: AWS, Azure, Google Cloud for global deployment
-- **Enterprise Software**: SAP, Oracle, Microsoft for integration
+- **Enterprise Software**: SAP, Quantum Nexus, Microsoft for integration
 - **Consulting Firms**: McKinsey, BCG, Deloitte
 - **Insurance Companies**: Partner with SFG Symmetry
 - **Intelligence Agencies**: Partner with Ghost NeuroQ

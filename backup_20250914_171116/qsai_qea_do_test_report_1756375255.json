@@ -1,0 +1,35 @@
+{
+  "summary": {
+    "total_tests": 4,
+    "passed_tests": 1,
+    "failed_tests": 3,
+    "success_rate": "25.0%",
+    "timestamp": "2025-08-28T05:00:55.511484"
+  },
+  "test_results": [
+    {
+      "test_name": "QSAI Engine",
+      "status": "FAILED",
+      "details": "No module named 'yaml'",
+      "timestamp": "2025-08-28T05:00:54.847473"
+    },
+    {
+      "test_name": "QEA-DO System",
+      "status": "FAILED",
+      "details": "No module named 'yaml'",
+      "timestamp": "2025-08-28T05:00:54.850194"
+    },
+    {
+      "test_name": "Integration",
+      "status": "PASSED",
+      "details": "All integration tests completed successfully",
+      "timestamp": "2025-08-28T05:00:54.850843"
+    },
+    {
+      "test_name": "Performance",
+      "status": "FAILED",
+      "details": "No module named 'psutil'",
+      "timestamp": "2025-08-28T05:00:55.511070"
+    }
+  ]
+}

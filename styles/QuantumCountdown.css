@@ -1,0 +1,511 @@
+/* Quantum Countdown Styles */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+
+.quantum-countdown {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: radial-gradient(ellipse at center, rgba(0, 255, 246, 0.1) 0%, rgba(0, 0, 0, 0.9) 70%);
+  border-radius: 20px;
+  border: 2px solid rgba(0, 255, 246, 0.3);
+  backdrop-filter: blur(10px);
+  font-family: 'Orbitron', monospace;
+  overflow: hidden;
+  min-height: 400px;
+}
+
+.quantum-countdown::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(from 0deg, transparent, rgba(0, 255, 246, 0.1), transparent);
+  animation: rotate 10s linear infinite;
+  z-index: -1;
+}
+
+.countdown-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  z-index: 2;
+}
+
+.countdown-title {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.quantum-text {
+  font-size: 2.5rem;
+  font-weight: 900;
+  background: linear-gradient(45deg, #00fff6, #0080ff, #8000ff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 30px rgba(0, 255, 246, 0.5);
+  animation: quantumPulse 3s ease-in-out infinite;
+}
+
+.launch-text {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.mystery-phrase {
+  color: #00fff6;
+  font-size: 1.1rem;
+  font-style: italic;
+  margin-top: 1rem;
+  text-shadow: 0 0 10px rgba(0, 255, 246, 0.7);
+  animation: mysteryGlow 2s ease-in-out infinite alternate;
+}
+
+.countdown-display {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.entanglement-rings {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.entanglement-ring {
+  position: absolute;
+  border: 2px solid rgba(0, 255, 246, 0.3);
+  border-radius: 50%;
+  animation: entangle 8s linear infinite;
+}
+
+.entanglement-ring.ring-1 {
+  width: 200px;
+  height: 200px;
+  top: -100px;
+  left: -100px;
+  border-color: rgba(0, 255, 246, 0.4);
+  animation-duration: 8s;
+}
+
+.entanglement-ring.ring-2 {
+  width: 300px;
+  height: 300px;
+  top: -150px;
+  left: -150px;
+  border-color: rgba(128, 0, 255, 0.3);
+  animation-duration: 12s;
+  animation-direction: reverse;
+}
+
+.entanglement-ring.ring-3 {
+  width: 400px;
+  height: 400px;
+  top: -200px;
+  left: -200px;
+  border-color: rgba(0, 128, 255, 0.2);
+  animation-duration: 16s;
+}
+
+.digits-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  z-index: 3;
+  position: relative;
+}
+
+.quantum-digit-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.quantum-digit {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #00fff6;
+  text-shadow: 
+    0 0 10px #00fff6,
+    0 0 20px #00fff6,
+    0 0 30px #00fff6;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 255, 246, 0.5);
+  min-width: 80px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.quantum-digit::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: digitScan 2s ease-in-out infinite;
+}
+
+.quantum-label {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.separator {
+  font-size: 2rem;
+  color: #00fff6;
+  font-weight: 700;
+  animation: separatorPulse 1s ease-in-out infinite;
+}
+
+.quantum-glyphs {
+  margin-top: 2rem;
+  text-align: center;
+  z-index: 2;
+}
+
+.glyphs-label {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.glyphs-grid {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.glyph {
+  font-size: 1.5rem;
+  color: #8000ff;
+  text-shadow: 0 0 15px #8000ff;
+  padding: 0.5rem;
+  border: 1px solid rgba(128, 0, 255, 0.5);
+  border-radius: 50%;
+  background: rgba(128, 0, 255, 0.1);
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: glyphFloat 3s ease-in-out infinite;
+}
+
+.quantum-energy-field {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(0, 255, 246, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(128, 0, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(0, 128, 255, 0.1) 0%, transparent 50%);
+  animation: energyField 6s ease-in-out infinite;
+  z-index: 0;
+}
+
+/* Launched State */
+.quantum-countdown.launched {
+  background: radial-gradient(ellipse at center, rgba(0, 255, 246, 0.3) 0%, rgba(128, 0, 255, 0.2) 50%, rgba(0, 0, 0, 0.9) 100%);
+  border-color: #00fff6;
+  box-shadow: 0 0 50px rgba(0, 255, 246, 0.5);
+}
+
+.quantum-nexus-animation {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 2rem auto;
+}
+
+.nexus-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+  background: radial-gradient(circle, #00fff6, #8000ff);
+  border-radius: 50%;
+  box-shadow: 
+    0 0 20px #00fff6,
+    0 0 40px #00fff6,
+    0 0 60px #00fff6;
+  animation: nexusCore 2s ease-in-out infinite;
+}
+
+.nexus-rings {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.nexus-ring {
+  position: absolute;
+  border: 3px solid;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.nexus-ring.ring-1 {
+  width: 80px;
+  height: 80px;
+  border-color: rgba(0, 255, 246, 0.8);
+  animation: nexusRing1 3s linear infinite;
+}
+
+.nexus-ring.ring-2 {
+  width: 120px;
+  height: 120px;
+  border-color: rgba(128, 0, 255, 0.6);
+  animation: nexusRing2 4s linear infinite reverse;
+}
+
+.nexus-ring.ring-3 {
+  width: 160px;
+  height: 160px;
+  border-color: rgba(0, 128, 255, 0.4);
+  animation: nexusRing3 5s linear infinite;
+}
+
+.launch-message {
+  font-size: 2rem;
+  color: #00fff6;
+  text-align: center;
+  margin: 2rem 0;
+  text-shadow: 0 0 20px #00fff6;
+  animation: launchPulse 1s ease-in-out infinite;
+}
+
+.quantum-glyphs-final {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.quantum-glyphs-final .glyph {
+  font-size: 2rem;
+  width: 60px;
+  height: 60px;
+  border-color: #00fff6;
+  background: rgba(0, 255, 246, 0.2);
+  color: #00fff6;
+  text-shadow: 0 0 20px #00fff6;
+}
+
+/* Animations */
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes quantumPulse {
+  0%, 100% { 
+    text-shadow: 0 0 30px rgba(0, 255, 246, 0.5);
+    transform: scale(1);
+  }
+  50% { 
+    text-shadow: 0 0 50px rgba(0, 255, 246, 0.8), 0 0 70px rgba(128, 0, 255, 0.5);
+    transform: scale(1.05);
+  }
+}
+
+@keyframes mysteryGlow {
+  from { 
+    text-shadow: 0 0 10px rgba(0, 255, 246, 0.7);
+    opacity: 0.8;
+  }
+  to { 
+    text-shadow: 0 0 25px rgba(0, 255, 246, 1), 0 0 35px rgba(0, 255, 246, 0.5);
+    opacity: 1;
+  }
+}
+
+@keyframes entangle {
+  0% { 
+    transform: translate(-50%, -50%) rotate(0deg);
+    border-style: solid;
+  }
+  25% { 
+    border-style: dashed;
+  }
+  50% { 
+    transform: translate(-50%, -50%) rotate(180deg);
+    border-style: dotted;
+  }
+  75% { 
+    border-style: dashed;
+  }
+  100% { 
+    transform: translate(-50%, -50%) rotate(360deg);
+    border-style: solid;
+  }
+}
+
+@keyframes digitScan {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+@keyframes separatorPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.2); }
+}
+
+@keyframes glyphFloat {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33% { transform: translateY(-10px) rotate(120deg); }
+  66% { transform: translateY(5px) rotate(240deg); }
+}
+
+@keyframes energyField {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes nexusCore {
+  0%, 100% { 
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow: 
+      0 0 20px #00fff6,
+      0 0 40px #00fff6,
+      0 0 60px #00fff6;
+  }
+  50% { 
+    transform: translate(-50%, -50%) scale(1.2);
+    box-shadow: 
+      0 0 30px #00fff6,
+      0 0 60px #00fff6,
+      0 0 90px #00fff6,
+      0 0 120px #8000ff;
+  }
+}
+
+@keyframes nexusRing1 {
+  0% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+  50% { transform: translate(-50%, -50%) rotate(180deg) scale(1.1); }
+  100% { transform: translate(-50%, -50%) rotate(360deg) scale(1); }
+}
+
+@keyframes nexusRing2 {
+  0% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+  50% { transform: translate(-50%, -50%) rotate(-180deg) scale(0.9); }
+  100% { transform: translate(-50%, -50%) rotate(-360deg) scale(1); }
+}
+
+@keyframes nexusRing3 {
+  0% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+  50% { transform: translate(-50%, -50%) rotate(180deg) scale(1.05); }
+  100% { transform: translate(-50%, -50%) rotate(360deg) scale(1); }
+}
+
+@keyframes launchPulse {
+  0%, 100% { 
+    transform: scale(1);
+    text-shadow: 0 0 20px #00fff6;
+  }
+  50% { 
+    transform: scale(1.05);
+    text-shadow: 
+      0 0 30px #00fff6,
+      0 0 50px #00fff6,
+      0 0 70px #8000ff;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .quantum-countdown {
+    padding: 1rem;
+    min-height: 300px;
+  }
+  
+  .quantum-text {
+    font-size: 1.8rem;
+  }
+  
+  .launch-text {
+    font-size: 1rem;
+  }
+  
+  .quantum-digit {
+    font-size: 2rem;
+    min-width: 60px;
+    padding: 0.3rem 0.8rem;
+  }
+  
+  .digits-container {
+    gap: 0.5rem;
+  }
+  
+  .entanglement-ring.ring-1 {
+    width: 150px;
+    height: 150px;
+    top: -75px;
+    left: -75px;
+  }
+  
+  .entanglement-ring.ring-2 {
+    width: 200px;
+    height: 200px;
+    top: -100px;
+    left: -100px;
+  }
+  
+  .entanglement-ring.ring-3 {
+    width: 250px;
+    height: 250px;
+    top: -125px;
+    left: -125px;
+  }
+}
+
+@media (max-width: 480px) {
+  .quantum-digit {
+    font-size: 1.5rem;
+    min-width: 50px;
+  }
+  
+  .separator {
+    font-size: 1.5rem;
+  }
+  
+  .glyph {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+}

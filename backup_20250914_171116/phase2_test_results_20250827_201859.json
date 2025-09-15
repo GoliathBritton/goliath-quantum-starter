@@ -1,0 +1,82 @@
+{
+  "Multi-Tenant Management": {
+    "status": "FAILED",
+    "error": "Tenant creation failed: 422 - {\"detail\":[{\"type\":\"missing\",\"loc\":[\"query\",\"name\"],\"msg\":\"Field required\",\"input\":null}]}",
+    "timestamp": "2025-08-27T20:18:22.127687"
+  },
+  "Real-Time Learning Engine": {
+    "status": "FAILED",
+    "error": "Algorithm registration failed: 422",
+    "timestamp": "2025-08-27T20:18:24.166949"
+  },
+  "Advanced QUBO Engine": {
+    "status": "FAILED",
+    "error": "QUBO creation failed: 422",
+    "timestamp": "2025-08-27T20:18:26.199568"
+  },
+  "Performance Dashboard": {
+    "status": "PASSED",
+    "dashboard_status": {
+      "is_running": true,
+      "last_update": "2025-08-27T20:18:05.908487",
+      "update_count": 5,
+      "update_interval": 30
+    },
+    "system_health": {
+      "overall_health": "healthy",
+      "health_score": 0.95,
+      "last_updated": "2025-08-27T20:18:05.908455",
+      "api_server_health": "healthy",
+      "quantum_adapter_health": "healthy",
+      "business_pods_health": "healthy",
+      "database_health": "healthy",
+      "network_health": "healthy",
+      "response_time_avg": 0.15,
+      "throughput_avg": 1000.0,
+      "error_rate_avg": 0.01,
+      "availability_avg": 0.999,
+      "cpu_utilization": 0.65,
+      "memory_utilization": 0.58,
+      "storage_utilization": 0.42,
+      "quantum_utilization": 0.73,
+      "metadata": {
+        "source": "mock_data",
+        "recommendations": []
+      }
+    },
+    "active_alerts": 1,
+    "timestamp": "2025-08-27T20:18:37.367521"
+  },
+  "Integration Workflows": {
+    "status": "PASSED",
+    "workflow_steps": [
+      "\u2705 Tenant system analytics: 0 tenants"
+    ],
+    "total_steps": 1,
+    "timestamp": "2025-08-27T20:18:39.411197"
+  },
+  "Performance & Scalability": {
+    "status": "PASSED",
+    "performance_metrics": {
+      "concurrent_requests": {
+        "total_requests": 10,
+        "successful_requests": 10,
+        "success_rate": 1.0,
+        "total_time": 20.501502752304077,
+        "avg_response_time": 2.0501502752304077
+      },
+      "memory_usage": {
+        "estimated_memory_mb": 256.5,
+        "memory_efficiency": "good",
+        "garbage_collection": "active"
+      },
+      "scalability_limits": {
+        "max_tenants": 1000,
+        "max_algorithms": 100,
+        "max_qubo_matrices": 500,
+        "max_concurrent_optimizations": 50
+      }
+    },
+    "timestamp": "2025-08-27T20:18:59.913348"
+  }
+}

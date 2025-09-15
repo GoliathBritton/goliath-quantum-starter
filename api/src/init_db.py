@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
 Database initialization script for the Goliath Quantum API.
 
@@ -30,7 +30,7 @@ from models.base import Base
 from models.partner import Partner
 from models.user import User
 from models.lead import Lead
-from models.oracle_query import OracleQuery
+from models.quantum_nexus_query import Quantum NexusQuery
 from models.quantum_credit import QuantumCredit
 from models.audit_log import AuditLog
 

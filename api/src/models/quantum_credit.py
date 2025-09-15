@@ -1,4 +1,4 @@
-from datetime import datetime
+﻿from datetime import datetime
 from typing import Optional
 from sqlalchemy import String, Text, Integer, Numeric, JSON, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -12,7 +12,7 @@ class QuantumCredit(Base):
     # Relationships
     partner_id: Mapped[str] = mapped_column(ForeignKey("partners.id"), nullable=False, index=True)
     user_id: Mapped[Optional[str]] = mapped_column(ForeignKey("users.id"), nullable=True, index=True)
-    oracle_query_id: Mapped[Optional[str]] = mapped_column(ForeignKey("oracle_queries.id"), nullable=True, index=True)
+    quantum_nexus_query_id: Mapped[Optional[str]] = mapped_column(ForeignKey("quantum_nexus_queries.id"), nullable=True, index=True)
     
     # Transaction Details
     transaction_type: Mapped[str] = mapped_column(String(50), nullable=False, index=True)  # purchase, usage, refund, bonus, expiry
@@ -27,7 +27,7 @@ class QuantumCredit(Base):
     total_cost_usd: Mapped[Optional[float]] = mapped_column(Numeric(10, 4), nullable=True)
     
     # Usage Information
-    usage_type: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)  # oracle_query, api_call, batch_processing
+    usage_type: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)  # quantum_nexus_query, api_call, batch_processing
     query_type: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)  # lead_scoring, market_prediction, etc.
     processing_complexity: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)  # simple, medium, complex
     
@@ -56,7 +56,7 @@ class QuantumCredit(Base):
     # Relationships
     # partner = relationship("Partner", back_populates="quantum_credits")
     # user = relationship("User", back_populates="quantum_credits")
-    # oracle_query = relationship("OracleQuery", back_populates="quantum_credits")
+    # quantum_nexus_query = relationship("Quantum NexusQuery", back_populates="quantum_credits")
     
     def __repr__(self) -> str:
         return f"<QuantumCredit(id={self.id}, type={self.transaction_type}, amount={self.amount})>"
@@ -164,15 +164,15 @@ class QuantumCredit(Base):
                     user_id: Optional[str],
                     amount: int,
                     balance_before: int,
-                    oracle_query_id: Optional[str] = None,
-                    usage_type: str = "oracle_query",
+                    quantum_nexus_query_id: Optional[str] = None,
+                    usage_type: str = "quantum_nexus_query",
                     query_type: Optional[str] = None,
                     processing_complexity: str = "simple") -> 'QuantumCredit':
         """Create a credit usage transaction."""
         return cls(
             partner_id=partner_id,
             user_id=user_id,
-            oracle_query_id=oracle_query_id,
+            quantum_nexus_query_id=quantum_nexus_query_id,
             transaction_type="usage",
             amount=-amount,  # Negative for usage
             balance_before=balance_before,

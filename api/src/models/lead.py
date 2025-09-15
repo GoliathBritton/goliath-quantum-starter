@@ -1,4 +1,4 @@
-from datetime import datetime
+﻿from datetime import datetime
 from typing import Optional
 from sqlalchemy import String, Text, Integer, Boolean, Numeric, JSON, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -87,7 +87,7 @@ class Lead(Base):
     
     # Relationships
     # partner = relationship("Partner", back_populates="leads")
-    # oracle_queries = relationship("OracleQuery", back_populates="lead")
+    # quantum_nexus_queries = relationship("Quantum NexusQuery", back_populates="lead")
     
     def __repr__(self) -> str:
         return f"<Lead(id={self.id}, name={self.first_name} {self.last_name}, score={self.quantum_score})>"

@@ -1,4 +1,4 @@
-# Goliath Quantum Application Deployments
+﻿# Goliath Quantum Application Deployments
 # Main application services: API and Portal
 
 apiVersion: v1
@@ -27,7 +27,7 @@ data:
   API_VERSION: "v1"
   
   # Feature Flags
-  ENABLE_QUANTUM_ORACLE: "true"
+  ENABLE_QUANTUM_Quantum Nexus: "true"
   ENABLE_LEAD_SCORING: "true"
   ENABLE_PARTNER_DASHBOARD: "true"
   ENABLE_METRICS_COLLECTION: "true"

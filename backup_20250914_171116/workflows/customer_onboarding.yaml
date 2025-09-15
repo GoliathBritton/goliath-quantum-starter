@@ -1,0 +1,400 @@
+name: customer_onboarding
+description: Automated customer onboarding and activation workflow
+version: "1.0"
+author: Quantum Nexus Engine
+created_at: "2024-01-15T00:00:00Z"
+
+triggers:
+  - type: event
+    source: "customer.signed_up"
+  - type: webhook
+    endpoint: "/api/workflows/onboarding"
+    method: POST
+  - type: manual
+    permissions: ["admin", "customer_success"]
+
+inputs:
+  - name: customer_data
+    type: object
+    required: true
+    schema:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+          format: email
+        company:
+          type: string
+        plan:
+          type: string
+          enum: ["starter", "professional", "enterprise"]
+        industry:
+          type: string
+        team_size:
+          type: number
+        use_cases:
+          type: array
+          items:
+            type: string
+        technical_contact:
+          type: object
+          properties:
+            name:
+              type: string
+            email:
+              type: string
+            role:
+              type: string
+
+steps:
+  - name: welcome_sequence_start
+    type: notification
+    description: "Send welcome email with getting started guide"
+    notification_type: "email"
+    template: "welcome_onboarding"
+    recipients:
+      - "${customer_data.email}"
+    data:
+      customer_name: "${customer_data.company}"
+      plan: "${customer_data.plan}"
+      onboarding_link: "${generate_onboarding_link(customer_data.id)}"
+      support_contact: "success@company.com"
+    priority: "high"
+    delay: 0
+
+  - name: create_customer_workspace
+    type: api_call
+    description: "Set up customer workspace and initial configuration"
+    endpoint: "/api/workspaces/create"
+    method: POST
+    headers:
+      Content-Type: "application/json"
+      Authorization: "Bearer ${ADMIN_API_TOKEN}"
+    body:
+      customer_id: "${customer_data.id}"
+      plan: "${customer_data.plan}"
+      company: "${customer_data.company}"
+      industry: "${customer_data.industry}"
+      team_size: "${customer_data.team_size}"
+      features: "${get_plan_features(customer_data.plan)}"
+    output_key: "workspace_info"
+    timeout: 30
+
+  - name: provision_quantum_resources
+    type: quantum_process
+    description: "Provision quantum computing resources based on plan"
+    process: "resource_allocation"
+    parameters:
+      plan_type: "${customer_data.plan}"
+      estimated_usage: "${calculate_usage_estimate(customer_data.team_size, customer_data.use_cases)}"
+      resource_limits:
+        starter:
+          quantum_jobs_per_month: 100
+          max_qubits: 20
+          priority: "standard"
+        professional:
+          quantum_jobs_per_month: 1000
+          max_qubits: 50
+          priority: "high"
+        enterprise:
+          quantum_jobs_per_month: 10000
+          max_qubits: 100
+          priority: "premium"
+    output_key: "quantum_allocation"
+    timeout: 45
+
+  - name: setup_api_credentials
+    type: api_call
+    description: "Generate API keys and access credentials"
+    endpoint: "/api/credentials/generate"
+    method: POST
+    body:
+      customer_id: "${customer_data.id}"
+      workspace_id: "${workspace_info.workspace_id}"
+      permissions: "${get_plan_permissions(customer_data.plan)}"
+      rate_limits: "${get_plan_rate_limits(customer_data.plan)}"
+    output_key: "api_credentials"
+    security_level: "high"
+
+  - name: customize_dashboard
+    type: data_transform
+    description: "Customize dashboard based on use cases and industry"
+    transform: "dashboard_customization"
+    input_data:
+      industry: "${customer_data.industry}"
+      use_cases: "${customer_data.use_cases}"
+      plan: "${customer_data.plan}"
+      team_size: "${customer_data.team_size}"
+    customization_rules:
+      finance:
+        widgets: ["portfolio_optimizer", "risk_analyzer", "quantum_monte_carlo"]
+        themes: ["professional_dark", "financial_charts"]
+      healthcare:
+        widgets: ["drug_discovery", "protein_folding", "clinical_optimizer"]
+        themes: ["medical_clean", "research_focused"]
+      logistics:
+        widgets: ["route_optimizer", "supply_chain", "scheduling"]
+        themes: ["operational_blue", "logistics_maps"]
+      default:
+        widgets: ["quantum_simulator", "algorithm_builder", "job_monitor"]
+        themes: ["quantum_gradient", "tech_modern"]
+    output_key: "dashboard_config"
+
+  - name: schedule_onboarding_call
+    type: condition
+    description: "Schedule onboarding call for professional and enterprise plans"
+    condition: "customer_data.plan in ['professional', 'enterprise']"
+    true_branch:
+      - name: "create_calendar_invite"
+        type: "api_call"
+        endpoint: "/api/calendar/schedule"
+        method: POST
+        body:
+          type: "onboarding_call"
+          customer_id: "${customer_data.id}"
+          duration: 60
+          attendees:
+            - "${customer_data.email}"
+            - "${customer_data.technical_contact.email}"
+            - "success@company.com"
+          agenda:
+            - "Platform overview and capabilities"
+            - "Use case discussion and planning"
+            - "Technical integration walkthrough"
+            - "Q&A and next steps"
+          suggested_times: "${get_business_hours_slots(7)}"
+        output_key: "onboarding_call"
+      - name: "send_call_confirmation"
+        type: "notification"
+        notification_type: "email"
+        template: "onboarding_call_scheduled"
+        recipients:
+          - "${customer_data.email}"
+          - "${customer_data.technical_contact.email}"
+        data:
+          call_details: "${onboarding_call}"
+          preparation_guide: "${generate_prep_guide(customer_data.use_cases)}"
+
+  - name: create_sample_projects
+    type: api_call
+    description: "Create sample projects based on customer use cases"
+    endpoint: "/api/projects/create-samples"
+    method: POST
+    body:
+      customer_id: "${customer_data.id}"
+      workspace_id: "${workspace_info.workspace_id}"
+      use_cases: "${customer_data.use_cases}"
+      industry: "${customer_data.industry}"
+      complexity_level: "${get_complexity_for_plan(customer_data.plan)}"
+    output_key: "sample_projects"
+    timeout: 60
+
+  - name: setup_documentation_access
+    type: api_call
+    description: "Provide access to relevant documentation and tutorials"
+    endpoint: "/api/documentation/personalize"
+    method: POST
+    body:
+      customer_id: "${customer_data.id}"
+      plan: "${customer_data.plan}"
+      use_cases: "${customer_data.use_cases}"
+      technical_level: "${assess_technical_level(customer_data.technical_contact)}"
+    personalization_rules:
+      beginner:
+        sections: ["getting_started", "basic_concepts", "tutorials"]
+        format: "guided_walkthrough"
+      intermediate:
+        sections: ["api_reference", "advanced_tutorials", "best_practices"]
+        format: "searchable_docs"
+      expert:
+        sections: ["full_api_docs", "quantum_algorithms", "optimization_guides"]
+        format: "technical_reference"
+    output_key: "documentation_access"
+
+  - name: send_technical_resources
+    type: notification
+    description: "Send technical resources and integration guides"
+    notification_type: "email"
+    template: "technical_resources"
+    recipients:
+      - "${customer_data.technical_contact.email}"
+    data:
+      api_credentials: "${api_credentials}"
+      documentation_links: "${documentation_access.links}"
+      sample_projects: "${sample_projects}"
+      sdk_downloads: "${get_sdk_links(customer_data.plan)}"
+      integration_examples: "${get_integration_examples(customer_data.use_cases)}"
+    attachments:
+      - filename: "api_quick_start.pdf"
+        content: "${generate_quick_start_guide(customer_data)}"
+      - filename: "integration_examples.zip"
+        content: "${package_code_examples(customer_data.use_cases)}"
+
+  - name: activate_monitoring
+    type: api_call
+    description: "Activate usage monitoring and analytics"
+    endpoint: "/api/monitoring/activate"
+    method: POST
+    body:
+      customer_id: "${customer_data.id}"
+      workspace_id: "${workspace_info.workspace_id}"
+      monitoring_level: "${get_monitoring_level(customer_data.plan)}"
+      alerts:
+        usage_threshold: 0.8  # Alert at 80% of plan limits
+        error_rate_threshold: 0.05  # Alert if error rate > 5%
+        performance_threshold: 10000  # Alert if avg response time > 10s
+      dashboards:
+        - "usage_overview"
+        - "performance_metrics"
+        - "quantum_job_analytics"
+    output_key: "monitoring_config"
+
+  - name: schedule_check_in_sequence
+    type: api_call
+    description: "Schedule follow-up check-ins and milestone tracking"
+    endpoint: "/api/workflows/schedule"
+    method: POST
+    body:
+      workflow_name: "customer_check_in"
+      customer_id: "${customer_data.id}"
+      schedule:
+        - delay: "1 day"
+          type: "first_login_check"
+        - delay: "3 days"
+          type: "initial_usage_review"
+        - delay: "1 week"
+          type: "progress_check_in"
+        - delay: "2 weeks"
+          type: "success_milestone_review"
+        - delay: "1 month"
+          type: "expansion_opportunity_assessment"
+    output_key: "check_in_schedule"
+
+  - name: create_success_metrics
+    type: data_transform
+    description: "Define success metrics and goals for the customer"
+    transform: "success_metrics_definition"
+    input_data:
+      plan: "${customer_data.plan}"
+      use_cases: "${customer_data.use_cases}"
+      team_size: "${customer_data.team_size}"
+      industry: "${customer_data.industry}"
+    metrics_templates:
+      starter:
+        - "First successful quantum job within 7 days"
+        - "Complete at least 3 sample projects within 2 weeks"
+        - "Achieve 80% API success rate within 1 month"
+      professional:
+        - "Integrate with existing systems within 2 weeks"
+        - "Deploy first production use case within 1 month"
+        - "Achieve ROI positive results within 3 months"
+      enterprise:
+        - "Complete technical integration within 1 month"
+        - "Scale to full team usage within 2 months"
+        - "Demonstrate measurable business impact within 6 months"
+    output_key: "success_metrics"
+
+  - name: update_customer_record
+    type: api_call
+    description: "Update customer record with onboarding completion"
+    endpoint: "/api/customers/${customer_data.id}"
+    method: PATCH
+    body:
+      onboarding_status: "completed"
+      onboarding_completed_at: "${current_timestamp}"
+      workspace_id: "${workspace_info.workspace_id}"
+      quantum_allocation: "${quantum_allocation}"
+      success_metrics: "${success_metrics}"
+      next_check_in: "${check_in_schedule.next_check_in}"
+      customer_success_manager: "${assign_csm(customer_data.plan)}"
+    timeout: 15
+
+  - name: notify_internal_teams
+    type: notification
+    description: "Notify internal teams about new customer onboarding"
+    notification_type: "email"
+    template: "new_customer_onboarded"
+    recipients:
+      - "customer-success@company.com"
+      - "sales@company.com"
+      - "support@company.com"
+    data:
+      customer: "${customer_data}"
+      workspace: "${workspace_info}"
+      plan_details: "${get_plan_details(customer_data.plan)}"
+      success_metrics: "${success_metrics}"
+      assigned_csm: "${assign_csm(customer_data.plan)}"
+    priority: "normal"
+
+  - name: log_onboarding_completion
+    type: api_call
+    description: "Log onboarding completion for analytics"
+    endpoint: "/api/analytics/onboarding/log"
+    method: POST
+    body:
+      customer_id: "${customer_data.id}"
+      plan: "${customer_data.plan}"
+      industry: "${customer_data.industry}"
+      team_size: "${customer_data.team_size}"
+      use_cases: "${customer_data.use_cases}"
+      onboarding_duration: "${workflow_duration}"
+      steps_completed: "${completed_steps_count}"
+      success_rate: "${calculate_success_rate()}"
+      completion_timestamp: "${current_timestamp}"
+    continue_on_error: true
+
+outputs:
+  - name: onboarding_result
+    description: "Complete onboarding results and customer setup"
+    value:
+      customer_id: "${customer_data.id}"
+      workspace_id: "${workspace_info.workspace_id}"
+      onboarding_status: "completed"
+      api_credentials: "${api_credentials}"
+      quantum_allocation: "${quantum_allocation}"
+      sample_projects: "${sample_projects}"
+      success_metrics: "${success_metrics}"
+      next_check_in: "${check_in_schedule.next_check_in}"
+      assigned_csm: "${assign_csm(customer_data.plan)}"
+      onboarding_completed_at: "${current_timestamp}"
+
+error_handling:
+  on_step_failure:
+    - log_error: true
+    - notify_admin: true
+    - attempt_recovery: true
+    - continue_workflow: true  # Continue with non-critical steps
+  on_timeout:
+    - retry_count: 2
+    - escalate_after: 3
+    - notify_customer_success: true
+  critical_steps:
+    - "create_customer_workspace"
+    - "setup_api_credentials"
+    - "provision_quantum_resources"
+
+monitoring:
+  metrics:
+    - name: "onboarding_completion_time"
+      type: "duration"
+    - name: "step_success_rate"
+      type: "percentage"
+    - name: "customer_satisfaction_score"
+      type: "rating"
+    - name: "time_to_first_value"
+      type: "duration"
+  alerts:
+    - condition: "onboarding_completion_time > 3600"  # 1 hour
+      severity: "warning"
+      message: "Customer onboarding taking longer than expected"
+    - condition: "step_success_rate < 0.9"
+      severity: "critical"
+      message: "High failure rate in customer onboarding"
+
+retention:
+  execution_logs: 90   # days
+  customer_data: 2555  # days (7 years for compliance)
+  metrics_data: 365    # days
+  error_logs: 180      # days

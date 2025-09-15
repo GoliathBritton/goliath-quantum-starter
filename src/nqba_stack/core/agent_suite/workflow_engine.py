@@ -1,4 +1,4 @@
-"""
+﻿"""
 NQBA Workflow Engine - Quantum Process Intelligence Platform
 Combines FLYFOX AI RPA, Goliath Trade workflows, and Sigma Select process mining with quantum enhancements
 """
@@ -211,7 +211,7 @@ class QuantumWorkflowEngine:
                     name="Collect Process Data",
                     description="Gather data from ERP, CRM, and other systems",
                     config={
-                        "sources": ["salesforce", "sap", "oracle"],
+                        "sources": ["salesforce", "sap", "Quantum Nexus"],
                         "time_range": "last_30_days",
                         "data_types": ["events", "transactions", "user_actions"]
                     }

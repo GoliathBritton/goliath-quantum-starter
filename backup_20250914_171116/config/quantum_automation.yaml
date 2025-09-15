@@ -1,0 +1,51 @@
+fallbacks:
+  dynex:
+    cache_ttl: 3600
+    degraded_features:
+    - quantum_optimization
+    - qubo_solving
+    fallback_mode: local
+    local_storage_path: ./data/quantum_cache
+  ipfs:
+    cache_ttl: 3600
+    degraded_features:
+    - audit_backup
+    - distributed_storage
+    fallback_mode: local
+    local_storage_path: ./data/audit_backup
+  llm:
+    cache_ttl: 7200
+    degraded_features:
+    - generative_ai
+    - advanced_nlp
+    fallback_mode: cache
+    local_storage_path: null
+services:
+  dynex:
+    enabled: false
+    endpoint: https://dynex.network
+    fallback_enabled: true
+    health_check_enabled: true
+    retry_attempts: 3
+    timeout: 30
+  ipfs:
+    enabled: false
+    endpoint: https://gateway.pinata.cloud
+    fallback_enabled: true
+    health_check_enabled: true
+    retry_attempts: 3
+    timeout: 30
+  llm:
+    enabled: true
+    endpoint: https://api.openai.com
+    fallback_enabled: true
+    health_check_enabled: true
+    retry_attempts: 3
+    timeout: 30
+  web3:
+    enabled: false
+    endpoint: null
+    fallback_enabled: true
+    health_check_enabled: false
+    retry_attempts: 3
+    timeout: 30

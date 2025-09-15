@@ -1,4 +1,4 @@
-// Oracle Decision Engine - Monte Carlo & Confidence Scoring
+﻿// Quantum Nexus Decision Engine - Monte Carlo & Confidence Scoring
 
 export interface DecisionScenario {
   name: string;
@@ -196,7 +196,7 @@ class ConfidenceScorer {
     // Time horizon confidence (longer = less certain)
     const timeHorizon = this.assessTimeHorizon(scenario.timeframe);
     
-    // Quantum coherence (mystical factor for the Oracle)
+    // Quantum coherence (mystical factor for the Quantum Nexus)
     const quantumCoherence = 0.8 + Math.random() * 0.15; // 80-95%
     
     return {
@@ -299,7 +299,7 @@ class ConfidenceScorer {
   }
 }
 
-export class OracleDecisionEngine {
+export class Quantum NexusDecisionEngine {
   private monteCarloEngine: MonteCarloEngine;
   private confidenceScorer: ConfidenceScorer;
   

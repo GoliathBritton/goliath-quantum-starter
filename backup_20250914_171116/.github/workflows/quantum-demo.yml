@@ -1,0 +1,51 @@
+name: Quantum Demo
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  quantum-demo:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.11
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -e .
+    
+    - name: Run QUBO Demo
+      run: |
+        python src/goliath/quantum/examples/run_qubo_demo.py
+    
+    - name: Run Integration Tests
+      run: |
+        python test_integration.py
+    
+    - name: Test Quantum Adapter
+      run: |
+        python -c "
+        from src.nqba.quantum_adapter import QuantumAdapter
+        adapter = QuantumAdapter()
+        print('Quantum adapter initialized successfully')
+        "
+    
+    - name: Test Decision Logic
+      run: |
+        python -c "
+        from src.nqba.decision_logic import DecisionLogic
+        logic = DecisionLogic()
+        print('Decision logic initialized successfully')
+        "
+

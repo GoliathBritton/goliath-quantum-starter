@@ -1,0 +1,184 @@
+# FLYFOX AI - Terraform Variables Example
+# Copy this file to terraform.tfvars and customize the values
+
+# General Configuration
+aws_region   = "us-west-2"
+environment  = "production"
+project_name = "flyfox"
+
+# VPC Configuration
+vpc_cidr = "10.0.0.0/16"
+private_subnets  = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+public_subnets   = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+database_subnets = ["10.0.201.0/24", "10.0.202.0/24", "10.0.203.0/24"]
+
+# EKS Configuration
+cluster_name       = "flyfox-production-eks"
+kubernetes_version = "1.28"
+
+# EKS Admin Users (customize with your IAM users)
+eks_admin_users = [
+  {
+    userarn  = "arn:aws:iam::123456789012:user/admin-user"
+    username = "admin-user"
+    groups   = ["system:masters"]
+  }
+]
+
+# RDS Configuration
+rds_instance_class        = "db.t3.medium"  # For production: db.r5.large or higher
+rds_allocated_storage     = 100
+rds_max_allocated_storage = 1000
+database_name             = "flyfox"
+database_username         = "flyfox_admin"
+database_password         = "CHANGE_ME_SECURE_PASSWORD_123!"  # MUST CHANGE
+
+# ElastiCache Configuration
+redis_node_type        = "cache.t3.medium"  # For production: cache.r6g.large or higher
+redis_num_cache_nodes  = 2
+redis_auth_token       = "CHANGE_ME_REDIS_AUTH_TOKEN_456!"  # MUST CHANGE
+
+# Domain and SSL Configuration
+domain_name         = "flyfox.ai"  # Change to your domain
+create_route53_zone = false        # Set to true if you want Terraform to manage DNS
+
+# Monitoring and Logging
+enable_cloudwatch_logs = true
+log_retention_days     = 30
+
+# Security Configuration
+enable_encryption    = true
+allowed_cidr_blocks = ["0.0.0.0/0"]  # Restrict this in production
+
+# Cost Optimization
+enable_spot_instances      = true
+enable_cluster_autoscaler  = true
+
+# Backup Configuration
+backup_retention_period = 7
+
+# Application Configuration
+app_replicas = {
+  api            = 3
+  worker         = 5
+  quantum_worker = 2
+  frontend       = 3
+}
+
+resource_limits = {
+  api = {
+    cpu    = "1000m"
+    memory = "2Gi"
+  }
+  worker = {
+    cpu    = "2000m"
+    memory = "4Gi"
+  }
+  quantum_worker = {
+    cpu    = "4000m"
+    memory = "8Gi"
+  }
+  frontend = {
+    cpu    = "500m"
+    memory = "1Gi"
+  }
+}
+
+# External Services Configuration (REQUIRED - Get from service providers)
+twilio_account_sid = "ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"  # From Twilio Console
+twilio_auth_token  = "your_twilio_auth_token_here"         # From Twilio Console
+openai_api_key     = "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" # From OpenAI
+dynex_api_key      = "your_dynex_api_key_here"            # From Dynex
+sentry_dsn         = "https://xxxxx@xxxxx.ingest.sentry.io/xxxxx"  # From Sentry
+
+# Feature Flags
+enable_gpu_nodes           = true
+enable_monitoring_stack    = true
+enable_ingress_controller  = true
+enable_cert_manager        = true
+
+# Development Configuration
+enable_bastion_host = false  # Set to true for secure SSH access
+enable_vpn          = false  # Set to true if you need VPN access
+
+# Compliance and Governance
+enable_config     = true
+enable_cloudtrail = true
+enable_guardduty  = true
+
+# Additional Tags
+additional_tags = {
+  "CostCenter"    = "Engineering"
+  "Owner"         = "DevOps Team"
+  "BusinessUnit"  = "AI Platform"
+  "Compliance"    = "SOC2"
+}
+
+# ============================================================================
+# IMPORTANT SECURITY NOTES:
+# ============================================================================
+# 
+# 1. NEVER commit terraform.tfvars to version control
+# 2. Use strong, unique passwords for database_password and redis_auth_token
+# 3. Rotate all secrets regularly
+# 4. Use AWS Secrets Manager or Parameter Store for production secrets
+# 5. Restrict allowed_cidr_blocks to your organization's IP ranges
+# 6. Enable MFA for all IAM users with admin access
+# 7. Review and customize security groups for your specific requirements
+# 
+# ============================================================================
+# COST OPTIMIZATION NOTES:
+# ============================================================================
+# 
+# 1. Start with smaller instance types and scale up based on usage
+# 2. Use spot instances for non-critical workloads
+# 3. Enable cluster autoscaler to automatically adjust node count
+# 4. Monitor costs using AWS Cost Explorer and set up billing alerts
+# 5. Consider Reserved Instances for predictable workloads
+# 
+# Estimated monthly costs (us-west-2):
+# - EKS Cluster: $73
+# - Worker Nodes (3x m5.large): ~$150
+# - RDS (db.t3.medium): ~$150
+# - ElastiCache (2x cache.t3.medium): ~$100
+# - NAT Gateways (3): ~$135
+# - Load Balancer: ~$25
+# - Total Base Infrastructure: ~$633/month
+# 
+# Additional costs:
+# - Data transfer
+# - CloudWatch logs
+# - S3 storage
+# - Dynex compute usage (variable)
+# - GPU instances (when used)
+# 
+# ============================================================================
+# DEPLOYMENT CHECKLIST:
+# ============================================================================
+# 
+# Before running terraform apply:
+# 
+# □ Copy this file to terraform.tfvars
+# □ Update all CHANGE_ME values
+# □ Set up AWS credentials (aws configure or IAM roles)
+# □ Create S3 bucket for Terraform state (update backend config in main.tf)
+# □ Create DynamoDB table for state locking
+# □ Review and customize security groups
+# □ Verify domain ownership (if using Route53)
+# □ Set up monitoring and alerting
+# □ Plan for backup and disaster recovery
+# □ Review compliance requirements
+# 
+# After terraform apply:
+# 
+# □ Configure kubectl: aws eks update-kubeconfig --region <region> --name <cluster>
+# □ Install AWS Load Balancer Controller
+# □ Deploy application manifests
+# □ Set up monitoring dashboards
+# □ Configure CI/CD pipeline
+# □ Test application functionality
+# □ Set up log aggregation
+# □ Configure alerting rules
+# □ Document runbook procedures
+# 
+# ============================================================================

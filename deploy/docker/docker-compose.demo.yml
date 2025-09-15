@@ -1,0 +1,362 @@
+# Quantum Nexus Platform - Demo Configuration
+# Prebuilt agents + workflows for immediate demonstration
+
+version: '3.8'
+
+services:
+  # =============================================================================
+  # Demo API with Prebuilt Workflows
+  # =============================================================================
+  quantum-nexus-demo-api:
+    build:
+      context: ../../
+      dockerfile: api/Dockerfile.demo
+      args:
+        BUILD_ENV: demo
+        PYTHON_VERSION: 3.11
+    image: quantum-nexus/demo-api:${VERSION:-latest}
+    container_name: quantum-nexus-demo-api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+      - "9090:9090"  # Metrics
+    environment:
+      - ENVIRONMENT=demo
+      - LOG_LEVEL=INFO
+      - LOG_FORMAT=json
+      - PYTHONUNBUFFERED=1
+      - DATABASE_URL=sqlite:///demo.db
+      - REDIS_URL=redis://redis:6379/0
+      - SECRET_KEY=demo-secret-key-change-in-production
+      - DYNEX_API_KEY=${DYNEX_API_KEY:-demo-key}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-demo-key}
+      - DEMO_MODE=true
+      - ENABLE_DEMO_DATA=true
+      - DEMO_USER_EMAIL=demo@quantum-nexus.ai
+      - DEMO_USER_PASSWORD=quantum-demo-2024
+    volumes:
+      - demo_data:/app/data
+      - demo_logs:/app/logs
+      - ./demo/workflows:/app/demo_workflows:ro
+      - ./demo/agents:/app/demo_agents:ro
+    networks:
+      - quantum-nexus-demo
+    depends_on:
+      - redis
+      - demo-db
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2G
+        reservations:
+          cpus: '0.25'
+          memory: 512M
+
+  # =============================================================================
+  # Demo Frontend with Quantum Nexus Branding
+  # =============================================================================
+  quantum-nexus-demo-frontend:
+    build:
+      context: ../../frontend
+      dockerfile: Dockerfile.demo
+      args:
+        BUILD_ENV: demo
+        REACT_APP_API_URL: http://localhost:8000
+        REACT_APP_BRAND_NAME: "Quantum Nexus"
+        REACT_APP_DEMO_MODE: "true"
+    image: quantum-nexus/demo-frontend:${VERSION:-latest}
+    container_name: quantum-nexus-demo-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+      - REACT_APP_BRAND_NAME=Quantum Nexus
+      - REACT_APP_DEMO_MODE=true
+      - REACT_APP_ENABLE_TEASER=true
+    volumes:
+      - ./demo/frontend/assets:/usr/share/nginx/html/assets:ro
+    networks:
+      - quantum-nexus-demo
+    depends_on:
+      - quantum-nexus-demo-api
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 256M
+        reservations:
+          cpus: '0.1'
+          memory: 128M
+
+  # =============================================================================
+  # Demo Worker with Prebuilt Quantum Algorithms
+  # =============================================================================
+  quantum-nexus-demo-worker:
+    build:
+      context: ../../
+      dockerfile: worker/Dockerfile.demo
+      args:
+        BUILD_ENV: demo
+        PYTHON_VERSION: 3.11
+    image: quantum-nexus/demo-worker:${VERSION:-latest}
+    container_name: quantum-nexus-demo-worker
+    restart: unless-stopped
+    environment:
+      - ENVIRONMENT=demo
+      - LOG_LEVEL=INFO
+      - WORKER_TYPE=demo
+      - DATABASE_URL=sqlite:///demo.db
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+      - DEMO_MODE=true
+      - ENABLE_MOCK_QUANTUM=true
+    volumes:
+      - demo_worker_data:/app/data
+      - ./demo/algorithms:/app/demo_algorithms:ro
+    networks:
+      - quantum-nexus-demo
+    depends_on:
+      - redis
+      - demo-db
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2G
+        reservations:
+          cpus: '0.25'
+          memory: 512M
+
+  # =============================================================================
+  # Demo Database (SQLite for simplicity)
+  # =============================================================================
+  demo-db:
+    image: alpine:3.18
+    container_name: quantum-nexus-demo-db
+    restart: unless-stopped
+    command: >
+      sh -c "mkdir -p /data && 
+             echo 'Demo database initialized' > /data/init.log &&
+             tail -f /data/init.log"
+    volumes:
+      - demo_db_data:/data
+    networks:
+      - quantum-nexus-demo
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 128M
+        reservations:
+          cpus: '0.05'
+          memory: 64M
+
+  # =============================================================================
+  # Redis for Demo Session Management
+  # =============================================================================
+  redis:
+    image: redis:7.2-alpine
+    container_name: quantum-nexus-demo-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: >
+      redis-server
+      --appendonly yes
+      --maxmemory 512mb
+      --maxmemory-policy allkeys-lru
+    volumes:
+      - demo_redis_data:/data
+    networks:
+      - quantum-nexus-demo
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 512M
+        reservations:
+          cpus: '0.1'
+          memory: 128M
+
+  # =============================================================================
+  # Demo Calling Agent Service
+  # =============================================================================
+  quantum-nexus-calling-agent:
+    build:
+      context: ../../
+      dockerfile: services/calling_agent/Dockerfile.demo
+      args:
+        BUILD_ENV: demo
+    image: quantum-nexus/calling-agent:${VERSION:-latest}
+    container_name: quantum-nexus-calling-agent
+    restart: unless-stopped
+    ports:
+      - "8001:8001"
+    environment:
+      - ENVIRONMENT=demo
+      - LOG_LEVEL=INFO
+      - API_URL=http://quantum-nexus-demo-api:8000
+      - REDIS_URL=redis://redis:6379/3
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-demo-key}
+      - DEMO_CONTACT_LIST_SIZE=100
+      - ENABLE_CALL_SIMULATION=true
+    volumes:
+      - demo_calling_data:/app/data
+      - ./demo/contacts:/app/demo_contacts:ro
+    networks:
+      - quantum-nexus-demo
+    depends_on:
+      - quantum-nexus-demo-api
+      - redis
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1G
+        reservations:
+          cpus: '0.1'
+          memory: 256M
+
+  # =============================================================================
+  # Demo Workflow Marketplace
+  # =============================================================================
+  quantum-nexus-marketplace:
+    build:
+      context: ../../
+      dockerfile: services/marketplace/Dockerfile.demo
+      args:
+        BUILD_ENV: demo
+    image: quantum-nexus/marketplace:${VERSION:-latest}
+    container_name: quantum-nexus-marketplace
+    restart: unless-stopped
+    ports:
+      - "8002:8002"
+    environment:
+      - ENVIRONMENT=demo
+      - LOG_LEVEL=INFO
+      - API_URL=http://quantum-nexus-demo-api:8000
+      - REDIS_URL=redis://redis:6379/4
+      - DEMO_MODE=true
+      - PRELOAD_TEMPLATES=true
+    volumes:
+      - demo_marketplace_data:/app/data
+      - ./demo/workflow_templates:/app/templates:ro
+    networks:
+      - quantum-nexus-demo
+    depends_on:
+      - quantum-nexus-demo-api
+      - redis
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1G
+        reservations:
+          cpus: '0.1'
+          memory: 256M
+
+  # =============================================================================
+  # Demo Monitoring Dashboard
+  # =============================================================================
+  quantum-nexus-demo-monitor:
+    image: grafana/grafana:10.1.0
+    container_name: quantum-nexus-demo-monitor
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=quantum-demo-2024
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
+      - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/etc/grafana/provisioning/dashboards/quantum-nexus-demo.json
+    volumes:
+      - demo_grafana_data:/var/lib/grafana
+      - ./demo/monitoring/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./demo/monitoring/datasources:/etc/grafana/provisioning/datasources:ro
+    networks:
+      - quantum-nexus-demo
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 512M
+        reservations:
+          cpus: '0.1'
+          memory: 128M
+
+  # =============================================================================
+  # Demo Load Generator (for realistic metrics)
+  # =============================================================================
+  quantum-nexus-load-generator:
+    build:
+      context: ../../
+      dockerfile: tools/load_generator/Dockerfile
+      args:
+        BUILD_ENV: demo
+    image: quantum-nexus/load-generator:${VERSION:-latest}
+    container_name: quantum-nexus-load-generator
+    restart: unless-stopped
+    environment:
+      - TARGET_URL=http://quantum-nexus-demo-api:8000
+      - LOAD_PATTERN=demo
+      - REQUESTS_PER_MINUTE=30
+      - ENABLE_QUANTUM_JOBS=true
+      - DEMO_SCENARIOS=capital_funding,insurance_risk,energy_optimization
+    networks:
+      - quantum-nexus-demo
+    depends_on:
+      - quantum-nexus-demo-api
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 128M
+        reservations:
+          cpus: '0.05'
+          memory: 64M
+
+# =============================================================================
+# Networks
+# =============================================================================
+networks:
+  quantum-nexus-demo:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16
+
+# =============================================================================
+# Volumes
+# =============================================================================
+volumes:
+  demo_data:
+    driver: local
+  demo_logs:
+    driver: local
+  demo_worker_data:
+    driver: local
+  demo_db_data:
+    driver: local
+  demo_redis_data:
+    driver: local
+  demo_calling_data:
+    driver: local
+  demo_marketplace_data:
+    driver: local
+  demo_grafana_data:
+    driver: local

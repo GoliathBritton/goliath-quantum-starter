@@ -1,4 +1,4 @@
-from datetime import datetime
+﻿from datetime import datetime
 from typing import Optional
 from sqlalchemy import String, Text, JSON, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -17,7 +17,7 @@ class AuditLog(Base):
     event_type: Mapped[str] = mapped_column(String(100), nullable=False, index=True)  # login, logout, data_access, etc.
     event_category: Mapped[str] = mapped_column(String(50), nullable=False, index=True)  # security, data, system, business
     action: Mapped[str] = mapped_column(String(100), nullable=False)  # create, read, update, delete, execute
-    resource_type: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)  # user, partner, lead, oracle_query
+    resource_type: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)  # user, partner, lead, quantum_nexus_query
     resource_id: Mapped[Optional[str]] = mapped_column(String(255), nullable=True, index=True)
     
     # Event Details
@@ -178,23 +178,23 @@ class AuditLog(Base):
         )
     
     @classmethod
-    def create_oracle_query_event(cls,
+    def create_quantum_nexus_query_event(cls,
                                  user_id: Optional[str],
                                  partner_id: str,
-                                 oracle_query_id: str,
+                                 quantum_nexus_query_id: str,
                                  query_type: str,
                                  credits_used: int,
                                  success: bool = True) -> 'AuditLog':
-        """Create an oracle query audit event."""
+        """Create an Quantum Nexus query audit event."""
         return cls(
             user_id=user_id,
             partner_id=partner_id,
-            event_type="oracle_query",
+            event_type="quantum_nexus_query",
             event_category="business",
             action="execute",
-            resource_type="oracle_query",
-            resource_id=oracle_query_id,
-            description=f"Oracle query {query_type} {'completed' if success else 'failed'}",
+            resource_type="quantum_nexus_query",
+            resource_id=quantum_nexus_query_id,
+            description=f"Quantum Nexus query {query_type} {'completed' if success else 'failed'}",
             severity="info" if success else "error",
             status="success" if success else "failure",
             business_process="quantum_scoring",

@@ -1,0 +1,130 @@
+# Goliath Quantum Division - Deployment Configuration
+# Production-ready settings for 10K+ contact batch processing
+
+environment: production
+batch_size: 10000
+quantum_workers: 4
+api_workers: 8
+
+# Database Configuration
+database:
+  host: localhost
+  port: 5432
+  name: goliath_quantum
+  user: goliath_user
+  password: quantum_secure_2024
+  pool_size: 20
+  max_overflow: 30
+
+# Redis Cache Configuration
+redis:
+  host: localhost
+  port: 6379
+  db: 0
+  password: null
+  max_connections: 50
+
+# Service Configuration
+services:
+  nqba_engine:
+    port: 8000
+    workers: 4
+    timeout: 300
+    memory_limit: "2G"
+    
+  high_council:
+    port: 8001
+    workers: 2
+    timeout: 600
+    memory_limit: "1G"
+    
+  quantum_architect:
+    port: 8002
+    workers: 2
+    timeout: 600
+    memory_limit: "1G"
+    
+  lead_processor:
+    port: 8003
+    workers: 6
+    timeout: 180
+    memory_limit: "4G"
+    batch_size: 1000
+    
+  ai_calling:
+    port: 8004
+    workers: 4
+    timeout: 300
+    memory_limit: "2G"
+    
+  main_api:
+    port: 8080
+    workers: 8
+    timeout: 120
+    memory_limit: "3G"
+
+# Monitoring Configuration
+monitoring:
+  prometheus_port: 9090
+  grafana_port: 3000
+  metrics_interval: 15
+  log_level: INFO
+  
+# Performance Tuning
+performance:
+  max_concurrent_batches: 5
+  quantum_cache_size: 1000
+  ltc_cache_size: 5000
+  connection_pool_size: 50
+  
+# Security Configuration
+security:
+  api_rate_limit: 1000  # requests per minute
+  jwt_expiry: 3600      # seconds
+  cors_origins:
+    - "http://localhost:3000"
+    - "https://goliath-quantum.com"
+    
+# Quantum Computing Settings
+quantum:
+  dynex_workers: 4
+  qubo_timeout: 300
+  quantum_cache_ttl: 3600
+  max_qubits: 1000
+  
+# AI Configuration
+ai:
+  openai_model: "gpt-4"
+  max_tokens: 4000
+  temperature: 0.7
+  voice_model: "tts-1"
+  
+# Batch Processing
+batch_processing:
+  chunk_size: 100
+  max_retries: 3
+  retry_delay: 5
+  parallel_chunks: 10
+  
+# File Storage
+storage:
+  data_directory: "data"
+  logs_directory: "logs"
+  cache_directory: "cache"
+  backup_directory: "backups"
+  max_file_size: "100MB"
+  
+# Health Checks
+health_checks:
+  enabled: true
+  interval: 30
+  timeout: 10
+  retries: 3
+  
+# Deployment Specific
+deployment:
+  auto_migrate: true
+  backup_before_deploy: true
+  rollback_on_failure: true
+  health_check_timeout: 300
+  startup_timeout: 120

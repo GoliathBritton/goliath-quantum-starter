@@ -1,0 +1,9 @@
+pandas
+psycopg2-binary
+sqlalchemy
+python-dateutil
+phonumbers
+boto3
+redis
+rq
+python-dotenv

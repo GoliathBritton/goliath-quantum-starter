@@ -1,0 +1,10 @@
+openai
+requests
+psycopg2-binary
+sqlalchemy
+redis
+rq
+twilio
+python-dotenv
+tenacity
+boto3

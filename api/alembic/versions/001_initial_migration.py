@@ -1,4 +1,4 @@
-"""Initial migration - create all tables
+﻿"""Initial migration - create all tables
 
 Revision ID: 001
 Revises: 
@@ -221,8 +221,8 @@ def upgrade() -> None:
     op.create_index('ix_leads_quantum_score', 'leads', ['quantum_score'])
     op.create_index('ix_leads_assigned_to', 'leads', ['assigned_to'])
 
-    # Create oracle_queries table
-    op.create_table('oracle_queries',
+    # Create quantum_nexus_queries table
+    op.create_table('quantum_nexus_queries',
         sa.Column('id', sa.String(), nullable=False),
         sa.Column('created_at', sa.DateTime(), nullable=False),
         sa.Column('updated_at', sa.DateTime(), nullable=False),
@@ -269,18 +269,18 @@ def upgrade() -> None:
         sa.Column('business_impact', sa.String(length=50), nullable=True),
         sa.Column('urgency', sa.String(length=50), nullable=True),
         sa.Column('tags', postgresql.JSON(astext_type=sa.Text()), nullable=True),
-        sa.ForeignKeyConstraint(['lead_id'], ['leads.id'], name='fk_oracle_queries_lead_id_leads'),
-        sa.ForeignKeyConstraint(['partner_id'], ['partners.id'], name='fk_oracle_queries_partner_id_partners'),
-        sa.ForeignKeyConstraint(['user_id'], ['users.id'], name='fk_oracle_queries_user_id_users'),
-        sa.PrimaryKeyConstraint('pk_oracle_queries')
+        sa.ForeignKeyConstraint(['lead_id'], ['leads.id'], name='fk_quantum_nexus_queries_lead_id_leads'),
+        sa.ForeignKeyConstraint(['partner_id'], ['partners.id'], name='fk_quantum_nexus_queries_partner_id_partners'),
+        sa.ForeignKeyConstraint(['user_id'], ['users.id'], name='fk_quantum_nexus_queries_user_id_users'),
+        sa.PrimaryKeyConstraint('pk_quantum_nexus_queries')
     )
-    op.create_index('ix_oracle_queries_partner_id', 'oracle_queries', ['partner_id'])
-    op.create_index('ix_oracle_queries_user_id', 'oracle_queries', ['user_id'])
-    op.create_index('ix_oracle_queries_lead_id', 'oracle_queries', ['lead_id'])
-    op.create_index('ix_oracle_queries_query_type', 'oracle_queries', ['query_type'])
-    op.create_index('ix_oracle_queries_input_hash', 'oracle_queries', ['input_hash'])
-    op.create_index('ix_oracle_queries_dynex_job_id', 'oracle_queries', ['dynex_job_id'])
-    op.create_index('ix_oracle_queries_request_id', 'oracle_queries', ['request_id'])
+    op.create_index('ix_quantum_nexus_queries_partner_id', 'quantum_nexus_queries', ['partner_id'])
+    op.create_index('ix_quantum_nexus_queries_user_id', 'quantum_nexus_queries', ['user_id'])
+    op.create_index('ix_quantum_nexus_queries_lead_id', 'quantum_nexus_queries', ['lead_id'])
+    op.create_index('ix_quantum_nexus_queries_query_type', 'quantum_nexus_queries', ['query_type'])
+    op.create_index('ix_quantum_nexus_queries_input_hash', 'quantum_nexus_queries', ['input_hash'])
+    op.create_index('ix_quantum_nexus_queries_dynex_job_id', 'quantum_nexus_queries', ['dynex_job_id'])
+    op.create_index('ix_quantum_nexus_queries_request_id', 'quantum_nexus_queries', ['request_id'])
 
     # Create quantum_credits table
     op.create_table('quantum_credits',
@@ -290,7 +290,7 @@ def upgrade() -> None:
         sa.Column('deleted_at', sa.DateTime(), nullable=True),
         sa.Column('partner_id', sa.String(), nullable=False),
         sa.Column('user_id', sa.String(), nullable=True),
-        sa.Column('oracle_query_id', sa.String(), nullable=True),
+        sa.Column('quantum_nexus_query_id', sa.String(), nullable=True),
         sa.Column('transaction_type', sa.String(length=50), nullable=False),
         sa.Column('amount', sa.Integer(), nullable=False),
         sa.Column('balance_before', sa.Integer(), nullable=False),
@@ -315,7 +315,7 @@ def upgrade() -> None:
         sa.Column('approved_at', sa.DateTime(), nullable=True),
         sa.ForeignKeyConstraint(['approved_by'], ['users.id'], name='fk_quantum_credits_approved_by_users'),
         sa.ForeignKeyConstraint(['created_by'], ['users.id'], name='fk_quantum_credits_created_by_users'),
-        sa.ForeignKeyConstraint(['oracle_query_id'], ['oracle_queries.id'], name='fk_quantum_credits_oracle_query_id_oracle_queries'),
+        sa.ForeignKeyConstraint(['quantum_nexus_query_id'], ['quantum_nexus_queries.id'], name='fk_quantum_credits_quantum_nexus_query_id_quantum_nexus_queries'),
         sa.ForeignKeyConstraint(['partner_id'], ['partners.id'], name='fk_quantum_credits_partner_id_partners'),
         sa.ForeignKeyConstraint(['user_id'], ['users.id'], name='fk_quantum_credits_user_id_users'),
         sa.PrimaryKeyConstraint('pk_quantum_credits')
@@ -378,7 +378,7 @@ def downgrade() -> None:
     """Downgrade database schema."""
     op.drop_table('audit_logs')
     op.drop_table('quantum_credits')
-    op.drop_table('oracle_queries')
+    op.drop_table('quantum_nexus_queries')
     op.drop_table('leads')
     op.drop_table('users')
     op.drop_table('partners')

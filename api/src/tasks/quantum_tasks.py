@@ -1,4 +1,4 @@
-from celery import Celery
+﻿from celery import Celery
 from typing import Dict, Any, Optional
 import json
 import uuid
@@ -47,7 +47,7 @@ def process_quantum_nexus_query(self, query_data: Dict[str, Any]) -> Dict[str, A
         dynex_client = DynexClient()
         
         # Process the quantum query
-        result = dynex_client.oracle_prediction(
+        result = dynex_client.quantum_nexus_prediction(
             scenario_name=query_data.get("question", "General Query"),
             description=query_data.get("context", {}),
             inputs=query_data.get("metadata", {})
@@ -151,7 +151,7 @@ def batch_quantum_processing(self, batch_queries: list) -> Dict[str, Any]:
         for i, query in enumerate(batch_queries):
             try:
                 # Process individual query
-                result = dynex_client.oracle_prediction(
+                result = dynex_client.quantum_nexus_prediction(
                     scenario_name=query.get("question", f"Batch Query {i+1}"),
                     description=query.get("context", {}),
                     inputs=query.get("metadata", {})
