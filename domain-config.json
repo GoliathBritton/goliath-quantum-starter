@@ -1,0 +1,74 @@
+{
+  "domains": {
+    "development": {
+      "primary": "localhost:3000",
+      "api": "localhost:8000",
+      "websocket": "ws://localhost:3001"
+    },
+    "staging": {
+      "primary": "staging.quantum-omniscient.com",
+      "api": "api-staging.quantum-omniscient.com",
+      "websocket": "wss://ws-staging.quantum-omniscient.com"
+    },
+    "production": {
+      "primary": "quantum-omniscient.com",
+      "api": "api.quantum-omniscient.com",
+      "websocket": "wss://ws.quantum-omniscient.com",
+      "cdn": "cdn.quantum-omniscient.com"
+    },
+    "alternatives": [
+      "quantumomniscient.ai",
+      "omniscient.quantum",
+      "qo-platform.com",
+      "quantum-ai.omniscient"
+    ]
+  },
+  "ssl": {
+    "enabled": true,
+    "provider": "letsencrypt",
+    "auto_renew": true
+  },
+  "dns": {
+    "provider": "cloudflare",
+    "records": [
+      {
+        "type": "A",
+        "name": "@",
+        "content": "YOUR_SERVER_IP",
+        "ttl": 300
+      },
+      {
+        "type": "CNAME",
+        "name": "www",
+        "content": "quantum-omniscient.com",
+        "ttl": 300
+      },
+      {
+        "type": "CNAME",
+        "name": "api",
+        "content": "quantum-omniscient.com",
+        "ttl": 300
+      },
+      {
+        "type": "CNAME",
+        "name": "ws",
+        "content": "quantum-omniscient.com",
+        "ttl": 300
+      }
+    ]
+  },
+  "redirects": {
+    "www.quantum-omniscient.com": "quantum-omniscient.com",
+    "quantumomniscient.com": "quantum-omniscient.com",
+    "omniscient.ai": "quantum-omniscient.com"
+  },
+  "security": {
+    "hsts": true,
+    "force_https": true,
+    "cors_origins": [
+      "https://quantum-omniscient.com",
+      "https://www.quantum-omniscient.com",
+      "https://quantumomniscient.ai"
+    ]
+  }
+}

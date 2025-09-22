@@ -154,14 +154,10 @@ async def dynex_api_get(path: str, params: str = "{}"):
 app.include_router(dynex_router)
 
 # Import and include recipe endpoints
-print("DEBUG: Importing recipe router...")
+import logging
+logger = logging.getLogger(__name__)
 from api.recipe_endpoints import router as recipe_router
-print(f"DEBUG: Recipe router imported: {recipe_router}")
-print(f"DEBUG: Recipe router routes: {[route.path for route in recipe_router.routes]}")
 app.include_router(recipe_router)
-print("DEBUG: Recipe router included in app")
-print(f"DEBUG: All app routes: {[route.path for route in app.routes]}")
-print(f"DEBUG: App router count: {len(app.routes)}")
 
 # Add a simple test route directly to the main app
 @app.get("/test-main-app")

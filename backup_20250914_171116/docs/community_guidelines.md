@@ -1,4 +1,29 @@
-# 🌐 Community Guidelines & Contribution Standards
+chrome://settings/searchEngines
+    default-search                  
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    chrome://settings/searchEngines
+        Flights                 
+        
+        b1ce0798-9b8c-456c-84e8-6ec6ec9102ea
+        🌐 Community Guidelines & Contribution Standards
 # FLYFOX AI Platform Ecosystem
 
 ![FLYFOX AI Logo](https://flyfox.ai/logo.svg)

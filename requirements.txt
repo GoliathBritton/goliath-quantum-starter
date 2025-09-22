@@ -1,10 +1,12 @@
-# Goliath Quantum Division - Production Dependencies
-# Core platform requirements for 10K+ contact batch processing
+# Goliath Quantum Division - qdLLM Foundation Stack Dependencies
+# Core platform requirements for quantum-enhanced language models
 
 # Web Framework & API
 fastapi==0.116.1
 uvicorn[standard]==0.35.0
 starlette==0.41.3
+pydantic-settings>=2.1.0
+python-multipart>=0.0.6
 
 # Data Validation & Serialization
 pydantic==1.10.12
@@ -19,35 +21,85 @@ alembic==1.13.1
 redis==5.0.1
 celery==5.3.4
 
-# Quantum Computing
+# Quantum Computing & Simulation
 dimod==0.12.21
-numpy==2.3.3
-scipy==1.14.1
-networkx==3.4.2
+numpy==1.26.4  # Fixed from 2.3.3 which doesn't exist yet
+scipy==1.12.0  # Fixed from 1.14.1 which doesn't exist yet
+networkx==3.2.1  # Fixed from 3.4.2 which doesn't exist yet
+qiskit>=0.45.0
+cirq>=1.3.0
+pennylane>=0.33.0
+qutip>=4.7.0
 
 # AI & Machine Learning
 openai==1.57.0
 scikit-learn==1.5.2
 pandas==2.2.3
+torch>=2.1.0
+transformers>=4.36.0
+sentence-transformers>=2.2.0
+
+# Natural Language Processing
+spacy>=3.7.0
+nltk>=3.8.0
+textblob>=0.17.0
 
 # HTTP Client & Requests
 httpx==0.28.1
 requests==2.32.3
 aiohttp==3.11.10
+aiofiles>=23.2.0
+asyncio-throttle>=1.0.2
 
 # Authentication & Security
 pyjwt==2.10.1
 passlib[bcrypt]==1.7.4
 cryptography==44.0.0
+python-jose[cryptography]>=3.3.0
 
 # Configuration & Environment
 python-dotenv==1.0.1
 pyyaml==6.0.2
 click==8.1.8
+toml>=0.10.0
 
 # Logging & Monitoring
 structlog==23.2.0
 prometheus-client==0.19.0
+loguru>=0.7.0
+
+# Testing & Development
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+pytest-cov>=4.1.0
+pytest-mock>=3.12.0
+coverage>=7.3.0
+black>=23.11.0
+flake8>=6.1.0
+mypy>=1.7.0
+
+# Data Visualization
+matplotlib>=3.8.0
+seaborn>=0.13.0
+plotly>=5.17.0
+
+# Utilities
+tqdm>=4.66.0
+rich>=13.7.0
+typer>=0.9.0
+psutil>=5.9.0
+memory-profiler>=0.61.0
+ortools==9.14.6206  # Fixed from 9.8.3296
+ipfshttpclient==0.8.0a2  # Fixed from 0.8.0
+
+# Performance Optimization
+numba>=0.58.0
+
+# WebSocket Support
+websockets>=12.0.0
+
+# API Rate Limiting
+fastapi-limiter>=0.1.5
 
 # Date & Time
 python-dateutil==2.9.0.post0

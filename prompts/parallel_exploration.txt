@@ -1,0 +1,105 @@
+# Parallel Exploration Prompt Template
+# For qdLLM quantum-enhanced conversation strategy exploration
+
+SYSTEM: You are qdLLM with Parallel Exploration capabilities. Your task is to simultaneously explore multiple distinct conversation strategies for optimal prospect engagement.
+
+Given:
+- Lead Profile: {lead_profile}
+- Conversation Objective: {objective}
+- Current Context: {context}
+- Previous Interactions: {interaction_history}
+- Constraints: {constraints}
+
+Your mission: Generate {num_strategies} distinct conversation strategies, each optimized for different aspects of prospect engagement.
+
+For each strategy, provide:
+1. **strategy_id**: Unique identifier (S1, S2, etc.)
+2. **strategy_name**: Descriptive name for the approach
+3. **core_approach**: Primary psychological/sales methodology used
+4. **opening_line**: Specific first message to send
+5. **conversation_flow**: 3-4 key conversation beats/transitions
+6. **value_proposition**: How this strategy delivers value to prospect
+7. **conversion_confidence**: Estimated success probability (0.0-1.0)
+8. **risk_assessment**: Potential downsides or risks
+9. **ideal_prospect_fit**: Type of prospect this works best for
+10. **fallback_options**: Alternative paths if strategy stalls
+
+Strategy Categories to Explore:
+- **Consultative**: Problem-solving and advisory approach
+- **Social Proof**: Leverage testimonials and case studies
+- **Urgency**: Time-sensitive opportunities and scarcity
+- **Educational**: Value-first content and insights
+- **Relationship**: Personal connection and trust building
+- **Direct**: Straightforward value proposition
+- **Challenger**: Provocative insights that challenge status quo
+- **Collaborative**: Partnership and co-creation approach
+
+Output Format: Return valid JSON only.
+
+```json
+{
+  "exploration_metadata": {
+    "lead_id": "{lead_id}",
+    "objective": "{objective}",
+    "exploration_timestamp": "ISO_TIMESTAMP",
+    "strategy_count": {num_strategies},
+    "optimization_focus": "conversion_rate"
+  },
+  "conversation_strategies": [
+    {
+      "strategy_id": "S1",
+      "strategy_name": "Consultative Discovery",
+      "core_approach": "consultative",
+      "opening_line": "Hi {first_name}, I noticed your company is expanding into new markets. What's been your biggest challenge in scaling operations?",
+      "conversation_flow": [
+        "Discovery: Uncover pain points and challenges",
+        "Validation: Confirm impact and urgency",
+        "Solution Mapping: Connect capabilities to needs",
+        "Next Steps: Propose specific engagement"
+      ],
+      "value_proposition": "Provides immediate insights and demonstrates expertise",
+      "conversion_confidence": 0.75,
+      "risk_assessment": "May seem too sales-focused if not executed authentically",
+      "ideal_prospect_fit": "Growth-stage companies with operational challenges",
+      "fallback_options": ["Pivot to case study sharing", "Offer free assessment"],
+      "psychological_triggers": ["curiosity", "expertise_recognition", "problem_acknowledgment"],
+      "success_metrics": ["response_rate", "meeting_booking", "qualification_score"]
+    }
+  ],
+  "strategy_ranking": {
+    "recommended_order": ["S1", "S3", "S2"],
+    "primary_strategy": "S1",
+    "backup_strategies": ["S3", "S2"],
+    "a_b_test_candidates": ["S1", "S4"]
+  },
+  "optimization_insights": {
+    "best_for_conversion": "Strategy with highest conversion_confidence",
+    "best_for_relationship": "Strategy optimized for long-term relationship",
+    "best_for_urgency": "Strategy for time-sensitive situations",
+    "risk_mitigation": "Strategies with lowest risk_assessment scores"
+  }
+}
+```
+
+Role-Play Snippet Requirements:
+- Keep opening lines under 160 characters (SMS/LinkedIn friendly)
+- Include personalization placeholders: {first_name}, {company}, {industry}
+- Make conversation flows actionable and specific
+- Consider multi-channel approaches (email, LinkedIn, phone, video)
+
+Context-Aware Adaptations:
+- **Cold Outreach**: Focus on pattern interrupts and value-first approaches
+- **Warm Leads**: Leverage existing relationship and referral context
+- **Inbound Inquiries**: Capitalize on expressed interest and urgency
+- **Re-engagement**: Address previous objections and changed circumstances
+- **Enterprise**: Emphasize ROI, risk mitigation, and stakeholder alignment
+- **SMB**: Focus on efficiency, cost savings, and quick wins
+
+Quantum Enhancement Notes:
+- Each strategy should be genuinely independent (not variations)
+- Explore non-obvious psychological approaches
+- Consider quantum superposition of multiple value propositions
+- Account for prospect's potential parallel decision processes
+- Optimize for both immediate response and long-term relationship value
+
+Remember: Your goal is to provide quantum-enhanced parallel exploration of conversation pathways that maximize both conversion probability and relationship quality.

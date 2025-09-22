@@ -40,6 +40,14 @@ from src.nqba_stack.core.flyfox_quantum_hub import (
     get_quantum_usage_stats
 )
 
+# Import Quantum Algorithms
+from src.nqba_stack.algorithms.runner import (
+    run_algorithm,
+    AlgorithmType,
+    AlgorithmConfig,
+    BackendType
+)
+
 class NQBADemo:
     """Comprehensive NQBA demonstration"""
     
@@ -67,10 +75,13 @@ class NQBADemo:
         # Step 5: Quantum Computing Operations
         await self.demo_quantum_operations()
         
-        # Step 6: Usage Statistics
+        # Step 6: Quantum Algorithms Demo
+        await self.demo_quantum_algorithms()
+        
+        # Step 7: Usage Statistics
         await self.demo_usage_statistics()
         
-        # Step 7: Summary
+        # Step 8: Summary
         self.print_demo_summary()
     
     async def demo_third_party_registration(self):
@@ -335,9 +346,139 @@ class NQBADemo:
             print(f"❌ Quantum operations failed: {e}")
             self.demo_results["quantum_operations"] = {"status": "failed", "error": str(e)}
     
+    async def demo_quantum_algorithms(self):
+        """Demonstrate quantum algorithms (QAOA MaxCut, VQE Chemistry)"""
+        print("\n🔬 Step 6: Quantum Algorithms Demo")
+        print("-" * 35)
+        
+        try:
+            # Demo 1: QAOA MaxCut for combinatorial optimization
+            print("\n🎯 Running QAOA MaxCut Algorithm...")
+            
+            qaoa_config = AlgorithmConfig(
+                algorithm_type=AlgorithmType.QAOA_MAXCUT,
+                backend_type=BackendType.QISKIT,
+                num_qubits=4,
+                num_layers=2,
+                max_iterations=50,
+                shots=1024,
+                optimization_level=1,
+                noise_mitigation=True
+            )
+            
+            # Create a sample graph for MaxCut
+            graph_edges = [(0, 1), (1, 2), (2, 3), (3, 0), (0, 2)]
+            qaoa_params = {
+                "graph_edges": graph_edges,
+                "warm_start": True,
+                "layerwise_training": True
+            }
+            
+            qaoa_result = await run_algorithm(
+                config=qaoa_config,
+                algorithm_params=qaoa_params
+            )
+            
+            print(f"   ✅ QAOA MaxCut completed successfully")
+            print(f"   Best Cut Value: {qaoa_result.best_value:.4f}")
+            print(f"   Optimal Parameters: {qaoa_result.optimal_params[:4]}...")  # Show first 4
+            print(f"   Execution Time: {qaoa_result.execution_time:.2f}s")
+            print(f"   Iterations: {qaoa_result.iterations}")
+            
+            # Demo 2: VQE Chemistry for molecular simulation
+            print("\n🧪 Running VQE Chemistry Algorithm...")
+            
+            vqe_config = AlgorithmConfig(
+                algorithm_type=AlgorithmType.VQE_CHEMISTRY,
+                backend_type=BackendType.QISKIT,
+                num_qubits=4,
+                num_layers=2,
+                max_iterations=30,
+                shots=1024,
+                optimization_level=1,
+                noise_mitigation=True
+            )
+            
+            # H2 molecule parameters
+            vqe_params = {
+                "molecule": "H2",
+                "bond_distance": 0.735,  # Angstroms
+                "ansatz_type": "hardware_efficient",
+                "gradient_method": "parameter_shift"
+            }
+            
+            vqe_result = await run_algorithm(
+                config=vqe_config,
+                algorithm_params=vqe_params
+            )
+            
+            print(f"   ✅ VQE Chemistry completed successfully")
+            print(f"   Ground State Energy: {vqe_result.best_value:.6f} Hartree")
+            print(f"   Optimal Parameters: {vqe_result.optimal_params[:4]}...")  # Show first 4
+            print(f"   Execution Time: {vqe_result.execution_time:.2f}s")
+            print(f"   Iterations: {vqe_result.iterations}")
+            
+            # Demo 3: Quantum Classifier for machine learning
+            print("\n🤖 Running Quantum Classifier Algorithm...")
+            
+            classifier_result = await run_algorithm(
+                algorithm_type="quantum_classifier",
+                problem_data={
+                    "dataset_name": "iris",
+                    "num_samples": 100,
+                    "test_size": 0.3,
+                    "random_state": 42
+                },
+                backend_type="simulator",
+                max_iterations=50,
+                algorithm_params={
+                    "feature_map": "ZZFeatureMap",
+                    "ansatz": "RealAmplitudes",
+                    "num_layers": 2
+                }
+            )
+            
+            print(f"   ✅ Quantum Classifier completed successfully")
+            print(f"   Test Accuracy: {classifier_result.get('test_accuracy', 0):.3f}")
+            print(f"   Train Accuracy: {classifier_result.get('train_accuracy', 0):.3f}")
+            print(f"   Execution Time: {classifier_result.get('execution_time', 0):.2f}s")
+            print(f"   Iterations: {classifier_result.get('iterations', 0)}")
+            
+            # Store results
+            self.demo_results["quantum_algorithms"] = {
+                "qaoa_maxcut": {
+                    "status": "success",
+                    "best_cut_value": qaoa_result.best_value,
+                    "execution_time": qaoa_result.execution_time,
+                    "iterations": qaoa_result.iterations
+                },
+                "vqe_chemistry": {
+                    "status": "success",
+                    "ground_state_energy": vqe_result.best_value,
+                    "execution_time": vqe_result.execution_time,
+                    "iterations": vqe_result.iterations
+                },
+                "quantum_classifier": {
+                    "status": "success",
+                    "test_accuracy": classifier_result.get('test_accuracy', 0),
+                    "train_accuracy": classifier_result.get('train_accuracy', 0),
+                    "execution_time": classifier_result.get('execution_time', 0),
+                    "iterations": classifier_result.get('iterations', 0)
+                }
+            }
+            
+            total_time = (qaoa_result.execution_time + vqe_result.execution_time + 
+                         classifier_result.get('execution_time', 0))
+            print(f"\n   🎉 All three quantum algorithms completed successfully!")
+            print(f"   Total Execution Time: {total_time:.2f}s")
+            
+        except Exception as e:
+            print(f"❌ Quantum algorithms demo failed: {e}")
+            self.demo_results["quantum_algorithms"] = {"status": "failed", "error": str(e)}
+    
     async def demo_usage_statistics(self):
         """Demonstrate usage statistics"""
-        print("\n📈 Step 6: Usage Statistics")
+        print("\n📈 Step 7: Usage Statistics")
         print("-" * 20)
         
         if not self.client_id:
@@ -390,6 +531,7 @@ class NQBADemo:
         print("   • Automated Audit Scheduling")
         print("   • Real-time Data Collection")
         print("   • MCP-style Quantum Computing Hub")
+        print("   • Advanced Quantum Algorithms (QAOA, VQE, Quantum ML)")
         print("   • Third-party Integration Support")
 
 async def main():

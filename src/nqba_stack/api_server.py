@@ -585,8 +585,9 @@ async def execute_neuro_siphon(request: IntelligenceOperationRequest):
         )
 
     except Exception as e:
-        logger.error(f"NeuroSiphon operation failed: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        request_id = str(uuid.uuid4())
+        logger.error(f"NeuroSiphon operation failed: {e}", exc_info=True, extra={"request_id": request_id})
+        raise HTTPException(status_code=500, detail="Internal server error", headers={"X-Request-ID": request_id})
 
 
 @app.post("/ghost-neuroq/create-sigma-graph")
@@ -635,8 +636,9 @@ async def execute_data_poisoning(request: IntelligenceOperationRequest):
         )
 
     except Exception as e:
-        logger.error(f"Data poisoning operation failed: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        request_id = str(uuid.uuid4())
+        logger.error(f"Data poisoning operation failed: {e}", exc_info=True, extra={"request_id": request_id})
+        raise HTTPException(status_code=500, detail="Internal server error", headers={"X-Request-ID": request_id})
 
 
 # ============================================================================
@@ -768,7 +770,9 @@ async def create_advanced_qubo(request: QUBOCreateRequest):
             "message": "Advanced QUBO matrix created successfully",
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        request_id = str(uuid.uuid4())
+        logger.error(f"Operation failed: {e}", exc_info=True, extra={"request_id": request_id})
+        raise HTTPException(status_code=500, detail="Internal server error", headers={"X-Request-ID": request_id})
 
 
 class QUBOOptimizeRequest(BaseModel):
@@ -1547,6 +1551,16 @@ async def create_tutorial(request: TutorialCreationRequest):
             full_name="Temporary Developer",
         )
 
+        # Map difficulty string to enum value
+        difficulty_mapping = {
+            "Beginner": AlgorithmComplexity.BEGINNER,
+            "Intermediate": AlgorithmComplexity.INTERMEDIATE,
+            "Advanced": AlgorithmComplexity.ADVANCED,
+            "Expert": AlgorithmComplexity.EXPERT,
+        }
+        
+        difficulty = difficulty_mapping.get(request.difficulty, AlgorithmComplexity.INTERMEDIATE)
+
         # Create tutorial object
         tutorial = Tutorial(
             tutorial_id="",  # Will be generated
@@ -1554,7 +1568,7 @@ async def create_tutorial(request: TutorialCreationRequest):
             content=request.content,
             author=developer,
             category=request.category,
-            difficulty=AlgorithmComplexity(request.difficulty),
+            difficulty=difficulty,
             tags=request.tags or [],
             estimated_time=request.estimated_time,
             prerequisites=request.prerequisites or [],

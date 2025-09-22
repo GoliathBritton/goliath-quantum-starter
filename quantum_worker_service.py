@@ -155,7 +155,7 @@ class QuantumProcessor:
             job["error"] = str(e)
             job["completed_at"] = self.get_cached_timestamp()
             logger.error(f"Failed quantum job {job_id}: {e}")
-            raise
+            return {"error": str(e), "status": "failed"}
             
     def _process_nuco_cloud_job(self, job_id: str) -> Dict[str, Any]:
         """Process a job using nuco.cloud integration"""
@@ -204,6 +204,11 @@ class QuantumWorkerHandler(BaseHTTPRequestHandler):
                 self.send_job_status(job_id)
             elif path == "/jobs":
                 self.send_all_jobs()
+            elif path.startswith("/api/jobs/"):
+                job_id = path.split("/")[-1]
+                self.send_job_status(job_id)
+            elif path == "/api/jobs":
+                self.send_all_jobs()
             else:
                 self.send_error(404, "Not Found")
         except Exception as e:
@@ -220,7 +225,7 @@ class QuantumWorkerHandler(BaseHTTPRequestHandler):
             post_data = self.rfile.read(content_length).decode('utf-8')
             data = json.loads(post_data) if post_data else {}
             
-            if path == "/submit":
+            if path == "/submit" or path == "/api/jobs":
                 self.handle_job_submission(data)
             elif path.startswith("/execute/"):
                 job_id = path.split("/")[-1]
@@ -296,6 +301,22 @@ class QuantumWorkerHandler(BaseHTTPRequestHandler):
             # Execute job synchronously for immediate response
             result = self.quantum_processor.execute_job(job_id)
             
+            # Check if result is a Future object and get its result
+            if isinstance(result, concurrent.futures.Future):
+                try:
+                    result = result.result(timeout=30)  # Add timeout to prevent hanging
+                except concurrent.futures.TimeoutError:
+                    self.send_error(504, f"Job execution timed out")
+                    return
+                except Exception as e:
+                    self.send_error(500, f"Job execution failed: {str(e)}")
+                    return
+            
+            # Check if result contains error
+            if isinstance(result, dict) and result.get("status") == "failed":
+                self.send_error(500, result.get("error", "Unknown error"))
+                return
+                
             response = {
                 "job_id": job_id,
                 "status": "completed",
@@ -351,12 +372,14 @@ def main():
     
     # Create HTTP server
     handler = create_handler(quantum_processor)
-    server = HTTPServer(('localhost', port), handler)
+    # Bind to 0.0.0.0 instead of localhost to allow external connections
+    server = HTTPServer(('0.0.0.0', port), handler)
     
     logger.info(f"🚀 Quantum Worker Service starting on port {port}")
-    logger.info(f"📊 Health check: http://localhost:{port}/health")
-    logger.info(f"📈 Status: http://localhost:{port}/status")
-    logger.info(f"🔬 Submit jobs: POST http://localhost:{port}/submit")
+    logger.info(f"📊 Health check: http://0.0.0.0:{port}/health")
+    logger.info(f"📈 Status: http://0.0.0.0:{port}/status")
+    logger.info(f"🔬 Submit jobs: POST http://0.0.0.0:{port}/submit")
+    logger.info(f"🔬 API jobs: POST http://0.0.0.0:{port}/api/jobs")
     
     try:
         server.serve_forever()

@@ -1,4 +1,4 @@
-Metadata-Version: 2.2
+Metadata-Version: 2.4
 Name: flyfox-quantum-platform
 Version: 0.1.0
 Summary: FLYFOX AI Quantum Computing Platform - Advanced quantum computing with AI agents
@@ -27,67 +27,140 @@ Classifier: Topic :: Software Development :: Libraries :: Python Modules
 Classifier: Topic :: System :: Distributed Computing
 Requires-Python: >=3.8
 Description-Content-Type: text/markdown
-Requires-Dist: qiskit>=0.44.0
-Requires-Dist: qiskit-aer>=0.12.0
-Requires-Dist: qiskit-optimization>=0.5.0
-Requires-Dist: qiskit-machine-learning>=0.5.0
-Requires-Dist: qiskit-finance>=0.4.0
-Requires-Dist: qiskit-nature>=0.6.0
-Requires-Dist: dynex>=0.1.0
-Requires-Dist: openai>=1.0.0
-Requires-Dist: anthropic>=0.7.0
-Requires-Dist: transformers>=4.30.0
-Requires-Dist: torch>=2.0.0
-Requires-Dist: numpy>=1.24.0
-Requires-Dist: scipy>=1.10.0
-Requires-Dist: scikit-learn>=1.3.0
-Requires-Dist: fastapi>=0.100.0
-Requires-Dist: uvicorn>=0.23.0
-Requires-Dist: pydantic>=2.0.0
-Requires-Dist: httpx>=0.24.0
-Requires-Dist: requests>=2.31.0
-Requires-Dist: click>=8.1.0
-Requires-Dist: pyyaml>=6.0
-Requires-Dist: python-dotenv>=1.0.0
-Requires-Dist: configparser>=5.3.0
-Requires-Dist: structlog>=23.1.0
-Requires-Dist: colorama>=0.4.6
-Requires-Dist: SpeechRecognition>=3.10.0
-Requires-Dist: pyttsx3>=2.90
-Requires-Dist: pyaudio>=0.2.11
-Requires-Dist: pandas>=2.0.0
-Requires-Dist: matplotlib>=3.7.0
-Requires-Dist: seaborn>=0.12.0
-Requires-Dist: plotly>=5.15.0
-Requires-Dist: sqlalchemy>=2.0.0
-Requires-Dist: alembic>=1.11.0
-Requires-Dist: redis>=4.6.0
+License-File: LICENSE-APACHE
+License-File: LICENSE-BSL
+Requires-Dist: fastapi==0.116.1
+Requires-Dist: uvicorn[standard]==0.35.0
+Requires-Dist: starlette==0.41.3
+Requires-Dist: pydantic-settings>=2.1.0
+Requires-Dist: python-multipart>=0.0.6
+Requires-Dist: pydantic==1.10.12
+Requires-Dist: pydantic[email]==1.10.12
+Requires-Dist: sqlalchemy==1.4.53
+Requires-Dist: psycopg2-binary==2.9.9
+Requires-Dist: alembic==1.13.1
+Requires-Dist: redis==5.0.1
+Requires-Dist: celery==5.3.4
+Requires-Dist: dimod==0.12.21
+Requires-Dist: numpy==2.3.3
+Requires-Dist: scipy==1.14.1
+Requires-Dist: networkx==3.4.2
+Requires-Dist: qiskit>=0.45.0
+Requires-Dist: cirq>=1.3.0
+Requires-Dist: pennylane>=0.33.0
+Requires-Dist: qutip>=4.7.0
+Requires-Dist: openai==1.57.0
+Requires-Dist: scikit-learn==1.5.2
+Requires-Dist: pandas==2.2.3
+Requires-Dist: torch>=2.1.0
+Requires-Dist: transformers>=4.36.0
+Requires-Dist: sentence-transformers>=2.2.0
+Requires-Dist: spacy>=3.7.0
+Requires-Dist: nltk>=3.8.0
+Requires-Dist: textblob>=0.17.0
+Requires-Dist: httpx==0.28.1
+Requires-Dist: requests==2.32.3
+Requires-Dist: aiohttp==3.11.10
+Requires-Dist: aiofiles>=23.2.0
+Requires-Dist: asyncio-throttle>=1.0.2
+Requires-Dist: pyjwt==2.10.1
+Requires-Dist: passlib[bcrypt]==1.7.4
+Requires-Dist: cryptography==44.0.0
+Requires-Dist: python-jose[cryptography]>=3.3.0
+Requires-Dist: python-dotenv==1.0.1
+Requires-Dist: pyyaml==6.0.2
+Requires-Dist: click==8.1.8
+Requires-Dist: toml>=0.10.0
+Requires-Dist: structlog==23.2.0
+Requires-Dist: prometheus-client==0.19.0
+Requires-Dist: loguru>=0.7.0
 Requires-Dist: pytest>=7.4.0
 Requires-Dist: pytest-asyncio>=0.21.0
 Requires-Dist: pytest-cov>=4.1.0
-Requires-Dist: pytest-mock>=3.11.0
-Requires-Dist: black>=23.7.0
-Requires-Dist: flake8>=6.0.0
-Requires-Dist: mypy>=1.5.0
-Requires-Dist: pre-commit>=3.3.0
-Requires-Dist: sphinx>=7.1.0
-Requires-Dist: sphinx-rtd-theme>=1.3.0
-Requires-Dist: cryptography>=41.0.0
-Requires-Dist: bcrypt>=4.0.0
-Requires-Dist: asyncio-mqtt>=0.13.0
-Requires-Dist: aiofiles>=23.1.0
-Requires-Dist: openpyxl>=3.1.0
-Requires-Dist: xlrd>=2.0.1
-Requires-Dist: python-docx>=0.8.11
-Requires-Dist: PyPDF2>=3.0.0
-Requires-Dist: boto3>=1.28.0
-Requires-Dist: google-cloud-storage>=2.10.0
-Requires-Dist: azure-storage-blob>=12.17.0
-Requires-Dist: numba>=0.57.0
-Requires-Dist: cython>=3.0.0
-Requires-Dist: schedule>=1.2.0
-Requires-Dist: croniter>=1.4.0
-Requires-Dist: apscheduler>=3.10.0
+Requires-Dist: pytest-mock>=3.12.0
+Requires-Dist: coverage>=7.3.0
+Requires-Dist: black>=23.11.0
+Requires-Dist: flake8>=6.1.0
+Requires-Dist: mypy>=1.7.0
+Requires-Dist: matplotlib>=3.8.0
+Requires-Dist: seaborn>=0.13.0
+Requires-Dist: plotly>=5.17.0
+Requires-Dist: tqdm>=4.66.0
+Requires-Dist: rich>=13.7.0
+Requires-Dist: typer>=0.9.0
+Requires-Dist: psutil>=5.9.0
+Requires-Dist: memory-profiler>=0.61.0
+Requires-Dist: numba>=0.58.0
+Requires-Dist: websockets>=12.0.0
+Requires-Dist: fastapi-limiter>=0.1.5
+Requires-Dist: python-dateutil==2.9.0.post0
+Requires-Dist: openpyxl==3.1.5
+Requires-Dist: twilio==9.3.7
+Requires-Dist: pytest==8.3.4
+Requires-Dist: pytest-asyncio==0.24.0
+Requires-Dist: pytest-cov==6.0.0
+Requires-Dist: black==24.10.0
+Requires-Dist: flake8==7.1.1
+Requires-Dist: mypy==1.13.0
+Requires-Dist: gunicorn==23.0.0
+Requires-Dist: tqdm==4.67.1
+Requires-Dist: rich==13.9.4
+Requires-Dist: typer==0.15.1
+Requires-Dist: anyio==4.7.0
+Requires-Dist: jsonschema==4.23.0
+Requires-Dist: marshmallow==3.23.2
+Requires-Dist: cachetools==5.5.0
+Requires-Dist: memory-profiler==0.61.0
+Requires-Dist: docker==7.1.0
+Requires-Dist: opentelemetry-api==1.29.0
+Requires-Dist: opentelemetry-sdk==1.29.0
+Requires-Dist: fastapi-users==13.0.0
+Requires-Dist: fastapi-limiter==0.1.6
+Requires-Dist: Pillow==11.0.0
+Requires-Dist: pydub==0.25.1
+Requires-Dist: speech-recognition==3.12.0
+Requires-Dist: websockets==14.1
+Requires-Dist: rq==2.0.0
+Requires-Dist: apscheduler==3.11.0
+Requires-Dist: cerberus==1.3.5
+Requires-Dist: psutil==6.1.0
+Requires-Dist: plotly==5.24.1
+Requires-Dist: matplotlib==3.10.0
+Requires-Dist: seaborn==0.13.2
+Requires-Dist: numba==0.60.0
+Requires-Dist: cython==3.0.11
+Requires-Dist: diskcache==5.6.3
+Requires-Dist: slowapi==0.1.9
+Requires-Dist: orjson==3.10.12
+Requires-Dist: msgpack==1.1.0
+Requires-Dist: loguru==0.7.3
+Requires-Dist: safety==4.0.1
+Requires-Dist: bandit==1.8.0
+Requires-Dist: pre-commit==4.0.1
+Requires-Dist: isort==5.13.2
+Requires-Dist: sphinx==8.1.3
+Requires-Dist: mkdocs==1.6.1
+Requires-Dist: boto3==1.35.91
+Requires-Dist: azure-storage-blob==12.24.0
+Requires-Dist: google-cloud-storage==2.19.0
+Requires-Dist: aioredis==2.1.0
+Requires-Dist: pymongo==4.10.1
+Requires-Dist: fastapi-pagination==0.12.35
+Requires-Dist: uvloop==0.21.0
+Requires-Dist: polars==1.17.1
+Requires-Dist: kafka-python==2.0.2
+Requires-Dist: pyarrow==18.1.0
+Requires-Dist: fastparquet==2024.11.0
+Requires-Dist: great-expectations==1.2.3
+Requires-Dist: locust==2.32.4
+Requires-Dist: elasticsearch==8.17.0
+Requires-Dist: hypothesis==6.122.3
+Requires-Dist: factory-boy==3.3.1
+Requires-Dist: statsd==4.0.1
+Requires-Dist: qiskit-aer==0.15.1
+Requires-Dist: qiskit-optimization==0.6.1
+Requires-Dist: vault-client==0.1.0
+Requires-Dist: intel-mkl==2024.0.0
 Provides-Extra: dev
 Requires-Dist: pytest>=7.4.0; extra == "dev"
 Requires-Dist: pytest-asyncio>=0.21.0; extra == "dev"
@@ -117,219 +190,367 @@ Dynamic: description-content-type
 Dynamic: home-page
 Dynamic: keywords
 Dynamic: license
+Dynamic: license-file
 Dynamic: project-url
 Dynamic: provides-extra
 Dynamic: requires-dist
 Dynamic: requires-python
 Dynamic: summary
 
-# NQBA Stack: Neuromorphic Quantum Business Architecture
+# NQBA Framework
+## Neuromorphic Quantum Business Architecture
 
-**The core orchestration engine and Living Technical Codex (LTC)** for the next generation of intelligent enterprises. This repository is the foundational implementation of the NQBA Stack, powering the quantum-native AI capabilities of **FLYFOX AI**, **Goliath of All Trade**, and **Sigma Select**.
+🚀 **Enterprise Quantum-Enhanced Business Intelligence Platform**
 
-The NQBA Stack unifies neuromorphic quantum computing (Dynex), adaptive AI, and blockchain-based provenance into a single, coherent architecture for business automation and intelligence.
-
----
-
-## 🚀 Live Demos & Business Pods
-See the NQBA Stack in action:
-*   **Sigma Select (Sales Intelligence):** [flyfoxai.io/sigmaeq](https://flyfoxai.io/sigmaeq) - AI-powered sales copilot and lead scoring.
-*   **FLYFOX AI (Industrial AIaaS):** [flyfoxai.io/energy](https://flyfoxai.io/energy) - Quantum-optimized energy scheduling and analytics.
-*   **Goliath of All Trade (Quantum Finance):** [flyfoxai.io/broker](https://flyfoxai.io/broker) - Portfolio optimization and risk analysis.
+NQBA is a comprehensive meta-architecture that orchestrates quantum-inspired AI modules for enterprise business applications, providing a unified framework for intelligent business process automation.
 
 ---
 
-## ⚡ Quick Start
+## 🌟 Framework Overview
 
-### 1. Clone & Install
+The **Neuromorphic Quantum Business Architecture (NQBA)** Framework represents a paradigm shift in enterprise AI architecture. Rather than being just another AI model, NQBA serves as a comprehensive business intelligence orchestration platform that integrates three core quantum-inspired intelligence modules:
+
+### Core Intelligence Modules
+
+- **🧠 qdLLM Engine** - Quantum-inspired Large Language Model with bidirectional reasoning
+- **🔤 QNLP Processor** - Quantum Natural Language Processing with semantic entanglement
+- **⚛️ QTransformers** - Quantum-enhanced transformer architectures with attention optimization
+
+### Business Framework Layers
+
+- **🏗️ Framework Orchestration** - Central coordination and intelligent routing
+- **📋 Procedures Layer** - Reusable business workflows and algorithm templates
+- **🛡️ Governance Layer** - Policy enforcement, compliance, and audit capabilities
+- **🔗 Integration Layer** - External system connectors and protocol adapters
+- **🌐 API Layer** - Production-ready REST API with authentication and rate limiting
+
+---
+
+## 🏗️ Architecture Diagram
+
+```mermaid
+graph TB
+    subgraph "NQBA Framework - Enterprise Business Intelligence"
+        subgraph "External Interface"
+            CLIENT[Business Applications]
+            EXT[External Systems]
+            LEGACY[Legacy Infrastructure]
+        end
+        
+        subgraph "API Layer"
+            REST[REST API]
+            WS[WebSocket]
+            AUTH[Authentication]
+            RATE[Rate Limiting]
+        end
+        
+        subgraph "Governance Layer"
+            POL[Policy Engine]
+            COMP[Compliance Framework]
+            AUD[Audit Trail]
+            SEC[Security Controls]
+        end
+        
+        subgraph "Integration Layer"
+            CONN[System Connectors]
+            ADAPT[Protocol Adapters]
+            BRIDGE[Legacy Bridges]
+            GATE[Service Gateways]
+        end
+        
+        subgraph "Procedures Layer"
+            WF[Business Workflows]
+            ALG[Algorithm Library]
+            TEMP[Process Templates]
+            ORCH[Orchestration Engine]
+        end
+        
+        subgraph "Core Intelligence Layer"
+            subgraph "qdLLM Engine"
+                QDE[Quantum Diffusion]
+                REV[Reversal Algorithms]
+                DIFF[Bidirectional Processing]
+                SCORE[Coherence Scoring]
+            end
+            
+            subgraph "QNLP Processor"
+                PROC[QNLP Core]
+                EMB[Quantum Embeddings]
+                ENT[Semantic Entanglement]
+                COH[Contextual Coherence]
+            end
+            
+            subgraph "QTransformers"
+                BLOCK[QTransformer Blocks]
+                ATT[Quantum Attention]
+                FF[Quantum FeedForward]
+                MODEL[QTransformer Model]
+            end
+        end
+        
+        subgraph "Framework Core"
+            CORE[NQBA Orchestrator]
+            CONFIG[Configuration Manager]
+            MONITOR[Health Monitoring]
+            METRICS[Performance Metrics]
+        end
+    end
+    
+    %% External Connections
+    CLIENT --> REST
+    EXT --> CONN
+    LEGACY --> BRIDGE
+    
+    %% API Layer Routing
+    REST --> CORE
+    AUTH --> CORE
+    
+    %% Governance Integration
+    POL --> CORE
+    COMP --> AUD
+    
+    %% Integration Flow
+    CONN --> CORE
+    GATE --> CORE
+    
+    %% Business Process Flow
+    WF --> QDE
+    WF --> PROC
+    WF --> BLOCK
+    ORCH --> CORE
+    
+    %% Core Orchestration
+    CORE --> QDE
+    CORE --> PROC
+    CORE --> BLOCK
+    
+    %% Intelligence Module Interactions
+    QDE -.-> PROC
+    PROC -.-> BLOCK
+    BLOCK -.-> QDE
+    
+    classDef intelligence fill:#e1f5fe
+    classDef governance fill:#f3e5f5
+    classDef integration fill:#e8f5e8
+    classDef procedures fill:#fff3e0
+    classDef api fill:#fce4ec
+    classDef external fill:#f5f5f5
+    
+    class QDE,REV,DIFF,SCORE,PROC,EMB,ENT,COH,BLOCK,ATT,FF,MODEL intelligence
+    class POL,COMP,AUD,SEC governance
+    class CONN,ADAPT,BRIDGE,GATE integration
+    class WF,ALG,TEMP,ORCH procedures
+    class REST,WS,AUTH,RATE api
+    class CLIENT,EXT,LEGACY external
+```
+
+---
+
+## 🚀 Quick Start
+
+### Installation
+
 ```bash
-git clone https://github.com/FLYFOX-AI/flyfoxai-nqba-core
-cd flyfoxai-nqba-core
+# Clone the repository
+git clone https://github.com/your-org/nqba-framework.git
+cd nqba-framework
+
+# Install dependencies
 pip install -r requirements.txt
+
+# Initialize the framework
+python -m nqba.setup --initialize
 ```
 
-### 2. Configure Environment
-Add your API keys to your environment:
-```bash
-# Required for Neuromorphic Quantum Compute
-export DYNEX_API_KEY="your_dynex_mainnet_key"
+### Basic Usage
 
-# Required for LLM Orchestration
-export OPENAI_API_KEY="your_openai_key"
-# and/or
-export LLM_API_KEY="your_deepseek_or_other_key"
-
-# Required for Decentralized Storage (LTC Provenance)
-export IPFS_PROJECT_ID="your_infura_project_id"
-export IPFS_PROJECT_SECRET="your_infura_secret"
-```
-
-### 3. Run the Services
-**Run the Core API Server (FastAPI):**
-```bash
-uvicorn api_server:app --host 0.0.0.0 --port 8000
-```
-**Run a Business Pod Dashboard (Streamlit):**
-```bash
-streamlit run src/nqba_stack/business_pods/sigma_select/sigma_select_dashboard.py
-streamlit run src/nqba_stack/business_pods/flyfox_ai/flyfox_energy_optimizer.py
-streamlit run src/nqba_stack/business_pods/goliath_trade/web3_blockchain_demo.py
-```
-
----
-
-## 🔌 API Endpoints (NQBA Core Orchestration)
-
-The core API acts as the central orchestrator, routing tasks to the appropriate AI and quantum engines.
-
-| Endpoint | Pod | Description |
-| :--- | :--- | :--- |
-| `POST /v1/sales/score` | Sigma Select | Score leads and prioritize pipeline using the SigmaEQ engine. |
-| `GET /v1/sales/script` | Sigma Select | Generate personalized sales scripts grounded in proven SigmaEQ playbooks. |
-| `POST /v1/energy/optimize` | FLYFOX AI | Optimize industrial energy schedules and consumption using quantum-derived strategies. |
-| `POST /v1/energy/broker` | FLYFOX AI / Goliath | Optimize energy trading portfolios and risk exposure (QUBO-powered). |
-| `GET /v1/system/health` | Core | System health and orchestrator status. |
-| `GET /v1/ltc/query` | Core | Query the Living Technical Codex for audit and compliance. |
-
----
-
-## 🏗️ Architecture Overview
-
-The NQBA Stack is built in distinct layers:
-
-```
-goliath-quantum-starter/ (The NQBA Stack)
-└── src/
-    └── nqba_stack/              # The Core Architecture
-        ├── core/                # The Kernel (Orchestrator, LTC, Quantum Adapter)
-        │   ├── orchestrator.py  # Central brain for task routing
-        │   ├── ltc_logger.py    # Living Technical Codex
-        │   ├── dynex_adapter.py # Quantum optimization interface
-        │   └── settings.py      # Configuration management
-        └── business_pods/       # The Implementations
-            ├── flyfox_ai/       # AIaaS Marketplace Pod
-            ├── goliath_trade/   # Quantum Finance Pod
-            └── sigma_select/    # Sales Intelligence Pod
-```
-
-### Core Components
-
-1.  **Business Pods:** Specialized applications (Sigma Select, FLYFOX AI, Goliath) that consume the core's intelligence.
-2.  **Orchestration & Intelligence Layer (This Repo):** The `NQBA Core` containing the orchestrator, SigmaEQ decision engine, and Living Technical Codex (LTC).
-3.  **Neuromorphic Quantum Compute Layer:** Integration with the **Dynex** platform and its DynexSolve chip for quantum-powered optimization.
-4.  **Provenance & Security Layer:** Blockchain-anchored logging of all decisions via IPFS and PoUW receipts for auditable trust.
-
----
-
-## 🧠 The Vision: Why NQBA?
-
-The Neuromorphic Quantum Business Architecture isn't just a platform—it's a new paradigm for business logic. It moves beyond static software to create **adaptive, self-optimizing enterprises** where every decision is enhanced by quantum-derived intelligence and recorded on an immutable ledger for perfect provenance.
-
-### Key Differentiators
-
-- **Quantum Advantage**: DynexSolve PoUW for complex optimization problems
-- **Neuromorphic Intelligence**: Adaptive AI that learns and evolves
-- **Living Technical Codex**: Immutable audit trail for all operations
-- **Business Pod Architecture**: Modular, scalable business solutions
-- **SigmaEQ Methodology**: Question-led sales and optimization approach
-
-### Use Cases
-
-- **Industrial AI**: Energy optimization, production scheduling, quality control
-- **Quantum Finance**: Portfolio optimization, risk assessment, DeFi strategies
-- **Sales Intelligence**: Lead scoring, next-best-action, customer analytics
-
----
-
-## 🚀 Development & Testing
-
-### Running Tests
-```bash
-# Test the core NQBA Stack
-python -m pytest tests/ -v
-
-# Test specific components
-python -m pytest tests/test_sigma_select_fixes.py -v
-```
-
-### Development Workflow
-1. **Core Development**: Work in `src/nqba_stack/core/`
-2. **Business Pods**: Implement solutions in `src/nqba_stack/business_pods/`
-3. **Integration**: Use the orchestrator for cross-pod communication
-4. **Testing**: All operations are logged to LTC for verification
-
-### Adding New Business Pods
 ```python
-from nqba_stack.core.orchestrator import BusinessPod
+from nqba import create_framework
+from nqba.core.intelligence import qdllm, qnlp, qtransformers
 
-new_pod = BusinessPod(
-    pod_id="new_business",
-    name="New Business",
-    description="Description of capabilities",
-    capabilities=["capability1", "capability2"],
-    qubo_problems=["problem1", "problem2"],
-    active=True,
-    last_heartbeat=datetime.now()
+# Initialize NQBA Framework
+framework = create_framework(
+    enable_qdllm=True,
+    enable_qnlp=True,
+    enable_qtransformers=True,
+    governance_enabled=True,
+    compliance_checks=True
 )
 
-orchestrator.register_business_pod(new_pod)
+# Process a business request
+business_request = {
+    'type': 'customer_service_automation',
+    'data': 'Customer complaint about billing issue',
+    'workflow': 'qnlp_sentiment_qdllm_reasoning_qtransformers_optimization',
+    'governance': {
+        'compliance_check': True,
+        'audit_required': True,
+        'data_classification': 'sensitive'
+    }
+}
+
+result = framework.process_business_request(business_request)
+print(f"Automated Response: {result['response']}")
+print(f"Confidence Score: {result['confidence']}")
+print(f"Compliance Status: {result['governance']['compliance_status']}")
 ```
 
 ---
 
-## 📊 Deployment & Resources
+## 🎯 Business Use Cases
 
-*   **GitHub Pages Documentation:** [https://flyfox-ai.github.io/nqba-core](https://flyfox-ai.github.io/nqba-core)
-*   **Live Demo Dashboards:** [SigmaEQ](https://flyfoxai.io/sigmaeq) | [Energy Analytics](https://flyfoxai.io/energy) | [Broker](https://flyfoxai.io/broker)
-*   **API Documentation:** [http://localhost:8000/docs](http://localhost:8000/docs) (when running locally)
-*   **License:** Proprietary. See LICENSE.md for details.
+### 1. Customer Service Automation
+```python
+# Automated customer service workflow
+workflow = framework.create_workflow("customer_service")
+workflow.add_step("qnlp", "sentiment_analysis")
+workflow.add_step("qdllm", "issue_understanding")
+workflow.add_step("qtransformers", "response_optimization")
+workflow.add_governance("customer_data_protection")
+
+result = workflow.execute(customer_query)
+```
+
+### 2. Document Processing Pipeline
+```python
+# Intelligent document processing
+document_processor = framework.create_processor("document_analysis")
+result = document_processor.process(
+    document_content,
+    steps=["qnlp_extraction", "qdllm_summarization", "qtransformers_classification"]
+)
+```
+
+### 3. Fraud Detection System
+```python
+# Real-time fraud detection
+fraud_detector = framework.create_detector("fraud_analysis")
+risk_assessment = fraud_detector.analyze(
+    transaction_data,
+    behavioral_patterns,
+    compliance_rules=["PCI_DSS", "SOX"]
+)
+```
 
 ---
 
-## 🔮 Roadmap
+## 🛡️ Governance & Compliance
 
-### Phase 1: Core Foundation (Current)
-- ✅ NQBA Stack Orchestrator
-- ✅ Living Technical Codex (LTC)
-- ✅ Dynex Quantum Integration
-- ✅ Three Business Pods
-- ✅ API Server
+### Policy Enforcement
+```python
+# Define business policies
+from nqba.governance import PolicyEngine
 
-### Phase 2: Intelligence Scale-Up (Next 90 Days)
-- 🚧 Advanced QUBO Models
-- 🚧 Real-time Learning
-- 🚧 Multi-tenant Support
-- 🚧 Advanced Analytics
+policy_engine = PolicyEngine()
+policy_engine.add_policy("data_retention", {
+    "customer_data": "7_years",
+    "transaction_logs": "10_years",
+    "audit_trails": "permanent"
+})
+```
 
-### Phase 3: Enterprise Features
-- 🔮 Advanced Security
-- 🔮 Compliance Frameworks
-- 🔮 Enterprise Integrations
-- 🔮 Global Deployment
+---
+
+## 🔗 Integration Capabilities
+
+### Database Connectors
+```python
+# Database integration
+from nqba.integration import DatabaseConnector
+
+db_connector = DatabaseConnector()
+db_connector.add_connection("postgresql", {
+    "host": "localhost",
+    "database": "business_data",
+    "credentials": "encrypted_vault"
+})
+```
+
+---
+
+## 📊 Performance & Monitoring
+
+### Real-time Metrics
+```python
+# Performance monitoring
+from nqba.monitoring import MetricsCollector
+
+metrics = MetricsCollector()
+metrics.track_intelligence_modules()
+metrics.track_business_workflows()
+metrics.track_governance_compliance()
+```
+
+---
+
+## 🌐 API Server
+
+### Starting the Server
+```python
+# Start NQBA API server
+from nqba.api import create_nqba_server
+
+server = create_nqba_server(
+    host="0.0.0.0",
+    port=8000,
+    cors_enabled=True,
+    authentication_required=True,
+    rate_limiting=True
+)
+
+server.start()
+```
+
+---
+
+## 📚 Documentation
+
+- **[Technical Blueprint](docs/nqba_technical_blueprint.md)** - Comprehensive architecture documentation
+- **[API Reference](docs/api_reference.md)** - Complete API documentation
+- **[Governance Guide](docs/governance_guide.md)** - Policy and compliance management
+- **[Integration Manual](docs/integration_manual.md)** - External system integration
+- **[Deployment Guide](docs/deployment_guide.md)** - Production deployment instructions
 
 ---
 
 ## 🤝 Contributing
 
-This is the foundational core of the NQBA Stack. Contributions should focus on:
+We welcome contributions to the NQBA Framework! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
-1. **Core Architecture**: Orchestrator, LTC, quantum integration
-2. **Business Pods**: New business solutions and capabilities
-3. **Testing & Validation**: Ensuring quantum advantage and reliability
-4. **Documentation**: Making the architecture accessible
+### Development Setup
+```bash
+# Clone for development
+git clone https://github.com/your-org/nqba-framework.git
+cd nqba-framework
+
+# Install development dependencies
+pip install -r requirements-dev.txt
+
+# Run tests
+python -m pytest tests/
+
+# Run demo
+python demo/demo_nqba_framework.py
+```
 
 ---
 
-## 📞 Support
+## 📄 License
 
-- **Technical Issues**: Create GitHub issues
-- **Business Inquiries**: Contact the NQBA Stack team
-- **Partnership Opportunities**: Reach out for collaboration
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-**This core repository is the first step. Welcome to the future of business intelligence.**
+## 🏢 Enterprise Support
+
+For enterprise support, custom integrations, and professional services, please contact:
+
+- **Email**: enterprise@nqba-framework.com
+- **Website**: https://nqba-framework.com
+- **Documentation**: https://docs.nqba-framework.com
 
 ---
 
-*Built with ❤️ by the NQBA Stack Team*
+**NQBA Framework** - Transforming Business Intelligence with Quantum-Enhanced AI
+
+*Built with ❤️ by the NQBA Development Team*

@@ -1,7 +1,25 @@
 version: '3.8'
 
 services:
-  nqba-api:
+  # Frontend - Next.js Application
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=http://backend:8000
+      - NEXT_PUBLIC_QUANTUM_OMNISCIENT_API=http://backend:8000/api/v1
+    depends_on:
+      - backend
+    networks:
+      - quantum-omniscient-network
+    restart: unless-stopped
+
+  # Backend - NQBA API with Quantum Omniscient™ Engine
+  backend:
     build:
       context: .
       dockerfile: Dockerfile.simple
@@ -10,6 +28,12 @@ services:
     environment:
       - ENVIRONMENT=production
       - PYTHONPATH=/app
+      - DATABASE_URL=postgresql://quantum_user:quantum_pass@postgres:5432/quantum_omniscient_db
+      - REDIS_URL=redis://redis:6379
+      - DYNEX_API_KEY=${DYNEX_API_KEY}
+      - JWT_SECRET=${JWT_SECRET}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - QUANTUM_OMNISCIENT_MODE=production
     volumes:
       - ./logs:/app/logs
     restart: unless-stopped
@@ -19,25 +43,102 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+    depends_on:
+      - postgres
+      - redis
     networks:
-      - nqba-network
+      - quantum-omniscient-network
 
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=quantum_omniscient_db
+      - POSTGRES_USER=quantum_user
+      - POSTGRES_PASSWORD=quantum_pass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - quantum-omniscient-network
+    restart: unless-stopped
+
+  # Redis Cache
   redis:
     image: redis:7-alpine
     ports:
       - "6379:6379"
     restart: unless-stopped
     networks:
-      - nqba-network
+      - quantum-omniscient-network
     volumes:
       - redis_data:/data
+    command: redis-server --appendonly yes
 
-networks:
-  nqba-network:
-    driver: bridge
+  # MinIO Object Storage
+  minio:
+    image: minio/minio:latest
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      - MINIO_ROOT_USER=quantum_admin
+      - MINIO_ROOT_PASSWORD=quantum_omniscient_2024
+    volumes:
+      - minio_data:/data
+    networks:
+      - quantum-omniscient-network
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+
+  # Prometheus Monitoring
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    networks:
+      - quantum-omniscient-network
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+
+  # Grafana Dashboards
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=quantum_omniscient_admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - quantum-omniscient-network
+    restart: unless-stopped
+    depends_on:
+      - prometheus
 
 volumes:
   logs:
     driver: local
   redis_data:
     driver: local
+  postgres_data:
+    driver: local
+  minio_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+
+networks:
+  quantum-omniscient-network:
+    driver: bridge

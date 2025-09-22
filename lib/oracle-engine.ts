@@ -1,4 +1,4 @@
-﻿// Quantum Nexus Decision Engine - Monte Carlo & Confidence Scoring
+// Quantum Omniscient™ Decision Engine - Monte Carlo & Confidence Scoring
 
 export interface DecisionScenario {
   name: string;
@@ -299,7 +299,7 @@ class ConfidenceScorer {
   }
 }
 
-export class Quantum NexusDecisionEngine {
+export class QuantumOmniscientDecisionEngine {
   private monteCarloEngine: MonteCarloEngine;
   private confidenceScorer: ConfidenceScorer;
   

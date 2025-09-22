@@ -1,2 +1,6 @@
+nqba
 nqba_stack
+qdllm
+quantum
 utils
+video_processing

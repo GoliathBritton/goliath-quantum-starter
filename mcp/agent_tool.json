@@ -1,0 +1,411 @@
+{
+  "name": "quantum-agent-tool",
+  "version": "1.0.0",
+  "description": "Quantum-enhanced AI agent tool for MCP integration with Dynex quantum computing and qdLLM capabilities",
+  "author": "FLYFOX AI",
+  "license": "MIT",
+  "homepage": "https://github.com/flyfox-ai/quantum-agent",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/flyfox-ai/quantum-agent.git"
+  },
+  "mcp": {
+    "version": "0.1.0",
+    "capabilities": {
+      "tools": true,
+      "resources": true,
+      "prompts": true,
+      "logging": true
+    }
+  },
+  "tools": [
+    {
+      "name": "quantum_parallel_exploration",
+      "description": "Generate multiple distinct conversation strategies using quantum-enhanced parallel exploration",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "lead_profile": {
+            "type": "object",
+            "description": "Lead profile information",
+            "properties": {
+              "name": {"type": "string"},
+              "company": {"type": "string"},
+              "title": {"type": "string"},
+              "industry": {"type": "string"},
+              "company_size": {"type": "string"},
+              "pain_points": {"type": "array", "items": {"type": "string"}}
+            },
+            "required": ["name", "company"]
+          },
+          "objective": {
+            "type": "string",
+            "description": "Engagement objective",
+            "enum": ["schedule_demo", "qualify_lead", "nurture_relationship", "close_deal", "upsell"]
+          },
+          "num_strategies": {
+            "type": "integer",
+            "description": "Number of strategies to generate",
+            "minimum": 3,
+            "maximum": 12,
+            "default": 6
+          },
+          "constraints": {
+            "type": "array",
+            "description": "Conversation constraints",
+            "items": {
+              "type": "string",
+              "enum": ["professional_tone", "casual_tone", "under_160_chars", "email_format", "linkedin_message", "cold_call_script"]
+            }
+          },
+          "quantum_enhance": {
+            "type": "boolean",
+            "description": "Enable quantum ranking optimization",
+            "default": true
+          }
+        },
+        "required": ["lead_profile", "objective"]
+      }
+    },
+    {
+      "name": "quantum_reversal_reasoning",
+      "description": "Perform reversal reasoning analysis to understand why an outcome occurred",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "outcome": {
+            "type": "string",
+            "description": "The observed outcome to analyze"
+          },
+          "context": {
+            "type": "object",
+            "description": "Context information for the analysis",
+            "properties": {
+              "timeline": {"type": "string"},
+              "stakeholders": {"type": "array", "items": {"type": "string"}},
+              "metrics": {"type": "object"},
+              "previous_state": {"type": "object"}
+            }
+          },
+          "num_candidates": {
+            "type": "integer",
+            "description": "Number of backtrace candidates to generate",
+            "minimum": 3,
+            "maximum": 10,
+            "default": 6
+          },
+          "confidence_threshold": {
+            "type": "number",
+            "description": "Minimum confidence threshold for candidates",
+            "minimum": 0.0,
+            "maximum": 1.0,
+            "default": 0.7
+          },
+          "quantum_optimize": {
+            "type": "boolean",
+            "description": "Use quantum optimization for backtrace ranking",
+            "default": true
+          }
+        },
+        "required": ["outcome", "context"]
+      }
+    },
+    {
+      "name": "quantum_ranking",
+      "description": "Rank candidates using quantum optimization algorithms",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "candidates": {
+            "type": "array",
+            "description": "List of candidates to rank",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {"type": "string"},
+                "name": {"type": "string"},
+                "attributes": {"type": "object"}
+              },
+              "required": ["id", "name"]
+            }
+          },
+          "optimization_goal": {
+            "type": "string",
+            "description": "Optimization objective",
+            "enum": ["maximize_conversion", "minimize_risk", "maximize_engagement", "optimize_fit", "balance_all"]
+          },
+          "ranking_dimensions": {
+            "type": "array",
+            "description": "Dimensions to consider in ranking",
+            "items": {
+              "type": "string",
+              "enum": ["fit_score", "engagement_score", "urgency_score", "budget_score", "authority_score", "need_score"]
+            }
+          },
+          "weights": {
+            "type": "object",
+            "description": "Custom weights for ranking dimensions",
+            "additionalProperties": {
+              "type": "number",
+              "minimum": 0.0,
+              "maximum": 1.0
+            }
+          },
+          "quantum_mode": {
+            "type": "string",
+            "description": "Quantum optimization mode",
+            "enum": ["fast", "balanced", "thorough"],
+            "default": "balanced"
+          }
+        },
+        "required": ["candidates", "optimization_goal"]
+      }
+    },
+    {
+      "name": "lead_qualification",
+      "description": "Qualify leads using quantum-enhanced scoring",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "lead_data": {
+            "type": "object",
+            "description": "Lead information",
+            "properties": {
+              "contact_info": {
+                "type": "object",
+                "properties": {
+                  "name": {"type": "string"},
+                  "email": {"type": "string"},
+                  "phone": {"type": "string"},
+                  "title": {"type": "string"}
+                }
+              },
+              "company_info": {
+                "type": "object",
+                "properties": {
+                  "name": {"type": "string"},
+                  "industry": {"type": "string"},
+                  "size": {"type": "string"},
+                  "revenue": {"type": "string"},
+                  "location": {"type": "string"}
+                }
+              },
+              "engagement_history": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "type": {"type": "string"},
+                    "date": {"type": "string"},
+                    "outcome": {"type": "string"}
+                  }
+                }
+              },
+              "behavioral_data": {
+                "type": "object",
+                "properties": {
+                  "website_visits": {"type": "integer"},
+                  "email_opens": {"type": "integer"},
+                  "content_downloads": {"type": "integer"},
+                  "demo_requests": {"type": "integer"}
+                }
+              }
+            },
+            "required": ["contact_info", "company_info"]
+          },
+          "qualification_criteria": {
+            "type": "object",
+            "description": "Custom qualification criteria",
+            "properties": {
+              "budget_range": {"type": "string"},
+              "timeline": {"type": "string"},
+              "decision_makers": {"type": "array", "items": {"type": "string"}},
+              "use_case": {"type": "string"}
+            }
+          },
+          "scoring_model": {
+            "type": "string",
+            "description": "Scoring model to use",
+            "enum": ["bant", "meddic", "custom", "quantum_enhanced"],
+            "default": "quantum_enhanced"
+          },
+          "quantum_score": {
+            "type": "boolean",
+            "description": "Enable quantum-enhanced scoring",
+            "default": true
+          }
+        },
+        "required": ["lead_data"]
+      }
+    },
+    {
+      "name": "quantum_job_status",
+      "description": "Check the status of a quantum job",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "job_id": {
+            "type": "string",
+            "description": "Quantum job identifier"
+          },
+          "include_details": {
+            "type": "boolean",
+            "description": "Include detailed job information",
+            "default": false
+          }
+        },
+        "required": ["job_id"]
+      }
+    },
+    {
+      "name": "agent_health_check",
+      "description": "Check the health status of the quantum agent system",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "include_metrics": {
+            "type": "boolean",
+            "description": "Include performance metrics",
+            "default": false
+          },
+          "check_dependencies": {
+            "type": "boolean",
+            "description": "Check external dependencies",
+            "default": true
+          }
+        }
+      }
+    }
+  ],
+  "resources": [
+    {
+      "uri": "quantum://prompts/reversal_reasoning",
+      "name": "Reversal Reasoning Prompt",
+      "description": "Template for reversal reasoning analysis",
+      "mimeType": "text/plain"
+    },
+    {
+      "uri": "quantum://prompts/parallel_exploration",
+      "name": "Parallel Exploration Prompt",
+      "description": "Template for parallel strategy exploration",
+      "mimeType": "text/plain"
+    },
+    {
+      "uri": "quantum://prompts/quantum_ranking",
+      "name": "Quantum Ranking Prompt",
+      "description": "Template for quantum-enhanced ranking",
+      "mimeType": "text/plain"
+    },
+    {
+      "uri": "quantum://prompts/lead_qualification",
+      "name": "Lead Qualification Prompt",
+      "description": "Template for lead qualification",
+      "mimeType": "text/plain"
+    },
+    {
+      "uri": "quantum://docs/blueprint",
+      "name": "Quantum Agent Blueprint",
+      "description": "Complete system architecture and implementation guide",
+      "mimeType": "text/markdown"
+    }
+  ],
+  "prompts": [
+    {
+      "name": "quantum_agent_system",
+      "description": "System prompt for quantum-enhanced AI agents",
+      "arguments": [
+        {
+          "name": "agent_role",
+          "description": "The role of the agent (sales, support, analyst)",
+          "required": true
+        },
+        {
+          "name": "quantum_capabilities",
+          "description": "Enabled quantum capabilities",
+          "required": false
+        },
+        {
+          "name": "risk_threshold",
+          "description": "Risk threshold for escalation",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "quantum_exploration_context",
+      "description": "Context setup for parallel exploration tasks",
+      "arguments": [
+        {
+          "name": "exploration_type",
+          "description": "Type of exploration (conversation, strategy, analysis)",
+          "required": true
+        },
+        {
+          "name": "target_audience",
+          "description": "Target audience characteristics",
+          "required": true
+        },
+        {
+          "name": "constraints",
+          "description": "Exploration constraints and guidelines",
+          "required": false
+        }
+      ]
+    }
+  ],
+  "server": {
+    "command": "python",
+    "args": ["-m", "services.qdllm_worker.worker"],
+    "env": {
+      "PYTHONPATH": ".",
+      "MCP_SERVER_NAME": "quantum-agent-tool"
+    }
+  },
+  "client": {
+    "timeout": 30000,
+    "retries": 3
+  },
+  "logging": {
+    "level": "INFO",
+    "format": "json",
+    "audit": true
+  },
+  "security": {
+    "require_auth": true,
+    "allowed_origins": ["*"],
+    "rate_limit": {
+      "requests_per_minute": 100,
+      "burst_limit": 20
+    }
+  },
+  "quantum": {
+    "provider": "dynex",
+    "fallback_enabled": true,
+    "cost_optimization": true,
+    "cache_results": true,
+    "max_job_duration": 300
+  },
+  "integration": {
+    "supported_platforms": [
+      "openai",
+      "anthropic",
+      "azure-openai",
+      "google-ai"
+    ],
+    "webhook_endpoints": {
+      "job_completion": "/webhooks/quantum/job-complete",
+      "error_notification": "/webhooks/quantum/error",
+      "health_check": "/webhooks/quantum/health"
+    }
+  },
+  "monitoring": {
+    "metrics_enabled": true,
+    "tracing_enabled": true,
+    "health_check_interval": 30,
+    "performance_thresholds": {
+      "response_time_ms": 5000,
+      "error_rate_percent": 5,
+      "quantum_job_success_rate": 95
+    }
+  }
+}

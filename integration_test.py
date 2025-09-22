@@ -8,14 +8,38 @@ import requests
 import time
 import json
 import logging
-import statistics
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+chrome://settings/searchEngines
+    Flights                 
+    
+    b1ce0798-9b8c-456c-84e8-6ec6ec9102ea
+    mport statistics
 import os
 from concurrent.futures import ThreadPoolExecutor
 
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[logging.StreamHandler()]
 )
 logger = logging.getLogger(__name__)
 
@@ -194,14 +218,17 @@ def test_nuco_cloud_integration():
 
 def run_all_tests():
     """Run all integration tests"""
+    print("Starting integration tests...")
     logger.info("Starting integration tests...")
     
+    # Run all tests and collect results
     test_results = {
         "orchestrator_performance": test_orchestrator_performance(),
         "quantum_worker": test_quantum_worker(),
         "nuco_cloud_integration": test_nuco_cloud_integration(),
         "concurrent_requests": test_concurrent_requests()
     }
+    print(f"Test results: {test_results}")
     
     # Print summary
     logger.info("\n=== TEST RESULTS SUMMARY ===")
@@ -220,4 +247,6 @@ def run_all_tests():
     return all_passed
 
 if __name__ == "__main__":
-    run_all_tests()
+    print("Starting integration tests...")
+    result = run_all_tests()
+    print(f"Integration tests completed. Overall result: {'PASSED' if result else 'FAILED'}")

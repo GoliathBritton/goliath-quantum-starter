@@ -9,12 +9,22 @@ Comprehensive testing of all Phase 2.1 components:
 - Community Launch Platform
 """
 
+print("=== Phase 2.1 Test Script Starting ===")
+print("Script loaded successfully")
+
+print("Importing asyncio...")
 import asyncio
+print("Importing json...")
 import json
+print("Importing requests...")
 import requests
+print("Importing time...")
 import time
+print("Importing datetime...")
 from datetime import datetime
+print("Importing typing...")
 from typing import Dict, Any, List
+print("All imports completed successfully!")
 
 # Configuration
 API_BASE_URL = "http://localhost:8002"
@@ -908,12 +918,15 @@ def main():
     print()
 
     # Wait for server to be ready
-    print("⏳ Waiting for server to be ready...")
+    print("Waiting for server to be ready...")
     time.sleep(5)
 
     # Run tests
+    print("Creating test suite...")
     test_suite = Phase21TestSuite(API_BASE_URL)
+    print("Running all tests...")
     test_suite.run_all_tests()
+    print("Tests completed!")
 
 
 if __name__ == "__main__":

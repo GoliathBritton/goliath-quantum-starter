@@ -8,6 +8,7 @@ from .routes.auth import router as auth_router
 from .routes.entitlements import router as entitlements_router
 from .routes.security import router as security_router
 from .routes.performance import router as performance_router
+from .routes.stripe import router as stripe_router
 from .security.middleware import SecurityMiddleware
 import uvicorn
 
@@ -63,4 +64,4 @@ async def health_check():
     }
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8080, reload=True)
+    uvicorn.run(app, host="0.0.0.0", port=8001, reload=True)

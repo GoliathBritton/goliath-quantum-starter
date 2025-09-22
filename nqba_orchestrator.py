@@ -8,6 +8,7 @@ Optimized for maximum throughput and minimal latency
 import asyncio
 import json
 import logging
+import os
 import time
 import functools
 from datetime import datetime, timezone
@@ -211,7 +212,11 @@ class NQBAOrchestrator:
         self.lead_count = 0
         
         # Initialize nuco.cloud integration
-        self.initialize_nuco_cloud()
+        try:
+            self.initialize_nuco_cloud()
+        except Exception as e:
+            logger.error(f"Failed to initialize nuco.cloud integration: {e}")
+            logger.info("Continuing with limited functionality")
     
     def initialize_nuco_cloud(self):
         """Initialize nuco.cloud integration"""
@@ -223,6 +228,11 @@ class NQBAOrchestrator:
             api_key = os.environ.get("NUCO_CLOUD_API_KEY", "development-api-key")
             base_url = os.environ.get("NUCO_CLOUD_API_URL", "https://api.nuco.cloud")
             
+            # Add proper error handling for production
+            if not os.path.exists("config/nuco_cloud.json"):
+                logger.warning("nuco_cloud.json configuration not found")
+                return
+                
             self.nuco_cloud = NucoCloudIntegration(api_key=api_key, base_url=base_url)
             logging.info("Nuco.cloud integration initialized successfully")
             
