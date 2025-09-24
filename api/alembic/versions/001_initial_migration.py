@@ -1,4 +1,4 @@
-﻿"""Initial migration - create all tables
+"""Initial migration - create all tables
 
 Revision ID: 001
 Revises: 
@@ -20,13 +20,13 @@ def upgrade() -> None:
     """Upgrade database schema."""
     # Create partners table
     op.create_table('partners',
-        sa.Column('id', sa.String(), nullable=False),
+        sa.Column('id', sa.String(), primary_key=True, nullable=False),
         sa.Column('created_at', sa.DateTime(), nullable=False),
         sa.Column('updated_at', sa.DateTime(), nullable=False),
         sa.Column('deleted_at', sa.DateTime(), nullable=True),
         sa.Column('name', sa.String(length=255), nullable=False),
-        sa.Column('slug', sa.String(length=100), nullable=False),
-        sa.Column('email', sa.String(length=255), nullable=False),
+        sa.Column('slug', sa.String(length=100), nullable=False, unique=True),
+        sa.Column('email', sa.String(length=255), nullable=False, unique=True),
         sa.Column('phone', sa.String(length=50), nullable=True),
         sa.Column('website', sa.String(length=255), nullable=True),
         sa.Column('company_size', sa.String(length=50), nullable=True),
@@ -35,7 +35,7 @@ def upgrade() -> None:
         sa.Column('timezone', sa.String(length=50), nullable=True),
         sa.Column('status', sa.String(length=50), nullable=False),
         sa.Column('tier', sa.String(length=50), nullable=False),
-        sa.Column('api_key', sa.String(length=255), nullable=True),
+        sa.Column('api_key', sa.String(length=255), nullable=True, unique=True),
         sa.Column('api_secret_hash', sa.String(length=255), nullable=True),
         sa.Column('webhook_url', sa.String(length=500), nullable=True),
         sa.Column('webhook_secret', sa.String(length=255), nullable=True),
@@ -47,31 +47,27 @@ def upgrade() -> None:
         sa.Column('billing_email', sa.String(length=255), nullable=True),
         sa.Column('rate_limit_per_minute', sa.Integer(), nullable=False),
         sa.Column('rate_limit_per_hour', sa.Integer(), nullable=False),
-        sa.Column('allowed_ips', postgresql.JSON(astext_type=sa.Text()), nullable=True),
-        sa.Column('cors_origins', postgresql.JSON(astext_type=sa.Text()), nullable=True),
-        sa.Column('white_label_enabled', sa.Boolean(), nullable=False),
+        sa.Column('allowed_ips', sa.Text(), nullable=True),
+        sa.Column('cors_origins', sa.Text(), nullable=True),
+        sa.Column('white_label_enabled', sa.Boolean().with_variant(sa.Integer(), 'sqlite'), nullable=False),
         sa.Column('custom_domain', sa.String(length=255), nullable=True),
-        sa.Column('brand_colors', postgresql.JSON(astext_type=sa.Text()), nullable=True),
+        sa.Column('brand_colors', sa.Text(), nullable=True),
         sa.Column('logo_url', sa.String(length=500), nullable=True),
         sa.Column('custom_css', sa.Text(), nullable=True),
-        sa.Column('salesforce_enabled', sa.Boolean(), nullable=False),
+        sa.Column('salesforce_enabled', sa.Boolean().with_variant(sa.Integer(), 'sqlite'), nullable=False),
         sa.Column('salesforce_instance_url', sa.String(length=255), nullable=True),
         sa.Column('salesforce_client_id', sa.String(length=255), nullable=True),
-        sa.Column('hubspot_enabled', sa.Boolean(), nullable=False),
+        sa.Column('hubspot_enabled', sa.Boolean().with_variant(sa.Integer(), 'sqlite'), nullable=False),
         sa.Column('hubspot_portal_id', sa.String(length=100), nullable=True),
         sa.Column('hubspot_api_key_hash', sa.String(length=255), nullable=True),
-        sa.Column('zapier_enabled', sa.Boolean(), nullable=False),
+        sa.Column('zapier_enabled', sa.Boolean().with_variant(sa.Integer(), 'sqlite'), nullable=False),
         sa.Column('zapier_webhook_url', sa.String(length=500), nullable=True),
-        sa.Column('gdpr_compliant', sa.Boolean(), nullable=False),
-        sa.Column('ccpa_compliant', sa.Boolean(), nullable=False),
+        sa.Column('gdpr_compliant', sa.Boolean().with_variant(sa.Integer(), 'sqlite'), nullable=False),
+        sa.Column('ccpa_compliant', sa.Boolean().with_variant(sa.Integer(), 'sqlite'), nullable=False),
         sa.Column('data_retention_days', sa.Integer(), nullable=False),
         sa.Column('trial_ends_at', sa.DateTime(), nullable=True),
-        sa.Column('onboarding_completed', sa.Boolean(), nullable=False),
-        sa.Column('onboarding_step', sa.String(length=100), nullable=True),
-        sa.PrimaryKeyConstraint('pk_partners'),
-        sa.UniqueConstraint('uq_partners_slug'),
-        sa.UniqueConstraint('uq_partners_email'),
-        sa.UniqueConstraint('uq_partners_api_key')
+        sa.Column('onboarding_completed', sa.Boolean().with_variant(sa.Integer(), 'sqlite'), nullable=False),
+        sa.Column('onboarding_step', sa.String(length=100), nullable=True)
     )
     op.create_index('ix_partners_status', 'partners', ['status'])
     op.create_index('ix_partners_tier', 'partners', ['tier'])
@@ -81,20 +77,20 @@ def upgrade() -> None:
 
     # Create users table
     op.create_table('users',
-        sa.Column('id', sa.String(), nullable=False),
+        sa.Column('id', sa.String(), primary_key=True, nullable=False),
         sa.Column('created_at', sa.DateTime(), nullable=False),
         sa.Column('updated_at', sa.DateTime(), nullable=False),
         sa.Column('deleted_at', sa.DateTime(), nullable=True),
         sa.Column('partner_id', sa.String(), nullable=False),
-        sa.Column('email', sa.String(length=255), nullable=False),
-        sa.Column('username', sa.String(length=100), nullable=True),
+        sa.Column('email', sa.String(length=255), unique=True, nullable=False),
+        sa.Column('username', sa.String(length=100), unique=True, nullable=True),
         sa.Column('first_name', sa.String(length=100), nullable=True),
         sa.Column('last_name', sa.String(length=100), nullable=True),
         sa.Column('password_hash', sa.String(length=255), nullable=True),
         sa.Column('is_active', sa.Boolean(), nullable=False),
         sa.Column('is_verified', sa.Boolean(), nullable=False),
         sa.Column('role', sa.String(length=50), nullable=False),
-        sa.Column('permissions', postgresql.JSON(astext_type=sa.Text()), nullable=True),
+        sa.Column('permissions', sa.Text(), nullable=True),
         sa.Column('phone', sa.String(length=50), nullable=True),
         sa.Column('title', sa.String(length=100), nullable=True),
         sa.Column('department', sa.String(length=100), nullable=True),
@@ -106,7 +102,7 @@ def upgrade() -> None:
         sa.Column('notifications_enabled', sa.Boolean(), nullable=False),
         sa.Column('oauth_provider', sa.String(length=50), nullable=True),
         sa.Column('oauth_id', sa.String(length=255), nullable=True),
-        sa.Column('oauth_data', postgresql.JSON(astext_type=sa.Text()), nullable=True),
+        sa.Column('oauth_data', sa.Text(), nullable=True),
         sa.Column('last_login_at', sa.DateTime(), nullable=True),
         sa.Column('last_login_ip', sa.String(length=45), nullable=True),
         sa.Column('login_count', sa.Integer(), nullable=False),
@@ -116,7 +112,7 @@ def upgrade() -> None:
         sa.Column('session_expires_at', sa.DateTime(), nullable=True),
         sa.Column('totp_secret', sa.String(length=255), nullable=True),
         sa.Column('totp_enabled', sa.Boolean(), nullable=False),
-        sa.Column('backup_codes', postgresql.JSON(astext_type=sa.Text()), nullable=True),
+        sa.Column('backup_codes', sa.Text(), nullable=True),
         sa.Column('email_verification_token', sa.String(length=255), nullable=True),
         sa.Column('email_verification_expires_at', sa.DateTime(), nullable=True),
         sa.Column('password_reset_token', sa.String(length=255), nullable=True),
@@ -133,9 +129,6 @@ def upgrade() -> None:
         sa.Column('marketing_consent', sa.Boolean(), nullable=False),
         sa.Column('data_processing_consent', sa.Boolean(), nullable=False),
         sa.ForeignKeyConstraint(['partner_id'], ['partners.id'], name='fk_users_partner_id_partners'),
-        sa.PrimaryKeyConstraint('pk_users'),
-        sa.UniqueConstraint('uq_users_email'),
-        sa.UniqueConstraint('uq_users_username')
     )
     op.create_index('ix_users_partner_id', 'users', ['partner_id'])
     op.create_index('ix_users_role', 'users', ['role'])
@@ -144,7 +137,7 @@ def upgrade() -> None:
 
     # Create leads table
     op.create_table('leads',
-        sa.Column('id', sa.String(), nullable=False),
+        sa.Column('id', sa.String(), primary_key=True, nullable=False),
         sa.Column('created_at', sa.DateTime(), nullable=False),
         sa.Column('updated_at', sa.DateTime(), nullable=False),
         sa.Column('deleted_at', sa.DateTime(), nullable=True),
@@ -176,10 +169,10 @@ def upgrade() -> None:
         sa.Column('budget_range', sa.String(length=50), nullable=True),
         sa.Column('decision_timeframe', sa.String(length=50), nullable=True),
         sa.Column('pain_points', sa.Text(), nullable=True),
-        sa.Column('quantum_score', sa.Numeric(precision=8, scale=4), nullable=True),
-        sa.Column('quantum_confidence', sa.Numeric(precision=5, scale=2), nullable=True),
+        sa.Column('quantum_score', sa.Float(), nullable=True),
+        sa.Column('quantum_confidence', sa.Float(), nullable=True),
         sa.Column('quantum_last_calculated', sa.DateTime(), nullable=True),
-        sa.Column('quantum_factors', postgresql.JSON(astext_type=sa.Text()), nullable=True),
+        sa.Column('quantum_factors', sa.Text(), nullable=True),
         sa.Column('page_views', sa.Integer(), nullable=False),
         sa.Column('email_opens', sa.Integer(), nullable=False),
         sa.Column('email_clicks', sa.Integer(), nullable=False),
@@ -192,25 +185,29 @@ def upgrade() -> None:
         sa.Column('last_call_at', sa.DateTime(), nullable=True),
         sa.Column('next_follow_up_at', sa.DateTime(), nullable=True),
         sa.Column('engagement_score', sa.Integer(), nullable=False),
-        sa.Column('response_rate', sa.Numeric(precision=5, scale=2), nullable=True),
-        sa.Column('custom_fields', postgresql.JSON(astext_type=sa.Text()), nullable=True),
-        sa.Column('tags', postgresql.JSON(astext_type=sa.Text()), nullable=True),
+        sa.Column('response_rate', sa.Float(), nullable=True),
+        sa.Column('custom_fields', sa.Text(), nullable=True),
+        sa.Column('tags', sa.Text(), nullable=True),
         sa.Column('notes', sa.Text(), nullable=True),
         sa.Column('tcpa_consent', sa.Boolean(), nullable=False),
         sa.Column('tcpa_consent_date', sa.DateTime(), nullable=True),
         sa.Column('tcpa_consent_method', sa.String(length=50), nullable=True),
         sa.Column('marketing_consent', sa.Boolean(), nullable=False),
         sa.Column('gdpr_consent', sa.Boolean(), nullable=True),
-        sa.Column('estimated_value', sa.Numeric(precision=12, scale=2), nullable=True),
-        sa.Column('actual_value', sa.Numeric(precision=12, scale=2), nullable=True),
-        sa.Column('probability', sa.Numeric(precision=5, scale=2), nullable=True),
+        sa.Column('estimated_value', sa.Float(), nullable=True),
+        sa.Column('actual_value', sa.Float(), nullable=True),
+        sa.Column('probability', sa.Float(), nullable=True),
+        sa.Column('confidence', sa.Float(), nullable=True),
+        sa.Column('score', sa.Float(), nullable=True),
+        sa.Column('cost_usd', sa.Float(), nullable=True),
+        sa.Column('unit_cost_usd', sa.Float(), nullable=True),
+        sa.Column('total_cost_usd', sa.Float(), nullable=True),
         sa.Column('expected_close_date', sa.DateTime(), nullable=True),
         sa.Column('assigned_to', sa.String(), nullable=True),
         sa.Column('assigned_at', sa.DateTime(), nullable=True),
         sa.Column('assignment_method', sa.String(length=50), nullable=True),
         sa.ForeignKeyConstraint(['assigned_to'], ['users.id'], name='fk_leads_assigned_to_users'),
         sa.ForeignKeyConstraint(['partner_id'], ['partners.id'], name='fk_leads_partner_id_partners'),
-        sa.PrimaryKeyConstraint('pk_leads')
     )
     op.create_index('ix_leads_partner_id', 'leads', ['partner_id'])
     op.create_index('ix_leads_external_id', 'leads', ['external_id'])
@@ -223,7 +220,7 @@ def upgrade() -> None:
 
     # Create quantum_nexus_queries table
     op.create_table('quantum_nexus_queries',
-        sa.Column('id', sa.String(), nullable=False),
+        sa.Column('id', sa.String(), primary_key=True, nullable=False),
         sa.Column('created_at', sa.DateTime(), nullable=False),
         sa.Column('updated_at', sa.DateTime(), nullable=False),
         sa.Column('deleted_at', sa.DateTime(), nullable=True),
@@ -232,19 +229,19 @@ def upgrade() -> None:
         sa.Column('lead_id', sa.String(), nullable=True),
         sa.Column('query_type', sa.String(length=100), nullable=False),
         sa.Column('query_text', sa.Text(), nullable=True),
-        sa.Column('query_parameters', postgresql.JSON(astext_type=sa.Text()), nullable=True),
-        sa.Column('input_data', postgresql.JSON(astext_type=sa.Text()), nullable=False),
+        sa.Column('query_parameters', sa.Text(), nullable=True),
+        sa.Column('input_data', sa.Text(), nullable=False),
         sa.Column('input_hash', sa.String(length=64), nullable=True),
         sa.Column('dynex_job_id', sa.String(length=255), nullable=True),
-        sa.Column('qubo_matrix', postgresql.JSON(astext_type=sa.Text()), nullable=True),
+        sa.Column('qubo_matrix', sa.Text(), nullable=True),
         sa.Column('quantum_algorithm', sa.String(length=100), nullable=False),
         sa.Column('processing_time_ms', sa.Integer(), nullable=True),
         sa.Column('prophecy', sa.Text(), nullable=True),
-        sa.Column('confidence', sa.Numeric(precision=5, scale=2), nullable=True),
+        sa.Column('confidence', sa.Float(), nullable=True),
         sa.Column('recommended_action', sa.Text(), nullable=True),
         sa.Column('explainability', sa.Text(), nullable=True),
-        sa.Column('score', sa.Numeric(precision=8, scale=4), nullable=True),
-        sa.Column('probability', sa.Numeric(precision=5, scale=4), nullable=True),
+        sa.Column('score', sa.Float(), nullable=True),
+        sa.Column('probability', sa.Float(), nullable=True),
         sa.Column('risk_level', sa.String(length=50), nullable=True),
         sa.Column('category', sa.String(length=100), nullable=True),
         sa.Column('model_version', sa.String(length=50), nullable=False),
@@ -256,7 +253,7 @@ def upgrade() -> None:
         sa.Column('execution_time_ms', sa.Integer(), nullable=True),
         sa.Column('total_time_ms', sa.Integer(), nullable=True),
         sa.Column('quantum_credits_used', sa.Integer(), nullable=False),
-        sa.Column('cost_usd', sa.Numeric(precision=10, scale=4), nullable=True),
+        sa.Column('cost_usd', sa.Float(), nullable=True),
         sa.Column('cached_result', sa.Boolean(), nullable=False),
         sa.Column('cache_hit', sa.Boolean(), nullable=False),
         sa.Column('cache_expires_at', sa.DateTime(), nullable=True),
@@ -268,11 +265,10 @@ def upgrade() -> None:
         sa.Column('request_id', sa.String(length=255), nullable=True),
         sa.Column('business_impact', sa.String(length=50), nullable=True),
         sa.Column('urgency', sa.String(length=50), nullable=True),
-        sa.Column('tags', postgresql.JSON(astext_type=sa.Text()), nullable=True),
+        sa.Column('tags', sa.Text(), nullable=True),
         sa.ForeignKeyConstraint(['lead_id'], ['leads.id'], name='fk_quantum_nexus_queries_lead_id_leads'),
         sa.ForeignKeyConstraint(['partner_id'], ['partners.id'], name='fk_quantum_nexus_queries_partner_id_partners'),
         sa.ForeignKeyConstraint(['user_id'], ['users.id'], name='fk_quantum_nexus_queries_user_id_users'),
-        sa.PrimaryKeyConstraint('pk_quantum_nexus_queries')
     )
     op.create_index('ix_quantum_nexus_queries_partner_id', 'quantum_nexus_queries', ['partner_id'])
     op.create_index('ix_quantum_nexus_queries_user_id', 'quantum_nexus_queries', ['user_id'])
@@ -284,7 +280,7 @@ def upgrade() -> None:
 
     # Create quantum_credits table
     op.create_table('quantum_credits',
-        sa.Column('id', sa.String(), nullable=False),
+        sa.Column('id', sa.String(), primary_key=True, nullable=False),
         sa.Column('created_at', sa.DateTime(), nullable=False),
         sa.Column('updated_at', sa.DateTime(), nullable=False),
         sa.Column('deleted_at', sa.DateTime(), nullable=True),
@@ -295,8 +291,8 @@ def upgrade() -> None:
         sa.Column('amount', sa.Integer(), nullable=False),
         sa.Column('balance_before', sa.Integer(), nullable=False),
         sa.Column('balance_after', sa.Integer(), nullable=False),
-        sa.Column('unit_cost_usd', sa.Numeric(precision=10, scale=6), nullable=True),
-        sa.Column('total_cost_usd', sa.Numeric(precision=10, scale=4), nullable=True),
+        sa.Column('unit_cost_usd', sa.Float(), nullable=True),
+        sa.Column('total_cost_usd', sa.Float(), nullable=True),
         sa.Column('purchase_order_id', sa.String(length=255), nullable=True),
         sa.Column('stripe_payment_intent_id', sa.String(length=255), nullable=True),
         sa.Column('stripe_invoice_id', sa.String(length=255), nullable=True),
@@ -309,7 +305,7 @@ def upgrade() -> None:
         sa.Column('refunded_at', sa.DateTime(), nullable=True),
         sa.Column('refund_transaction_id', sa.String(length=255), nullable=True),
         sa.Column('description', sa.Text(), nullable=True),
-        sa.Column('transaction_metadata', postgresql.JSON(astext_type=sa.Text()), nullable=True),
+        sa.Column('transaction_metadata', sa.Text(), nullable=True),
         sa.Column('created_by', sa.String(), nullable=True),
         sa.Column('approved_by', sa.String(), nullable=True),
         sa.Column('approved_at', sa.DateTime(), nullable=True),
@@ -318,7 +314,6 @@ def upgrade() -> None:
         sa.ForeignKeyConstraint(['quantum_nexus_query_id'], ['quantum_nexus_queries.id'], name='fk_quantum_credits_quantum_nexus_query_id_quantum_nexus_queries'),
         sa.ForeignKeyConstraint(['partner_id'], ['partners.id'], name='fk_quantum_credits_partner_id_partners'),
         sa.ForeignKeyConstraint(['user_id'], ['users.id'], name='fk_quantum_credits_user_id_users'),
-        sa.PrimaryKeyConstraint('pk_quantum_credits')
     )
     op.create_index('ix_quantum_credits_partner_id', 'quantum_credits', ['partner_id'])
     op.create_index('ix_quantum_credits_user_id', 'quantum_credits', ['user_id'])
@@ -327,7 +322,7 @@ def upgrade() -> None:
 
     # Create audit_logs table
     op.create_table('audit_logs',
-        sa.Column('id', sa.String(), nullable=False),
+        sa.Column('id', sa.String(), primary_key=True, nullable=False),
         sa.Column('created_at', sa.DateTime(), nullable=False),
         sa.Column('updated_at', sa.DateTime(), nullable=False),
         sa.Column('deleted_at', sa.DateTime(), nullable=True),
@@ -349,19 +344,18 @@ def upgrade() -> None:
         sa.Column('http_method', sa.String(length=10), nullable=True),
         sa.Column('response_status', sa.Integer(), nullable=True),
         sa.Column('response_time_ms', sa.Integer(), nullable=True),
-        sa.Column('old_values', postgresql.JSON(astext_type=sa.Text()), nullable=True),
-        sa.Column('new_values', postgresql.JSON(astext_type=sa.Text()), nullable=True),
-        sa.Column('changed_fields', postgresql.JSON(astext_type=sa.Text()), nullable=True),
+        sa.Column('old_values', sa.Text(), nullable=True),
+        sa.Column('new_values', sa.Text(), nullable=True),
+        sa.Column('changed_fields', sa.Text(), nullable=True),
         sa.Column('risk_score', sa.Integer(), nullable=True),
-        sa.Column('compliance_flags', postgresql.JSON(astext_type=sa.Text()), nullable=True),
+        sa.Column('compliance_flags', sa.Text(), nullable=True),
         sa.Column('gdpr_relevant', sa.Boolean(), nullable=False),
         sa.Column('pii_involved', sa.Boolean(), nullable=False),
         sa.Column('retention_period_days', sa.Integer(), nullable=False),
-        sa.Column('event_metadata', postgresql.JSON(astext_type=sa.Text()), nullable=True),
-        sa.Column('tags', postgresql.JSON(astext_type=sa.Text()), nullable=True),
+        sa.Column('event_metadata', sa.Text(), nullable=True),
+        sa.Column('tags', sa.Text(), nullable=True),
         sa.ForeignKeyConstraint(['partner_id'], ['partners.id'], name='fk_audit_logs_partner_id_partners'),
         sa.ForeignKeyConstraint(['user_id'], ['users.id'], name='fk_audit_logs_user_id_users'),
-        sa.PrimaryKeyConstraint('pk_audit_logs')
     )
     op.create_index('ix_audit_logs_partner_id', 'audit_logs', ['partner_id'])
     op.create_index('ix_audit_logs_user_id', 'audit_logs', ['user_id'])

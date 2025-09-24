@@ -1,14 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from typing import Dict, Any, List
-from ..models import User
-from ..entitlements import (
+from src.models import User
+from src.entitlements import (
     EntitlementsEngine, 
     SubscriptionTier, 
     FeatureFlag, 
     EntitlementConfig,
     get_entitlements_engine
 )
-from ..middleware.entitlements_middleware import get_current_user, rate_limit_middleware
+from src.middleware.entitlements_middleware import get_current_user, rate_limit_middleware
 from pydantic import BaseModel
 
 router = APIRouter(prefix="/entitlements", tags=["entitlements"])

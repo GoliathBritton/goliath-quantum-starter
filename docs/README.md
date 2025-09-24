@@ -4,6 +4,8 @@
 
 ![FLYFOX AI Logo](https://flyfox.ai/logo.svg)
 
+**FLYFOX AI - Goliath of All Trade - Sigma Select**
+
 **Quantum-Powered Business Intelligence Platform**
 
 *Revolutionizing Enterprise Solutions with Neuromorphic Quantum Computing*

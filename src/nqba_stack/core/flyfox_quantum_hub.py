@@ -22,10 +22,10 @@ logger = logging.getLogger(__name__)
 
 class QuantumProvider(Enum):
     """Quantum computing providers supported by FLYFOX AI"""
-    DYNEX = "dynex"
-    IBM_Q = "ibm_q"
-    GOOGLE_QUANTUM = "google_quantum"
-    MICROSOFT_AZURE = "microsoft_azure"
+    FLYFOX_NEUROMORPHIC = "flyfox_neuromorphic"
+    FLYFOX_GATE = "flyfox_gate"
+    FLYFOX_ANNEALING = "flyfox_annealing"
+    FLYFOX_HYBRID = "flyfox_hybrid"
     CUSTOM = "custom"
 
 class QuantumOperation(Enum):

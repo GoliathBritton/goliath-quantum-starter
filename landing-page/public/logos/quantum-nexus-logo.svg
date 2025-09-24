@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Quantum Nexus Logo based on brand guidelines -->
+  <defs>
+    <linearGradient id="quantum-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#667eea" />
+      <stop offset="100%" stop-color="#764ba2" />
+    </linearGradient>
+    <linearGradient id="gold-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F5C14C" />
+      <stop offset="100%" stop-color="#D97706" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Outer Quantum Ring -->
+  <circle cx="100" cy="100" r="90" fill="none" stroke="url(#quantum-gradient)" stroke-width="4" stroke-dasharray="10 5" />
+  
+  <!-- Inner Hexagon -->
+  <polygon points="100,30 150,55 150,145 100,170 50,145 50,55" fill="none" stroke="url(#gold-gradient)" stroke-width="3" />
+  
+  <!-- Central Atom -->
+  <circle cx="100" cy="100" r="25" fill="url(#quantum-gradient)" />
+  
+  <!-- Orbiting Particles -->
+  <circle cx="150" cy="100" r="8" fill="url(#gold-gradient)">
+    <animateTransform attributeName="transform" type="rotate" from="0 100 100" to="360 100 100" dur="8s" repeatCount="indefinite" />
+  </circle>
+  
+  <circle cx="75" cy="150" r="6" fill="#27E5FF">
+    <animateTransform attributeName="transform" type="rotate" from="0 100 100" to="360 100 100" dur="6s" repeatCount="indefinite" />
+  </circle>
+  
+  <circle cx="75" cy="50" r="7" fill="#10B981">
+    <animateTransform attributeName="transform" type="rotate" from="0 100 100" to="360 100 100" dur="10s" repeatCount="indefinite" />
+  </circle>
+  
+  <!-- Q Letter -->
+  <text x="92" y="108" font-family="Arial, sans-serif" font-weight="bold" font-size="30" fill="white">Q</text>
+</svg>

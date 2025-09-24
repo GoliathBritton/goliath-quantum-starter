@@ -1,6 +1,6 @@
-﻿from datetime import datetime
+from datetime import datetime
 from typing import Optional
-from sqlalchemy import String, Text, Integer, Boolean, Numeric, JSON, ForeignKey
+from sqlalchemy import String, Text, Integer, Boolean, Float, JSON, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from .base import Base
 
@@ -45,8 +45,8 @@ class Lead(Base):
     stage: Mapped[str] = mapped_column(String(50), default="prospect", nullable=False)  # prospect, lead, opportunity, customer
     
     # Quantum Scoring
-    quantum_score: Mapped[Optional[float]] = mapped_column(Numeric(5, 2), nullable=True)  # 0.00 to 100.00
-    quantum_confidence: Mapped[Optional[float]] = mapped_column(Numeric(5, 2), nullable=True)  # 0.00 to 100.00
+    quantum_score: Mapped[Optional[float]] = mapped_column(Float(), nullable=True)  # 0.00 to 100.00
+    quantum_confidence: Mapped[Optional[float]] = mapped_column(Float(), nullable=True)  # 0.00 to 100.00
     last_scored_at: Mapped[Optional[datetime]] = mapped_column(nullable=True)
     scoring_version: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
     
@@ -77,8 +77,8 @@ class Lead(Base):
     do_not_email: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     
     # Lead Value & Conversion
-    estimated_value: Mapped[Optional[float]] = mapped_column(Numeric(12, 2), nullable=True)
-    conversion_probability: Mapped[Optional[float]] = mapped_column(Numeric(5, 2), nullable=True)
+    estimated_value: Mapped[Optional[float]] = mapped_column(Float(), nullable=True)
+    conversion_probability: Mapped[Optional[float]] = mapped_column(Float(), nullable=True)
     days_to_conversion: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
     
     # Assignment & Ownership

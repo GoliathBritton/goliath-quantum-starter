@@ -66,11 +66,11 @@ class QuantumAdapter:
 ```
 
 #### Supported Quantum Platforms
-- **Dynex**: Neuromorphic quantum computing (Primary)
-- **IBM Quantum**: Access to IBM's quantum network
-- **Google Quantum AI**: Integration with Google's quantum processors
-- **AWS Braket**: Amazon's quantum computing service
-- **Azure Quantum**: Microsoft's quantum cloud service
+- **FLYFOX Neuromorphic Quantum**: Primary neuromorphic quantum computing
+- **FLYFOX Gate Quantum**: Gate-based quantum computing
+- **FLYFOX Annealing Quantum**: Annealing-based quantum processing
+- **FLYFOX Quantum Cloud**: Primary quantum computing service
+- **FLYFOX Hybrid Quantum**: Integrated quantum cloud service
 - **Local Simulators**: Classical simulation for development
 
 ### 🤖 AI Agent Framework

@@ -790,7 +790,7 @@ class QuantumAlgorithmFactory:
     @staticmethod
     def select_optimal_algorithm(
         problem_context: Dict[str, Any],
-        selection_criteria: SelectionCriteria = SelectionCriteria.BALANCED
+        selection_criteria: Optional[SelectionCriteria] = None
     ) -> AlgorithmType:
         """Dynamically select the optimal algorithm based on problem context and criteria"""
         
@@ -816,7 +816,7 @@ class QuantumAlgorithmFactory:
     @staticmethod
     def create_optimal_algorithm(
         problem_context: Dict[str, Any],
-        selection_criteria: SelectionCriteria = SelectionCriteria.BALANCED,
+        selection_criteria: Optional[SelectionCriteria] = None,
         **kwargs
     ) -> Any:
         """Create the optimal algorithm instance based on dynamic selection"""

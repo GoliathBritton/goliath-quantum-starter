@@ -57,12 +57,13 @@ export default function ResourcesPage() {
   }
 
   const categories = [
-    { id: 'all', name: 'All Resources', count: 24 },
-    { id: 'documentation', name: 'Documentation', count: 8 },
-    { id: 'tutorials', name: 'Tutorials', count: 6 },
+    { id: 'all', name: 'All Resources', count: 30 },
+    { id: 'documentation', name: 'Documentation', count: 9 },
+    { id: 'tutorials', name: 'Tutorials', count: 8 },
     { id: 'case-studies', name: 'Case Studies', count: 4 },
-    { id: 'whitepapers', name: 'Whitepapers', count: 3 },
-    { id: 'webinars', name: 'Webinars', count: 3 }
+    { id: 'whitepapers', name: 'Whitepapers', count: 5 },
+    { id: 'webinars', name: 'Webinars', count: 3 },
+    { id: 'videos', name: 'Videos', count: 3 }
   ]
 
   const featuredResources = [
@@ -95,8 +96,25 @@ export default function ResourcesPage() {
       featured: true,
       icon: FileText,
       tags: ["Quantum", "Business Intelligence", "Enterprise"]
-    }
-  ]
+    },
+    {
+      title: \"FLYFOX AI Observability Platform\",
+      description: \"Comprehensive guide to monitoring and explaining AI models in the FLYFOX ecosystem.\",
+      type: \"Documentation\",
+      category: \"documentation\",
+      link: \"/resources/flyfox-observability\",
+      featured: true,
+      icon: BookOpen,
+      tags: [\"AI Observability\", \"Model Monitoring\", \"FLYFOX AI\"]\n    },
+    {
+      title: \"Explainable AI in FLYFOX\",
+      description: \"Whitepaper on achieving transparent and responsible AI with FLYFOX tools.\",
+      type: \"Whitepaper\",
+      category: \"whitepapers\",
+      link: \"/resources/explainable-ai-flyfox\",
+      featured: true,
+      icon: FileText,
+      tags: [\"Explainable AI\", \"Responsible AI\", \"FLYFOX\"]\n    }\n  ]
 
   const resources = [
     {

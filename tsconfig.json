@@ -18,9 +18,14 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@/landing-page/*": ["./landing-page/*"]
-    }
+      "@/*": [
+        "./src/*"
+      ],
+      "@/landing-page/*": [
+        "./landing-page/*"
+      ]
+    },
+    "target": "ES2017"
   },
   "include": [
     "next-env.d.ts",

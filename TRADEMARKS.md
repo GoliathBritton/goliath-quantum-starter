@@ -20,10 +20,7 @@ This document outlines the trademark usage policy for FLYFOX AI and its ecosyste
 - **NQBA** - Neuromorphic Quantum Business Architecture (ecosystem foundation)
 - **NQBA Stack** - Technical implementation
 
-### "Quantum Powered by Dynex"
-- **"Quantum Powered by Dynex"** - Technology attribution badge
-- **Usage**: Single placement in footer and "About Technology" modal only
-- **Restriction**: Not to be used in headers, navigation, or other prominent locations
+
 
 ## Usage Guidelines
 
@@ -41,7 +38,6 @@ This document outlines the trademark usage policy for FLYFOX AI and its ecosyste
 When using our trademarks, include:
 ```
 "FLYFOX AI" is a trademark of FLYFOX AI.
-"Quantum Powered by Dynex" indicates integration with Dynex quantum optimization technology.
 ```
 
 ## Brand Asset Usage
@@ -51,11 +47,7 @@ When using our trademarks, include:
 - Preserve aspect ratio and spacing
 - Use official brand colors (see Brand Guidelines)
 
-### "Quantum Powered by Dynex" Badge
-- **Placement**: Footer only, or in "About Technology" modal
-- **Size**: Maximum 120px width
-- **Context**: Must link to technology explanation
-- **Restriction**: No other placement allowed
+
 
 ## Enforcement
 

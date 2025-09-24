@@ -1,10 +1,10 @@
-﻿from datetime import datetime
-from typing import Optional
-from sqlalchemy import String, Text, Integer, Boolean, Numeric, JSON, ForeignKey
+from datetime import datetime
+from typing import Optional, List
+from sqlalchemy import String, Text, Integer, Boolean, Float, JSON, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from .base import Base
 
-class Quantum NexusQuery(Base):
+class QuantumNexusQuery(Base):
     """Quantum Nexus Query model for tracking quantum Quantum Nexus requests and responses."""
     
     __tablename__ = "quantum_nexus_queries"
@@ -31,13 +31,13 @@ class Quantum NexusQuery(Base):
     
     # Quantum Nexus Response
     prophecy: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
-    confidence: Mapped[Optional[float]] = mapped_column(Numeric(5, 2), nullable=True)  # 0.00 to 100.00
+    confidence: Mapped[Optional[float]] = mapped_column(Float(), nullable=True)  # 0.00 to 100.00
     recommended_action: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     explainability: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     
     # Structured Results
-    score: Mapped[Optional[float]] = mapped_column(Numeric(8, 4), nullable=True)
-    probability: Mapped[Optional[float]] = mapped_column(Numeric(5, 4), nullable=True)  # 0.0000 to 1.0000
+    score: Mapped[Optional[float]] = mapped_column(Float(), nullable=True)
+    probability: Mapped[Optional[float]] = mapped_column(Float(), nullable=True)  # 0.0000 to 1.0000
     risk_level: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)  # low, medium, high, critical
     category: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
     
@@ -57,7 +57,7 @@ class Quantum NexusQuery(Base):
     
     # Cost & Credits
     quantum_credits_used: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
-    cost_usd: Mapped[Optional[float]] = mapped_column(Numeric(10, 4), nullable=True)
+    cost_usd: Mapped[Optional[float]] = mapped_column(Float(), nullable=True)
     
     # Caching & Optimization
     cached_result: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
@@ -85,7 +85,7 @@ class Quantum NexusQuery(Base):
     # lead = relationship("Lead", back_populates="quantum_nexus_queries")
     
     def __repr__(self) -> str:
-        return f"<Quantum NexusQuery(id={self.id}, type={self.query_type}, status={self.status})>"
+        return f"<QuantumNexusQuery(id={self.id}, type={self.query_type}, status={self.status})>"
     
     @property
     def is_completed(self) -> bool:

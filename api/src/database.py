@@ -1,17 +1,20 @@
 import os
 from typing import AsyncGenerator
-from sqlalchemy import create_engine, event
+from sqlalchemy import create_engine, event, text
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.pool import StaticPool
-from models.base import Base
+from src.models.base import Base
 import logging
 
 logger = logging.getLogger(__name__)
 
 # Database Configuration
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://flyfox:flyfoxpass@localhost:5433/flyfoxdb")
-ASYNC_DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://")
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///app.db")
+if "sqlite" in DATABASE_URL:
+    ASYNC_DATABASE_URL = "sqlite+aiosqlite:///app.db"
+else:
+    ASYNC_DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://")
 
 # Test Database (SQLite in-memory for testing)
 TEST_DATABASE_URL = "sqlite:///:memory:"
@@ -149,7 +152,7 @@ def check_database_health() -> bool:
     """Check if database is healthy and accessible."""
     try:
         with engine.connect() as conn:
-            conn.execute("SELECT 1")
+            conn.execute(text("SELECT 1"))
         return True
     except Exception as e:
         logger.error(f"Database health check failed: {e}")
@@ -159,7 +162,7 @@ async def check_database_health_async() -> bool:
     """Check if database is healthy and accessible (async)."""
     try:
         async with async_engine.connect() as conn:
-            await conn.execute("SELECT 1")
+            await conn.execute(text("SELECT 1"))
         return True
     except Exception as e:
         logger.error(f"Async database health check failed: {e}")
@@ -192,13 +195,23 @@ def receive_checkin(dbapi_connection, connection_record):
 def get_pool_status() -> dict:
     """Get database connection pool status."""
     pool = engine.pool
-    return {
-        "size": pool.size(),
-        "checked_in": pool.checkedin(),
-        "checked_out": pool.checkedout(),
-        "overflow": pool.overflow(),
-        "invalid": pool.invalid()
-    }
+    if hasattr(pool, 'size'):
+        return {
+            "size": pool.size(),
+            "checked_in": pool.checkedin(),
+            "checked_out": pool.checkedout(),
+            "overflow": pool.overflow(),
+            "invalid": pool.invalid() if hasattr(pool, 'invalid') else 0
+        }
+    else:
+        # For StaticPool or similar
+        return {
+            "size": 1,
+            "checked_in": 1,
+            "checked_out": 0,
+            "overflow": 0,
+            "invalid": 0
+        }
 
 # Database initialization
 def init_database():

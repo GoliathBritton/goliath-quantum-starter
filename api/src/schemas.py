@@ -1,7 +1,7 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional, List
 from datetime import datetime
-from .entitlements import SubscriptionTier
+from src.entitlements import SubscriptionTier
 
 class User(BaseModel):
     id: str

@@ -17,7 +17,7 @@ import ssl
 logger = structlog.get_logger()
 
 # Get Celery app instance
-from ..app_consolidated import celery_app
+from src.app_consolidated import celery_app
 
 class NotificationService:
     """Unified notification service for email, SMS, and push notifications"""
@@ -46,6 +46,11 @@ class NotificationService:
                         html_body: Optional[str] = None, 
                         attachments: Optional[List[Dict[str, Any]]] = None) -> Dict[str, Any]:
         """Send email notification"""
+        branding_text = "\n\n-- \nFLYFOX AI\nGoliath of All Trade\nSigma Select"
+        body += branding_text
+        if html_body:
+            branding_html = '<br><br><hr><p style="font-size: small; color: gray;">FLYFOX AI | Goliath of All Trade | Sigma Select</p>'
+            html_body += branding_html
         try:
             # Create message
             msg = MIMEMultipart('alternative')

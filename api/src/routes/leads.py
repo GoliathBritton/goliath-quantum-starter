@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from typing import List, Optional
-from ..models import Lead, LeadScoreRequest, LeadScore
-from ..dynex_client import dynex_client
+from src.schemas import Lead, CreateLead, LeadScoreRequest, LeadScore
+from src.dynex_client import dynex_client
 import uuid
 import random
 
@@ -73,17 +73,15 @@ async def get_lead(lead_id: str):
     return lead
 
 @router.post("/", response_model=Lead)
-async def create_lead(lead: Lead):
+async def create_lead(lead: CreateLead):
     """
     Create a new lead.
     """
-    if not lead.id:
-        lead.id = f"lead_{uuid.uuid4().hex[:8]}"
-    
-    # Add to sample data (in production, this would go to a database)
     lead_dict = lead.dict()
+    lead_dict["id"] = f"lead_{uuid.uuid4().hex[:8]}"
+    # Add default status if needed
+    lead_dict["status"] = "new"
     SAMPLE_LEADS.append(lead_dict)
-    
     return lead_dict
 
 @router.post("/score", response_model=List[LeadScore])

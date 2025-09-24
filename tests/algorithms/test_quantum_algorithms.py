@@ -10,7 +10,7 @@ from unittest.mock import Mock, patch, AsyncMock
 from dataclasses import dataclass
 from typing import Dict, Any, List
 
-# Import quantum algorithms
+import os\nimport sys\n# Import quantum algorithms
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'src'))
 
 from nqba_stack.algorithms.qaoa_maxcut import (

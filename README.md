@@ -57,6 +57,12 @@ The framework seamlessly integrates with **nuco.cloud** infrastructure, providin
   - **Intelligent Request Routing**: Directs queries to optimal processing modules
   - **Fault Tolerance**: Self-healing architecture with automatic failover capabilities
   - **Performance Monitoring**: Real-time metrics and predictive maintenance
+  
+- **🤖 AIPRM Integration** - AI Prompt and Resource Management
+  - **Prompt Templates**: Library of pre-built prompts for various domains
+  - **AI Extensions**: Modular extensions for enhanced AI capabilities
+  - **Quantum-Enhanced Prompts**: Leverage quantum computing for improved AI responses
+  - **Diversegy Integration**: Seamless connection with energy services
 
 - **📋 Procedures Layer** - Reusable business workflows and algorithm templates
   - **Industry-Specific Templates**: Pre-configured workflows for common business processes
@@ -82,7 +88,7 @@ The framework seamlessly integrates with **nuco.cloud** infrastructure, providin
   - **OAuth2 Authentication**: Enterprise-grade security with MFA support
   - **Rate Limiting & Throttling**: Configurable usage controls with fair use policies
 
-### Blockchain & Web3 Integration
+## API Server Overview\n\nThe API server is initialized with qdLLM in main.py around line 170 as follows (note: line number may vary):\n\n```python\ngq = GoliathQuantum(\n    use_simulator=True,\n    apollo_mode=True,\n    qdllm_params=400_000_000_000,\n    max_qubits=32,\n    enable_dynex=False,  # Disable for demo\n    dynex_network=DynexNetwork.TESTNET\n)\n```\n\nThis initializes the Goliath Quantum system with qdLLM parameters for quantum-enhanced operations.\n\n### Blockchain & Web3 Integration
 
 - **⛓️ Blockchain Connectors** - Native integration with major blockchain networks
   - **Multi-Chain Support**: Ethereum, Binance Smart Chain, Solana, Polygon, Avalanche, and more
@@ -468,6 +474,14 @@ print(f"Automated Response: {result['response']}")
 print(f"Confidence Score: {result['confidence']}")
 print(f"Compliance Status: {result['governance']['compliance_status']}")
 ```
+
+---
+
+### Examples
+
+Check out our demonstration notebooks:
+
+- [qdLLM Energy Optimization](examples/qdllm_energy.ipynb): Demonstrates parallel QAOA for energy cost optimization using quantum-inspired algorithms.
 
 ---
 

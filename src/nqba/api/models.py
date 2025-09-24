@@ -117,7 +117,7 @@ class QNLPRequest(BaseRequest):
     entanglement_threshold: float = Field(default=0.5, ge=0.0, le=1.0, description="Entanglement threshold")
     
     # Analysis depth
-    analysis_depth: str = Field(default="standard", regex="^(basic|standard|deep)$", description="Analysis depth")
+    analysis_depth: str = Field(default="standard", pattern="^(basic|standard|deep)$", description="Analysis depth")
     
     @validator('text')
     def validate_text(cls, v):
@@ -155,10 +155,10 @@ class QNLPResponse(BaseResponse):
 class QTransformerRequest(BaseRequest):
     """Request model for QTransformer processing"""
     input_text: str = Field(description="Input text for QTransformer processing")
-    task_type: str = Field(default="generation", regex="^(generation|classification|embedding|analysis)$", description="Task type")
+    task_type: str = Field(default="generation", pattern="^(generation|classification|embedding|analysis)$", description="Task type")
     
     # Model configuration
-    model_size: str = Field(default="base", regex="^(small|base|large)$", description="Model size")
+    model_size: str = Field(default="base", pattern="^(small|base|large)$", description="Model size")
     quantum_enhancement: bool = Field(default=True, description="Enable quantum enhancements")
     
     # Generation parameters (for generation tasks)

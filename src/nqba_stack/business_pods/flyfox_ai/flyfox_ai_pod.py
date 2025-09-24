@@ -212,9 +212,19 @@ class FLYFOXAIPod:
             },
             AIAgentType.QUANTUM_SYNTHETIC: {
                 "name": "FLYFOX AI Architect",
-                "description": "Meta-agent orchestrator and creator",
+                "description": "Meta-agent orchestrator and creator with comprehensive knowledge of FLYFOX AI ecosystem and all integrations.",
                 "capabilities": ["agent_creation", "orchestration", "optimization"],
                 "quantum_enhanced": True,
+                "knowledge_areas": [
+                    "FLYFOX AI Observability",
+                    "Explainable AI",
+                    "LLMOps and Guardrails",
+                    "Fairness and Bias Detection",
+                    "Quantum Computing Integrations",
+                    "AI Agent Framework",
+                    "Business Pod Framework",
+                    "All FLYFOX AI Integrations and Features"
+                ]
             },
         }
 

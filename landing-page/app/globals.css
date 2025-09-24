@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import design system */
+@import './styles/design-system.css';
+
 /* FLYFOX AI Brand Variables */
 :root {
   /* Primary Brand Colors */
@@ -51,31 +54,61 @@
     @apply bg-white text-black;
     font-family: var(--font-family-sans);
     position: relative;
+    overflow-x: hidden;
   }
   
-  /* Fixed Background Logo */
+  /* Animated Particle Background */
   body::before {
     content: '';
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 60vw;
-    height: 60vh;
-    background-image: url('/logos/flyfox-logo.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    opacity: 0.03;
-    z-index: -1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+      radial-gradient(circle at 20% 30%, rgba(102, 126, 234, 0.15) 0%, transparent 25%),
+      radial-gradient(circle at 80% 70%, rgba(118, 75, 162, 0.1) 0%, transparent 30%),
+      radial-gradient(circle at 50% 50%, rgba(245, 193, 76, 0.05) 0%, transparent 60%);
+    background-size: 120% 120%;
+    z-index: -2;
     pointer-events: none;
-    animation: subtle-pulse 8s ease-in-out infinite;
+    animation: gradient-shift 15s ease infinite;
   }
   
-  /* Subtle background animation */
-  @keyframes subtle-pulse {
-    0%, 100% { opacity: 0.03; transform: translate(-50%, -50%) scale(1); }
-    50% { opacity: 0.05; transform: translate(-50%, -50%) scale(1.02); }
+  /* Quantum Particles */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      radial-gradient(circle at calc(10% + var(--x-offset, 0px)) calc(20% + var(--y-offset, 0px)), rgba(39, 229, 255, 0.4) 0%, transparent 8px),
+      radial-gradient(circle at calc(85% + var(--x-offset, 0px)) calc(15% + var(--y-offset, 0px)), rgba(245, 193, 76, 0.4) 0%, transparent 6px),
+      radial-gradient(circle at calc(25% + var(--x-offset, 0px)) calc(80% + var(--y-offset, 0px)), rgba(118, 75, 162, 0.4) 0%, transparent 10px),
+      radial-gradient(circle at calc(70% + var(--x-offset, 0px)) calc(65% + var(--y-offset, 0px)), rgba(16, 185, 129, 0.4) 0%, transparent 8px),
+      radial-gradient(circle at calc(40% + var(--x-offset, 0px)) calc(40% + var(--y-offset, 0px)), rgba(59, 130, 246, 0.4) 0%, transparent 12px);
+    background-size: 100% 100%;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.7;
+    filter: blur(2px);
+    animation: particle-float 20s ease-in-out infinite alternate;
+  }
+  
+  /* Gradient Animations */
+  @keyframes gradient-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  
+  @keyframes particle-float {
+    0% { --x-offset: 0px; --y-offset: 0px; }
+    25% { --x-offset: 20px; --y-offset: -10px; }
+    50% { --x-offset: -15px; --y-offset: 15px; }
+    75% { --x-offset: 10px; --y-offset: 20px; }
+    100% { --x-offset: -20px; --y-offset: -15px; }
   }
   
   /* Ensure all backgrounds default to white */
@@ -93,11 +126,115 @@
     @apply text-black;
   }
   
-  /* Content layering over background logo */
+  /* Content layering over background */
   main {
     position: relative;
     z-index: 1;
-    background-color: rgba(255, 255, 255, 0.95);
+    background-color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(5px);
+  }
+  
+  /* Advanced Hero Section Styling */
+  .hero-gradient {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    position: relative;
+    overflow: hidden;
+    padding: 8rem 0;
+  }
+  
+  .hero-gradient::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(39, 229, 255, 0.1) 0%, transparent 50%);
+    animation: rotate-gradient 20s linear infinite;
+    z-index: 0;
+  }
+  
+  @keyframes rotate-gradient {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  /* 3D Card Effects */
+  .card-3d {
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    transition: all 0.5s ease;
+  }
+  
+  .card-3d:hover {
+    transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
+    box-shadow: 
+      0 20px 30px -10px rgba(0, 0, 0, 0.1),
+      0 0 20px rgba(102, 126, 234, 0.3);
+  }
+  
+  /* Floating Elements */
+  .float-element {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+  }
+  
+  /* Glowing Effects */
+  .glow-effect {
+    position: relative;
+  }
+  
+  .glow-effect::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border-radius: inherit;
+    background: linear-gradient(135deg, #667eea, #764ba2, #F5C14C);
+    z-index: -1;
+    opacity: 0;
+    filter: blur(15px);
+    transition: opacity 0.3s ease;
+  }
+  
+  .glow-effect:hover::after {
+    opacity: 0.7;
+  }
+  
+  /* Quantum Button Styling */
+  .quantum-btn {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    z-index: 1;
+  }
+  
+  .quantum-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: all 0.5s ease;
+    z-index: -1;
+  }
+  
+  .quantum-btn:hover::before {
+    left: 100%;
   }
   
   nav, footer {
@@ -472,6 +609,67 @@
   .section-padding-sm {
     @apply py-8 lg:py-12;
   }
+  
+  /* Scroll Animations */
+  .fade-up-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .fade-up-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .fade-in-on-scroll {
+    opacity: 0;
+    transition: opacity 0.8s ease;
+  }
+
+  .fade-in-on-scroll.visible {
+    opacity: 1;
+  }
+
+  .scale-in-on-scroll {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .scale-in-on-scroll.visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .slide-in-left-on-scroll {
+    opacity: 0;
+    transform: translateX(-50px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .slide-in-left-on-scroll.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .slide-in-right-on-scroll {
+    opacity: 0;
+    transform: translateX(50px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .slide-in-right-on-scroll.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* Staggered animation delays */
+  .stagger-1 { transition-delay: 0.1s; }
+  .stagger-2 { transition-delay: 0.2s; }
+  .stagger-3 { transition-delay: 0.3s; }
+  .stagger-4 { transition-delay: 0.4s; }
+  .stagger-5 { transition-delay: 0.5s; }
 }
 
 /* Dark mode overrides for specific components (minimal usage) */

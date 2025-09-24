@@ -1,15 +1,15 @@
 from fastapi import APIRouter, HTTPException
 from typing import List
-from ..models import Partner
-from ..seed_data import PARTNERS
+from src.models import Partner
+from src.seed_data import PARTNERS
 
 router = APIRouter(prefix="/api/partners", tags=["partners"])
 
-@router.get("/", response_model=List[Partner])
+@router.get("/")
 async def list_partners():
     return PARTNERS
 
-@router.get("/{partner_id}", response_model=Partner)
+@router.get("/{partner_id}")
 async def get_partner(partner_id: str):
     for p in PARTNERS:
         if p["id"] == partner_id:

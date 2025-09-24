@@ -5,6 +5,10 @@ import { AuthProvider } from '../components/auth/AuthContext'
 import Nav from '../components/Nav'
 import Footer from '../components/Footer'
 import { brand } from '../lib/brand'
+import ScrollAnimations from './scroll-animations'
+import { GoogleAnalytics } from '@next/third-parties/google'
+import { Suspense } from 'react'
+import Loading from './components/Loading'
 
 const inter = Inter({ subsets: ['latin'] })
 const AuthProviderComponent = AuthProvider as any
@@ -84,11 +88,15 @@ export default function RootLayout({
           <div className="min-h-screen flex flex-col bg-white">
             <Nav />
             <main className="flex-1 bg-white">
-              {children}
+              <Suspense fallback={<Loading />}>
+                {children}
+              </Suspense>
             </main>
             <Footer />
           </div>
         </AuthProviderComponent>
+        <ScrollAnimations />
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
       </body>
     </html>
   )

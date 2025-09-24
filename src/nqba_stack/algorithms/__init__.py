@@ -61,14 +61,13 @@ from .algorithm_orchestrator import (
 )
 
 from .performance_engine import (
+    PerformanceMetric,
     PerformanceTracker,
     AlgorithmBenchmarker,
-    DynamicAlgorithmSelector,
-    PerformanceMetrics,
-    ResourceUsage,
-    OptimizationCriteria,
-    track_performance,
-    performance_engine,
+    PerformanceSnapshot,
+    AlgorithmBenchmark,
+    SelectionCriteria,
+    AlgorithmRecommendation
 )
 
 from .quantum_enhanced_algorithms import (

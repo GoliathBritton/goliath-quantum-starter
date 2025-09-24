@@ -7,12 +7,12 @@ from datetime import datetime, timedelta
 import redis.asyncio as redis
 import structlog
 import asyncio
-from ..dynex_client import DynexClient
+from src.dynex_client import DynexClient
 
 logger = structlog.get_logger()
 
 # Get Celery app instance
-from ..app_consolidated import celery_app
+from src.app_consolidated import celery_app
 
 @celery_app.task(bind=True, name="leads.score_lead")
 def score_lead_async(self, lead_data: Dict[str, Any]) -> Dict[str, Any]:

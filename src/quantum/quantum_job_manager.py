@@ -15,6 +15,7 @@ from typing import Any, Dict, List, Optional, Union
 
 import numpy as np
 from pydantic import BaseModel, Field
+from src.qdllm.core.nuco_client import NucoClient
 
 try:
     import dynex
@@ -268,12 +269,15 @@ class DynexClient:
 class QuantumJobManager:
     """Manages quantum job lifecycle and orchestration"""
     
-    def __init__(self, 
+    def __init__(self,
                  dynex_client: Optional[DynexClient] = None,
+                 nuco_client: Optional[NucoClient] = None,
                  max_retries: int = 3,
                  default_timeout: int = 30,
-                 max_concurrent_jobs: int = 10):
+                 max_concurrent_jobs: int = 10,
+                 start_processor: bool = True):
         self.dynex = dynex_client or DynexClient()
+        self.nuco = nuco_client or NucoClient(api_key="your_nuco_api_key")  # Replace with actual key handling
         self.max_retries = max_retries
         self.default_timeout = default_timeout
         self.max_concurrent_jobs = max_concurrent_jobs
@@ -284,7 +288,10 @@ class QuantumJobManager:
         self.logger = logging.getLogger("quantum_job_manager")
         
         # Start background job processor
-        self._processor_task = asyncio.create_task(self._process_jobs())
+        if start_processor:
+            self._processor_task = asyncio.create_task(self._process_jobs())
+        else:
+            self._processor_task = None
         
     async def submit(self, payload: Dict[str, Any], 
                     priority: JobPriority = JobPriority.NORMAL) -> QuantumJob:
@@ -622,3 +629,23 @@ class QuantumJobManager:
             await asyncio.gather(*self.running_jobs.values(), return_exceptions=True)
             
         self.logger.info("Quantum job manager shutdown complete")
+
+    def submit_job(self, payload: Dict[str, Any]) -> str: 
+        backend = payload.get("backend", "dynex") 
+        if backend == "nuco": 
+            # GPU-specific: Provision + run job 
+            instance_id = self.nuco.provision_gpu(payload.get("gpu_type", "RTX 4090")) 
+            # Mock job execution (replace w/ actual workload upload) 
+            self.nuco.pause_reboot_instance(instance_id, "start")  # Start 
+            return instance_id  # Track as job_id 
+        elif backend == "dynex": 
+            return self.dynex.submit_job(payload) 
+        raise ValueError(f"Backend {backend} unsupported") 
+
+    def monitor_job(self, job_id: str, backend: str) -> Dict[str, Any]: 
+        if backend == "nuco": 
+            # Real-time: Check status + credits 
+            status = self.nuco.pause_reboot_instance(job_id, "status")  # Hypothetical status call 
+            balance = self.nuco.get_credit_balance() 
+            return {"status": status.get("status"), "credits_remaining": balance} 
+        return self.dynex.monitor_job(job_id)  # Existing

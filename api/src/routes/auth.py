@@ -2,15 +2,17 @@ from datetime import datetime
 from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
 from pydantic import BaseModel, EmailStr
 import uuid
 
-from ..database import get_db
-from ..models.user import User
-from ..models.partner import Partner
-from ..models.audit_log import AuditLog
-from ..auth.jwt_handler import JWTHandler, Token
-from ..auth.dependencies import CurrentUser, AdminUser
+from src.database import get_db, get_async_db
+from src.models.user import User
+from src.models.partner import Partner
+from src.models.audit_log import AuditLog
+from src.auth.jwt_handler import JWTHandler, Token
+from src.auth.dependencies import CurrentUser, AdminUser
 
 router = APIRouter()
 
@@ -120,13 +122,14 @@ def login(
     )
 
 @router.post("/register", response_model=UserResponse)
-def register(
+async def register(
     user_data: UserRegister,
-    db: Session = Depends(get_db)
+    db: AsyncSession = Depends(get_async_db)
 ):
     """Register a new user."""
     # Check if user already exists
-    existing_user = db.query(User).filter(User.email == user_data.email).first()
+    result = await db.execute(select(User).where(User.email == user_data.email))
+    existing_user = result.scalar_one_or_none()
     if existing_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -135,7 +138,8 @@ def register(
     
     # Validate partner_id if provided
     if user_data.partner_id:
-        partner = db.query(Partner).filter(Partner.id == user_data.partner_id).first()
+        result = await db.execute(select(Partner).where(Partner.id == user_data.partner_id))
+        partner = result.scalar_one_or_none()
         if not partner:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
@@ -163,8 +167,8 @@ def register(
     )
     
     db.add(user)
-    db.commit()
-    db.refresh(user)
+    await db.commit()
+    await db.refresh(user)
     
     # Log user registration
     audit_log = AuditLog(
@@ -178,7 +182,7 @@ def register(
         user_agent="unknown"   # TODO: Extract from request
     )
     db.add(audit_log)
-    db.commit()
+    await db.commit()
     
     return user
 

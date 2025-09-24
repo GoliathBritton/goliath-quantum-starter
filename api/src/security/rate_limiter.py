@@ -8,7 +8,7 @@ from dataclasses import dataclass
 import redis
 import json
 from fastapi import HTTPException, Request
-from ..entitlements import SubscriptionTier
+from src.entitlements import SubscriptionTier
 
 class RateLimitType(Enum):
     REQUESTS_PER_MINUTE = "requests_per_minute"
@@ -45,7 +45,7 @@ class RateLimitConfig:
             RateLimitType.DATA_UPLOAD_MB_PER_HOUR: RateLimit(RateLimitType.DATA_UPLOAD_MB_PER_HOUR, 100, 3600, 20),
             RateLimitType.API_CALLS_PER_MINUTE: RateLimit(RateLimitType.API_CALLS_PER_MINUTE, 20, 60, 5)
         },
-        SubscriptionTier.PROFESSIONAL: {
+        SubscriptionTier.PREMIUM: {
             RateLimitType.REQUESTS_PER_MINUTE: RateLimit(RateLimitType.REQUESTS_PER_MINUTE, 50, 60, 10),
             RateLimitType.REQUESTS_PER_HOUR: RateLimit(RateLimitType.REQUESTS_PER_HOUR, 1000, 3600, 100),
             RateLimitType.REQUESTS_PER_DAY: RateLimit(RateLimitType.REQUESTS_PER_DAY, 10000, 86400, 500),

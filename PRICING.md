@@ -25,7 +25,7 @@ Membership to the future of business intelligence.
 |-------------------|-----------------|------------------------------------------------------------------------------------------|
 | **Pro**           | $1,500/mo       | Sigma Select Copilot (Lite), Energy Scheduling (1 facility), EduVerse (100 learners), Insurance & Capital pre-qual integrations |
 | **Growth**        | $7,500/mo       | Full Sigma Select Copilot, Multi-facility Energy Optimization, Capital pre-qualification engine, EduVerse campus license, Insurance integrations |
-| **Enterprise Pilot** | $50,000/mo   | Quantum optimization workflows (Dynex-powered), Cross-pod orchestration, Private EduVerse district instance, Dedicated success manager |
+| **Enterprise Pilot** | $50,000/mo   | Quantum optimization workflows, Cross-pod orchestration, Private EduVerse district instance, Dedicated success manager |
 | **Enterprise+**   | $150,000/mo     | 6M FCUs + custom AI Pods, Cross-border risk & finance modeling, Energy + Insurance hedging bundles, Annual Sigma Select leadership training, 24/7 AI Concierge |
 | **Strategic License** | $500,000+/yr | Private NQBA instance, Gov/Defense-grade LTC compliance, Global enterprise rollout, On-premise deployment |
 

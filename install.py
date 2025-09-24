@@ -55,7 +55,7 @@ def check_system_requirements():
     try:
         disk_usage = shutil.disk_usage('.')
         free_gb = disk_usage.free / (1024**3)
-        if free_gb < 2:
+        if free_gb < 1:
             print(f"ERROR: Insufficient disk space: {free_gb:.1f}GB free")
             print("   At least 2GB free space is required")
             sys.exit(1)

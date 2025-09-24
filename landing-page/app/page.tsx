@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { 
   Brain, 
@@ -22,6 +22,12 @@ import {
 } from 'lucide-react'
 import { brand, businessUnits, nqbaLayers, trustMetrics } from '../lib/brand'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
+const DiversegyIntegration = dynamic(() => import('./components/DiversegyIntegration'), { ssr: false, loading: () => <div className="loading-placeholder">Loading Integration...</div> })
+const AIPRMIntegration = dynamic(() => import('./components/AIPRMIntegration'), { ssr: false, loading: () => <div className="loading-placeholder">Loading Integration...</div> })
+import Navbar from './components/Navbar'
+import Footer from './components/Footer'
+import { FadeIn, SlideUp, ScrollReveal, StaggerContainer, StaggerItem } from './components/animations'
 
 // Type assertions for motion components
 const MotionDiv = motion.div as any
@@ -49,6 +55,11 @@ const CrownIcon = Crown as any
 
 export default function HomePage() {
   const [activeTab, setActiveTab] = useState('council')
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   const fadeInUp = {
     initial: { opacity: 0, y: 60 },
@@ -94,57 +105,321 @@ export default function HomePage() {
 
   return (
     <div className="bg-white">
+      <Navbar />
       {/* Hero Section */}
-      <section className="hero-gradient section-padding">
-        <div className="container-quantum text-center">
+      <section className="hero-section relative overflow-hidden min-h-[90vh] flex items-center bg-gradient-to-br from-blue-50 via-white to-purple-50">
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 -z-10 overflow-hidden">
+          {/* Gradient Background */}
+          <FadeIn duration={1.5}>
+            <div className="absolute inset-0 bg-gradient-to-br from-indigo-800 via-purple-800 to-blue-900"></div>
+          </FadeIn>
+          
+          {/* Animated Grid */}
+          <FadeIn delay={0.3} duration={2}>
+            <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] bg-center opacity-15 bg-repeat"></div>
+          </FadeIn>
+          
+          {/* Subtle Glow Effect */}
+          <FadeIn delay={0.6} duration={2.5}>
+            <div className="absolute inset-0 bg-gradient-radial from-blue-500/10 via-transparent to-transparent"></div>
+          </FadeIn>
+          
+          {/* Additional Animated Elements */}
+          
+          {/* Floating Particles */}
+          <div className="absolute top-0 left-0 w-full h-full">
+            {[...Array(20)].map((_, i) => (
+              <MotionDiv
+                key={`particle-${i}`}
+                className="absolute rounded-full bg-white opacity-20"
+                style={{
+                  width: Math.random() * 8 + 2 + 'px',
+                  height: Math.random() * 8 + 2 + 'px',
+                  top: Math.random() * 100 + '%',
+                  left: Math.random() * 100 + '%',
+                }}
+                animate={{
+                  y: [0, Math.random() * 100 - 50],
+                  x: [0, Math.random() * 100 - 50],
+                  opacity: [0.2, 0.8, 0.2],
+                }}
+                transition={{
+                  duration: Math.random() * 20 + 10,
+                  repeat: Infinity,
+                  repeatType: "reverse",
+                }}
+              />
+            ))}
+          </div>
+          
+          {/* Glowing Orbs */}
           <MotionDiv
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <h1 className="text-5xl md:text-7xl font-bold text-black mb-6">
-              {brand.tagline.split('.')[0]}.
-              <span className="block text-gradient-cyan">
-                Powered by NQBA.
-              </span>
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-4xl mx-auto">
-              {brand.description}
-            </p>
-            <MotionDiv 
-              className="flex flex-col sm:flex-row gap-4 justify-center"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-            >
-              <MotionDiv whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <LinkComponent href="#demo" className="btn-primary">
-                  Book a Demo
+            className="absolute -top-20 -right-20 w-96 h-96 rounded-full bg-purple-600 opacity-20 blur-3xl"
+            animate={{
+              scale: [1, 1.2, 1],
+              opacity: [0.2, 0.3, 0.2],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              repeatType: "reverse",
+            }}
+          />
+          <MotionDiv
+            className="absolute -bottom-40 -left-20 w-96 h-96 rounded-full bg-indigo-600 opacity-20 blur-3xl"
+            animate={{
+              scale: [1, 1.3, 1],
+              opacity: [0.2, 0.3, 0.2],
+            }}
+            transition={{
+              duration: 10,
+              repeat: Infinity,
+              repeatType: "reverse",
+            }}
+          />
+        </div>
+        
+        <div className="container-quantum relative z-10 pt-20 pb-20">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            {/* Hero Content */}
+            <div className="lg:col-span-6">
+              <MotionDiv
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ 
+                  type: "spring",
+                  stiffness: 100,
+                  damping: 20
+                }}
+                className="relative"
+              >
+                {/* Decorative Element */}
+                <div className="absolute -left-6 -top-6 w-20 h-20">
                   <MotionDiv
-                    animate={{ x: [0, 5, 0] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
+                    className="w-full h-full"
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
                   >
-                    <ArrowRightIcon className="ml-2 h-5 w-5" />
+                    <svg viewBox="0 0 100 100" className="w-full h-full text-indigo-500 opacity-70">
+                      <path d="M50 0 L100 50 L50 100 L0 50 Z" fill="none" stroke="currentColor" strokeWidth="2" />
+                    </svg>
                   </MotionDiv>
-                </LinkComponent>
+                </div>
+                
+                <MotionDiv
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                >
+                  <div className="inline-block px-4 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/90 text-sm font-medium mb-6">
+                    Quantum Computing • AI • Enterprise Solutions
+                  </div>
+                </MotionDiv>
+                
+                <MotionDiv
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.8, delay: 0.3 }}
+                >
+                  <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-white">
+                    <span className="inline-block bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">
+                      {brand.tagline.split('.')[0]}
+                    </span>
+                    <br />Powered by NQBA
+                  </h1>
+                </MotionDiv>
+                
+                <MotionDiv
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.8, delay: 0.5 }}
+                >
+                  <p className="text-xl text-white/80 mb-8 backdrop-blur-sm bg-white/5 p-4 rounded-lg border border-white/10">
+                    {brand.description}
+                  </p>
+                </MotionDiv>
+                
+                <MotionDiv
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.7 }}
+                  className="flex flex-wrap gap-4"
+                >
+                  <MotionDiv 
+                    whileHover={{ scale: 1.05 }} 
+                    whileTap={{ scale: 0.95 }}
+                    className="glow-effect"
+                  >
+                    <LinkComponent href="#demo" className="quantum-btn inline-block">
+                      Book a Demo
+                      <MotionDiv
+                        animate={{ x: [0, 5, 0] }}
+                        transition={{ duration: 1.5, repeat: Infinity }}
+                        className="inline-block"
+                      >
+                        <ArrowRightIcon className="ml-2 h-5 w-5 inline" />
+                      </MotionDiv>
+                    </LinkComponent>
+                  </MotionDiv>
+                  
+                  <MotionDiv 
+                    whileHover={{ scale: 1.05 }} 
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <LinkComponent href="#how-it-works" className="btn-secondary">
+                      Learn More
+                    </LinkComponent>
+                  </MotionDiv>
+                </MotionDiv>
+                
+                {/* Trusted By */}
+                <MotionDiv
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.8, delay: 1 }}
+                  className="mt-12"
+                >
+                  <p className="text-sm text-white/60 mb-4">Trusted by industry leaders</p>
+                  <div className="flex flex-wrap gap-8 items-center">
+                    {['IBM', 'Microsoft', 'Google', 'Amazon'].map((company, i) => (
+                      <div key={company} className="text-white/40 font-medium">{company}</div>
+                    ))}
+                  </div>
+                </MotionDiv>
               </MotionDiv>
-              <MotionDiv whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <LinkComponent href="#how-it-works" className="btn-secondary">
-                  Learn More
-                </LinkComponent>
+            </div>
+            
+            {/* 3D Card */}
+            <div className="lg:col-span-6 relative">
+              <MotionDiv
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ 
+                  type: "spring",
+                  stiffness: 100,
+                  damping: 20,
+                  delay: 0.4
+                }}
+                className="relative"
+              >
+                {/* Floating Elements */}
+                <MotionDiv
+                  className="absolute -top-10 -left-10 w-20 h-20 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-lg opacity-70 blur-sm"
+                  animate={{
+                    y: [0, -20, 0],
+                    rotate: [0, 10, 0],
+                    scale: [1, 1.05, 1],
+                  }}
+                  transition={{
+                    duration: 6,
+                    repeat: Infinity,
+                    repeatType: "reverse",
+                  }}
+                />
+                
+                <MotionDiv
+                  className="absolute -bottom-10 -right-10 w-20 h-20 bg-gradient-to-br from-indigo-500 to-cyan-500 rounded-full opacity-70 blur-sm"
+                  animate={{
+                    y: [0, 20, 0],
+                    rotate: [0, -10, 0],
+                    scale: [1, 1.05, 1],
+                  }}
+                  transition={{
+                    duration: 7,
+                    repeat: Infinity,
+                    repeatType: "reverse",
+                  }}
+                />
+                
+                {/* Main 3D Card */}
+                <MotionDiv
+                  whileHover={{ 
+                    rotateY: 5,
+                    rotateX: -5,
+                    z: 10,
+                    scale: 1.02,
+                  }}
+                  transition={{ type: "spring", stiffness: 400 }}
+                  className="card-3d bg-white/10 backdrop-blur-xl p-8 rounded-2xl border border-white/20 shadow-2xl overflow-hidden transform-gpu perspective-1000"
+                >
+                  <div className="relative aspect-video bg-gradient-to-br from-indigo-900 to-purple-900 rounded-lg mb-6 overflow-hidden">
+                    {/* Quantum Visualization */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <MotionDiv
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                        className="w-40 h-40"
+                      >
+                        <svg viewBox="0 0 100 100" className="w-full h-full text-white opacity-30">
+                          <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="2" />
+                          <circle cx="50" cy="50" r="30" fill="none" stroke="currentColor" strokeWidth="2" />
+                          <circle cx="50" cy="50" r="15" fill="none" stroke="currentColor" strokeWidth="2" />
+                        </svg>
+                      </MotionDiv>
+                    </div>
+                    
+                    {/* Particles */}
+                    {[...Array(10)].map((_, i) => (
+                      <MotionDiv
+                        key={`viz-particle-${i}`}
+                        className="absolute w-2 h-2 rounded-full bg-white"
+                        style={{
+                          top: Math.random() * 100 + '%',
+                          left: Math.random() * 100 + '%',
+                        }}
+                        animate={{
+                          scale: [1, 1.5, 1],
+                          opacity: [0.4, 0.8, 0.4],
+                        }}
+                        transition={{
+                          duration: Math.random() * 2 + 1,
+                          repeat: Infinity,
+                          repeatType: "reverse",
+                        }}
+                      />
+                    ))}
+                  </div>
+                  
+                  <h3 className="text-2xl font-bold mb-3 text-white">Quantum-Enhanced Analytics</h3>
+                  <p className="text-white/80 mb-6">
+                    Process complex data sets exponentially faster with our quantum algorithms, unlocking insights that were previously impossible to discover.
+                  </p>
+                  
+                  <MotionDiv
+                    whileHover={{ x: 5 }}
+                    className="flex items-center text-indigo-300 group"
+                  >
+                    <span className="mr-2 group-hover:mr-3 transition-all">Learn more</span>
+                    <ArrowRightIcon className="h-5 w-5" />
+                  </MotionDiv>
+                  
+                  {/* Glow Effect */}
+                  <div className="absolute inset-0 -z-10 bg-gradient-to-r from-indigo-500/0 via-purple-500/20 to-pink-500/0 opacity-0 group-hover:opacity-100 blur-xl transition-opacity"></div>
+                </MotionDiv>
               </MotionDiv>
-            </MotionDiv>
-          </MotionDiv>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* Intelligence Economy Business Units */}
-      <section className="section-padding bg-white border-t border-gray-200">
-        <div className="container-quantum">
+      <section className="section-padding bg-white border-t border-gray-200 relative overflow-hidden">
+        {/* Background decorative elements */}
+        <div className="absolute w-full h-full top-0 left-0 overflow-hidden opacity-10 pointer-events-none">
+          <div className="absolute w-96 h-96 -top-20 -left-20 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 blur-3xl"></div>
+          <div className="absolute w-96 h-96 -bottom-20 -right-20 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 blur-3xl"></div>
+        </div>
+        
+        <div className="container-quantum relative z-10">
           <MotionDiv
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ 
+              type: "spring",
+              stiffness: 100,
+              damping: 20
+            }}
             viewport={{ once: true }}
             className="text-center mb-16"
           >
@@ -167,16 +442,22 @@ export default function HomePage() {
               <MotionDiv
                 key={unit.name}
                 variants={fadeInUp}
-                whileHover={{ scale: 1.02, y: -8 }}
-                className="card-quantum group cursor-pointer relative overflow-hidden"
+                whileHover={{ scale: 1.05, y: -15, rotateX: 5, rotateY: 5, z: 50 }}
+                transition={{ type: "spring", stiffness: 400 }}
+                className="card-quantum card-3d group cursor-pointer relative overflow-hidden transform-gpu perspective-1000"
               >
+                {/* Decorative corner accent */}
+                <div className="absolute top-0 right-0 w-20 h-20 overflow-hidden">
+                  <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-indigo-500 to-purple-600 rotate-45 transform origin-top-right"></div>
+                </div>
+                
                 <MotionDiv 
-                  className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-5 transition-opacity duration-300"
+                  className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity duration-300"
                   style={{ background: `linear-gradient(135deg, ${unit.color}, transparent)` }}
                 />
                 <MotionDiv 
-                  className="flex items-center justify-center w-24 h-24 rounded-xl mb-6 overflow-hidden"
-                  whileHover={{ rotate: 5, scale: 1.1 }}
+                  className="flex items-center justify-center w-24 h-24 rounded-xl mb-6 overflow-hidden shadow-lg"
+                  whileHover={{ rotate: 5, scale: 1.1, z: 20 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
                   {logoMap[unit.name] ? (
@@ -195,12 +476,15 @@ export default function HomePage() {
                 </MotionDiv>
                 <h3 className="text-2xl font-bold text-black mb-3 group-hover:text-brand-cyan transition-colors duration-200">{unit.name}</h3>
                 <p className="text-gray-600 mb-4">{unit.description}</p>
-                <div className="text-sm font-semibold mb-2" style={{ color: unit.color }}>
+                <div className="text-sm font-semibold mb-2 transform transition-transform hover:scale-105" style={{ color: unit.color }}>
                   {unit.focus}
                 </div>
-                <div className="text-sm text-gray-500">
+                <div className="text-sm text-gray-500 transform transition-transform hover:scale-105">
                   {unit.quantumAdvantage}
                 </div>
+                
+                {/* Interactive glow effect on hover */}
+                <div className="absolute inset-0 -z-10 bg-gradient-to-r from-indigo-500/0 via-purple-500/0 to-pink-500/0 opacity-0 group-hover:opacity-100 blur-xl transition-opacity rounded-xl"></div>
               </MotionDiv>
             ))}
           </MotionDiv>
@@ -357,8 +641,89 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Trust & Compliance */}
-      <section id="trust" className="section-padding">
+      {/* Features Section */}
+      <section className="section-padding bg-gradient-to-b from-gray-900 to-indigo-900 text-white relative overflow-hidden">
+        {/* Background decorative elements */}
+        <div className="absolute inset-0 overflow-hidden opacity-20 pointer-events-none">
+          <div className="absolute top-0 left-0 w-full h-full bg-[url('/grid-pattern.svg')] bg-center"></div>
+          <div className="absolute -top-20 -right-20 w-96 h-96 rounded-full bg-indigo-600 opacity-20 blur-3xl"></div>
+          <div className="absolute -bottom-40 -left-20 w-96 h-96 rounded-full bg-purple-600 opacity-20 blur-3xl"></div>
+        </div>
+        
+        <div className="container-quantum relative z-10">
+          <MotionDiv
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-16 fade-up-on-scroll"
+          >
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300">
+              Quantum-Powered Features
+            </h2>
+            <p className="text-xl text-white/80 max-w-3xl mx-auto">
+              Our platform leverages quantum computing to deliver unprecedented capabilities.
+            </p>
+          </MotionDiv>
+
+          <MotionDiv
+            variants={staggerContainer}
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-8"
+          >
+            {[
+              {
+                title: "Quantum Processing",
+                description: "Process complex data sets exponentially faster with our quantum algorithms",
+                icon: Cpu,
+                color: "from-indigo-500 to-purple-600"
+              },
+              {
+                title: "AI Integration",
+                description: "Seamlessly integrate with existing AI systems for enhanced intelligence",
+                icon: Brain,
+                color: "from-purple-500 to-pink-600"
+              },
+              {
+                title: "Enterprise Security",
+                description: "Post-quantum cryptography and quantum random number generation",
+                icon: Shield,
+                color: "from-blue-500 to-indigo-600"
+              }
+            ].map((feature, index) => (
+              <MotionDiv
+                key={feature.title}
+                variants={fadeInUp}
+                whileHover={{ scale: 1.05 }}
+                className={`bg-white/10 backdrop-blur-md p-8 rounded-xl border border-white/20 shadow-xl transform-gpu transition-all duration-500 hover:shadow-2xl hover:border-white/30 ${
+                  index % 3 === 0 ? 'slide-in-left-on-scroll' : 
+                  index % 3 === 2 ? 'slide-in-right-on-scroll' : 
+                  'fade-up-on-scroll'
+                } stagger-${index % 5 + 1}`}
+              >
+                <div className={`w-16 h-16 rounded-lg bg-gradient-to-br ${feature.color} flex items-center justify-center mb-6 shadow-lg`}>
+                  {feature.icon === Cpu && <CpuIcon className="h-8 w-8 text-white" />}
+                  {feature.icon === Brain && <BrainIcon className="h-8 w-8 text-white" />}
+                  {feature.icon === Shield && <ShieldIcon className="h-8 w-8 text-white" />}
+                </div>
+                <h3 className="text-2xl font-bold mb-3 text-white">{feature.title}</h3>
+                <p className="text-white/80">{feature.description}</p>
+                
+                {/* Decorative element */}
+                <div className="w-full h-1 mt-6 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full opacity-50"></div>
+              </MotionDiv>
+            ))}
+          </MotionDiv>
+        </div>
+      </section>
+
+          {/* AIPRM Integration Section */}
+      <AIPRMIntegration />
+      
+      {/* Trust Metrics Section */}
+      <section className="section-padding bg-white border-t border-gray-200">
         <div className="container-quantum">
           <MotionDiv
             initial={{ opacity: 0, y: 20 }}
@@ -368,57 +733,13 @@ export default function HomePage() {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-bold text-black mb-6">
-              Trust & Compliance
+              Trusted by Industry Leaders
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Built for enterprise with immutable audit trails and quantum-grade security.
+              Our quantum solutions are delivering measurable results across industries.
             </p>
           </MotionDiv>
-
-          <MotionDiv
-            variants={staggerContainer}
-            initial="initial"
-            whileInView="animate"
-            viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16"
-          >
-            {[
-              {
-                title: "LTC Provenance",
-                description: "Living Technical Codex provides immutable, hash-chained audit trails for every decision",
-                icon: Shield,
-                color: "bg-quantum-emerald"
-              },
-              {
-                title: "Quantum Security",
-                description: "Post-quantum cryptography and quantum random number generation for future-proof security",
-                icon: Lock,
-                color: "bg-quantum-blue"
-              },
-              {
-                title: "Compliance Ready",
-                description: "GDPR, HIPAA, SOX compliance with automated validation and audit logging",
-                icon: CheckCircle,
-                color: "bg-quantum-purple"
-              }
-            ].map((trust) => (
-              <MotionDiv
-                key={trust.title}
-                variants={fadeInUp}
-                className="text-center"
-              >
-                <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full ${trust.color} mb-4`}>
-                  {trust.title === "Quantum Security" && <LockIcon className="h-8 w-8 text-white" />}
-                  {trust.title === "Global Compliance" && <GlobeIcon className="h-8 w-8 text-white" />}
-                  {trust.title === "Regulatory Adherence" && <CheckCircleIcon className="h-8 w-8 text-white" />}
-                </div>
-                <h3 className="text-xl font-semibold text-black mb-3">{trust.title}</h3>
-                <p className="text-gray-600">{trust.description}</p>
-              </MotionDiv>
-            ))}
-          </MotionDiv>
-
-          {/* Trust Metrics */}
+          
           <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -486,6 +807,7 @@ export default function HomePage() {
           </MotionDiv>
         </div>
       </section>
+      <Footer />
     </div>
   )
 }

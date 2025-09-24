@@ -11,8 +11,8 @@ import ipaddress
 
 from .compliance import compliance_engine, DataClassification, AuditEvent
 from .rate_limiter import rate_limit_manager, RateLimitType, RateLimitExceeded
-from ..entitlements import SubscriptionTier
-from ..models import User
+from src.entitlements import SubscriptionTier
+from src.models import User
 
 class SecurityMiddleware(BaseHTTPMiddleware):
     """Comprehensive security middleware integrating all security features"""

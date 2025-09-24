@@ -9,8 +9,8 @@ pydantic-settings>=2.1.0
 python-multipart>=0.0.6
 
 # Data Validation & Serialization
-pydantic==1.10.12
-pydantic[email]==1.10.12
+pydantic==2.9.2  # Updated to resolve dependency conflict with safety
+pydantic[email]==2.9.2
 
 # Database & ORM
 sqlalchemy==1.4.53
@@ -34,7 +34,7 @@ qutip>=4.7.0
 # AI & Machine Learning
 openai==1.57.0
 scikit-learn==1.5.2
-pandas==2.2.3
+pandas==2.1.4  # Downgraded to resolve conflict with great-expectations
 torch>=2.1.0
 transformers>=4.36.0
 sentence-transformers>=2.2.0
@@ -52,7 +52,7 @@ aiofiles>=23.2.0
 asyncio-throttle>=1.0.2
 
 # Authentication & Security
-pyjwt==2.10.1
+pyjwt==2.8.0  # Downgraded to resolve dependency conflict with fastapi-users
 passlib[bcrypt]==1.7.4
 cryptography==44.0.0
 python-jose[cryptography]>=3.3.0
@@ -86,7 +86,7 @@ plotly>=5.17.0
 # Utilities
 tqdm>=4.66.0
 rich>=13.7.0
-typer>=0.9.0
+typer==0.19.1  # Updated to latest to resolve conflict with safety
 psutil>=5.9.0
 memory-profiler>=0.61.0
 ortools==9.14.6206  # Fixed from 9.8.3296
@@ -124,7 +124,6 @@ gunicorn==23.0.0
 # Additional Utilities
 tqdm==4.67.1
 rich==13.9.4
-typer==0.15.1
 
 # Async Support
 anyio==4.7.0
@@ -153,7 +152,7 @@ Pillow==11.0.0
 
 # Audio Processing (for AI Calling)
 pydub==0.25.1
-speech-recognition==3.12.0
+SpeechRecognition==3.12.0
 
 # WebSocket Support
 websockets==14.1
@@ -191,7 +190,7 @@ msgpack==1.1.0
 loguru==0.7.3
 
 # Security Scanning
-safety==4.0.1
+safety==3.6.1  # Dependency Checker
 bandit==1.8.0
 
 # Code Quality
@@ -208,16 +207,16 @@ azure-storage-blob==12.24.0
 google-cloud-storage==2.19.0
 
 # Advanced Networking
-aioredis==2.1.0
+aioredis==2.0.1  # Async Redis Client
 
 # Enterprise Database Support
 pymongo==4.10.1
 
 # Advanced API Features
-fastapi-pagination==0.12.35
+fastapi-pagination==0.14.1  # FastAPI Pagination
 
 # Performance Optimization
-uvloop==0.21.0
+# uvloop==0.21.0  # Not supported on Windows
 
 # Advanced Data Processing
 polars==1.17.1
@@ -230,7 +229,7 @@ pyarrow==18.1.0
 fastparquet==2024.11.0
 
 # Advanced Validation
-great-expectations==1.2.3
+great-expectations==1.6.1  # Updated to support pandas 2.2.3
 
 # Performance Testing
 locust==2.32.4
@@ -250,7 +249,7 @@ qiskit-aer==0.15.1
 qiskit-optimization==0.6.1
 
 # Enterprise Security
-vault-client==0.1.0
+vault-client==0.3.4  # Updated to latest available version
 
 # Advanced Performance
-intel-mkl==2024.0.0
+mkl==2024.0.0  # Intel Math Kernel Library

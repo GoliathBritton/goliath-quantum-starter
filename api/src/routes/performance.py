@@ -10,27 +10,15 @@ from datetime import datetime, timedelta
 from pydantic import BaseModel, Field
 
 # Import performance tracking components
-try:
-    from ...src.nqba_stack.algorithms.performance_engine import (
-        performance_tracker, benchmarker, algorithm_selector,
-        PerformanceMetric, AlgorithmComplexity, SelectionCriteria,
-        PerformanceRecord, BenchmarkResult
-    )
-    from ...src.nqba_stack.algorithms.performance_config import (
-        config_manager, DeploymentEnvironment, ResourceTier,
-        get_current_config, validate_performance
-    )
-except ImportError:
-    # Fallback for development
-    from src.nqba_stack.algorithms.performance_engine import (
-        performance_tracker, benchmarker, algorithm_selector,
-        PerformanceMetric, AlgorithmComplexity, SelectionCriteria,
-        PerformanceRecord, BenchmarkResult
-    )
-    from src.nqba_stack.algorithms.performance_config import (
-        config_manager, DeploymentEnvironment, ResourceTier,
-        get_current_config, validate_performance
-    )
+from src.nqba_stack.algorithms.performance_engine import (
+    performance_tracker, benchmarker, algorithm_selector,
+    PerformanceMetric, AlgorithmComplexity, SelectionCriteria,
+    PerformanceRecord, BenchmarkResult
+)
+from src.nqba_stack.algorithms.performance_config import (
+    config_manager, DeploymentEnvironment, ResourceTier,
+    get_current_config, validate_performance
+)
 
 router = APIRouter(prefix="/performance", tags=["performance"])
 

@@ -4,25 +4,12 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from ..database import get_db, get_async_db
-from ..models.user import User
+from src.database import get_db, get_async_db
+from src.models.user import User
+from src.models.partner import Partner
 from .jwt_handler import JWTHandler, TokenData
 
 security = HTTPBearer()
-
-class RoleChecker:
-    """Dependency class for role-based access control."""
-    
-    def __init__(self, allowed_roles: list[str]):
-        self.allowed_roles = allowed_roles
-    
-    def __call__(self, current_user: User = Depends(get_current_user)):
-        if current_user.role not in self.allowed_roles:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="Operation not permitted for your role"
-            )
-        return current_user
 
 def get_current_user_token(
     credentials: HTTPAuthorizationCredentials = Depends(security)
@@ -53,6 +40,20 @@ def get_current_user(
         )
     
     return user
+
+class RoleChecker:
+    """Dependency class for role-based access control."""
+    
+    def __init__(self, allowed_roles: list[str]):
+        self.allowed_roles = allowed_roles
+    
+    def __call__(self, current_user: User = Depends(get_current_user)):
+        if current_user.role not in self.allowed_roles:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Operation not permitted for your role"
+            )
+        return current_user
 
 async def get_current_user_async(
     db: AsyncSession = Depends(get_async_db),
@@ -113,3 +114,19 @@ AdminUser = Annotated[User, Depends(require_admin)]
 PartnerUser = Annotated[User, Depends(require_partner)]
 QHCUser = Annotated[User, Depends(require_qhc)]
 AnyRoleUser = Annotated[User, Depends(require_any_role)]
+
+def get_current_partner(
+    current_user: CurrentUser,
+    db: Session = Depends(get_db)
+) -> Partner:
+    partner = db.query(Partner).filter(Partner.id == current_user.partner_id).first()
+    if not partner:
+        raise HTTPException(status_code=403, detail="Partner not found")
+    return partner
+
+def get_current_admin(
+    current_user: CurrentUser
+) -> User:
+    if not current_user.is_system_admin:
+        raise HTTPException(status_code=403, detail="Admin privileges required")
+    return current_user

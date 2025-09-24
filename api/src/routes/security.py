@@ -3,12 +3,12 @@ from typing import List, Dict, Any, Optional
 from datetime import datetime, timedelta
 from pydantic import BaseModel
 
-from ..security import (
+from src.security import (
     compliance_engine, rate_limit_manager, ComplianceFramework,
     DataClassification, RateLimitType, security_middleware
 )
-from ..models import User
-from ..middleware.entitlements_middleware import get_current_user, require_admin
+from src.models import User
+from src.auth.dependencies import get_current_user, require_admin
 
 router = APIRouter()
 
@@ -182,7 +182,7 @@ async def get_user_rate_limit_status(
     """Get current rate limit status for a user"""
     try:
         # Get user's subscription tier (this would typically come from database)
-        from ..entitlements import SubscriptionTier
+        from src.entitlements import SubscriptionTier
         subscription_tier = SubscriptionTier.BASIC  # Placeholder
         
         # Check all rate limit types

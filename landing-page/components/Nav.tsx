@@ -1,10 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, ChevronDown, User, LogOut } from 'lucide-react'
+import { Menu, X, ChevronDown, User, LogOut, ChevronRight } from 'lucide-react'
 
 // Type assertions for components
 const LinkComponent = Link as any
@@ -15,6 +16,7 @@ const XIcon = X as any
 const ChevronDownIcon = ChevronDown as any
 const UserIcon = User as any
 const LogOutIcon = LogOut as any
+const ChevronRightIcon = ChevronRight as any
 import { brand, navigation, partners as strategicPartners } from '../lib/brand'
 
 export default function Nav() {

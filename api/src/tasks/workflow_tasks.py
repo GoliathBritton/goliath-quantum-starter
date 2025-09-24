@@ -13,7 +13,7 @@ from pathlib import Path
 logger = structlog.get_logger()
 
 # Get Celery app instance
-from ..app_consolidated import celery_app
+from src.app_consolidated import celery_app
 
 class WorkflowEngine:
     """Quantum-enhanced workflow execution engine"""
@@ -52,7 +52,7 @@ class WorkflowEngine:
         else:
             raise ValueError(f"Unknown step type: {step_type}")
     
-    async def _execute_api_call(self, step: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
+    async def _execute_api_call(self, step: Dict[str, Any], context: Dict[str, Any]):
         """Execute API call step"""
         # Simulate API call
         await asyncio.sleep(0.5)

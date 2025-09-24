@@ -5,18 +5,37 @@ Implements SigmaEQ scoring endpoints according to the OpenAPI specification.
 
 from fastapi import APIRouter, HTTPException, Depends, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from typing import List, Dict, Any, Optional
+from typing import Dict, List, Optional, Union, Any
 from datetime import datetime
 import uuid
 import random
-from models import (
-    Lead,
-    ScoreResponse,
-    ScoreFactor,
-    ScoreImpact,
-    ErrorResponse
-)
-from auth_router import verify_token
+from src.schemas import CreateLead
+from pydantic import BaseModel, Field
+from enum import Enum
+
+class ScoreImpact(Enum):
+    positive = "positive"
+    negative = "negative"
+    neutral = "neutral"
+
+class ScoreFactor(BaseModel):
+    name: str
+    weight: float
+    value: float
+    impact: ScoreImpact
+
+class ScoreResponse(BaseModel):
+    lead_id: str
+    score: float
+    confidence: float
+    factors: List[ScoreFactor]
+    model_version: str
+    scored_at: datetime
+
+class ErrorResponse(BaseModel):
+    detail: str
+
+from src.auth.jwt_handler import JWTHandler
 
 # Create router
 sigma_router = APIRouter(prefix="/sigma", tags=["sigma"])
@@ -56,7 +75,7 @@ SCORING_MODELS = [
 ]
 
 
-def calculate_advanced_score(lead: Lead, model_id: str = "sigmaeq_v2") -> ScoreResponse:
+def calculate_advanced_score(lead: CreateLead, model_id: str = "sigmaeq_v2") -> ScoreResponse:
     """Calculate an advanced score using SigmaEQ algorithms"""
     model = next((m for m in SCORING_MODELS if m["id"] == model_id), SCORING_MODELS[1])
     
@@ -192,9 +211,9 @@ def calculate_advanced_score(lead: Lead, model_id: str = "sigmaeq_v2") -> ScoreR
 
 @sigma_router.post("/score", response_model=ScoreResponse)
 async def score_lead(
-    lead: Lead,
+    lead: CreateLead,
     model_id: str = "sigmaeq_v2",
-    current_user: dict = Depends(verify_token)
+    current_user: dict = Depends(JWTHandler.verify_token)
 ):
     """Score a lead using SigmaEQ algorithms"""
     # Validate model exists
@@ -222,13 +241,13 @@ async def score_lead(
 
 
 @sigma_router.get("/models")
-async def list_scoring_models(current_user: dict = Depends(verify_token)):
+async def list_scoring_models(current_user: dict = Depends(JWTHandler.verify_token)):
     """List available scoring models"""
     return SCORING_MODELS
 
 
 @sigma_router.get("/models/{model_id}")
-async def get_scoring_model(model_id: str, current_user: dict = Depends(verify_token)):
+async def get_scoring_model(model_id: str, current_user: dict = Depends(JWTHandler.verify_token)):
     """Get details of a specific scoring model"""
     model = next((m for m in SCORING_MODELS if m["id"] == model_id), None)
     if not model:
@@ -242,9 +261,9 @@ async def get_scoring_model(model_id: str, current_user: dict = Depends(verify_t
 
 @sigma_router.post("/batch-score")
 async def batch_score_leads(
-    leads: List[Lead],
+    leads: List[CreateLead],
     model_id: str = "sigmaeq_v2",
-    current_user: dict = Depends(verify_token)
+    current_user: dict = Depends(JWTHandler.verify_token)
 ):
     """Score multiple leads in batch"""
     # Validate model exists
@@ -305,7 +324,7 @@ async def batch_score_leads(
 
 
 @sigma_router.get("/analytics/model-performance")
-async def get_model_performance(current_user: dict = Depends(verify_token)):
+async def get_model_performance(current_user: dict = Depends(JWTHandler.verify_token)):
     """Get performance analytics for scoring models"""
     # Mock performance data
     performance_data = []
@@ -334,7 +353,7 @@ async def get_model_performance(current_user: dict = Depends(verify_token)):
 async def get_score_distribution(
     model_id: str = "sigmaeq_v2",
     days: int = 30,
-    current_user: dict = Depends(verify_token)
+    current_user: dict = Depends(JWTHandler.verify_token)
 ):
     """Get score distribution analytics"""
     # Mock distribution data

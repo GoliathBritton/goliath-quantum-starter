@@ -14,9 +14,9 @@ Key Components:
 from .blocks import QTransformerBlock, QuantumFeedForward
 from .attention import QuantumAttention, QuantumMultiHeadAttention
 from .model import QTransformerModel, QTransformerConfig
-from .encoding import QuantumPositionalEncoding
-from .layers import QuantumLayerNorm, QuantumDropout
-from .utils import QTransformerUtils, QuantumActivations
+from .model import QuantumPositionalEncoding
+from .blocks import QuantumLayerNorm
+from .utils import QTransformerUtils
 
 __version__ = "0.1.0"
 __author__ = "NQBA Quantum AI Team"

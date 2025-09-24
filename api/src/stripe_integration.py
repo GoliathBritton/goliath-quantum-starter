@@ -4,9 +4,9 @@ import logging
 from typing import Optional, Dict, Any, List
 from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
-from models.partner import Partner
-from models.quantum_credit import QuantumCredit
-from models.audit_log import AuditLog
+from .models.partner import Partner
+from .models.quantum_credit import QuantumCredit
+from .models.audit_log import AuditLog
 import uuid
 import hashlib
 import hmac

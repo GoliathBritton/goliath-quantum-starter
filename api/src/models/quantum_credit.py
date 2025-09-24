@@ -1,6 +1,6 @@
-﻿from datetime import datetime
+from datetime import datetime
 from typing import Optional
-from sqlalchemy import String, Text, Integer, Numeric, JSON, ForeignKey
+from sqlalchemy import String, Text, Integer, Float, JSON, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from .base import Base
 
@@ -23,8 +23,9 @@ class QuantumCredit(Base):
     # Purchase Information
     purchase_order_id: Mapped[Optional[str]] = mapped_column(String(255), nullable=True, index=True)
     stripe_payment_intent_id: Mapped[Optional[str]] = mapped_column(String(255), nullable=True, index=True)
-    unit_price_usd: Mapped[Optional[float]] = mapped_column(Numeric(10, 4), nullable=True)
-    total_cost_usd: Mapped[Optional[float]] = mapped_column(Numeric(10, 4), nullable=True)
+    unit_price_usd: Mapped[float] = mapped_column(Float(), nullable=False, default=0.01)
+    total_cost_usd: Mapped[float] = mapped_column(Float(), nullable=False, default=0.00)
+    discount_applied: Mapped[Optional[float]] = mapped_column(Float(), nullable=True)  # Percentage 0.00 to 100.00
     
     # Usage Information
     usage_type: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)  # quantum_nexus_query, api_call, batch_processing
@@ -33,7 +34,7 @@ class QuantumCredit(Base):
     
     # Billing & Pricing
     billing_tier: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)  # starter, professional, enterprise
-    discount_applied: Mapped[Optional[float]] = mapped_column(Numeric(5, 2), nullable=True)  # Percentage discount
+    discount_applied: Mapped[Optional[float]] = mapped_column(Float(), nullable=True)  # Percentage discount
     promotion_code: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
     
     # Expiry & Validity
