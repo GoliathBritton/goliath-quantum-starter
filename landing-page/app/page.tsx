@@ -552,6 +552,98 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Living Technical Codex (LTC) Section */}
+      <section id="ltc" className="section-padding bg-white border-t border-gray-200">
+        <div className="container-quantum">
+          <MotionDiv
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-5xl font-bold text-black mb-6">
+              Living Technical Codex (LTC)
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Our revolutionary logging system that ensures every decision, optimization, and action is recorded immutably, providing unparalleled transparency, auditability, and trust in our quantum-powered platform.
+            </p>
+          </MotionDiv>
+
+          <MotionDiv
+            variants={staggerContainer}
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true }}
+            className="grid grid-cols-1 md:grid-cols-4 gap-8"
+          >
+            <MotionDiv
+              variants={fadeInUp}
+              whileHover={{ scale: 1.03, y: -5 }}
+              className="bg-white rounded-xl p-6 border border-gray-200 hover:border-brand-cyan transition-all duration-300 shadow-sm hover:shadow-xl group"
+            >
+              <MotionDiv 
+                className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-brand-cyan mb-4"
+                whileHover={{ rotate: 360, scale: 1.1 }}
+                transition={{ duration: 0.6 }}
+              >
+                <LockIcon className="h-6 w-6 text-white" />
+              </MotionDiv>
+              <h3 className="text-xl font-semibold text-black mb-3 group-hover:text-brand-cyan transition-colors duration-200">Comprehensive Logging</h3>
+              <p className="text-gray-600 text-sm">Captures every decision, input, output, and explanation across the platform.</p>
+            </MotionDiv>
+
+            <MotionDiv
+              variants={fadeInUp}
+              whileHover={{ scale: 1.03, y: -5 }}
+              className="bg-white rounded-xl p-6 border border-gray-200 hover:border-brand-cyan transition-all duration-300 shadow-sm hover:shadow-xl group"
+            >
+              <MotionDiv 
+                className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-brand-cyan mb-4"
+                whileHover={{ rotate: 360, scale: 1.1 }}
+                transition={{ duration: 0.6 }}
+              >
+                <LockIcon className="h-6 w-6 text-white" />
+              </MotionDiv>
+              <h3 className="text-xl font-semibold text-black mb-3 group-hover:text-brand-cyan transition-colors duration-200">Hash Chain Integrity</h3>
+              <p className="text-gray-600 text-sm">Maintains tamper-proof records through cryptographic hash chains.</p>
+            </MotionDiv>
+
+            <MotionDiv
+              variants={fadeInUp}
+              whileHover={{ scale: 1.03, y: -5 }}
+              className="bg-white rounded-xl p-6 border border-gray-200 hover:border-brand-cyan transition-all duration-300 shadow-sm hover:shadow-xl group"
+            >
+              <MotionDiv 
+                className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-brand-cyan mb-4"
+                whileHover={{ rotate: 360, scale: 1.1 }}
+                transition={{ duration: 0.6 }}
+              >
+                <GlobeIcon className="h-6 w-6 text-white" />
+              </MotionDiv>
+              <h3 className="text-xl font-semibold text-black mb-3 group-hover:text-brand-cyan transition-colors duration-200">IPFS Backup</h3>
+              <p className="text-gray-600 text-sm">Decentralized storage ensures permanent, accessible records.</p>
+            </MotionDiv>
+
+            <MotionDiv
+              variants={fadeInUp}
+              whileHover={{ scale: 1.03, y: -5 }}
+              className="bg-white rounded-xl p-6 border border-gray-200 hover:border-brand-cyan transition-all duration-300 shadow-sm hover:shadow-xl group"
+            >
+              <MotionDiv 
+                className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-brand-cyan mb-4"
+                whileHover={{ rotate: 360, scale: 1.1 }}
+                transition={{ duration: 0.6 }}
+              >
+                <CpuIcon className="h-6 w-6 text-white" />
+              </MotionDiv>
+              <h3 className="text-xl font-semibold text-black mb-3 group-hover:text-brand-cyan transition-colors duration-200">Platform-Wide Integration</h3>
+              <p className="text-gray-600 text-sm">Embedded in every aspect of our ecosystem for complete traceability.</p>
+            </MotionDiv>
+          </MotionDiv>
+        </div>
+      </section>
+
       {/* AI Agents & Business Intelligence */}
       <section id="agents" className="section-padding bg-white border-t border-gray-200">
         <div className="container-quantum">

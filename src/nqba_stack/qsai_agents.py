@@ -22,7 +22,7 @@ from .qsai_engine import ActionProposal, ContextVector, AgentType
 from .qdllm import qdllm
 from .qtransformer import qtransformer
 from .qnlp import qnlp
-from .dynex_client import get_dynex_client
+from .flyfox_quantum_client import get_flyfox_quantum_client
 from .core.ltc_logger import LTCLogger
 
 logger = logging.getLogger(__name__)
@@ -77,7 +77,7 @@ class OfferAgent:
 
     def __init__(self, ltc_logger: LTCLogger):
         self.ltc_logger = ltc_logger
-        self.dynex = get_dynex_client()
+        self.flyfox_quantum = get_flyfox_quantum_client()
         self.offer_history: List[Dict[str, Any]] = []
         self.conversion_rates: Dict[str, float] = {}
 
@@ -399,7 +399,7 @@ class OfferAgent:
     ) -> int:
         """Parse quantum result to get selected offer index"""
         try:
-            # Parse Dynex QUBO result format
+            # Parse FLYFOX Quantum QUBO result format
             if "solution" in qubo_result:
                 solution = qubo_result["solution"]
                 

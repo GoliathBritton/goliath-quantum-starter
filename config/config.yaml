@@ -9,11 +9,25 @@ quantum:
   enable_hybrid: true
 
 dynex:
-  api_key: ""
-  network: "mainnet"
-  enable_pouw: true
-  green_credits: true
-  submission_interval: 300
+  clients:
+    flyfox_ai:
+      api_key: ""
+      network: "mainnet"
+      enable_pouw: true
+      green_credits: true
+      submission_interval: 300
+    goliath:
+      api_key: ""
+      network: "mainnet"
+      enable_pouw: true
+      green_credits: true
+      submission_interval: 300
+    sigma_select:
+      api_key: ""
+      network: "mainnet"
+      enable_pouw: true
+      green_credits: true
+      submission_interval: 300
 
 nqba:
   execution_mode: "simulator"

@@ -316,7 +316,7 @@ class APIConfig(BaseModel):
     rate_limit_enabled: bool = Field(default=True, description="Enable rate limiting")
     
     # Logging settings
-    log_level: str = Field(default="INFO", regex="^(DEBUG|INFO|WARNING|ERROR|CRITICAL)$", description="Log level")
+    log_level: str = Field(default="INFO", pattern="^(DEBUG|INFO|WARNING|ERROR|CRITICAL)$", description="Log level")
     log_requests: bool = Field(default=True, description="Log all requests")
     
     # Cache settings

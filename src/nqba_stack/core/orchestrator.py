@@ -16,6 +16,17 @@ from .settings import get_settings
 from .dynex_adapter import DynexAdapter, OptimizationResult
 from .ltc_logger import LTCLogger
 
+# New imports for advanced systems
+from .enhanced_quantum_runtime import EnhancedQuantumRuntime
+from .quantum_digital_agents import AutonomousAIAgents
+from ..security.ai_safety_governance import AISafetyGovernance
+from ..security.quantum_secure_communication import QuantumSecureCommunication
+from ..training.federated_learning_engine import FederatedLearningEngine
+from ..observability.quantum_observability_suite import QuantumObservabilitySuite
+from ..algorithms.ml_algorithms.quantum_ml_pipeline import QuantumMLPipeline
+from ..blockchain.blockchain_security_layer import BlockchainSecurityLayer
+from ..benchmarks.enhanced_benchmarks import EnhancedBenchmarks
+
 logger = logging.getLogger(__name__)
 
 @dataclass
@@ -79,6 +90,8 @@ class NQBAStackOrchestrator:
         self._initialize_core_capabilities()
         self._register_business_pods()
         
+        self._initialize_advanced_systems()
+        
         logger.info("NQBA Stack Orchestrator initialized successfully")
     
     def _initialize_core_capabilities(self):
@@ -131,6 +144,22 @@ class NQBAStackOrchestrator:
             self.business_pods[pod.pod_id] = pod
         
         logger.info(f"Registered {len(self.business_pods)} business pods")
+    
+    def _initialize_advanced_systems(self):
+        """Initialize advanced NQBA systems"""
+        self.advanced_systems = {
+            'ai_safety_governance': AISafetyGovernance(),
+            'federated_learning_engine': FederatedLearningEngine(),
+            'enhanced_quantum_runtime': EnhancedQuantumRuntime(),
+            'quantum_observability_suite': QuantumObservabilitySuite(),
+            'quantum_ml_pipeline': QuantumMLPipeline(),
+            'blockchain_security_layer': BlockchainSecurityLayer(),
+            'autonomous_ai_agents': AutonomousAIAgents(),
+            'quantum_secure_communication': QuantumSecureCommunication(),
+            'enhanced_benchmarks': EnhancedBenchmarks(),
+        }
+        
+        logger.info(f"Initialized {len(self.advanced_systems)} advanced systems")
     
     async def submit_task(self, task_request: TaskRequest) -> TaskResult:
         """

@@ -16,7 +16,7 @@ from enum import Enum
 
 from ..core.quantum_digital_agents import QuantumDigitalAgent
 from ..core.ltc_automation import LTCLogger
-from ..quantum.adapters.dynex_adapter import DynexAdapter
+from ..quantum.adapters.flyfox_quantum_adapter import FlyFoxQuantumAdapter
 
 
 class PodCategory(Enum):
@@ -102,7 +102,7 @@ class QuantumMarketplace:
         self.pods: Dict[str, PodMetadata] = {}
         self.transactions: List[PodTransaction] = []
         self.ltc_logger = LTCLogger()
-        self.dynex_adapter = DynexAdapter()
+        self.flyfox_quantum_adapter = FlyFoxQuantumAdapter()
         self.quantum_agent = QuantumDigitalAgent()
         
         # Revenue split configuration (80/20 like Apple App Store)
@@ -170,13 +170,13 @@ class QuantumMarketplace:
             test_qubo = self._create_validation_qubo(pod_data)
             
             # Submit to Dynex for validation
-            job_id = await self.dynex_adapter.submit_qubo(test_qubo)
+            job_id = await self.flyfox_quantum_adapter.submit_qubo(test_qubo)
             
             # Wait for results
             await asyncio.sleep(2)  # Simulate processing time
             
             # Get results
-            results = await self.dynex_adapter.get_job_results(job_id)
+            results = await self.flyfox_quantum_adapter.get_job_results(job_id)
             
             # Calculate quantum advantage
             quantum_advantage = self._calculate_quantum_advantage(results)

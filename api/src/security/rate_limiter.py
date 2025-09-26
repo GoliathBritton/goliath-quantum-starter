@@ -8,7 +8,7 @@ from dataclasses import dataclass
 import redis
 import json
 from fastapi import HTTPException, Request
-from src.entitlements import SubscriptionTier
+from ..entitlements import SubscriptionTier
 
 class RateLimitType(Enum):
     REQUESTS_PER_MINUTE = "requests_per_minute"

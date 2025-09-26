@@ -2,7 +2,7 @@
 """
 🧪 Benchmark Tests for Quantum vs Classical Solvers
 
-Compares performance of quantum optimization (Dynex) vs classical solvers
+Compares performance of quantum optimization (FLYFOX Quantum) vs classical solvers
 for various optimization problems. Generates win/loss reports for investors.
 """
 
@@ -16,11 +16,11 @@ from pathlib import Path
 
 # Mock imports for testing - replace with actual implementations
 try:
-    from src.nqba_stack.quantum.adapters.dynex_adapter import DynexAdapter
+    from src.nqba_stack.quantum.adapters.flyfox_quantum_adapter import FlyFoxQuantumAdapter
     from src.nqba_stack.quantum.classical_solvers import ClassicalSolver
 except ImportError:
     # Mock implementations for testing
-    class DynexAdapter:
+    class FlyFoxQuantumAdapter:
         def solve_qubo(self, qubo_matrix, **kwargs):
             return {"solution": [1, 0, 1, 0], "energy": -10.5, "time_ms": 150}
 
@@ -50,7 +50,7 @@ class BenchmarkSuite:
     """Comprehensive benchmark suite for quantum vs classical optimization"""
 
     def __init__(self):
-        self.dynex_adapter = DynexAdapter()
+        self.flyfox_quantum_adapter = FlyFoxQuantumAdapter()
         self.classical_solver = ClassicalSolver()
         self.results: List[BenchmarkResult] = []
 
@@ -128,7 +128,7 @@ class BenchmarkSuite:
 
         # Run quantum solver
         start_time = time.time()
-        quantum_result = self.dynex_adapter.solve_qubo(problem)
+        quantum_result = self.flyfox_quantum_adapter.solve_qubo(problem)
         quantum_time = time.time() - start_time
 
         # Calculate averages for classical
@@ -254,7 +254,7 @@ class BenchmarkSuite:
             "metadata": {
                 "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
                 "benchmark_version": "1.0.0",
-                "quantum_backend": "Dynex",
+                "quantum_backend": "FLYFOX Quantum",
                 "classical_backend": "OR-Tools/dimod",
             },
         }

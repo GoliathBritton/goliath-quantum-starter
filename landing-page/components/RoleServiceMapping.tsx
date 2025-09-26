@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react';
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   Code, Database, Cloud, Shield, TrendingUp, 
@@ -248,7 +248,7 @@ const statusColors = {
   'Planned': 'bg-gray-100 text-gray-700'
 }
 
-export default function RoleServiceMapping() {
+export default function RoleServiceMapping(props: {}): ReactNode {
   const [selectedRole, setSelectedRole] = useState<string | null>(null)
   const [filterType, setFilterType] = useState<string>('All')
   const [filterStatus, setFilterStatus] = useState<string>('All')

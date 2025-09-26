@@ -6,7 +6,7 @@ This module provides FastAPI routes for AIPRM integration.
 from fastapi import APIRouter, Depends, HTTPException, Query
 from typing import Optional, List
 import os
-from src.aiprm.models import (
+from ..aiprm.models import (
     PromptTemplate, 
     AIExtension,
     PromptCategory,
@@ -17,7 +17,7 @@ from src.aiprm.models import (
     AIPromptExecutionRequest,
     AIPromptExecutionResponse
 )
-from src.aiprm.client import AIPRMClient
+from ..aiprm.client import AIPRMClient
 
 router = APIRouter()
 

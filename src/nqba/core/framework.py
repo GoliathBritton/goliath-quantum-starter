@@ -14,6 +14,7 @@ The framework serves as the central coordination layer that:
 import logging
 from typing import Dict, Any, Optional, List
 from dataclasses import dataclass, field
+import time
 
 try:
     from .intelligence import qdllm, qnlp, qtransformers
@@ -21,6 +22,16 @@ except ImportError:
     qdllm = None
     qnlp = None
     qtransformers = None
+
+try:
+    from nqba.integration.legacy_wrapper import LegacyWrapper
+except ImportError:
+    LegacyWrapper = None
+
+try:
+    from nqba_stack.ltc_logger import LTCLogger
+except ImportError:
+    LTCLogger = None
 
 logger = logging.getLogger(__name__)
 
@@ -56,6 +67,12 @@ class NQBAFramework:
         self._initialize_modules()
         self._setup_governance()
         
+        if LTCLogger is not None:
+            self.ltc_logger = LTCLogger()
+        else:
+            self.ltc_logger = None
+            logger.warning("LTCLogger not available")
+        
         logger.info("NQBA Framework initialized successfully")
     
     def _setup_logging(self):
@@ -89,6 +106,13 @@ class NQBAFramework:
                 logger.info("QTransformers module initialized")
             except Exception as e:
                 logger.warning(f"Failed to initialize QTransformers: {e}")
+            
+            if LegacyWrapper is not None:
+                try:
+                    self.modules['legacy_wrapper'] = LegacyWrapper()
+                    logger.info("Legacy Wrapper module initialized")
+                except Exception as e:
+                    logger.warning(f"Failed to initialize Legacy Wrapper: {e}")
     
     def _setup_governance(self):
         """Setup governance and compliance"""
@@ -123,6 +147,8 @@ class NQBAFramework:
             return self._process_pattern_analysis(data, params)
         elif request_type == 'integrated_workflow':
             return self._process_integrated_workflow(data, params)
+        elif request_type == 'legacy_integration':
+            return self._process_legacy_integration(data, params)
         else:
             return self._process_general_request(data, params)
     
@@ -133,6 +159,13 @@ class NQBAFramework:
         
         try:
             result = qnlp.analyze(text, processor=self.modules['qnlp'], **params)
+            if self.ltc_logger:
+                self.ltc_logger.log_operation(
+                    operation_type="text_analysis",
+                    component="QNLP",
+                    input_data={"text": text, "params": params},
+                    result_data=result
+                )
             return {
                 'status': 'success',
                 'type': 'text_analysis',
@@ -141,6 +174,13 @@ class NQBAFramework:
             }
         except Exception as e:
             logger.error(f"Text analysis failed: {e}")
+            if self.ltc_logger:
+                self.ltc_logger.log_operation(
+                    operation_type="text_analysis",
+                    component="QNLP",
+                    input_data={"text": text, "params": params},
+                    error_data={"error": str(e)}
+                )
             return {'error': str(e), 'status': 'failed'}
     
     def _process_reasoning(self, context: str, params: Dict[str, Any]) -> Dict[str, Any]:
@@ -151,6 +191,13 @@ class NQBAFramework:
         try:
             direction = params.get('direction', 'bidirectional')
             result = qdllm.reason(context, direction=direction, **params)
+            if self.ltc_logger:
+                self.ltc_logger.log_operation(
+                    operation_type="reasoning",
+                    component="qdLLM",
+                    input_data={"context": context, "params": params},
+                    result_data=result
+                )
             return {
                 'status': 'success',
                 'type': 'reasoning',
@@ -159,6 +206,13 @@ class NQBAFramework:
             }
         except Exception as e:
             logger.error(f"Reasoning failed: {e}")
+            if self.ltc_logger:
+                self.ltc_logger.log_operation(
+                    operation_type="reasoning",
+                    component="qdLLM",
+                    input_data={"context": context, "params": params},
+                    error_data={"error": str(e)}
+                )
             return {'error': str(e), 'status': 'failed'}
     
     def _process_pattern_analysis(self, sequence: Any, params: Dict[str, Any]) -> Dict[str, Any]:
@@ -168,6 +222,13 @@ class NQBAFramework:
         
         try:
             result = qtransformers.analyze_patterns(sequence, **params)
+            if self.ltc_logger:
+                self.ltc_logger.log_operation(
+                    operation_type="pattern_analysis",
+                    component="QTransformers",
+                    input_data={"sequence": sequence, "params": params},
+                    result_data=result
+                )
             return {
                 'status': 'success',
                 'type': 'pattern_analysis',
@@ -176,6 +237,13 @@ class NQBAFramework:
             }
         except Exception as e:
             logger.error(f"Pattern analysis failed: {e}")
+            if self.ltc_logger:
+                self.ltc_logger.log_operation(
+                    operation_type="pattern_analysis",
+                    component="QTransformers",
+                    input_data={"sequence": sequence, "params": params},
+                    error_data={"error": str(e)}
+                )
             return {'error': str(e), 'status': 'failed'}
     
     def _process_integrated_workflow(self, data: Any, params: Dict[str, Any]) -> Dict[str, Any]:
@@ -210,12 +278,59 @@ class NQBAFramework:
                 except Exception as e:
                     results['qtransformers'] = {'error': str(e)}
         
+        if self.ltc_logger:
+            self.ltc_logger.log_operation(
+                operation_type="integrated_workflow",
+                component="NQBAFramework",
+                input_data={"data": data, "params": params},
+                result_data=results
+            )
+        
         return {
             'status': 'success',
             'type': 'integrated_workflow',
             'results': results,
             'final_output': current_data
         }
+    
+    def _process_legacy_integration(self, data: str, params: Dict[str, Any]) -> Dict[str, Any]:
+        """Process legacy integration request using LegacyWrapper"""
+        if 'legacy_wrapper' not in self.modules:
+            return {'error': 'Legacy Wrapper module not available'}
+        
+        try:
+            system_type = params.get('system_type', 'generic')
+            if 'analyze' in params.get('action', 'translate'):
+                result = self.modules['legacy_wrapper'].analyze_legacy_system(data, system_type)
+            elif 'execute' in params.get('action', 'translate'):
+                result = self.modules['legacy_wrapper'].execute_legacy_command(data, system_type)
+            else:
+                result = self.modules['legacy_wrapper'].translate_api_call(data, system_type)
+            
+            if self.ltc_logger:
+                self.ltc_logger.log_operation(
+                    operation_type="legacy_integration",
+                    component="LegacyWrapper",
+                    input_data={"data": data, "params": params},
+                    result_data=result
+                )
+            
+            return {
+                'status': 'success',
+                'type': 'legacy_integration',
+                'result': result,
+                'module': 'legacy_wrapper'
+            }
+        except Exception as e:
+            logger.error(f"Legacy integration failed: {e}")
+            if self.ltc_logger:
+                self.ltc_logger.log_operation(
+                    operation_type="legacy_integration",
+                    component="LegacyWrapper",
+                    input_data={"data": data, "params": params},
+                    error_data={"error": str(e)}
+                )
+            return {'error': str(e), 'status': 'failed'}
     
     def _process_general_request(self, data: Any, params: Dict[str, Any]) -> Dict[str, Any]:
         """Process general request with automatic module selection"""
@@ -236,12 +351,22 @@ class NQBAFramework:
                 except Exception as e:
                     logger.warning(f"qdLLM processing failed: {e}")
             
-            return {
+            result = {
                 'status': 'success',
                 'type': 'general',
                 'qnlp_result': qnlp_result,
                 'qdllm_result': qdllm_result
             }
+            
+            if self.ltc_logger:
+                self.ltc_logger.log_operation(
+                    operation_type="general_request",
+                    component="NQBAFramework",
+                    input_data={"data": data, "params": params},
+                    result_data=result
+                )
+            
+            return result
         
         return {'error': 'Unable to process request', 'status': 'failed'}
     
@@ -251,6 +376,7 @@ class NQBAFramework:
             'qdllm': 'available' if 'qdllm' in self.modules else 'unavailable',
             'qnlp': 'available' if 'qnlp' in self.modules else 'unavailable',
             'qtransformers': 'available' if 'qtransformers' in self.modules else 'unavailable',
+            'legacy_wrapper': 'available' if 'legacy_wrapper' in self.modules else 'unavailable',
             'total_modules': len(self.modules),
             'framework_status': 'operational' if self.modules else 'degraded'
         }

@@ -57,6 +57,7 @@ JWT_SECRET=dev-secret-change-in-production
 QUANTUM_OMNISCIENT_MODE=development
 PORT=8000
 FRONTEND_PORT=3000
+MCP_TOKEN=your_mcp_token_here
 "@ | Out-File -FilePath ".env" -Encoding UTF8
 }
 

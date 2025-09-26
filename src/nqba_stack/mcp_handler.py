@@ -19,6 +19,7 @@ import json
 import jsonschema
 from pathlib import Path
 from functools import wraps
+from ..nqba.integration.legacy_wrapper import LegacyWrapper
 
 logger = logging.getLogger("mcp.handler")
 
@@ -88,8 +89,10 @@ async def dispatch_tool(tool: str, payload: dict, user: str = "anonymous") -> di
     try:
         handler = TOOL_HANDLERS[tool]
         result = await handler(payload)
-        audit_log("job.completed", {"tool": tool, "user": user, "result": result})
-        return {"success": True, "result": result}
+        from web3.ipfs_integration import add_json
+        ipfs_cid = add_json({"result": result})
+        audit_log("job.completed", {"tool": tool, "user": user, "result": result, "ipfs_cid": ipfs_cid})
+        return {"success": True, "result": result, "ipfs_cid": ipfs_cid}
     except Exception as e:
         logger.exception(f"Tool {tool} failed")
         audit_log("job.failed", {"tool": tool, "user": user, "error": str(e)})
@@ -894,6 +897,33 @@ async def handle_optimize_energy(payload: dict) -> dict:
         logger.exception("Energy optimization failed")
         return {"error": f"Optimization failed: {str(e)}"}
 
+
+@register_tool("legacy.analyze.system")
+@require_api_key(role="user")
+async def handle_legacy_analyze_system(payload: dict) -> dict:
+    documentation = payload["documentation"]
+    code_snippets = payload.get("code_snippets", [])
+    wrapper = LegacyWrapper()
+    analysis = wrapper.analyze_legacy_system(documentation, code_snippets)
+    return {"analysis": analysis}
+
+@register_tool("legacy.translate.api")
+@require_api_key(role="user")
+async def handle_legacy_translate_api(payload: dict) -> dict:
+    api_call = payload["api_call"]
+    parameters = payload.get("parameters", {})
+    wrapper = LegacyWrapper()
+    command = wrapper.translate_api_to_legacy(api_call, parameters)
+    return {"legacy_command": command}
+
+@register_tool("legacy.execute.command")
+@require_api_key(role="user")
+async def handle_legacy_execute_command(payload: dict) -> dict:
+    command = payload["command"]
+    system_state = payload.get("system_state", {})
+    wrapper = LegacyWrapper()
+    result = wrapper.execute_legacy_command(command, system_state)
+    return {"execution_result": result}
 
 def list_tools() -> list:
     return list(TOOL_SCHEMAS.keys())

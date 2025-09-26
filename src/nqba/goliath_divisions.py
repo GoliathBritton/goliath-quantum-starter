@@ -3,7 +3,7 @@ Goliath of All Trade: Business Divisions and Automated/Demo Workflows
 - Each division has its own catalog of automations and demo workflows
 """
 
-from nqba import AUTOMATIONS
+from . import AUTOMATIONS
 
 DIVISIONS = {
     "flyfox_ai": {

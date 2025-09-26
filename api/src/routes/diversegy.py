@@ -5,7 +5,7 @@ API endpoints for Diversegy energy brokerage platform integration
 
 from fastapi import APIRouter, HTTPException, Depends, Body
 from typing import List, Dict, Any, Optional
-from src.diversegy.models import (
+from ..diversegy.models import (
     DiversegyCustomer,
     DiversegyPlan,
     DiversegyQuote,
@@ -14,7 +14,7 @@ from src.diversegy.models import (
     DiversegyAPIResponse,
     DiversegyEnergyType
 )
-from src.diversegy.client import DiversegyClient
+from ..diversegy.client import DiversegyClient
 import os
 from datetime import datetime
 

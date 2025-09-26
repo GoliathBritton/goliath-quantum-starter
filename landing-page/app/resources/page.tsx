@@ -98,23 +98,26 @@ export default function ResourcesPage() {
       tags: ["Quantum", "Business Intelligence", "Enterprise"]
     },
     {
-      title: \"FLYFOX AI Observability Platform\",
-      description: \"Comprehensive guide to monitoring and explaining AI models in the FLYFOX ecosystem.\",
-      type: \"Documentation\",
-      category: \"documentation\",
-      link: \"/resources/flyfox-observability\",
+      title: "FLYFOX AI Observability Platform",
+      description: "Comprehensive guide to monitoring and explaining AI models in the FLYFOX ecosystem.",
+      type: "Documentation",
+      category: "documentation",
+      link: "/resources/flyfox-observability",
       featured: true,
       icon: BookOpen,
-      tags: [\"AI Observability\", \"Model Monitoring\", \"FLYFOX AI\"]\n    },
+      tags: ["AI Observability", "Model Monitoring", "FLYFOX AI"]
+    },
     {
-      title: \"Explainable AI in FLYFOX\",
-      description: \"Whitepaper on achieving transparent and responsible AI with FLYFOX tools.\",
-      type: \"Whitepaper\",
-      category: \"whitepapers\",
-      link: \"/resources/explainable-ai-flyfox\",
+      title: "Explainable AI in FLYFOX",
+      description: "Whitepaper on achieving transparent and responsible AI with FLYFOX tools.",
+      type: "Whitepaper",
+      category: "whitepapers",
+      link: "/resources/explainable-ai-flyfox",
       featured: true,
       icon: FileText,
-      tags: [\"Explainable AI\", \"Responsible AI\", \"FLYFOX\"]\n    }\n  ]
+      tags: ["Explainable AI", "Responsible AI", "FLYFOX"]
+    }
+  ]
 
   const resources = [
     {

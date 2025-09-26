@@ -19,7 +19,7 @@ from nqba_stack.business_integration import (
     BusinessUnitType,
     BusinessUnitStatus,
 )
-from nqba_stack.quantum.adapters.dynex_adapter import DynexAdapter
+from src.nqba_stack.quantum.adapters.flyfox_quantum_adapter import FlyFoxQuantumAdapter
 
 
 class TestPhase4EndToEnd:
@@ -40,9 +40,9 @@ class TestPhase4EndToEnd:
         await unit.shutdown()
 
     @pytest_asyncio.fixture
-    async def dynex_adapter(self):
+    async def flyfox_quantum_adapter(self):
         """Create a Dynex adapter for testing"""
-        adapter = DynexAdapter()
+        adapter = FlyFoxQuantumAdapter()
         yield adapter
 
     @pytest.fixture
@@ -190,7 +190,7 @@ class TestPhase4EndToEnd:
 
     @pytest.mark.asyncio
     async def test_quantum_optimization_integration(
-        self, dynex_adapter, flyfox_ai_unit
+        self, flyfox_quantum_adapter, flyfox_ai_unit
     ):
         """Test quantum optimization integration with business units"""
         # Create a QUBO problem for energy optimization
@@ -206,19 +206,19 @@ class TestPhase4EndToEnd:
         }
 
         # Submit QUBO to quantum solver
-        job_id = await dynex_adapter.submit_qubo(qubo_data)
+        job_id = await flyfox_quantum_adapter.submit_qubo(qubo_data)
         assert job_id is not None
-        assert job_id.startswith("dynex_")
+        assert job_id.startswith("flyfox_")
 
         # Wait for job completion
         await asyncio.sleep(0.1)
 
         # Check job status
-        job_status = await dynex_adapter.get_job_status(job_id)
+        job_status = await flyfox_quantum_adapter.get_job_status(job_id)
         assert job_status["status"] in ["completed", "running", "pending"]
 
         # Get results
-        results = await dynex_adapter.get_job_results(job_id)
+        results = await flyfox_quantum_adapter.get_job_results(job_id)
         assert "samples" in results
         assert "energy" in results
 
@@ -432,7 +432,7 @@ class TestPhase4EndToEnd:
 
     @pytest.mark.asyncio
     async def test_complete_workflow_integration(
-        self, initialized_ecosystem, dynex_adapter
+        self, initialized_ecosystem, flyfox_quantum_adapter
     ):
         """Test complete workflow integration from data input to quantum optimization"""
         flyfox_units = await initialized_ecosystem.get_business_units_by_type(

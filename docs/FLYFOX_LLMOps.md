@@ -1,31 +1,36 @@
-# FLYFOX LLMOps
+# FLYFOX AI LLMOps
 
-## Overview
+FLYFOX AI empowers AI teams with LLM observability, providing tools to monitor, analyze, and safeguard large language models (LLMs) and their applications.
 
-FLYFOX LLMOps (Large Language Model Operations) is the practice of training, deploying, and monitoring large language models in the FLYFOX AI ecosystem. It addresses unique risks such as hallucinations, prompt injections, and unsafe outputs, ensuring safe and reliable generative AI systems.
+## What is LLMOps?
+LLMOps tackles the unique risks of deploying large language models in production — such as hallucinations, prompt injections, jailbreaks, unsafe outputs, and unpredictable behavior. It also helps track operational costs, monitor key performance metrics, and ensure regulatory compliance. By bringing observability, guardrails, and root cause analysis into one workflow, LLMOps enables teams to build safer, more reliable generative AI systems at scale.
 
-As part of the MOOD stack (Modeling, AI Observability, Orchestration, Data), FLYFOX LLMOps standardizes and accelerates LLM application development and management.
+With FLYFOX AI, you can safeguard, monitor, and analyze generative AI (GenAI) and LLM applications in production.
 
 ## Key Features
+- **Proactively Detect LLM Risks**: Safeguard LLM applications with low-latency model scoring and guardrails to mitigate costly risks, including hallucinations, safety violations, prompt injection attacks, and jailbreaking attempts.
+- **Analyze Issues in Prompts and Responses**: Utilize prompt and response monitoring to receive real-time alerts, diagnose issues, and understand the underlying causes.
+- **Pinpoint High-Density Clusters**: Visualize qualitative insights by identifying data patterns and trends on a 3D UMAP visualization.
+- **Track Key Metrics with AI Observability Dashboards**: Create dashboards and reports that track PII, toxicity, hallucination, and other LLM metrics to improve collaboration.
 
-### Risk Detection and Guardrails
-- Proactively detect hallucinations, toxicity, PII leakage, and attacks.
-- Implement programmable guardrails to block unsafe content.
-- Low-latency moderation for real-time protection.
+## The MOOD Stack
+The MOOD stack is the new stack for LLMOps to standardize and accelerate LLM application development, deployment, and management. It comprises Modeling, AI Observability, Orchestration, and Data layers. AI Observability is the most critical layer, enabling governance, interpretability, and monitoring of operational performance and risks of LLMs.
 
-### Monitoring and Analytics
-- Dashboards for metrics like response faithfulness, toxicity, and costs.
-- 3D UMAP visualizations for data patterns.
-- Real-time alerts and root cause analysis.
+## Guardrails
+FLYFOX AI Guardrails provide low-latency moderation to prevent hallucinations, harmful content, or jailbreak attempts. They are fast (<100ms latency), scalable, cost-effective, and secure.
 
-### Use Cases
-- Assure accurate product messaging in public-facing applications.
-- Monitor summarization and analysis of large datasets.
-- Optimize LLM performance in enterprise environments.
+## Metrics Monitored
+- Jailbreak activity
+- Response faithfulness (hallucination detection)
+- Response toxicity
+- Costs linked to outputs
+- PII exposure risks
+- Model latency and throughput
+- Domain-specific metrics
 
-## Benefits
-- Build safer, more reliable LLMs at scale.
-- Ensure regulatory compliance and operational efficiency.
-- Increase collaboration with unified tools.
+FLYFOX AI supports tracking 50+ out-of-the-box LLM metrics, plus custom metrics.
 
-For integration guides, see the FLYFOX AI Observability documentation.
+## Industry Use Cases
+FLYFOX AI supports scaling and building trust in LLM deployments across industries.
+
+For more details, refer to the FLYFOX AI Resource Library.

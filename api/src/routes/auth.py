@@ -7,12 +7,12 @@ from sqlalchemy import select
 from pydantic import BaseModel, EmailStr
 import uuid
 
-from src.database import get_db, get_async_db
-from src.models.user import User
-from src.models.partner import Partner
-from src.models.audit_log import AuditLog
-from src.auth.jwt_handler import JWTHandler, Token
-from src.auth.dependencies import CurrentUser, AdminUser
+from ..database import get_db, get_async_db
+from ..models import User
+from ..models.partner import Partner
+from ..models.audit_log import AuditLog
+from ..auth.jwt_handler import JWTHandler, Token
+from ..auth.dependencies import CurrentUser, AdminUser
 
 router = APIRouter()
 

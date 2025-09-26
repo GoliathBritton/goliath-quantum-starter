@@ -538,6 +538,101 @@ app.include_router(qih_router, prefix="/api/v1")
 app.include_router(video_processing_router, prefix="/api/v1")
 
 
+# MCP Agent Orchestrator Endpoint
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent.parent.parent))
+from nqba.procedures.mcp_agent_orchestrator import MCPAgentOrchestrator
+
+class OrchestrateInput(BaseModel):
+    task: str = Field(..., description="The task to orchestrate")
+
+@app.post("/api/v1/mcp/orchestrate", tags=["MCP"])
+async def orchestrate_mcp(input_data: OrchestrateInput):
+    """Orchestrate MCP tasks using AI agents with AutoGen integration"""
+    try:
+        orchestrator = MCPAgentOrchestrator()
+        result = orchestrator.orchestrate_mcp_task(input_data.task)
+        return {
+            "status": "success",
+            "result": result,
+            "timestamp": time.time()
+        }
+    except Exception as e:
+        logger.error(f"MCP orchestration failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Orchestration failed: {str(e)}")
+
+
+# Decentralized Compute Endpoint
+from nqba.core.decentralized_client import DecentralizedClient
+from typing import List, Dict
+
+class DecentralizedInput(BaseModel):
+    model: str = Field(..., description="The model to use for the compute task")
+    messages: List[Dict[str, str]] = Field(..., description="The messages for the compute task")
+
+@app.post("/api/v1/decentralized/compute", tags=["Decentralized"])
+async def decentralized_compute(input_data: DecentralizedInput):
+    """Execute a compute task on decentralized Akash Network"""
+    try:
+        client = DecentralizedClient()
+        result = client.deploy_compute_task(input_data.model, input_data.messages)
+        return {
+            "status": "success",
+            "result": result,
+            "timestamp": time.time()
+        }
+    except Exception as e:
+        logger.error(f"Decentralized compute failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Decentralized compute failed: {str(e)}")
+
+# Quantum ML Optimization Endpoint
+from nqba.core.quantum_ml import QuantumMLOptimizer
+from typing import List
+
+class QuantumMLOptInput(BaseModel):
+    X: List[List[float]] = Field(..., description="Input features")
+    y: List[float] = Field(..., description="Target values")
+    params_init: List[float] = Field(..., description="Initial parameters for optimization")
+
+@app.post("/api/v1/quantum/ml/optimize", tags=["Quantum ML"])
+async def quantum_ml_optimize(input_data: QuantumMLOptInput):
+    """Optimize qdLLM parameters using quantum ML with PennyLane"""
+    try:
+        optimizer = QuantumMLOptimizer()
+        optimized_params = optimizer.optimize_qdllm(input_data.X, input_data.y, input_data.params_init)
+        return {
+            "status": "success",
+            "optimized_params": optimized_params.tolist(),
+            "timestamp": time.time()
+        }
+    except Exception as e:
+        logger.error(f"Quantum ML optimization failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Quantum ML optimization failed: {str(e)}")
+
+# Bubble Integration Endpoint
+from nqba.integrations.bubble_connector import BubbleConnector
+
+class BubbleMCPInput(BaseModel):
+    app_name: str
+    api_token: str
+    template_data: dict
+
+@app.post("/api/v1/integrations/bubble/handle_mcp", tags=["Integrations"])
+async def handle_bubble_mcp(input_data: BubbleMCPInput):
+    """Handle MCP template generated from Bubble no-code tool"""
+    try:
+        connector = BubbleConnector(input_data.app_name, input_data.api_token)
+        result = connector.handle_mcp_template(input_data.template_data)
+        return {
+            "status": "success",
+            "result": result,
+            "timestamp": time.time()
+        }
+    except Exception as e:
+        logger.error(f"Bubble MCP handling failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Bubble MCP handling failed: {str(e)}")
+
 # Observability endpoints
 @app.get("/observability/metrics", tags=["Observability"])
 async def get_observability_metrics():

@@ -3,29 +3,31 @@
 import { motion } from 'framer-motion';
 import { ReactNode } from 'react';
 
+const MotionDiv = motion.div as any;
+
 // Fade in animation
 export const FadeIn = ({ children, delay = 0, duration = 0.5 }: { children: ReactNode, delay?: number, duration?: number }) => {
   return (
-    <motion.div
+    <MotionDiv
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration, delay }}
     >
       {children}
-    </motion.div>
+    </MotionDiv>
   );
 };
 
 // Slide up animation
 export const SlideUp = ({ children, delay = 0, duration = 0.5 }: { children: ReactNode, delay?: number, duration?: number }) => {
   return (
-    <motion.div
+    <MotionDiv
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration, delay }}
     >
       {children}
-    </motion.div>
+    </MotionDiv>
   );
 };
 
@@ -40,7 +42,7 @@ export const StaggerContainer = ({
   containerDelay?: number
 }) => {
   return (
-    <motion.div
+    <MotionDiv
       initial="hidden"
       animate="visible"
       variants={{
@@ -55,14 +57,14 @@ export const StaggerContainer = ({
       }}
     >
       {children}
-    </motion.div>
+    </MotionDiv>
   );
 };
 
 // Child item for staggered animations
 export const StaggerItem = ({ children }: { children: ReactNode }) => {
   return (
-    <motion.div
+    <MotionDiv
       variants={{
         hidden: { opacity: 0, y: 20 },
         visible: { opacity: 1, y: 0 }
@@ -70,46 +72,46 @@ export const StaggerItem = ({ children }: { children: ReactNode }) => {
       transition={{ duration: 0.5 }}
     >
       {children}
-    </motion.div>
+    </MotionDiv>
   );
 };
 
 // Scale animation
 export const ScaleIn = ({ children, delay = 0, duration = 0.5 }: { children: ReactNode, delay?: number, duration?: number }) => {
   return (
-    <motion.div
+    <MotionDiv
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration, delay }}
     >
       {children}
-    </motion.div>
+    </MotionDiv>
   );
 };
 
 // Hover animation for cards and buttons
 export const HoverScale = ({ children }: { children: ReactNode }) => {
   return (
-    <motion.div
+    <MotionDiv
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.98 }}
       transition={{ duration: 0.2 }}
     >
       {children}
-    </motion.div>
+    </MotionDiv>
   );
 };
 
 // Scroll-triggered animation
 export const ScrollReveal = ({ children }: { children: ReactNode }) => {
   return (
-    <motion.div
+    <MotionDiv
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.7 }}
     >
       {children}
-    </motion.div>
+    </MotionDiv>
   );
 };

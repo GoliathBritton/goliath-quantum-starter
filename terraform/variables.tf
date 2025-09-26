@@ -282,8 +282,8 @@ variable "openai_api_key" {
   default     = ""
 }
 
-variable "dynex_api_key" {
-  description = "Dynex API Key"
+variable "flyfox_quantum_api_key" {
+  description = "FLYFOX Quantum API Key"
   type        = string
   sensitive   = true
   default     = ""

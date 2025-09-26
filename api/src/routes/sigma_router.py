@@ -9,7 +9,7 @@ from typing import Dict, List, Optional, Union, Any
 from datetime import datetime
 import uuid
 import random
-from src.schemas import CreateLead
+from ..schemas import CreateLead
 from pydantic import BaseModel, Field
 from enum import Enum
 
@@ -35,7 +35,7 @@ class ScoreResponse(BaseModel):
 class ErrorResponse(BaseModel):
     detail: str
 
-from src.auth.jwt_handler import JWTHandler
+from ..auth.jwt_handler import JWTHandler
 
 # Create router
 sigma_router = APIRouter(prefix="/sigma", tags=["sigma"])

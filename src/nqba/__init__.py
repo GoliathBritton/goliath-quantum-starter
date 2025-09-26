@@ -16,6 +16,11 @@ Core Components:
 try:
     from .core.intelligence import qdllm, qnlp, qtransformers
     from .core.framework import NQBAFramework
+    from .core.ingestion import DataIngestor
+    from .core.analysis import AdvancedAnalyzer
+    from .core.presentation import SolutionPresenter
+    from .core.integration import SolutionIntegrator
+    from .core.outcomes import OutcomeMonitor
 except ImportError:
     # Fallback for development/transition period
     qdllm = None
@@ -100,7 +105,12 @@ __all__ = [
     "SalesScriptPod",
     "AUTOMATIONS",
     "register_automation",
-    "DIVISIONS"
+    "DIVISIONS",
+    "DataIngestor",
+    "AdvancedAnalyzer",
+    "SolutionPresenter",
+    "SolutionIntegrator",
+    "OutcomeMonitor"
 ]
 
 # Framework initialization
@@ -108,7 +118,17 @@ def create_framework(**config):
     """Create and configure an NQBA framework instance"""
     if NQBAFramework is None:
         raise ImportError("NQBA Framework not available. Please ensure all components are properly installed.")
-    return NQBAFramework(**config)
+    framework = NQBAFramework(**config)
+    framework.ingestor = DataIngestor(framework)
+    framework.analyzer = AdvancedAnalyzer()
+    framework.presenter = SolutionPresenter()
+    framework.integrator = SolutionIntegrator(
+        framework.ingestor,
+        framework.analyzer,
+        framework.presenter
+    )
+    framework.monitor = OutcomeMonitor(framework)
+    return framework
 
 # Quick access functions
 def process_business_request(request, framework=None):

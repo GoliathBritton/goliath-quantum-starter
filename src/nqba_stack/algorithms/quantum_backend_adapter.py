@@ -39,6 +39,13 @@ except ImportError:
     qml = None
 
 try:
+    import flyfox_quantum
+    FLYFOX_QUANTUM_AVAILABLE = True
+except ImportError:
+    FLYFOX_QUANTUM_AVAILABLE = False
+    flyfox_quantum = None
+
+try:
     import dynex
     DYNEX_AVAILABLE = True
 except ImportError:
@@ -51,7 +58,7 @@ class BackendType(Enum):
     """Supported quantum backends"""
     QISKIT = "qiskit"
     PENNYLANE = "pennylane"
-    DYNEX = "dynex"
+    FLYFOX = "flyfox_quantum"
     SIMULATOR = "simulator"
 
 class NoiseProfile(Enum):
@@ -475,8 +482,8 @@ class PennyLaneAdapter(QuantumBackendAdapter):
         # Placeholder implementation
         return result
 
-class DynexAdapter(QuantumBackendAdapter):
-    """Dynex SDK adapter for quantum annealing"""
+class FlyFoxQuantumAdapter(QuantumBackendAdapter):
+    """FLYFOX Quantum SDK adapter for quantum annealing"""
     
     def __init__(self, 
                  noise_profile: NoiseProfile = NoiseProfile.NOISELESS,
@@ -484,10 +491,10 @@ class DynexAdapter(QuantumBackendAdapter):
                  max_shots: int = 8192):
         super().__init__(noise_profile, enable_error_mitigation, max_shots)
         
-        if not DYNEX_AVAILABLE:
-            logger.warning("Dynex SDK not available. Using mock implementation.")
+        if not FLYFOX_QUANTUM_AVAILABLE:
+            logger.warning("FLYFOX Quantum SDK not available. Using mock implementation.")
         
-        logger.info("Dynex adapter initialized")
+        logger.info("FLYFOX Quantum adapter initialized")
     
     async def execute_circuit(self, 
                             circuit_params: Dict[str, Any],
@@ -509,7 +516,7 @@ class DynexAdapter(QuantumBackendAdapter):
                 expectation_value=result_value,
                 shots_used=shots,
                 execution_time=execution_time,
-                backend_used="dynex"
+                backend_used="flyfox_quantum"
             )
             
         except Exception as e:
@@ -517,7 +524,7 @@ class DynexAdapter(QuantumBackendAdapter):
             return CircuitResult(
                 success=False,
                 execution_time=time.time() - start_time,
-                backend_used="dynex",
+                backend_used="flyfox_quantum",
                 error_message=str(e)
             )
     
@@ -588,6 +595,15 @@ class QuantumBackendManager:
         except Exception as e:
             logger.warning(f"Failed to initialize Dynex adapter: {e}")
         
+        # Try to initialize FLYFOX Quantum
+        try:
+            self.adapters[BackendType.FLYFOX] = FlyFoxQuantumAdapter()
+            if self.preferred_backend is None:
+                self.preferred_backend = BackendType.FLYFOX
+            logger.info("FLYFOX Quantum adapter initialized")
+        except Exception as e:
+            logger.warning(f"Failed to initialize FLYFOX Quantum adapter: {e}")
+        
         if not self.adapters:
             raise RuntimeError("No quantum backends available")
     
@@ -626,8 +642,8 @@ class QuantumBackendManager:
             order.extend([b for b in self.adapters.keys() if b != preferred])
             return order
         
-        # Default order: Qiskit -> PennyLane -> Dynex
-        default_order = [BackendType.QISKIT, BackendType.PENNYLANE, BackendType.DYNEX]
+        # Default order: Qiskit -> PennyLane -> FLYFOX
+        default_order = [BackendType.QISKIT, BackendType.PENNYLANE, BackendType.FLYFOX]
         return [b for b in default_order if b in self.adapters]
     
     def get_available_backends(self) -> List[BackendType]:

@@ -578,7 +578,7 @@ async def get_metrics() -> Dict[str, Any]:
         logger.error(f"Failed to get metrics: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to retrieve metrics: {str(e)}"\n        )\n\n@system_router.post("/submit_compute", response_model=Dict[str, Any])\nasync def submit_compute(payload: Dict[str, Any], job_manager: QuantumJobManager = Depends(get_job_manager)):\n    """Submit a compute job to quantum backend"""\n    try:\n        backend = payload.get("backend", "dynex")\n        job_id = job_manager.submit_job(payload, backend=backend)\n        return {"job_id": job_id, "backend": backend, "status": "submitted"}\n    except Exception as e:\n        raise HTTPException(status_code=500, detail=str(e))
+            detail=f"Failed to retrieve metrics: {str(e)}"\n        )\n\n@system_router.post("/submit_compute", response_model=Dict[str, Any])\nasync def submit_compute(payload: Dict[str, Any], job_manager: QuantumJobManager = Depends(get_job_manager)):\n    """Submit a compute job to quantum backend"""\n    try:\n        backend = payload.get("backend", "flyfox")\n        job_id = job_manager.submit_job(payload, backend=backend)\n        return {"job_id": job_id, "backend": backend, "status": "submitted"}\n    except Exception as e:\n        raise HTTPException(status_code=500, detail=str(e))
 
 # Include all routers in the main API router
 api_router.include_router(inference_router)

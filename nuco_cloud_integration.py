@@ -17,6 +17,9 @@ from datetime import datetime
 import uuid
 from concurrent.futures import ThreadPoolExecutor
 
+from qiskit import QuantumCircuit, execute
+from qiskit.providers.aer import Aer
+
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -64,6 +67,8 @@ class NucoCloudIntegration:
         # Thread pool for concurrent operations
         self.executor = ThreadPoolExecutor(max_workers=10)
         
+        self.local_backend = Aer.get_backend('qasm_simulator')
+        
         # Job cache
         self.job_cache = {}
         
@@ -102,8 +107,8 @@ class NucoCloudIntegration:
             
         except Exception as e:
             logger.error(f"Failed to get available backends: {str(e)}")
-            # Return cached data if available, otherwise empty list
-            return self.backends_cache if self.backends_cache else []
+            # Fallback to local backend
+            return [{"id": "local_qiskit", "name": "Local Qiskit Simulator", "qubits": 32}]
     
     async def submit_job(self, 
                         circuit: Dict[str, Any], 
@@ -154,8 +159,38 @@ class NucoCloudIntegration:
             return job_data
             
         except Exception as e:
-            logger.error(f"Failed to submit job: {str(e)}")
-            raise
+            logger.warning(f"Falling back to local Qiskit simulator due to API error: {str(e)}")
+            
+            # Build Qiskit circuit
+            num_qubits = circuit["qubits"]
+            qc = QuantumCircuit(num_qubits, num_qubits)
+            for op in circuit["operations"]:
+                name = op["name"].lower()
+                qubits = op["qubits"]
+                if name == "h":
+                    qc.h(qubits[0])
+                elif name == "cx":
+                    qc.cx(qubits[0], qubits[1])
+                elif name == "measure":
+                    qc.measure(qubits, qubits)
+                # Add more gate types as needed
+            
+            # Execute
+            job = execute(qc, self.local_backend, shots=shots, optimization_level=optimization_level)
+            result = job.result()
+            counts = result.get_counts(qc)
+            
+            # Generate mock job_id
+            job_id = f"local-{uuid.uuid4().hex[:8]}"
+            
+            # Cache
+            self.job_cache[job_id] = {
+                "data": {"job_id": job_id, "status": NucoCloudJobStatus.COMPLETED.value, "results": {"counts": counts}},
+                "status": NucoCloudJobStatus.COMPLETED.value,
+                "last_checked": time.time()
+            }
+            
+            return {"job_id": job_id, "status": NucoCloudJobStatus.COMPLETED.value, "message": "Executed on local simulator"}
     
     async def get_job_status(self, job_id: str) -> Dict[str, Any]:
         """
@@ -167,6 +202,12 @@ class NucoCloudIntegration:
         Returns:
             Job status information
         """
+        if job_id.startswith("local-"):
+            if job_id in self.job_cache:
+                return self.job_cache[job_id]["data"]
+            else:
+                raise ValueError(f"Local job {job_id} not found")
+        
         try:
             # Check cache first
             if job_id in self.job_cache:
@@ -213,6 +254,12 @@ class NucoCloudIntegration:
         Returns:
             Job results
         """
+        if job_id.startswith("local-"):
+            if job_id in self.job_cache:
+                return self.job_cache[job_id]["data"].get("results", {})
+            else:
+                raise ValueError(f"Local job {job_id} not found")
+        
         try:
             # Check job status first
             job_status = await self.get_job_status(job_id)

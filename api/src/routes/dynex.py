@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from typing import Dict, Any
-from src.dynex_client import dynex_client
+from ..dynex_client import dynex_client
 
 router = APIRouter(prefix="/dynex", tags=["dynex"])
 

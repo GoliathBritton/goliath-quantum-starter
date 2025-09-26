@@ -117,6 +117,7 @@ pytest-cov==6.0.0
 black==24.10.0
 flake8==7.1.1
 mypy==1.13.0
+mcp==1.15.0
 
 # Production Server
 gunicorn==23.0.0
@@ -253,3 +254,17 @@ vault-client==0.3.4  # Updated to latest available version
 
 # Advanced Performance
 mkl==2024.0.0  # Intel Math Kernel Library
+
+# Dynex SDK for quantum computing
+dynex
+
+# Nvidia CuPy for GPU-accelerated computing
+cupy
+
+# xAI Grok SDK for AI model integration
+xai-sdk
+
+# Web3 Integration
+web3
+pinatapy
+dowhy\nstreamlit==1.38.0\nreportlab==4.2.2

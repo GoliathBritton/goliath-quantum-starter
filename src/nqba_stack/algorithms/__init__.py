@@ -44,14 +44,13 @@ from .energy_algorithms import (
     GridOptimizationResult,
 )
 
-from .ml_algorithms import (
+from .quantum_ml_algorithms import (
     QuantumSVM,
     QuantumNeuralNetwork,
     QuantumClustering,
     MLAlgorithmType,
     MLPrediction,
 )
-
 from .algorithm_orchestrator import (
     AlgorithmOrchestrator,
     OptimizationDomain,

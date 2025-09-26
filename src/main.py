@@ -20,6 +20,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from goliath.quantum import GoliathQuantum
 from goliath.quantum.dynex_integration import DynexNetwork
 import numpy as np
+from nqba import create_framework
 
 # Configure logging
 logging.basicConfig(
@@ -243,6 +244,79 @@ async def demonstrate_goliath_quantum():
     except Exception as e:
         print(f"✗ Goliath Quantum demonstration failed: {e}")
 
+async def demonstrate_data_ingestion():
+    print("\n📊 Data Ingestion Demonstration")
+    print("=" * 50)
+    
+    framework = create_framework()
+    ingestor = framework.ingestor  # Assuming attached in create_framework
+    problem_data = ingestor.ingest_problem('stream', 'kafka://server:9092')
+    print("Ingested problem data:", problem_data)
+
+async def demonstrate_advanced_analysis():
+    print("\n🔍 Advanced Analysis Demonstration")
+    print("=" * 50)
+    
+    framework = create_framework()
+    analyzer = framework.analyzer
+    # Example problem data
+    problem_data = {"problem": "Sample business problem", "data": [1, 2, 3]}
+    analysis = analyzer.analyze(problem_data)
+    print("Analysis results:", analysis)
+
+async def demonstrate_solution_presentation():
+    print("\n📊 Solution Presentation Demonstration")
+    print("=" * 50)
+    
+    framework = create_framework()
+    presenter = framework.presenter
+    
+    sample_solution = {
+        "problem": "Business Process Optimization",
+        "analysis": "Identified bottlenecks in supply chain",
+        "solution": "Quantum-optimized routing algorithm",
+        "expected_impact": "30% reduction in delivery times"
+    }
+    
+    pdf_path = presenter.generate_pdf_report(sample_solution)
+    print(f"Generated PDF report: {pdf_path}")
+    
+    dashboard_path = presenter.generate_dashboard_script(sample_solution)
+    print(f"Generated dashboard script: {dashboard_path}")
+    print("Note: Run 'streamlit run {dashboard_path}' to view the dashboard")
+
+async def demonstrate_solution_integration():
+    print("\n🔄 Solution Integration Demonstration")
+    print("=" * 50)
+    
+    framework = create_framework()
+    integrator = framework.integrator
+    
+    sample_sources = ["sample_data.csv", "api://example.com/data"]
+    results = await integrator.integrate_solution(
+        sample_sources,
+        analysis_params={"depth": "high"},
+        presentation_format="both"
+    )
+    
+    print("Integration results:")
+    print(f"  PDF Report: {results.get('pdf_path')}")
+    print(f"  Dashboard Script: {results.get('dashboard_path')}")
+
+async def demonstrate_outcome_monitoring():
+    print("\n📈 Outcome Monitoring Demonstration")
+    print("=" * 50)
+    
+    framework = create_framework()
+    monitor = framework.monitor
+    
+    sample_solution_data = {"success": True, "efficiency": 0.95}
+    monitoring_result = monitor.monitor_solution(sample_solution_data)
+    print("Monitoring result:", monitoring_result)
+    
+    report = monitor.generate_outcome_report()
+    print("Outcome report:", report)
+
 async def main():
     """Main demonstration function"""
     print("🚀 Goliath Quantum Starter - Complete System Demonstration")
@@ -252,28 +326,15 @@ async def main():
     print("• SigmaEQ Engine") 
     print("• Dynex API Integration")
     print("• Complete Goliath Quantum System")
+    print("• Data Ingestion")
+    print("• Advanced Analysis")
+    print("• Solution Presentation")
+    print("• Solution Integration")
+    print("• Outcome Monitoring")
     print("=" * 70)
     
-    try:
-        # Demonstrate each component
-        await demonstrate_nqba_engine()
-        await demonstrate_sigmaeq_engine()
-        await demonstrate_dynex_integration()
-        await demonstrate_goliath_quantum()
-        
-        print("\n🎉 All demonstrations completed successfully!")
-        print("\n✅ FLYFOX AI Quantum Platform is now fully functional with:")
-        print("   • NQBA Execution Layer - Quantum circuit execution and optimization")
-        print("   • SigmaEQ Engine - Advanced quantum optimization algorithms")
-        print("   • Dynex Integration - Blockchain and PoUW capabilities")
-        print("   • Unified Interface - Complete quantum computing system")
-        
-        return 0
-        
-    except Exception as e:
-        print(f"\n❌ Demonstration failed: {e}")
-        logger.error(f"Main demonstration failed: {e}", exc_info=True)
-        return 1
+    try:\n        # Demonstrate each component\n        await demonstrate_nqba_engine()\n        await demonstrate_sigmaeq_engine()\n        await demonstrate_dynex_integration()\n        await demonstrate_goliath_quantum()\n        await demonstrate_data_ingestion()\n        await demonstrate_advanced_analysis()\n        await demonstrate_solution_presentation()\n        await demonstrate_solution_integration()
+        print("\n🎉 All demonstrations completed successfully!")\n        print("\n✅ FLYFOX AI Quantum Platform is now fully functional with:\")\n        print("   • NQBA Execution Layer - Quantum circuit execution and optimization\")\n        print("   • SigmaEQ Engine - Advanced quantum optimization algorithms\")\n        print("   • Dynex Integration - Blockchain and PoUW capabilities\")\n        print("   • Unified Interface - Complete quantum computing system\")\n        \n        return 0\n        \n    except Exception as e:\n        print(f"\n❌ Demonstration failed: {e}")\n        logger.error(f"Main demonstration failed: {e}", exc_info=True)\n        return 1
 
 if __name__ == "__main__":
     try:

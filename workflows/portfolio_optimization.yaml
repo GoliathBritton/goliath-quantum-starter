@@ -223,7 +223,7 @@ steps:
           num_qubits: "${validated_request.quantum_parameters.num_qubits}"
           optimization_depth: "${validated_request.quantum_parameters.optimization_depth}"
           algorithm: "qaoa"
-          backend: "dynex_quantum"
+          backend: "flyfox_quantum"
         quantum_config:
           shots: 2048
           optimization_level: 3

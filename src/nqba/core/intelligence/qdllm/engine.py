@@ -1,6 +1,6 @@
 # src/qdllm/core/engine.py
 """
-Quantum Diffusion Engine
+Quantum Diffusion Engine within the Neuromorphic Quantum Business Architecture (NQBA)
 
 Main orchestration engine for the qdLLM quantum diffusion framework.
 Integrates diffusion, scoring, and merging components for unified inference.

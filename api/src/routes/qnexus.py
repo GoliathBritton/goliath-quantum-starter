@@ -1,9 +1,9 @@
 from fastapi import APIRouter, HTTPException, Depends
 from typing import List, Dict, Any
-from src.schemas import QNexusRequest, QNexusResponse, User
-from src.dynex_client import dynex_client
-from src.middleware.entitlements_middleware import require_qnexus_predictions, require_quantum_jobs_premium
-from src.entitlements import get_entitlements_engine, FeatureFlag
+from ..schemas import QNexusRequest, QNexusResponse, User
+from ..dynex_client import dynex_client
+from ..middleware.entitlements_middleware import require_qnexus_predictions, require_quantum_jobs_premium
+from ..entitlements import get_entitlements_engine, FeatureFlag
 import uuid
 import datetime
 

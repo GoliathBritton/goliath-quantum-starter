@@ -310,7 +310,18 @@ steps:
       next_check_in: "${check_in_schedule.next_check_in}"
       customer_success_manager: "${assign_csm(customer_data.plan)}"
     timeout: 15
-
+  - name: log_to_ltc
+    type: api_call
+    description: "Log onboarding completion to Living Technical Codex"
+    endpoint: "/api/ltc/log_operation"
+    method: POST
+    body:
+      operation_type: "customer_onboarding"
+      inputs: "${customer_data}"
+      outputs: "${onboarding_result}"
+      explanation: "Completed automated customer onboarding workflow for new signup"
+    timeout: 10
+    continue_on_error: true
   - name: notify_internal_teams
     type: notification
     description: "Notify internal teams about new customer onboarding"

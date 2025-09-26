@@ -155,7 +155,7 @@ const statusColors = {
   'monitoring': 'bg-yellow-100 text-yellow-700'
 }
 
-export default function QSAILearner() {
+export default function QSAILearner(props: {}) {
   const [selectedRole, setSelectedRole] = useState<string | null>(null)
   const [realTimeMetrics, setRealTimeMetrics] = useState(learningMetrics)
   const [isLearning, setIsLearning] = useState(true)

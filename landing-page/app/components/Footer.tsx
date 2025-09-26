@@ -6,6 +6,15 @@ import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram, Github } from 'lucide-react';
 
 const MotionFooter = motion.footer as any;
+const FacebookIcon = Facebook as any;
+const TwitterIcon = Twitter as any;
+const LinkedinIcon = Linkedin as any;
+const InstagramIcon = Instagram as any;
+const GithubIcon = Github as any;
+const MapPinIcon = MapPin as any;
+const PhoneIcon = Phone as any;
+const MailIcon = Mail as any;
+const NextLink = Link as any;
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -30,19 +39,19 @@ export default function Footer() {
             </p>
             <div className="flex space-x-4">
               <a href="#" aria-label="Facebook" className="text-gray-400 hover:text-white transition-colors">
-                <Facebook size={20} aria-hidden="true" />
+                <FacebookIcon size={20} aria-hidden="true" />
               </a>
               <a href="#" aria-label="Twitter" className="text-gray-400 hover:text-white transition-colors">
-                <Twitter size={20} aria-hidden="true" />
+                <TwitterIcon size={20} aria-hidden="true" />
               </a>
               <a href="#" aria-label="LinkedIn" className="text-gray-400 hover:text-white transition-colors">
-                <Linkedin size={20} aria-hidden="true" />
+                <LinkedinIcon size={20} aria-hidden="true" />
               </a>
               <a href="#" aria-label="Instagram" className="text-gray-400 hover:text-white transition-colors">
-                <Instagram size={20} aria-hidden="true" />
+                <InstagramIcon size={20} aria-hidden="true" />
               </a>
               <a href="#" aria-label="GitHub" className="text-gray-400 hover:text-white transition-colors">
-                <Github size={20} aria-hidden="true" />
+                <GithubIcon size={20} aria-hidden="true" />
               </a>
             </div>
           </div>
@@ -52,19 +61,19 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/" className="text-gray-300 hover:text-white transition-colors">Home</Link>
+                <NextLink href="/" className="text-gray-300 hover:text-white transition-colors">Home</NextLink>
               </li>
               <li>
-                <Link href="#about" className="text-gray-300 hover:text-white transition-colors">About Us</Link>
+                <NextLink href="#about" className="text-gray-300 hover:text-white transition-colors">About Us</NextLink>
               </li>
               <li>
-                <Link href="#services" className="text-gray-300 hover:text-white transition-colors">Services</Link>
+                <NextLink href="#services" className="text-gray-300 hover:text-white transition-colors">Services</NextLink>
               </li>
               <li>
-                <Link href="#products" className="text-gray-300 hover:text-white transition-colors">Products</Link>
+                <NextLink href="#products" className="text-gray-300 hover:text-white transition-colors">Products</NextLink>
               </li>
               <li>
-                <Link href="#contact" className="text-gray-300 hover:text-white transition-colors">Contact</Link>
+                <NextLink href="#contact" className="text-gray-300 hover:text-white transition-colors">Contact</NextLink>
               </li>
             </ul>
           </div>
@@ -74,19 +83,19 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-4">Our Solutions</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="#quantum" className="text-gray-300 hover:text-white transition-colors">Quantum Computing</Link>
+                <NextLink href="#quantum" className="text-gray-300 hover:text-white transition-colors">Quantum Computing</NextLink>
               </li>
               <li>
-                <Link href="#ai" className="text-gray-300 hover:text-white transition-colors">AI Integration</Link>
+                <NextLink href="#ai" className="text-gray-300 hover:text-white transition-colors">AI Integration</NextLink>
               </li>
               <li>
-                <Link href="#energy" className="text-gray-300 hover:text-white transition-colors">Energy Services</Link>
+                <NextLink href="#energy" className="text-gray-300 hover:text-white transition-colors">Energy Services</NextLink>
               </li>
               <li>
-                <Link href="#blockchain" className="text-gray-300 hover:text-white transition-colors">Blockchain Solutions</Link>
+                <NextLink href="#blockchain" className="text-gray-300 hover:text-white transition-colors">Blockchain Solutions</NextLink>
               </li>
               <li>
-                <Link href="#consulting" className="text-gray-300 hover:text-white transition-colors">Business Consulting</Link>
+                <NextLink href="#consulting" className="text-gray-300 hover:text-white transition-colors">Business Consulting</NextLink>
               </li>
             </ul>
           </div>
@@ -96,15 +105,15 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
             <ul className="space-y-3">
               <li className="flex items-start space-x-3">
-                <MapPin size={20} className="text-blue-400 mt-1 flex-shrink-0" />
+                <MapPinIcon size={20} className="text-blue-400 mt-1 flex-shrink-0" />
                 <span className="text-gray-300">123 Quantum Avenue, Innovation District, CA 94103</span>
               </li>
               <li className="flex items-center space-x-3">
-                <Phone size={20} className="text-blue-400 flex-shrink-0" />
+                <PhoneIcon size={20} className="text-blue-400 flex-shrink-0" />
                 <span className="text-gray-300">+1 (555) 123-4567</span>
               </li>
               <li className="flex items-center space-x-3">
-                <Mail size={20} className="text-blue-400 flex-shrink-0" />
+                <MailIcon size={20} className="text-blue-400 flex-shrink-0" />
                 <span className="text-gray-300">info@goliath-platform.com</span>
               </li>
             </ul>
@@ -116,9 +125,9 @@ export default function Footer() {
   © {currentYear} FLYFOX AI | Goliath of All Trade | Sigma Select. All rights reserved.
 </p>
           <div className="mt-4 md:mt-0 flex space-x-6">
-            <Link href="/privacy" className="text-gray-400 hover:text-white text-sm transition-colors">Privacy Policy</Link>
-            <Link href="/terms" className="text-gray-400 hover:text-white text-sm transition-colors">Terms of Service</Link>
-            <Link href="/cookies" className="text-gray-400 hover:text-white text-sm transition-colors">Cookie Policy</Link>
+            <NextLink href="/privacy" className="text-gray-400 hover:text-white text-sm transition-colors">Privacy Policy</NextLink>
+            <NextLink href="/terms" className="text-gray-400 hover:text-white text-sm transition-colors">Terms of Service</NextLink>
+            <NextLink href="/cookies" className="text-gray-400 hover:text-white text-sm transition-colors">Cookie Policy</NextLink>
           </div>
         </div>
       </div>

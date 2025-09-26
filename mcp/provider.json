@@ -262,6 +262,63 @@
         },
         "required": ["energy_sources", "demand_forecast"]
       }
+    },
+    {
+      "name": "legacy.analyze.system",
+      "description": "Analyze legacy system documentation and code using NQBA Legacy Wrapper",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "documentation": {
+            "type": "string",
+            "description": "Legacy system documentation"
+          },
+          "code_snippets": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Code snippets from legacy system"
+          }
+        },
+        "required": ["documentation"]
+      }
+    },
+    {
+      "name": "legacy.translate.api",
+      "description": "Translate modern API calls to legacy commands",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "api_call": {
+            "type": "string",
+            "description": "Modern API call"
+          },
+          "parameters": {
+            "type": "object",
+            "description": "API parameters"
+          }
+        },
+        "required": ["api_call"]
+      }
+    },
+    {
+      "name": "legacy.execute.command",
+      "description": "Simulate execution of legacy commands",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "command": {
+            "type": "string",
+            "description": "Legacy command to execute"
+          },
+          "system_state": {
+            "type": "object",
+            "description": "Current system state"
+          }
+        },
+        "required": ["command"]
+      }
     }
   ],
   "resources": [

@@ -7,12 +7,12 @@ import json
 from pydantic import BaseModel, Field
 from datetime import datetime
 
-from src.database import get_db
-from src.stripe_integration import stripe_service
-from src.models.partner import Partner
-from src.models.quantum_credit import QuantumCredit
-from src.models.audit_log import AuditLog
-from src.auth.dependencies import get_current_partner, get_current_admin
+from ..database import get_db
+from ..stripe_integration import stripe_service
+from ..models.partner import Partner
+from ..models.quantum_credit import QuantumCredit
+from ..models.audit_log import AuditLog
+from ..auth.dependencies import get_current_partner, get_current_admin
 
 logger = logging.getLogger(__name__)
 

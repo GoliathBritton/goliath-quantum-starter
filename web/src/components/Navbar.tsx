@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { useState, useEffect, useRef } from 'react'
 import { useSession, signOut } from 'next-auth/react'
-import { Menu, X, Zap, BarChart3, Users, Settings, CreditCard, LogOut, User } from 'lucide-react'
+import { Menu, X, Zap, BarChart3, Users, Settings, CreditCard, LogOut, User, BookOpen } from 'lucide-react'
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -25,6 +25,7 @@ const Navbar = () => {
 
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: BarChart3 },
+    { name: 'Resources', href: '/resources', icon: BookOpen },
     { name: 'Partners', href: '/partners', icon: Users },
     { name: 'Billing', href: '/billing', icon: CreditCard },
     { name: 'Pricing', href: '/pricing', icon: Settings },

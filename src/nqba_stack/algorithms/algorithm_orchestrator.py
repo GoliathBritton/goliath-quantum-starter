@@ -34,7 +34,7 @@ from .risk_algorithms import (
     VolatilityForecaster,
     RiskLevel,
 )
-from .ml_algorithms import QuantumSVM, QuantumNeuralNetwork, QuantumClustering
+from .quantum_ml_algorithms import QuantumSVM, QuantumNeuralNetwork, QuantumClustering
 from .energy_algorithms import (
     GridOptimizer,
     DemandForecaster,

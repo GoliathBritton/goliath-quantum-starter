@@ -27,7 +27,12 @@ import AgentFactory from '../../components/AgentFactory'
 import QSalesDivision from '../../components/QSalesDivision'
 import MarketplacePods from '../../components/MarketplacePods'
 import QuantumIntegration from '../../components/QuantumIntegration'
-
+const RoleServiceMappingComp = RoleServiceMapping as any;
+const QSAILearnerComp = QSAILearner as any;
+const AgentFactoryComp = AgentFactory as any;
+const QSalesDivisionComp = QSalesDivision as any;
+const MarketplacePodsComp = MarketplacePods as any;
+const QuantumIntegrationComp = QuantumIntegration as any;
 // Type assertions for framer-motion and Lucide icons
 const MotionDiv = motion.div as any
 const AnimatePresenceComponent = AnimatePresence as any
@@ -409,42 +414,42 @@ export default function AdvancedPage() {
       {/* Role-to-Service Mapping */}
       <section className="section-padding bg-gray-50">
         <div className="container-quantum">
-          <RoleServiceMapping />
+          <RoleServiceMappingComp />
         </div>
       </section>
 
       {/* QSAI Learner - Self-Healing Intelligence */}
       <section className="section-padding bg-white">
         <div className="container-quantum">
-          <QSAILearner />
+          <QSAILearnerComp />
         </div>
       </section>
 
       {/* Agent Factory - Enhanced Production */}
       <section className="section-padding bg-gray-50">
         <div className="container-quantum">
-          <AgentFactory />
+          <AgentFactoryComp />
         </div>
       </section>
 
       {/* Q-Sales Division - Growth Intelligence */}
       <section className="section-padding bg-white">
         <div className="container-quantum">
-          <QSalesDivision />
+          <QSalesDivisionComp />
         </div>
       </section>
 
       {/* Marketplace Pods - Partner Ecosystem */}
       <section className="section-padding bg-gray-50">
         <div className="container-quantum">
-          <MarketplacePods />
+          <MarketplacePodsComp />
         </div>
       </section>
 
       {/* Quantum Integration - Universal Principles */}
       <section className="section-padding bg-white">
         <div className="container-quantum">
-          <QuantumIntegration />
+          <QuantumIntegrationComp />
         </div>
       </section>
     </div>

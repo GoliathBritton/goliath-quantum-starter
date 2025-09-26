@@ -13,7 +13,7 @@ from pathlib import Path
 logger = structlog.get_logger()
 
 # Get Celery app instance
-from src.app_consolidated import celery_app
+from ..app_consolidated import celery_app
 
 class WorkflowEngine:
     """Quantum-enhanced workflow execution engine"""

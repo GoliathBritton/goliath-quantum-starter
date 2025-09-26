@@ -78,8 +78,8 @@ class MetricsCollector:
     def get_quantum_metrics(self) -> Dict[str, Any]:
         """Get quantum-specific metrics."""
         return {
-            "dynex_qubits_available": 1000000,
-            "dynex_qubits_utilized": 750000,
+            "flyfox_qubits_available": 1000000,
+            "flyfox_qubits_utilized": 750000,
             "quantum_jobs_completed": 1250,
             "quantum_jobs_failed": 75,
             "quantum_advantage_achieved": 3.2,
@@ -230,8 +230,8 @@ class DashboardRenderer:
         with col1:
             # Quantum utilization
             utilization = (
-                quantum_metrics["dynex_qubits_utilized"]
-                / quantum_metrics["dynex_qubits_available"]
+                quantum_metrics["flyfox_qubits_utilized"]
+                / quantum_metrics["flyfox_qubits_available"]
             ) * 100
 
             fig = go.Figure(
@@ -239,7 +239,7 @@ class DashboardRenderer:
                     mode="gauge+number+delta",
                     value=utilization,
                     domain={"x": [0, 1], "y": [0, 1]},
-                    title={"text": "Dynex Qubit Utilization"},
+                    title={"text": "FLYFOX Quantum Qubit Utilization"},
                     delta={"reference": 80},
                     gauge={
                         "axis": {"range": [None, 100]},

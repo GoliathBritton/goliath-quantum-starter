@@ -4,13 +4,13 @@ from typing import Optional, Dict, Any
 import time
 import redis
 import json
-from src.entitlements import (
+from ..entitlements import (
     EntitlementsEngine, 
     SubscriptionTier, 
     FeatureFlag,
     get_entitlements_engine
 )
-from src.models import User
+from ..models import User
 
 security = HTTPBearer()
 

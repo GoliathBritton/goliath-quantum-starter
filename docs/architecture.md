@@ -1,4 +1,4 @@
-﻿# Neuromorphic Quantum Business Architecture (NQBA) - Technical Architecture
+# Neuromorphic Quantum Business Architecture (NQBA) - Technical Architecture
 
 ## Overview
 
@@ -378,30 +378,11 @@ flowchart LR
     Repetitive[Repetitive Queries] --> Caching
 ```
 
-## Security & Compliance
+## Security & Compliance\n
 
-### NQBA Security Framework
+### NQBA Security Framework\n
 
-```mermaid
-flowchart TD
-    subgraph Security ["🔒 NQBA Security Layers"]
-        Auth[Authentication & Authorization]
-        Encrypt[End-to-End Encryption]
-        Audit[Audit Logging]
-        Privacy[Privacy Protection]
-    end
-    
-    subgraph Compliance ["📋 Compliance Framework"]
-        GDPR[GDPR Compliance]
-        HIPAA[HIPAA for Healthcare]
-        SOX[SOX for Finance]
-        Custom[Custom Policies]
-    end
-    
-    Security --> Compliance
-```
-
-## Future NQBA Evolution
+```mermaid\nflowchart TD\n    subgraph Security [\"🔒 NQBA Security Layers\"]\n        Auth[Authentication & Authorization]\n        Encrypt[End-to-End Encryption]\n        Audit[Audit Logging]\n        Privacy[Privacy Protection]\n    end\n    \n    subgraph Compliance [\"📋 Compliance Framework\"]\n        GDPR[GDPR Compliance]\n        HIPAA[HIPAA for Healthcare]\n        SOX[SOX for Finance]\n        Custom[Custom Policies]\n    end\n    \n    Security --> Compliance\n```\n\n## Living Technical Codex (LTC) Integration\n\nThe Living Technical Codex (LTC) is a foundational component of NQBA that ensures complete traceability, auditability, and compliance for all decisions and operations within the architecture.\n\n### Key Features of LTC in NQBA:\n- **Comprehensive Logging**: Every decision, optimization, and agent action is logged in a structured JSON format.\n- **Hash Chain Integrity**: Maintains an immutable chain of records for verification.\n- **IPFS Backup**: Distributed storage for long-term preservation.\n- **Integration Points**: LTC logging is embedded in all core intelligence modules (qdLLM, QNLP, QTransformers) and business procedures.\n\n```mermaid\nflowchart TD\n    subgraph LTC [\"📜 Living Technical Codex\"]\n        Log[Operation Logging]\n        Hash[Hash Chain]\n        Store[IPFS Storage]\n        Audit[Audit Trail]\n    end\n    \n    NQBA --> LTC\n    Intelligence --> Log\n    Procedures --> Log\n    LTC --> Compliance\n```\n\nLTC enhances NQBA's governance layer by providing real-time documentation of all system behaviors, ensuring trust and compliance in quantum-inspired business operations.\n\n## Future NQBA Evolution
 
 ### Roadmap
 

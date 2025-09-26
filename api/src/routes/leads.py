@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from typing import List, Optional
-from src.schemas import Lead, CreateLead, LeadScoreRequest, LeadScore
-from src.dynex_client import dynex_client
+from ..schemas import Lead, CreateLead, LeadScoreRequest, LeadScore
+from ..dynex_client import dynex_client
 import uuid
 import random
 

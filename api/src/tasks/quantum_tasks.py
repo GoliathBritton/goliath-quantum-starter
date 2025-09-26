@@ -7,12 +7,12 @@ from datetime import datetime, timedelta
 import redis.asyncio as redis
 import structlog
 import asyncio
-from src.dynex_client import DynexClient
+from ..dynex_client import DynexClient
 
 logger = structlog.get_logger()
 
 # Get Celery app instance
-from src.app_consolidated import celery_app
+from ..app_consolidated import celery_app
 
 @celery_app.task(bind=True, name="quantum.process_qne_query")
 def process_quantum_nexus_query(self, query_data: Dict[str, Any]) -> Dict[str, Any]:

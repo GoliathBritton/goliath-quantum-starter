@@ -4,7 +4,7 @@ Streamlit dashboard for Goliath of All Trade: Quantum+AI Automations
 """
 
 import streamlit as st
-from nqba import AUTOMATIONS, DIVISIONS
+from . import AUTOMATIONS, DIVISIONS
 
 st.set_page_config(page_title="NQBA Quantum+AI Automation Demo", layout="wide")
 st.title("Goliath of All Trade: Quantum+AI Automation Platform")

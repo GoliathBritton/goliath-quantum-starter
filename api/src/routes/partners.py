@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from typing import List
-from src.models import Partner
-from src.seed_data import PARTNERS
+from ..models import Partner
+from ..seed_data import PARTNERS
 
 router = APIRouter(prefix="/api/partners", tags=["partners"])
 

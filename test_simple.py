@@ -33,8 +33,8 @@ def test_basic_imports():
         print(f"✗ SigmaEQ Engine import failed: {e}")
     
     try:
-        from goliath.quantum.dynex_integration import DynexNetwork
-        print("✓ Dynex Integration imported successfully")
+        from goliath.quantum.flyfox_quantum_integration import FlyFoxQuantumNetwork
+        print("✓ FlyFox Quantum Integration imported successfully")
     except ImportError as e:
         print(f"✗ Dynex Integration import failed: {e}")
 

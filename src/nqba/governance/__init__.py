@@ -18,6 +18,7 @@ try:
     from .compliance import ComplianceMonitor, RegulatoryFrameworks
     from .audit import AuditTrail, AuditLogger, ComplianceReporter
     from .security import SecurityPolicies, AccessControl, DataProtection
+    from .pqc_security import PQCSignature, PQCKeyEncapsulation
 except ImportError:
     # Graceful fallback during development
     PolicyEngine = None
@@ -43,7 +44,9 @@ __all__ = [
     "ComplianceReporter",
     "SecurityPolicies",
     "AccessControl",
-    "DataProtection"
+    "DataProtection",
+    "PQCSignature",
+    "PQCKeyEncapsulation"
 ]
 
 # Module metadata
