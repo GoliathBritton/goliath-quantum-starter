@@ -1,0 +1,6 @@
+<svg width="300" height="100" viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="150" cy="50" r="40" fill="none" stroke="#C0C0C0" stroke-width="4" />
+  <path d="M150 20 L140 40 L160 40 Z" fill="#C0C0C0" /> <!-- Simple leaf -->
+  <text x="100" y="70" fill="#C0C0C0" font-size="16" font-family="Arial">SIGMA SELECT</text>
+  <text x="70" y="90" fill="#C0C0C0" font-size="12" font-family="Arial">THE TRAINING OF ELITE LEADERS</text>
+</svg>

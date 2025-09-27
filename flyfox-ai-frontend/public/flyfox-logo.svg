@@ -1,0 +1,6 @@
+<svg width="300" height="100" viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg">
+  <path d="M50 20 L30 60 L70 60 Z M250 20 L270 60 L230 60 Z" fill="none" stroke="#C0C0C0" stroke-width="4" /> <!-- Ears -->
+  <circle cx="150" cy="50" r="30" fill="none" stroke="#C0C0C0" stroke-width="4" /> <!-- Head -->
+  <path d="M150 50 L140 70 M150 50 L160 70" fill="none" stroke="#C0C0C0" stroke-width="4" /> <!-- Nose -->
+  <text x="80" y="90" fill="#C0C0C0" font-size="20" font-family="Arial">FLY FOX AI</text>
+</svg>
