@@ -28,7 +28,7 @@ export default async function handler(req, res) {
                 res.status(200).send('Lead received and saved');
             } else {
                 console.warn('Received GHL event without complete lead data:', event);
-                res.status(400).send('Incomplete lead data received');
+                res.status(400).json({ message: 'Incomplete lead data received', event: event });
             }
             db.end();
         } catch (error) {
