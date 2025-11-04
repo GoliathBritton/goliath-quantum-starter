@@ -1,0 +1,12 @@
+image:
+  repository: ghcr.io/GoliathBritton/flyfox-nqba-sentinel
+  tag: latest
+service:
+  type: ClusterIP
+  port: 80
+ingress:
+  enabled: true
+  className: nginx
+  hosts:
+    - host: api.flyfoxai.io
+      paths: [{ path: "/", pathType: Prefix }]

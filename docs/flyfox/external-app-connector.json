@@ -1,0 +1,9 @@
+{
+  "name": "NQBA Sentinel API",
+  "baseUrl": "https://api.flyfoxai.io",
+  "headers": {
+    "Authorization": "Bearer {{ENV.FLYFOX_API_KEY}}",
+    "X-Tenant-Id": "{{CURRENT_TENANT_ID}}",
+    "Content-Type": "application/json"
+  }
+}
