@@ -564,7 +564,7 @@ Complete these steps to get up and running:
 - [ ] Run basic tests to verify installation
 - [ ] Review [GETTING_STARTED.md](GETTING_STARTED.md) for detailed tutorials
 - [ ] Explore example notebooks in `examples/` directory
-- [ ] Join our [Discord community](https://discord.gg/nqba) for support
+- [ ] Join our Discord community for support (link coming soon)
 
 ### Next Steps
 
