@@ -1,144 +1,311 @@
+# ==============================================================================
+# NQBA Framework - Docker Compose Configuration
+# ==============================================================================
+# This docker-compose file orchestrates the complete NQBA Framework stack
+# including frontend, backend API, databases, caching, and monitoring services.
+#
+# Quick Start:
+#   docker-compose up -d          # Start all services in background
+#   docker-compose logs -f        # View logs from all services
+#   docker-compose down           # Stop and remove all containers
+#
+# Individual Services:
+#   docker-compose up frontend    # Start only frontend
+#   docker-compose logs backend   # View backend logs
+#   docker-compose restart redis  # Restart Redis service
+#
+# For production deployment, see: docs/DEPLOYMENT_GUIDE.md
+# ==============================================================================
+
 version: '3.8'
 
 services:
-  # Frontend - Next.js Application
+  # ============================================================================
+  # Frontend Service - Next.js Application
+  # ============================================================================
+  # Serves the quantum-enhanced web interface for the NQBA platform.
+  # Provides user authentication, dashboards, and business intelligence views.
+  #
+  # Access: http://localhost:3000
+  # Health: http://localhost:3000/api/health
+  # ============================================================================
   frontend:
     build:
       context: .
       dockerfile: Dockerfile.frontend
     ports:
-      - "3000:3000"
+      - "3000:3000"  # Map container port 3000 to host port 3000
     environment:
+      # Node environment (development/production)
       - NODE_ENV=production
+      # Backend API URL for server-side requests
       - NEXT_PUBLIC_API_URL=http://backend:8000
+      # Public API endpoint for client-side requests
       - NEXT_PUBLIC_QUANTUM_OMNISCIENT_API=http://backend:8000/api/v1
     depends_on:
-      - backend
+      - backend  # Ensure backend is started before frontend
     networks:
       - quantum-omniscient-network
-    restart: unless-stopped
+    restart: unless-stopped  # Automatically restart on failure
 
-  # Backend - NQBA API with Quantum Omniscient™ Engine
+  # ============================================================================
+  # Backend Service - NQBA API with Quantum Omniscient™ Engine
+  # ============================================================================
+  # Core API server providing quantum-enhanced business intelligence,
+  # orchestrating between business pods and quantum computing resources.
+  #
+  # Access: http://localhost:8000
+  # API Docs: http://localhost:8000/docs (Swagger UI)
+  # Health: http://localhost:8000/health
+  # ============================================================================
   backend:
     build:
       context: .
       dockerfile: Dockerfile.simple
     ports:
-      - "8000:8000"
+      - "8000:8000"  # Expose API on port 8000
     environment:
+      # Application environment (development/staging/production)
       - ENVIRONMENT=production
+      # Python path for module imports
       - PYTHONPATH=/app
+      # Database connection string (connects to postgres service)
       - DATABASE_URL=postgresql://quantum_user:quantum_pass@postgres:5432/quantum_omniscient_db
+      # Redis cache connection (connects to redis service)
       - REDIS_URL=redis://redis:6379
+      # Dynex API key for neuromorphic computing (from .env file)
       - DYNEX_API_KEY=${DYNEX_API_KEY}
+      # JWT secret for authentication (from .env file)
       - JWT_SECRET=${JWT_SECRET}
+      # Stripe key for payment processing (from .env file)
       - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      # Enable production optimizations
       - QUANTUM_OMNISCIENT_MODE=production
     volumes:
+      # Mount logs directory for persistent logging
       - ./logs:/app/logs
-    restart: unless-stopped
+    restart: unless-stopped  # Auto-restart on failure
     healthcheck:
+      # Check if API is responding every 30 seconds
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 40s
+      start_period: 40s  # Wait 40s for app to start before checking
     depends_on:
-      - postgres
-      - redis
+      - postgres  # Wait for database
+      - redis     # Wait for cache
     networks:
       - quantum-omniscient-network
 
-  # PostgreSQL Database
+  # ============================================================================
+  # PostgreSQL Database Service
+  # ============================================================================
+  # Primary relational database for storing business data, user information,
+  # task history, and configuration. Uses PostgreSQL 15 Alpine variant for
+  # smaller image size.
+  #
+  # Access: localhost:5432
+  # Credentials: quantum_user / quantum_pass (change in production!)
+  # Database: quantum_omniscient_db
+  # ============================================================================
   postgres:
-    image: postgres:15-alpine
+    image: postgres:15-alpine  # Lightweight PostgreSQL 15
     environment:
+      # Database name for NQBA data
       - POSTGRES_DB=quantum_omniscient_db
+      # Database user (change in production!)
       - POSTGRES_USER=quantum_user
+      # Database password (use strong password and move to secrets in production!)
       - POSTGRES_PASSWORD=quantum_pass
     volumes:
+      # Persist database data across container restarts
       - postgres_data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "5432:5432"  # Standard PostgreSQL port
     networks:
       - quantum-omniscient-network
     restart: unless-stopped
 
-  # Redis Cache
+  # ============================================================================
+  # Redis Cache Service
+  # ============================================================================
+  # In-memory data store used for caching, session management, and task queues.
+  # Configured with append-only file persistence for data durability.
+  #
+  # Access: localhost:6379
+  # Persistence: Append-only file (AOF) enabled
+  # ============================================================================
   redis:
-    image: redis:7-alpine
+    image: redis:7-alpine  # Lightweight Redis 7
     ports:
-      - "6379:6379"
+      - "6379:6379"  # Standard Redis port
     restart: unless-stopped
     networks:
       - quantum-omniscient-network
     volumes:
+      # Persist Redis data for durability
       - redis_data:/data
+    # Enable append-only file for data persistence
     command: redis-server --appendonly yes
 
-  # MinIO Object Storage
+  # ============================================================================
+  # MinIO Object Storage Service
+  # ============================================================================
+  # S3-compatible object storage for files, documents, ML models, and artifacts.
+  # Provides both API (port 9000) and web console (port 9001) interfaces.
+  #
+  # API: http://localhost:9000
+  # Console: http://localhost:9001
+  # Credentials: quantum_admin / quantum_omniscient_2024 (change in production!)
+  # ============================================================================
   minio:
     image: minio/minio:latest
     ports:
-      - "9000:9000"
-      - "9001:9001"
+      - "9000:9000"  # S3-compatible API port
+      - "9001:9001"  # Web console port
     environment:
+      # MinIO admin credentials (change in production!)
       - MINIO_ROOT_USER=quantum_admin
       - MINIO_ROOT_PASSWORD=quantum_omniscient_2024
     volumes:
+      # Persist object storage data
       - minio_data:/data
     networks:
       - quantum-omniscient-network
     restart: unless-stopped
+    # Start MinIO server with console on port 9001
     command: server /data --console-address ":9001"
 
-  # Prometheus Monitoring
+  # ============================================================================
+  # Prometheus Monitoring Service
+  # ============================================================================
+  # Time-series database for collecting and storing metrics from all services.
+  # Scrapes metrics from backend API and system components for monitoring.
+  #
+  # Access: http://localhost:9090
+  # Configuration: monitoring/prometheus.yml
+  # ============================================================================
   prometheus:
     image: prom/prometheus:latest
     ports:
-      - "9090:9090"
+      - "9090:9090"  # Prometheus web UI
     volumes:
+      # Mount Prometheus configuration file
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      # Persist metrics data
       - prometheus_data:/prometheus
     networks:
       - quantum-omniscient-network
     restart: unless-stopped
     command:
+      # Configuration file location
       - '--config.file=/etc/prometheus/prometheus.yml'
+      # Time-series data storage path
       - '--storage.tsdb.path=/prometheus'
+      # Console libraries and templates
       - '--web.console.libraries=/etc/prometheus/console_libraries'
       - '--web.console.templates=/etc/prometheus/consoles'
+      # Enable runtime configuration reload
       - '--web.enable-lifecycle'
 
-  # Grafana Dashboards
+  # ============================================================================
+  # Grafana Dashboard Service
+  # ============================================================================
+  # Visualization and analytics platform for displaying Prometheus metrics.
+  # Provides pre-built dashboards for monitoring system health and performance.
+  #
+  # Access: http://localhost:3001
+  # Default Login: admin / quantum_omniscient_admin (change immediately!)
+  # ============================================================================
   grafana:
     image: grafana/grafana:latest
     ports:
-      - "3001:3000"
+      - "3001:3000"  # Map to 3001 to avoid conflict with frontend
     environment:
+      # Set Grafana admin password (change in production!)
       - GF_SECURITY_ADMIN_PASSWORD=quantum_omniscient_admin
     volumes:
+      # Persist Grafana dashboards and settings
       - grafana_data:/var/lib/grafana
     networks:
       - quantum-omniscient-network
     restart: unless-stopped
     depends_on:
-      - prometheus
+      - prometheus  # Ensure Prometheus is available for data source
 
+# ==============================================================================
+# Volume Definitions
+# ==============================================================================
+# Named volumes for data persistence across container restarts and updates.
+# Data is stored in Docker's volume directory (/var/lib/docker/volumes/)
+#
+# Backup: docker run --rm -v <volume_name>:/data -v $(pwd):/backup \
+#         alpine tar czf /backup/<volume_name>.tar.gz -C /data .
+#
+# Restore: docker run --rm -v <volume_name>:/data -v $(pwd):/backup \
+#          alpine tar xzf /backup/<volume_name>.tar.gz -C /data
+# ==============================================================================
 volumes:
+  # Application logs from backend service
   logs:
     driver: local
+  # Redis cache and session data
   redis_data:
     driver: local
+  # PostgreSQL database files
   postgres_data:
     driver: local
+  # MinIO object storage files
   minio_data:
     driver: local
+  # Prometheus metrics time-series data
   prometheus_data:
     driver: local
+  # Grafana dashboards and configuration
   grafana_data:
     driver: local
 
+# ==============================================================================
+# Network Definitions
+# ==============================================================================
+# Creates an isolated bridge network for service communication.
+# Services can communicate using service names as hostnames.
+#
+# Example: backend can connect to postgres using hostname "postgres:5432"
+# ==============================================================================
 networks:
   quantum-omniscient-network:
-    driver: bridge
+    driver: bridge  # Default bridge driver for container networking
+
+# ==============================================================================
+# Usage Commands
+# ==============================================================================
+#
+# Start all services:
+#   docker-compose up -d
+#
+# View logs:
+#   docker-compose logs -f [service_name]
+#
+# Stop services:
+#   docker-compose down
+#
+# Stop and remove volumes (WARNING: deletes all data):
+#   docker-compose down -v
+#
+# Rebuild services:
+#   docker-compose build [service_name]
+#   docker-compose up -d --build
+#
+# Scale a service:
+#   docker-compose up -d --scale backend=3
+#
+# Check service status:
+#   docker-compose ps
+#
+# Execute command in running container:
+#   docker-compose exec backend python manage.py migrate
+#
+# For more information, see: docs/DEPLOYMENT_GUIDE.md
+# ==============================================================================

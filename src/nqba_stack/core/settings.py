@@ -1,4 +1,37 @@
-"""NQBA Stack Settings - Simplified Configuration"""
+"""
+NQBA Stack Settings Module - Centralized Configuration Management
+
+This module provides centralized configuration management for the NQBA Framework.
+All configuration values are loaded from environment variables with sensible
+defaults for both development and production environments.
+
+Key Features:
+    - Environment-based configuration with .env file support
+    - Type-safe settings with validation
+    - Sensible defaults for rapid development
+    - Production-ready security configurations
+    
+Usage:
+    >>> from nqba_stack.core.settings import get_settings
+    >>> settings = get_settings()
+    >>> # Check if API key is configured (never print actual keys!)
+    >>> if settings.dynex_api_key:
+    ...     print("Dynex API key is configured")
+    >>> print(f"Environment: {settings.environment}")
+    
+Environment Variables:
+    See .env.template for a complete list of all available configuration options
+    and their descriptions. Key variables include:
+    - DYNEX_API_KEY: Required for Dynex neuromorphic computing
+    - OPENAI_API_KEY: Required for AI/LLM features
+    - DATABASE_URL: Database connection string
+    - LOG_LEVEL: Logging verbosity (DEBUG, INFO, WARNING, ERROR)
+    
+Related Documentation:
+    - Configuration Guide: docs/TECHNICAL_IMPLEMENTATION_GUIDE.md
+    - Security Setup: docs/SECURITY_SYSTEM.md
+    - Deployment Guide: docs/DEPLOYMENT_GUIDE.md
+"""
 
 import os
 from pathlib import Path
@@ -9,7 +42,25 @@ logger = logging.getLogger(__name__)
 
 
 class NQBASettings:
-    """NQBA Stack Configuration Settings"""
+    """
+    NQBA Stack Configuration Settings
+    
+    This class manages all configuration settings for the NQBA Framework,
+    loading values from environment variables with fallback defaults.
+    
+    Attributes:
+        environment: Deployment environment (development/staging/production)
+        debug: Enable debug mode with verbose logging
+        company_name: Organization name for branding
+        dynex_api_key: API key for Dynex neuromorphic computing platform
+        openai_api_key: API key for OpenAI services
+        quantum_backend: Quantum computing backend selection
+        
+    Example:
+        >>> settings = NQBASettings()
+        >>> if settings.debug:
+        ...     print("Running in debug mode")
+    """
 
     def __init__(self):
         # Environment

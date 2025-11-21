@@ -1,7 +1,62 @@
+/**
+ * Quantum Optimization Service
+ * 
+ * Comprehensive service for quantum-enhanced optimization across multiple
+ * business domains including portfolio management, supply chain optimization,
+ * and resource scheduling. Implements QUBO (Quadratic Unconstrained Binary
+ * Optimization) formulations solved using quantum-inspired algorithms.
+ * 
+ * Key Features:
+ * - Portfolio optimization with risk management
+ * - Supply chain network optimization
+ * - Route and scheduling optimization
+ * - Energy grid optimization
+ * - Multi-objective optimization with constraints
+ * 
+ * Algorithms:
+ * - QAOA (Quantum Approximate Optimization Algorithm)
+ * - VQE (Variational Quantum Eigensolver)
+ * - Quantum Annealing via Dynex
+ * - Hybrid classical-quantum approaches
+ * 
+ * @example Portfolio Optimization
+ * ```typescript
+ * const result = await optimizePortfolio(assets, constraints);
+ * console.log(`Sharpe Ratio: ${result.sharpeRatio}`);
+ * console.log(`Expected Return: ${result.expectedReturn}%`);
+ * ```
+ * 
+ * @example Supply Chain Optimization
+ * ```typescript
+ * const network = await optimizeSupplyChain(nodes, routes, constraints);
+ * console.log(`Total Cost: $${network.totalCost}`);
+ * console.log(`CO2 Reduction: ${network.sustainability}%`);
+ * ```
+ * 
+ * @see {@link docs/quantum-hub.md} Quantum computing architecture
+ * @see {@link docs/API_ENDPOINTS_REFERENCE.md} API documentation
+ * @see {@link QUANTUM_ALGORITHMS_IMPLEMENTATION.md} Algorithm details
+ * 
+ * @module quantumOptimizationService
+ * @version 2.0.0
+ */
+
 import { QuantumCircuit, QuantumGate, QuantumState } from '../types/quantum';
 import { BusinessPod } from '../types/businessPod';
 
-// QUBO (Quadratic Unconstrained Binary Optimization) Matrix Interface
+/**
+ * QUBO Matrix Interface
+ * 
+ * Represents a Quadratic Unconstrained Binary Optimization problem.
+ * QUBO is the standard formulation for quantum annealing and QAOA algorithms.
+ * 
+ * @interface QUBOMatrix
+ * @property {number} size - Dimension of the QUBO matrix
+ * @property {number[][]} matrix - Square matrix of quadratic coefficients
+ * @property {string[]} variables - Names of binary decision variables
+ * @property {QUBOConstraint[]} constraints - Problem constraints
+ * @property {'minimize' | 'maximize'} objective - Optimization direction
+ */
 interface QUBOMatrix {
   size: number;
   matrix: number[][];
