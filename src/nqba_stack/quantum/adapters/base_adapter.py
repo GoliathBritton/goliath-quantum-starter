@@ -1,7 +1,59 @@
 """
 FLYFOX AI Quantum Hub - Base Adapter Protocol
 
-Defines the base protocol that all quantum provider adapters must implement.
+Defines the base protocol and abstract interface that all quantum provider
+adapters must implement to ensure consistent interaction with various quantum
+computing backends including Dynex, IBM Quantum, Google Quantum AI, and simulators.
+
+Architecture:
+    The adapter pattern allows the NQBA Framework to work with multiple quantum
+    backends through a unified interface. Each backend implements this protocol
+    while handling backend-specific details internally.
+
+Key Features:
+    - Unified QUBO problem submission across all backends
+    - Consistent job lifecycle management (submit, poll, result, cancel)
+    - Backend capability discovery and validation
+    - Cost estimation and resource management
+    - Automatic retry and error handling
+
+Adapter Lifecycle:
+    1. Initialize with AdapterConfig (API keys, endpoints, etc.)
+    2. Submit QUBO problem -> receive job_id
+    3. Poll job status until completion
+    4. Retrieve results when ready
+    5. Parse and return in standard format
+
+Concrete Implementations:
+    - DynexAdapter: Neuromorphic computing via Dynex platform
+    - ClassicalAdapter: Classical QUBO solver (for development/testing)
+    - SimulatorAdapter: Quantum circuit simulation
+    - FlyFoxQuantumAdapter: FLYFOX proprietary quantum optimizer
+
+Example Usage:
+    >>> config = AdapterConfig(
+    ...     api_key="your_key",
+    ...     endpoint="https://api.quantum-provider.com",
+    ...     timeout=300
+    ... )
+    >>> adapter = ConcreteAdapter(config)
+    >>> job_id = await adapter.submit_qubo(qubo_problem)
+    >>> while await adapter.poll(job_id) != JobStatus.COMPLETED:
+    ...     await asyncio.sleep(1)
+    >>> result = await adapter.result(job_id)
+
+Related Modules:
+    - dynex_adapter.py: Dynex implementation
+    - classical_adapter.py: Classical solver implementation
+    - schemas/core_models.py: Data models and enums
+
+See Also:
+    - docs/quantum-hub.md: Quantum Hub architecture
+    - docs/DYNEX_QAAS_INTEGRATION.md: Dynex integration guide
+    - QUANTUM_ALGORITHMS_IMPLEMENTATION.md: Algorithm implementations
+
+Author: FLYFOX AI Quantum Team
+Version: 2.0.0
 """
 
 from abc import ABC, abstractmethod
@@ -12,7 +64,31 @@ from ..schemas.core_models import JobStatus, ProblemType, ResultFormat
 
 
 class AdapterConfig:
-    """Configuration for quantum provider adapters."""
+    """
+    Configuration container for quantum provider adapters.
+    
+    Stores all necessary configuration parameters for connecting to and
+    using quantum computing backends. Supports both common parameters
+    (API keys, timeouts) and provider-specific settings via extra_config.
+    
+    Attributes:
+        api_key: Authentication key for the quantum provider
+        endpoint: API endpoint URL for the provider
+        timeout: Maximum time (seconds) to wait for job completion
+        max_qubits: Maximum number of qubits supported by this backend
+        cost_per_second: Cost in credits per second of computation
+        cost_per_qubit: Cost in credits per qubit used
+        extra_config: Provider-specific configuration parameters
+    
+    Example:
+        >>> config = AdapterConfig(
+        ...     api_key="sk_test_123",
+        ...     endpoint="https://api.dynex.network/v1",
+        ...     timeout=600,
+        ...     max_qubits=64,
+        ...     extra_config={"priority": "high"}
+        ... )
+    """
 
     def __init__(self, **kwargs):
         self.api_key: Optional[str] = kwargs.get("api_key")
