@@ -14,7 +14,10 @@ Key Features:
 Usage:
     >>> from nqba_stack.core.settings import get_settings
     >>> settings = get_settings()
-    >>> print(settings.dynex_api_key)
+    >>> # Check if API key is configured (never print actual keys!)
+    >>> if settings.dynex_api_key:
+    ...     print("Dynex API key is configured")
+    >>> print(f"Environment: {settings.environment}")
     
 Environment Variables:
     See .env.template for a complete list of all available configuration options

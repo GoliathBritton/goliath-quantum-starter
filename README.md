@@ -537,6 +537,10 @@ nano .env  # or vim, code, etc.
 - `NUCO_CLOUD_KEY`: Your nuco.cloud API key (optional for cloud deployment)
 - `OPENAI_API_KEY`: OpenAI API key (for AI features)
 
+⚠️ **Security Warning:** Never commit your `.env` file to version control. API keys are sensitive
+credentials that should be kept secret. The `.env` file is included in `.gitignore` for your protection.
+Always use environment-specific configuration and rotate keys regularly.
+
 See [.env.template](.env.template) for complete configuration options.
 
 #### 5️⃣ Verify Installation

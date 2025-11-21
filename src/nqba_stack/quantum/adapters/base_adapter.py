@@ -32,8 +32,8 @@ Concrete Implementations:
 
 Example Usage:
     >>> config = AdapterConfig(
-    ...     api_key="your_key",
-    ...     endpoint="https://api.quantum-provider.com",
+    ...     api_key="your_api_key_here",
+    ...     endpoint="https://api.example.com/quantum/v1",
     ...     timeout=300
     ... )
     >>> adapter = ConcreteAdapter(config)
@@ -82,8 +82,8 @@ class AdapterConfig:
     
     Example:
         >>> config = AdapterConfig(
-        ...     api_key="sk_test_123",
-        ...     endpoint="https://api.dynex.network/v1",
+        ...     api_key="your_api_key_here",
+        ...     endpoint="https://api.example.com/v1",
         ...     timeout=600,
         ...     max_qubits=64,
         ...     extra_config={"priority": "high"}
