@@ -5,6 +5,85 @@
 
 NQBA is a comprehensive meta-architecture that orchestrates quantum-inspired AI modules for enterprise business applications, providing a unified framework for intelligent business process automation. Developed in partnership with nuco.cloud and powered by Dynex neuromorphic computing technology, NQBA delivers unprecedented computational efficiency for complex business problems.
 
+[![Build Status](https://img.shields.io/github/workflow/status/GoliathBritton/goliath-quantum-starter/CI)](https://github.com/GoliathBritton/goliath-quantum-starter)
+[![License](https://img.shields.io/badge/license-BSL%2FAPACHE-blue)](LICENSE-BSL)
+[![Python Version](https://img.shields.io/badge/python-3.8%20%7C%203.9%20%7C%203.10-blue)](https://www.python.org/downloads/)
+[![Documentation](https://img.shields.io/badge/docs-latest-brightgreen.svg)](docs/README.md)
+[![Docker](https://img.shields.io/badge/docker-ready-blue)](docker/README.md)
+
+## 📑 Quick Navigation
+
+| Section | Description |
+|---------|-------------|
+| [🏗️ Project Structure](#-project-structure) | Repository organization and file layout |
+| [🚀 Quick Start](#-quick-start) | Get up and running in minutes |
+| [📚 Documentation](#-documentation) | Comprehensive guides and references |
+| [🎯 Use Cases](#-business-use-cases) | Real-world application examples |
+| [🔧 Configuration](#environment-setup) | Environment and settings |
+| [🧪 Testing](#testing) | Running tests and validation |
+| [🚢 Deployment](#-deployment-options) | Production deployment guides |
+| [❓ Troubleshooting](#-troubleshooting-guide) | Common issues and solutions |
+| [🤝 Contributing](#-contributing) | How to contribute to the project |
+| [📄 License](#-license) | Licensing information |
+
+---
+
+## 🏗️ Project Structure
+
+```
+goliath-quantum-starter/
+├── 📂 src/                          # Source code
+│   ├── nqba_stack/                  # NQBA framework core
+│   │   ├── core/                    # Core orchestration & runtime
+│   │   ├── quantum/                 # Quantum algorithms & adapters
+│   │   ├── business_pods/           # Business-specific modules
+│   │   ├── platform/                # Platform services & APIs
+│   │   ├── security/                # Security & compliance
+│   │   ├── training/                # ML training pipelines
+│   │   └── observability/           # Monitoring & observability
+│   ├── qdllm/                       # Quantum-inspired LLM engine
+│   ├── quantum/                     # Quantum computing utilities
+│   ├── services/                    # TypeScript service layer
+│   └── pages/                       # Next.js API routes
+│
+├── 📂 docs/                         # Comprehensive documentation
+│   ├── API_ENDPOINTS_REFERENCE.md   # API specifications
+│   ├── DEPLOYMENT_GUIDE.md          # Deployment instructions
+│   ├── SECURITY_SYSTEM.md           # Security architecture
+│   ├── TECHNICAL_IMPLEMENTATION_GUIDE.md
+│   └── ... (90+ documentation files)
+│
+├── 📂 tests/                        # Test suite
+│   ├── unit/                        # Unit tests
+│   ├── integration/                 # Integration tests
+│   ├── benchmarks/                  # Performance benchmarks
+│   └── algorithms/                  # Algorithm tests
+│
+├── 📂 configs/                      # Configuration files
+│   ├── .env.template                # Environment variables template
+│   ├── docker-compose.yml           # Docker orchestration
+│   ├── pytest.ini                   # Test configuration
+│   └── tsconfig.json                # TypeScript configuration
+│
+├── 📂 workflows/                    # YAML workflow definitions
+├── 📂 scripts/                      # Utility scripts
+├── 📂 deploy/                       # Deployment scripts
+├── 📄 README.md                     # This file
+├── 📄 CONTRIBUTING.md               # Contribution guidelines
+├── 📄 GETTING_STARTED.md            # Quick start guide
+└── 📄 requirements.txt              # Python dependencies
+```
+
+### Key Directories
+
+- **`src/nqba_stack/`**: The heart of the NQBA framework with modular business pods, quantum engines, and orchestration logic
+- **`src/qdllm/`**: Quantum-inspired Diffusion Language Model implementation with bidirectional reasoning
+- **`docs/`**: Extensive documentation covering architecture, APIs, security, deployment, and business use cases
+- **`tests/`**: Comprehensive test coverage including unit, integration, and performance tests
+- **`workflows/`**: Pre-defined business workflow templates (lead scoring, portfolio optimization, etc.)
+
+For detailed architecture documentation, see [NQBA_5_LAYER_ARCHITECTURE.md](NQBA_5_LAYER_ARCHITECTURE.md).
+
 ---
 
 ## 🌟 Framework Overview
@@ -395,32 +474,100 @@ graph TB
 
 ## 🚀 Quick Start
 
-[![Build Status](https://img.shields.io/github/workflow/status/GoliathBritton/goliath-quantum-starter/CI)](https://github.com/GoliathBritton/goliath-quantum-starter)
-[![License](https://img.shields.io/badge/license-BSL%2FAPACHE-blue)](LICENSE-BSL)
-[![Python Version](https://img.shields.io/badge/python-3.8%20%7C%203.9%20%7C%203.10-blue)](https://www.python.org/downloads/)
-[![Documentation](https://img.shields.io/badge/docs-latest-brightgreen.svg)](docs/README.md)
-[![Docker](https://img.shields.io/badge/docker-ready-blue)](docker/README.md)
+### Prerequisites
 
-### Installation
+Before you begin, ensure you have the following installed:
+
+- **Python 3.8+** (3.9 or 3.10 recommended)
+- **Node.js 18+** (for frontend components)
+- **Docker & Docker Compose** (optional, for containerized deployment)
+- **Git** for version control
+
+### Installation Steps
+
+#### 1️⃣ Clone the Repository
 
 ```bash
-# Clone the repository
 git clone https://github.com/GoliathBritton/goliath-quantum-starter.git
 cd goliath-quantum-starter
+```
 
-# Create and activate virtual environment (recommended)
+#### 2️⃣ Set Up Python Environment
+
+```bash
+# Create virtual environment (strongly recommended)
 python -m venv venv
-# On Windows
+
+# Activate virtual environment
+# On Windows:
 venv\Scripts\activate
-# On macOS/Linux
+# On macOS/Linux:
 source venv/bin/activate
 
-# Install dependencies
+# Verify Python version
+python --version  # Should be 3.8 or higher
+```
+
+#### 3️⃣ Install Dependencies
+
+```bash
+# Install core dependencies
 pip install -r requirements.txt
 
-# Initialize the framework with Dynex SDK support
+# Install development dependencies (for testing and linting)
+pip install -r requirements-dev.txt
+
+# Optional: Initialize with Dynex SDK support
 python install.py --with-dynex --initialize-nqba
 ```
+
+#### 4️⃣ Configure Environment Variables
+
+```bash
+# Copy the template to create your .env file
+cp .env.template .env
+
+# Edit .env with your favorite editor and add your API keys
+# See .env.template for detailed descriptions of each variable
+nano .env  # or vim, code, etc.
+```
+
+**Required Environment Variables:**
+- `DYNEX_API_KEY`: Your Dynex API key (get one at [dynex.network](https://dynex.network))
+- `NUCO_CLOUD_KEY`: Your nuco.cloud API key (optional for cloud deployment)
+- `OPENAI_API_KEY`: OpenAI API key (for AI features)
+
+See [.env.template](.env.template) for complete configuration options.
+
+#### 5️⃣ Verify Installation
+
+```bash
+# Run basic tests to verify setup
+pytest tests/test_basic.py -v
+
+# Check framework initialization
+python -c "from nqba import create_framework; print('✅ NQBA Framework loaded successfully')"
+```
+
+### Quick Start Checklist
+
+Complete these steps to get up and running:
+
+- [ ] Clone repository and navigate to project directory
+- [ ] Create and activate Python virtual environment
+- [ ] Install dependencies from requirements.txt
+- [ ] Copy .env.template to .env and configure API keys
+- [ ] Run basic tests to verify installation
+- [ ] Review [GETTING_STARTED.md](GETTING_STARTED.md) for detailed tutorials
+- [ ] Explore example notebooks in `examples/` directory
+- [ ] Join our [Discord community](https://discord.gg/nqba) for support
+
+### Next Steps
+
+1. **Read the Documentation**: Start with [GETTING_STARTED.md](GETTING_STARTED.md) for in-depth tutorials
+2. **Run Examples**: Check out `examples/` for practical demonstrations
+3. **Explore Business Pods**: Review pre-built business solutions in `src/nqba_stack/business_pods/`
+4. **Deploy**: Follow [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) for production deployment
 
 ### Environment Setup
 
@@ -682,46 +829,106 @@ serverless deploy --stage production
 
 ### Common Issues and Solutions
 
+#### 🔴 Installation Issues
+
 | Issue | Possible Cause | Solution |
 |-------|---------------|----------|
-| Connection Timeout | Network issues or service unavailability | Check network settings, verify service status at [status.nqba.io](https://status.nqba.io) |
-| Authentication Failed | Invalid credentials or expired token | Regenerate API keys in dashboard, check environment variables |
-| Dynex Acceleration Not Working | SDK misconfiguration or hardware issues | Verify Dynex API key, check hardware compatibility, update SDK |
+| `pip install` fails with dependency conflicts | Incompatible package versions | Use `pip install -r requirements.txt --upgrade` or create fresh virtual environment |
+| `ModuleNotFoundError` after installation | Virtual environment not activated | Activate venv: `source venv/bin/activate` (Linux/Mac) or `venv\Scripts\activate` (Windows) |
+| Python version mismatch | Incompatible Python version | Install Python 3.8-3.10, verify with `python --version` |
+| Permission denied errors | Insufficient permissions | Use `pip install --user` or run with appropriate permissions |
+
+#### 🔴 Configuration Issues
+
+| Issue | Possible Cause | Solution |
+|-------|---------------|----------|
+| `KeyError` for environment variables | Missing .env file or variables | Copy `.env.template` to `.env` and configure all required variables |
+| Authentication Failed | Invalid credentials or expired token | Regenerate API keys in dashboard, verify keys in `.env` file |
+| Connection Timeout | Network issues or service unavailability | Check network settings, verify firewall rules, test connectivity |
+| SSL/TLS certificate errors | Certificate validation issues | Update CA certificates or set `REQUESTS_CA_BUNDLE` environment variable |
+
+#### 🔴 Runtime Issues
+
+| Issue | Possible Cause | Solution |
+|-------|---------------|----------|
+| Dynex Acceleration Not Working | SDK misconfiguration or hardware issues | Verify `DYNEX_API_KEY` in .env, check hardware compatibility, update SDK |
 | High Latency | Resource constraints or inefficient queries | Optimize query patterns, increase resource allocation, enable caching |
-| Memory Errors | Large dataset processing or memory leaks | Implement streaming processing, increase RAM, update to latest version |
+| Memory Errors | Large dataset processing or memory leaks | Implement streaming processing, increase system RAM, update to latest version |
+| Import errors in custom modules | PYTHONPATH not set correctly | Add project root to PYTHONPATH: `export PYTHONPATH="${PYTHONPATH}:$(pwd)"` |
+
+#### 🔴 Testing Issues
+
+| Issue | Possible Cause | Solution |
+|-------|---------------|----------|
+| Tests fail with import errors | Missing test dependencies | Install dev dependencies: `pip install -r requirements-dev.txt` |
+| pytest not found | pytest not installed | Install pytest: `pip install pytest` |
+| Tests timeout | Tests taking too long | Run with increased timeout: `pytest --timeout=300` or skip slow tests: `pytest -m "not slow"` |
 
 ### Diagnostic Commands
 
 ```bash
-# Check system status
-nqba-cli status --verbose
+# Check system status and configuration
+python -c "from nqba.core import get_settings; s = get_settings(); print(s)"
 
-# Test Dynex connectivity
-nqba-cli test-dynex
+# Validate environment setup
+python -c "import sys; print(f'Python: {sys.version}'); import nqba; print('✅ NQBA imported successfully')"
 
-# Validate configuration
-nqba-cli validate-config
+# Test database connectivity (if using external DB)
+python -c "from sqlalchemy import create_engine; engine = create_engine('your_db_url'); engine.connect(); print('✅ DB connected')"
 
-# Performance diagnostics
-nqba-cli diagnostics --full
+# Check Dynex connectivity (requires valid API key)
+python -c "from nqba.core.dynex_adapter import DynexAdapter; adapter = DynexAdapter(); print('✅ Dynex adapter initialized')"
+
+# Run comprehensive health check
+pytest tests/test_basic.py -v
 ```
 
-### Logs and Debugging
+### Debug Mode
+
+Enable detailed logging for troubleshooting:
 
 ```python
-# Enable debug logging
+# In your Python script or interactive session
 import logging
 from nqba.core import set_log_level
 
+# Enable DEBUG level logging
 set_log_level(logging.DEBUG)
 
+# Configure logging to file
+logging.basicConfig(
+    filename='nqba_debug.log',
+    level=logging.DEBUG,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+
+# Now run your code - detailed logs will be captured
+```
+
+### Collecting Diagnostic Information
+
+When reporting issues, include diagnostic information:
+
+```python
 # Capture diagnostic information
 from nqba.diagnostics import DiagnosticCollector
 
 collector = DiagnosticCollector()
 diagnostic_report = collector.collect_all()
 collector.save_report("diagnostic_report.json")
+
+# Share diagnostic_report.json when seeking support
 ```
+
+### Getting Help
+
+If you encounter issues not covered here:
+
+1. **Check Documentation**: See [docs/TROUBLESHOOTING_GUIDE.md](docs/TROUBLESHOOTING_GUIDE.md) for more detailed troubleshooting
+2. **Search Issues**: Check [GitHub Issues](https://github.com/GoliathBritton/goliath-quantum-starter/issues) for similar problems
+3. **Join Discord**: Get real-time help from the community on [Discord](https://discord.gg/nqba)
+4. **File an Issue**: Report bugs at [GitHub Issues](https://github.com/GoliathBritton/goliath-quantum-starter/issues/new)
+5. **Enterprise Support**: Contact enterprise@nqba-framework.com for commercial support
 
 ## 🧠 Dynex SDK Integration Guide
 

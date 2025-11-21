@@ -99,6 +99,14 @@ Before submitting code, please:
 - **Provide clear descriptions** with reproduction steps
 - **Include environment details** and error messages
 
+**Issue Labels:**
+- `bug`: Something isn't working correctly
+- `enhancement`: New feature or improvement
+- `documentation`: Documentation improvements
+- `good first issue`: Good for newcomers
+- `help wanted`: Extra attention is needed
+- `security`: Security-related issues
+
 ### 2. Branch Strategy
 
 We use a simplified Git flow:
@@ -114,15 +122,90 @@ git checkout -b fix/issue-description
 
 # For documentation
 git checkout -b docs/description
+
+# For security fixes
+git checkout -b security/vulnerability-description
 ```
 
-### 3. Development Workflow
+**Branch Naming Convention:**
+- `feature/descriptive-name`: New features
+- `fix/issue-number-description`: Bug fixes
+- `docs/what-changed`: Documentation updates
+- `refactor/what-refactored`: Code refactoring
+- `test/what-tested`: Test additions/improvements
+- `security/vulnerability-fix`: Security patches
+
+### 3. Git Workflow Diagram
+
+```mermaid
+graph LR
+    A[Fork Repository] --> B[Clone Fork]
+    B --> C[Create Branch]
+    C --> D[Make Changes]
+    D --> E[Commit Changes]
+    E --> F[Push to Fork]
+    F --> G[Create Pull Request]
+    G --> H{Code Review}
+    H -->|Changes Requested| D
+    H -->|Approved| I[Merge to Main]
+    I --> J[Delete Branch]
+    
+    style A fill:#e1f5fe
+    style G fill:#fff3e0
+    style H fill:#f3e5f5
+    style I fill:#e8f5e9
+```
+
+### 4. Development Workflow
+
+Follow this workflow for all contributions:
 
 1. **Make changes** following code standards
+   - Write clean, readable code
+   - Follow existing patterns in the codebase
+   - Keep changes focused and minimal
+   
 2. **Write/update tests** for new functionality
+   - Maintain or improve code coverage
+   - Test edge cases and error conditions
+   - Ensure tests are deterministic and isolated
+   
 3. **Update documentation** as needed
+   - Update docstrings for modified functions
+   - Add examples for new features
+   - Update relevant markdown documentation
+   
 4. **Run tests locally** before committing
+   - Run full test suite: `pytest`
+   - Check code coverage: `pytest --cov=src/`
+   - Fix any failing tests
+   
 5. **Commit with clear messages**
+   - Use conventional commit format
+   - Reference related issues
+   - Keep commits atomic and focused
+
+**Development Cycle:**
+
+```mermaid
+graph TB
+    A[Write Code] --> B[Write Tests]
+    B --> C[Run Tests Locally]
+    C --> D{Tests Pass?}
+    D -->|No| E[Debug & Fix]
+    E --> C
+    D -->|Yes| F[Run Linters]
+    F --> G{Linting Pass?}
+    G -->|No| H[Fix Lint Issues]
+    H --> F
+    G -->|Yes| I[Update Docs]
+    I --> J[Commit Changes]
+    J --> K[Push to Fork]
+    
+    style D fill:#fff3e0
+    style G fill:#fff3e0
+    style J fill:#e8f5e9
+```
 
 ### 4. Commit Message Format
 
@@ -229,11 +312,67 @@ pytest -n auto
 
 ### Writing Tests
 
+Follow these best practices for writing tests:
+
 - **Test naming**: `test_<function_name>_<scenario>`
+  - Example: `test_orchestrator_handles_invalid_pod_id`
+  - Example: `test_quantum_adapter_with_timeout`
+  
 - **Arrange-Act-Assert**: Structure tests clearly
+  ```python
+  def test_calculate_sum():
+      # Arrange
+      numbers = [1, 2, 3, 4, 5]
+      
+      # Act
+      result = calculate_sum(numbers)
+      
+      # Assert
+      assert result == 15
+  ```
+
 - **Mock external dependencies**: Use pytest-mock
+  ```python
+  def test_api_call_with_mock(mocker):
+      # Mock external API call
+      mock_response = mocker.patch('requests.get')
+      mock_response.return_value.json.return_value = {'status': 'ok'}
+      
+      # Test function that calls API
+      result = fetch_data()
+      assert result['status'] == 'ok'
+  ```
+
 - **Test edge cases**: Include error conditions
+  ```python
+  def test_division_by_zero():
+      with pytest.raises(ZeroDivisionError):
+          divide(10, 0)
+  ```
+
 - **Use fixtures**: Share common test setup
+  ```python
+  @pytest.fixture
+  def sample_orchestrator():
+      """Provides a configured orchestrator instance for tests"""
+      return NQBAStackOrchestrator(config=test_config)
+      
+  def test_orchestrator_task_routing(sample_orchestrator):
+      # Use the fixture
+      result = sample_orchestrator.route_task(task)
+      assert result.success
+  ```
+
+- **Parametrize tests**: Test multiple scenarios efficiently
+  ```python
+  @pytest.mark.parametrize("input,expected", [
+      (2, 4),
+      (3, 9),
+      (4, 16),
+  ])
+  def test_square(input, expected):
+      assert square(input) == expected
+  ```
 
 ## Documentation
 
